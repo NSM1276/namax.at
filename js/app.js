@@ -71,7 +71,9 @@ function applyLanguage(lang) {
     de: 'NAMAX.at – Websites für lokale Betriebe in Wien',
     en: 'NAMAX.at – Websites for local businesses in Vienna',
     tr: 'NAMAX.at – Viyana\'da işletmeler için web siteleri',
-    ru: 'NAMAX.at – Сайты для бизнеса в Вене'
+    ru: 'NAMAX.at – Сайты для бизнеса в Вене',
+    sr: 'NAMAX.at – Web sajtovi za firme u Beču',
+    hr: 'NAMAX.at – Web stranice za tvrtke u Beču'
   };
   document.title = titles[lang];
 }
