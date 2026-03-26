@@ -59,8 +59,10 @@ function applyLanguage(lang) {
     }
   });
 
-  document.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+  const codeEl = document.getElementById('langCurrentCode');
+  if (codeEl) codeEl.textContent = lang.toUpperCase();
+  document.querySelectorAll('.lang-option').forEach(opt => {
+    opt.classList.toggle('active', opt.getAttribute('data-lang') === lang);
   });
 
   document.documentElement.lang = lang;
@@ -79,10 +81,22 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeroTubes();
   initNeonRipple();
 
-  // Language switcher
-  document.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.addEventListener('click', () => applyLanguage(btn.getAttribute('data-lang')));
-  });
+  // Language dropdown
+  const dropdown = document.getElementById('langDropdown');
+  const currentBtn = document.getElementById('langCurrentBtn');
+  if (dropdown && currentBtn) {
+    currentBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropdown.classList.toggle('open');
+    });
+    document.querySelectorAll('.lang-option').forEach(opt => {
+      opt.addEventListener('click', () => {
+        applyLanguage(opt.getAttribute('data-lang'));
+        dropdown.classList.remove('open');
+      });
+    });
+    document.addEventListener('click', () => dropdown.classList.remove('open'));
+  }
   applyLanguage(currentLang);
 
   // FAQ accordion

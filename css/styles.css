@@ -131,45 +131,88 @@ nav {
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 28px;
+  gap: clamp(14px, 1.6vw, 24px);
 }
 .nav-links a {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   color: var(--gray2);
+  white-space: nowrap;
   transition: color var(--transition);
 }
 .nav-links a:hover { color: var(--white); }
 .nav-right {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 12px;
   flex-shrink: 0;
 }
-.lang-switcher {
+
+/* ── Language Dropdown ── */
+.lang-dropdown { position: relative; }
+.lang-current {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
+  padding: 7px 12px;
   background: var(--bg3);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  padding: 4px 6px;
-}
-.lang-btn {
-  font-size: 12px;
+  color: var(--gray1);
+  font-size: 13px;
   font-weight: 600;
-  letter-spacing: 0.05em;
-  color: var(--gray3);
-  padding: 4px 8px;
-  border-radius: 5px;
+  cursor: pointer;
   transition: var(--transition);
+  white-space: nowrap;
 }
-.lang-btn.active {
-  background: var(--blue);
-  color: #fff;
+.lang-current:hover {
+  border-color: var(--border-b);
+  color: var(--white);
 }
-.lang-btn:hover:not(.active) { color: var(--white); }
-.lang-sep { color: var(--gray3); font-size: 12px; }
+.lang-chevron { transition: transform 0.2s ease; flex-shrink: 0; }
+.lang-dropdown.open .lang-chevron { transform: rotate(180deg); }
+.lang-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: var(--bg3);
+  border: 1px solid var(--border-b);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  min-width: 150px;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.5);
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 300;
+}
+.lang-dropdown.open .lang-menu {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.lang-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 16px;
+  text-align: left;
+  color: var(--gray2);
+  transition: background var(--transition), color var(--transition);
+}
+.lang-option:hover { background: rgba(27,143,209,0.1); color: var(--white); }
+.lang-option.active { color: var(--blue-lt); }
+.lang-opt-code {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: inherit;
+  width: 24px;
+}
+.lang-opt-name { font-size: 13px; font-weight: 500; }
+
 .nav-cta { display: none; }
 
 .menu-toggle {

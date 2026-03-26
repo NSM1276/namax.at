@@ -36,14 +36,18 @@
       </div>
 
       <div class="nav-right">
-        <div class="lang-switcher">
-          <button class="lang-btn active" data-lang="de">DE</button>
-          <span class="lang-sep">|</span>
-          <button class="lang-btn" data-lang="en">EN</button>
-          <span class="lang-sep">|</span>
-          <button class="lang-btn" data-lang="tr">TR</button>
-          <span class="lang-sep">|</span>
-          <button class="lang-btn" data-lang="ru">RU</button>
+        <div class="lang-dropdown" id="langDropdown">
+          <button class="lang-current" id="langCurrentBtn">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            <span id="langCurrentCode">DE</span>
+            <svg class="lang-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="lang-menu">
+            <button class="lang-option active" data-lang="de"><span class="lang-opt-code">DE</span><span class="lang-opt-name">Deutsch</span></button>
+            <button class="lang-option" data-lang="en"><span class="lang-opt-code">EN</span><span class="lang-opt-name">English</span></button>
+            <button class="lang-option" data-lang="tr"><span class="lang-opt-code">TR</span><span class="lang-opt-name">Türkçe</span></button>
+            <button class="lang-option" data-lang="ru"><span class="lang-opt-code">RU</span><span class="lang-opt-name">Русский</span></button>
+          </div>
         </div>
         <a href="#contact" class="btn btn-neon nav-cta" data-i18n="hero_cta">Jetzt anfragen<span class="shimmer"></span></a>
       </div>
