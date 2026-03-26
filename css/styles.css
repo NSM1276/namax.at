@@ -995,6 +995,30 @@ nav {
   color: var(--gray1);
 }
 .contact-btn.email:hover { border-color: var(--border-b); color: var(--white); transform: translateY(-2px); }
+.contact-btn.telegram { background: #229ED9; color: #fff; }
+.contact-btn.telegram:hover { background: #1a8bbf; transform: translateY(-2px); }
+
+.social-links {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.social-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  color: var(--gray2);
+  font-size: 13px;
+  font-weight: 500;
+  transition: var(--transition);
+}
+.social-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+.social-btn:hover { border-color: var(--border-b); color: var(--white); transform: translateY(-2px); }
 .contact-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
 
 /* ── Footer ── */
