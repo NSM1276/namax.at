@@ -1362,16 +1362,20 @@ footer {
 
 .portfolio-mobile {
   position: absolute;
-  bottom: 10px;
-  right: 10px;
-  width: 52px;
+  bottom: 14px;
+  right: 14px;
+  width: 120px;
   height: auto;
-  border-radius: 6px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.6);
-  border: 2px solid rgba(255,255,255,0.15);
+  border-radius: 10px;
+  border: 2px solid rgba(255,255,255,0.4);
+  box-shadow:
+    0 8px 32px rgba(0,0,0,0.8),
+    0 0 0 5px rgba(0,0,0,0.55),
+    0 0 30px rgba(0,180,255,0.35);
   object-fit: cover;
   object-position: top;
   aspect-ratio: 9/16;
+  transform: rotate(-4deg);
 }
 
 .portfolio-info {
@@ -1458,7 +1462,7 @@ footer {
   .container { padding: 0 16px; }
   .forwho-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
   .portfolio-grid { grid-template-columns: 1fr; }
-  .portfolio-mobile { width: 40px; }
+  .portfolio-mobile { width: 85px; }
   .process-steps { grid-template-columns: 1fr; }
   .hero-actions { flex-direction: column; gap: 10px; }
   .hero-actions .btn { width: 100%; justify-content: center; text-align: center; }
