@@ -209,15 +209,26 @@ nav {
 .menu-toggle {
   display: none;
   flex-direction: column;
+  justify-content: center;
   gap: 5px;
-  width: 28px;
+  width: 40px;
+  height: 40px;
+  padding: 11px 10px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 8px;
+  cursor: pointer;
+  flex-shrink: 0;
 }
 .menu-toggle span {
   display: block;
   height: 2px;
-  background: var(--white);
+  background: #ffffff;
   border-radius: 2px;
   transition: var(--transition);
+}
+.nav-close {
+  display: none;
 }
 .menu-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
 .menu-toggle.open span:nth-child(2) { opacity: 0; }
@@ -1433,6 +1444,23 @@ footer {
     display: flex;
     position: relative;
     z-index: 200;
+  }
+  .nav-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    font-size: 22px;
+    color: #ffffff;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    cursor: pointer;
+    z-index: 300;
   }
   .nav-cta { display: none; }
   .portfolio-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
