@@ -18,6 +18,137 @@
   <meta name="twitter:description" content="Moderne Website ab 590 € – fertig in 3–7 Tagen. Für Barbershops, Cafés, Restaurants und mehr.">
   <meta name="twitter:image" content="https://namax.at/logo2.jpg">
   <link rel="canonical" href="https://namax.at">
+
+  <!-- Hreflang: один сайт — 6 языков -->
+  <link rel="alternate" hreflang="de" href="https://namax.at"/>
+  <link rel="alternate" hreflang="en" href="https://namax.at"/>
+  <link rel="alternate" hreflang="tr" href="https://namax.at"/>
+  <link rel="alternate" hreflang="ru" href="https://namax.at"/>
+  <link rel="alternate" hreflang="sr" href="https://namax.at"/>
+  <link rel="alternate" hreflang="hr" href="https://namax.at"/>
+  <link rel="alternate" hreflang="x-default" href="https://namax.at"/>
+
+  <!-- Schema.org JSON-LD: LocalBusiness + FAQPage + Person (для SEO и AEO) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "ProfessionalService",
+        "@id": "https://namax.at/#business",
+        "name": "NAMAX.at",
+        "description": "Moderne Websites für lokale Betriebe in Wien – Barbershop, Café, Restaurant, Salon. Ab 590 €, fertig in 3–7 Tagen.",
+        "url": "https://namax.at",
+        "telephone": "+4367764292055",
+        "priceRange": "€€",
+        "image": "https://namax.at/logo.jpg",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Wien",
+          "addressRegion": "Wien",
+          "addressCountry": "AT"
+        },
+        "areaServed": {
+          "@type": "City",
+          "name": "Wien"
+        },
+        "serviceType": ["Webdesign", "Website Erstellung", "Webentwicklung", "Lokale Website Wien"],
+        "knowsLanguage": ["de", "ru", "en", "fa"],
+        "sameAs": ["https://t.me/nsmtjk"],
+        "founder": {
+          "@type": "Person",
+          "@id": "https://namax.at/#person",
+          "name": "Nasim Nuridinov",
+          "jobTitle": "Webdesigner Wien",
+          "knowsLanguage": ["de", "ru", "en", "fa"],
+          "worksFor": { "@id": "https://namax.at/#business" }
+        },
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Webdesign Leistungen Wien",
+          "itemListElement": [
+            {
+              "@type": "Offer",
+              "name": "Website erstellen",
+              "description": "Fertige moderne Website in 3–7 Tagen. Telefon, Google Maps, WhatsApp-Button, Fotos und Leistungen. Erstes Betriebsjahr inklusive.",
+              "price": "590",
+              "priceCurrency": "EUR"
+            },
+            {
+              "@type": "Offer",
+              "name": "Website Pflege-Paket",
+              "description": "Bis zu 5 Änderungen pro Monat. Hosting inklusive, einfach per WhatsApp.",
+              "price": "39",
+              "priceCurrency": "EUR"
+            },
+            {
+              "@type": "Offer",
+              "name": "Jahres-Hosting ab 2. Jahr",
+              "description": "Hosting, Sicherheit und Verfügbarkeit der Website.",
+              "price": "49",
+              "priceCurrency": "EUR"
+            }
+          ]
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://namax.at/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Wem gehört die Website?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Die Website gehört Ihnen. Sie bekommen alle Zugangsdaten – Sie sind der Eigentümer."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Was ist im Preis von 590 € enthalten?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Fertige Website, modernes Design, Telefon & Karte eingebunden, Fotos & Leistungen, WhatsApp-Button und das erste Betriebsjahr."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Was kostet die Website ab dem 2. Jahr?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Nur 49 € pro Jahr. Das deckt Hosting, Sicherheit und Verfügbarkeit Ihrer Website."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Kann ich selbst Inhalte ändern?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Ja – mit dem Pflege-Paket für 39 € pro Monat erledige ich bis zu 5 Änderungen pro Monat für Sie. Einfach per WhatsApp schreiben."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Wie schnell ist die Website fertig?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "In 3–7 Tagen. Nach dem ersten Gespräch und Erhalt der Fotos und Inhalte ist Ihre Website in wenigen Tagen online."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Gibt es Einschränkungen?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Das Angebot ist für lokale Betriebe: Visitenkarten-Websites, Menüs, Preislisten, Portfolios. Für Online-Shops oder komplexere Projekte bitte direkt anfragen."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
