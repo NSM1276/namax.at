@@ -1426,6 +1426,7 @@ footer {
   #hero { padding: 90px 0 44px; }
   .hero-title { letter-spacing: -0.5px; }
   .hero-subtitle { font-size: 15px; }
+  .hero-visual { display: none; }
   .nav-links {
     position: fixed;
     top: 0; left: 0; right: 0;
