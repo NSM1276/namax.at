@@ -115,19 +115,10 @@ nav {
   gap: 10px;
   flex-shrink: 0;
 }
-.nav-logo img {
-  width: 36px;
-  height: 36px;
-  border-radius: 6px;
-  object-fit: cover;
+.nav-logo-svg {
+  display: block;
+  flex-shrink: 0;
 }
-.nav-logo-text {
-  font-size: 20px;
-  font-weight: 800;
-  letter-spacing: -0.5px;
-  color: var(--white);
-}
-.nav-logo-text span { color: var(--blue); }
 .nav-links {
   display: flex;
   align-items: center;
@@ -1036,13 +1027,7 @@ footer {
   align-items: center;
   gap: 10px;
 }
-.footer-logo img { width: 28px; height: 28px; border-radius: 5px; object-fit: cover; }
-.footer-logo-text {
-  font-size: 16px;
-  font-weight: 800;
-  letter-spacing: -0.3px;
-}
-.footer-logo-text span { color: var(--blue); }
+.footer-logo svg { display: block; }
 .footer-tagline {
   font-size: 13px;
   color: var(--gray3);
@@ -1475,4 +1460,58 @@ footer {
 @media (max-width: 380px) {
   .forwho-grid { grid-template-columns: 1fr; }
   .biz-card { padding: 14px 16px; }
+}
+
+/* Trust counter */
+.trust-counter {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  background: rgba(27,143,209,0.08);
+  border: 1px solid rgba(27,143,209,0.2);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--blue-lt);
+}
+.trust-counter-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #4bb3f0;
+  box-shadow: 0 0 6px rgba(75,179,240,0.7);
+  animation: pulse-dot 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.75); }
+}
+
+/* Floating WhatsApp button */
+.wa-float {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 999;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #25d366;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(37,211,102,0.45);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.wa-float svg {
+  width: 28px;
+  height: 28px;
+}
+.wa-float:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 28px rgba(37,211,102,0.6);
 }
