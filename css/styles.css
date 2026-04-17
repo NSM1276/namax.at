@@ -222,10 +222,12 @@ nav {
 }
 .menu-toggle span {
   display: block;
+  width: 20px;
   height: 2px;
   background: #ffffff;
   border-radius: 2px;
   transition: var(--transition);
+  flex-shrink: 0;
 }
 .nav-close {
   display: none;
