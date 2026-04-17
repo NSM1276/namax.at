@@ -1462,6 +1462,61 @@ footer {
   .biz-card { padding: 14px 16px; }
 }
 
+/* Cookie banner */
+.cookie-banner {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: 1000;
+  max-width: 420px;
+  background: #18181c;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  padding: 20px;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  pointer-events: none;
+}
+.cookie-banner.cookie-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.cookie-text {
+  font-size: 13px;
+  color: #a1a1aa;
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+.cookie-actions {
+  display: flex;
+  gap: 10px;
+}
+.cookie-btn {
+  flex: 1;
+  padding: 9px 0;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.2s;
+}
+.cookie-btn:hover { opacity: 0.85; }
+.cookie-btn-accept {
+  background: var(--blue);
+  color: #fff;
+}
+.cookie-btn-decline {
+  background: rgba(255,255,255,0.07);
+  color: #a1a1aa;
+}
+@media (max-width: 480px) {
+  .cookie-banner { left: 12px; right: 12px; max-width: none; bottom: 90px; }
+}
+
 /* Trust counter */
 .trust-counter {
   display: inline-flex;

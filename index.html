@@ -22,6 +22,24 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
+
+  <!-- Google Analytics 4 — загружается только после согласия с куки -->
+  <script>
+    (function(){
+      var consent = localStorage.getItem('namax_cookie_consent');
+      if (consent === 'accepted') {
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=G-4JWN1EVBH4';
+        document.head.appendChild(s);
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        window.gtag = gtag;
+        gtag('js', new Date());
+        gtag('config', 'G-4JWN1EVBH4');
+      }
+    })();
+  </script>
 </head>
 <body>
 
@@ -632,6 +650,62 @@
       </div>
     </div>
   </footer>
+
+  <!-- ══ COOKIE BANNER ══ -->
+  <div id="cookieBanner" class="cookie-banner" hidden>
+    <div class="cookie-inner">
+      <p class="cookie-text" id="cookieText"></p>
+      <div class="cookie-actions">
+        <button id="cookieAccept" class="cookie-btn cookie-btn-accept"></button>
+        <button id="cookieDecline" class="cookie-btn cookie-btn-decline"></button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      var cookieTexts = {
+        de: { text: 'Wir nutzen Google Analytics, um zu verstehen, wie Besucher unsere Website nutzen. Keine persönlichen Daten werden gespeichert.', accept: 'Akzeptieren', decline: 'Ablehnen' },
+        en: { text: 'We use Google Analytics to understand how visitors use our website. No personal data is stored.', accept: 'Accept', decline: 'Decline' },
+        tr: { text: 'Ziyaretçilerin sitemizi nasıl kullandığını anlamak için Google Analytics kullanıyoruz. Kişisel veri saklanmaz.', accept: 'Kabul Et', decline: 'Reddet' },
+        ru: { text: 'Мы используем Google Analytics, чтобы понять, как посетители используют наш сайт. Личные данные не хранятся.', accept: 'Принять', decline: 'Отклонить' },
+        sr: { text: 'Koristimo Google Analytics da razumemo kako posetioci koriste naš sajt. Lični podaci se ne čuvaju.', accept: 'Prihvati', decline: 'Odbij' },
+        hr: { text: 'Koristimo Google Analytics kako bismo razumjeli kako posjetitelji koriste našu stranicu. Osobni podaci se ne pohranjuju.', accept: 'Prihvati', decline: 'Odbij' }
+      };
+
+      var consent = localStorage.getItem('namax_cookie_consent');
+      if (consent) return;
+
+      var banner = document.getElementById('cookieBanner');
+      var lang = localStorage.getItem('namax_lang') || 'de';
+      var t = cookieTexts[lang] || cookieTexts['de'];
+
+      document.getElementById('cookieText').textContent = t.text;
+      document.getElementById('cookieAccept').textContent = t.accept;
+      document.getElementById('cookieDecline').textContent = t.decline;
+
+      setTimeout(function(){ banner.removeAttribute('hidden'); banner.classList.add('cookie-visible'); }, 1500);
+
+      document.getElementById('cookieAccept').addEventListener('click', function(){
+        localStorage.setItem('namax_cookie_consent', 'accepted');
+        banner.classList.remove('cookie-visible');
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=G-4JWN1EVBH4';
+        document.head.appendChild(s);
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        window.gtag = gtag;
+        gtag('js', new Date());
+        gtag('config', 'G-4JWN1EVBH4');
+      });
+
+      document.getElementById('cookieDecline').addEventListener('click', function(){
+        localStorage.setItem('namax_cookie_consent', 'declined');
+        banner.classList.remove('cookie-visible');
+      });
+    })();
+  </script>
 
   <!-- ══ FLOATING WHATSAPP ══ -->
   <a href="https://wa.me/4367764292055" target="_blank" rel="noopener" class="wa-float" aria-label="WhatsApp">
