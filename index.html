@@ -1,0 +1,1071 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Namax · Boutique Web Studio Wien — Erfahrung trifft Innovation</title>
+<meta name="description" content="Namax ist ein Vater-Sohn-Studio aus Wien. Strategie und Engineering aus einer Hand. Strategic Consultation auf Handschlag."/>
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+
+<!-- Open Graph / Social sharing -->
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://namax-at.vercel.app/"/>
+<meta property="og:title" content="Namax · Boutique Web Studio Wien"/>
+<meta property="og:description" content="Vater-Sohn-Studio aus Wien. Strategie &amp; Engineering aus einer Hand. Digital­auftritte, die für ihre Branche einen Standard setzen."/>
+<meta property="og:image" content="https://namax-at.vercel.app/og-image.svg"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta property="og:locale" content="de_AT"/>
+<meta property="og:site_name" content="Namax Studio Wien"/>
+
+<!-- Twitter / X card -->
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Namax · Boutique Web Studio Wien"/>
+<meta name="twitter:description" content="Vater-Sohn-Studio aus Wien. Strategie &amp; Engineering aus einer Hand."/>
+<meta name="twitter:image" content="https://namax-at.vercel.app/og-image.svg"/>
+<!-- Fonts: self-hosted — no data sent to Google (DSGVO-konform) -->
+<style>
+@font-face{font-family:'Inter Tight';font-style:normal;font-weight:300 700;font-display:swap;
+  src:url('project/fonts/inter-tight-latin-ext.woff2') format('woff2');
+  unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Inter Tight';font-style:normal;font-weight:300 700;font-display:swap;
+  src:url('project/fonts/inter-tight-latin.woff2') format('woff2');
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Instrument Serif';font-style:normal;font-weight:400;font-display:swap;
+  src:url('project/fonts/instrument-serif-normal-latin-ext.woff2') format('woff2');
+  unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Instrument Serif';font-style:normal;font-weight:400;font-display:swap;
+  src:url('project/fonts/instrument-serif-normal-latin.woff2') format('woff2');
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Instrument Serif';font-style:italic;font-weight:400;font-display:swap;
+  src:url('project/fonts/instrument-serif-italic-latin-ext.woff2') format('woff2');
+  unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Instrument Serif';font-style:italic;font-weight:400;font-display:swap;
+  src:url('project/fonts/instrument-serif-italic-latin.woff2') format('woff2');
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+</style>
+<style>
+:root{
+  --bone:#F4F1EB;
+  --bone-2:#EAE5DB;
+  --bone-3:#DCD5C6;
+  --ink:#0E0E0C;
+  --ink-2:#1B1B17;
+  --ink-3:#3A3933;
+  --mute:#6F6B5F;
+  --mute-2:#8A8576;
+  --line:rgba(14,14,12,.10);
+  --line-2:rgba(14,14,12,.18);
+  --ochre:oklch(0.72 0.14 70);
+  --ochre-soft:oklch(0.85 0.08 70);
+  --ochre-deep:oklch(0.55 0.13 60);
+  --maxw:1320px;
+  --gutter:clamp(20px,4vw,56px);
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --ease-out:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bone);color:var(--ink);
+  font-family:"Inter Tight","Inter",ui-sans-serif,system-ui,-apple-system,Segoe UI,Helvetica,Arial,sans-serif;
+  font-feature-settings:"ss01","ss02","cv11";
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  font-size:16px;line-height:1.5}
+body{overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+button{font:inherit;cursor:pointer;border:0;background:transparent;color:inherit}
+::selection{background:var(--ink);color:var(--bone)}
+.serif{font-family:"Instrument Serif","Times New Roman",serif;font-weight:400;font-style:italic;letter-spacing:-.005em}
+.container{max-width:var(--maxw);margin:0 auto;padding-left:var(--gutter);padding-right:var(--gutter)}
+
+/* Nav */
+.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(20px) saturate(140%);
+  -webkit-backdrop-filter:blur(20px) saturate(140%);
+  background:color-mix(in oklab, var(--bone) 78%, transparent);
+  border-bottom:.5px solid var(--line)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:600;letter-spacing:-.01em}
+.brand-mark{width:28px;height:28px;border-radius:7px;background:var(--ink);
+  display:grid;place-items:center;color:var(--bone);font-family:"Instrument Serif",serif;
+  font-style:italic;font-size:18px;line-height:1}
+.brand-name{font-size:15px}
+.brand-name b{font-weight:600}
+.brand-name .dot{color:var(--ochre-deep)}
+.nav-links{display:flex;gap:28px;font-size:13.5px;color:var(--ink-3)}
+.nav-links a{position:relative;padding:6px 0}
+.nav-links a:hover{color:var(--ink)}
+.nav-cta{display:flex;align-items:center;gap:14px}
+.lang{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--mute);letter-spacing:.06em;
+  background:rgba(14,14,12,.04);border:1px solid var(--line);border-radius:999px;padding:4px 8px}
+.lang-btn{padding:2px 6px;border-radius:999px;color:var(--mute);font-weight:500;letter-spacing:.06em;
+  transition:color .2s,background .2s}
+.lang-btn:hover{color:var(--ink)}
+.lang-btn.on{color:var(--bone);background:var(--ink)}
+.lang-sep{color:var(--line-2)}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:10px;padding:13px 20px;border-radius:999px;
+  font-size:14px;font-weight:500;letter-spacing:-.005em;
+  transition:transform .25s var(--ease),background .2s,color .2s,border-color .2s}
+.btn-primary{background:var(--ink);color:var(--bone)}
+.btn-primary:hover{background:var(--ink-2);transform:translateY(-1px)}
+.btn-primary .arr{transition:transform .35s var(--ease-out)}
+.btn-primary:hover .arr{transform:translateX(4px)}
+.btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line-2)}
+.btn-ghost:hover{border-color:var(--ink);background:var(--ink);color:var(--bone)}
+.btn-pill{padding:9px 14px;font-size:12.5px}
+.kicker{display:inline-flex;align-items:center;gap:8px;font-size:11.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--mute);font-weight:500}
+.kicker .dot{width:5px;height:5px;border-radius:50%;background:var(--ochre);box-shadow:0 0 0 4px color-mix(in oklab,var(--ochre) 25%,transparent)}
+
+/* Hero */
+.hero{padding:clamp(56px,9vw,120px) 0 clamp(40px,6vw,80px);position:relative}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(28px,5vw,80px);align-items:end}
+.hero h1{font-family:"Instrument Serif",serif;font-weight:400;
+  font-size:clamp(44px,7vw,108px);line-height:.96;letter-spacing:-.025em;margin:0 0 18px}
+.hero h1 .it{font-style:italic;color:var(--ink-3)}
+.hero h1 .ochre{color:var(--ochre-deep);font-style:italic}
+.hero-lede{max-width:520px;font-size:clamp(15px,1.3vw,18px);color:var(--ink-3);line-height:1.55;margin:18px 0 28px}
+.hero-meta{display:flex;flex-wrap:wrap;gap:24px 36px;padding-top:24px;border-top:1px solid var(--line);margin-top:36px}
+.hero-meta div{display:flex;flex-direction:column;gap:4px}
+.hero-meta .k{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.hero-meta .v{font-size:15px;color:var(--ink);font-weight:500}
+.hero-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+
+/* Duo card */
+.duo{position:relative;border-radius:18px;background:linear-gradient(180deg,#1a1915 0%,#0e0e0c 100%);
+  color:var(--bone);padding:28px;overflow:hidden;
+  box-shadow:0 24px 60px -28px rgba(0,0,0,.45),0 1px 0 rgba(255,255,255,.04) inset}
+.duo-tag{display:flex;align-items:center;gap:10px;font-size:11.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:rgba(255,255,255,.55)}
+.duo-tag .pulse{width:6px;height:6px;border-radius:50%;background:var(--ochre);
+  box-shadow:0 0 0 0 color-mix(in oklab,var(--ochre) 70%,transparent);
+  animation:pulse 2.4s var(--ease) infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in oklab,var(--ochre) 60%,transparent)}
+  70%{box-shadow:0 0 0 12px transparent}100%{box-shadow:0 0 0 0 transparent}}
+.duo-people{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px}
+.person{position:relative}
+.avatar{aspect-ratio:4/5;border-radius:12px;overflow:hidden;position:relative;
+  background:#222 linear-gradient(135deg,#2a2924 0%,#181715 100%)}
+.avatar::before,.avatar::after{content:"";position:absolute;inset:0}
+.avatar::before{background:repeating-linear-gradient(135deg,rgba(255,255,255,.04) 0 8px,transparent 8px 16px)}
+.avatar::after{background:radial-gradient(60% 60% at 50% 35%,rgba(212,170,90,.18),transparent 70%)}
+.avatar .glyph{position:absolute;inset:0;display:grid;place-items:center;
+  font-family:"Instrument Serif",serif;font-style:italic;font-size:80px;
+  color:rgba(255,255,255,.9);z-index:1;letter-spacing:-.02em;
+  text-shadow:0 2px 24px rgba(0,0,0,.4)}
+.avatar .role{position:absolute;left:10px;bottom:10px;z-index:2;
+  font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.7);
+  background:rgba(0,0,0,.35);padding:5px 8px;border-radius:6px;backdrop-filter:blur(6px)}
+.person h4{margin:12px 0 2px;font-size:15px;font-weight:600;letter-spacing:-.01em}
+.person p{margin:0;font-size:12.5px;color:rgba(255,255,255,.55);line-height:1.45}
+.duo-rule{height:1px;background:rgba(255,255,255,.08);margin:22px 0}
+.duo-quote{font-family:"Instrument Serif",serif;font-style:italic;font-size:20px;line-height:1.35;
+  color:rgba(255,255,255,.92);letter-spacing:-.01em}
+.duo-quote sup{font-style:normal;font-family:"Inter Tight",sans-serif;font-size:10px;
+  color:rgba(255,255,255,.5);vertical-align:super;margin-right:4px}
+.duo-foot{display:flex;justify-content:space-between;align-items:center;margin-top:18px;
+  font-size:11.5px;color:rgba(255,255,255,.5);letter-spacing:.04em}
+.duo-foot .seal{display:inline-flex;align-items:center;gap:8px;color:var(--ochre-soft)}
+.seal-dot{width:6px;height:6px;border-radius:50%;background:var(--ochre)}
+
+/* Tape */
+.tape{border-block:1px solid var(--line);background:var(--bone);overflow:hidden;margin-top:60px}
+.tape-track{display:flex;gap:64px;padding:18px 0;white-space:nowrap;
+  animation:tape 38s linear infinite;font-size:13px;color:var(--ink-3);letter-spacing:.04em}
+.tape-track span{display:inline-flex;align-items:center;gap:14px}
+.tape-track i{font-style:normal;color:var(--ochre-deep);font-family:"Instrument Serif",serif;font-size:18px;line-height:1}
+@keyframes tape{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* Why */
+.why{padding:clamp(80px,11vw,160px) 0;position:relative}
+.section-head{display:grid;grid-template-columns:auto 1fr;gap:clamp(40px,8vw,120px);align-items:end;margin-bottom:64px}
+.section-head h2{font-family:"Instrument Serif",serif;font-weight:400;
+  font-size:clamp(34px,4.4vw,68px);line-height:1;letter-spacing:-.02em;margin:14px 0 0;max-width:14ch}
+.section-head h2 .it{font-style:italic;color:var(--ink-3)}
+.section-head .lede{font-size:15px;color:var(--ink-3);max-width:42ch;line-height:1.55}
+.why-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.why-col{padding:40px clamp(20px,3vw,40px) 40px 0;display:flex;flex-direction:column;gap:18px;position:relative}
+.why-col+.why-col{padding-left:clamp(20px,3vw,40px);border-left:1px solid var(--line)}
+.why-num{font-family:"Instrument Serif",serif;font-style:italic;font-size:64px;line-height:1;color:var(--ochre-deep)}
+.why-col h3{font-size:24px;font-weight:500;letter-spacing:-.015em;margin:0;line-height:1.15}
+.why-col p{margin:0;color:var(--ink-3);font-size:15px;line-height:1.6;max-width:42ch}
+.why-col ul{list-style:none;padding:0;margin:auto 0 0;display:flex;flex-direction:column;gap:10px}
+.why-col li{display:flex;gap:10px;align-items:baseline;font-size:13.5px;color:var(--ink-3);
+  padding-top:10px;border-top:1px dashed var(--line)}
+.why-col li::before{content:"";width:6px;height:6px;border-radius:1px;background:var(--ochre);
+  display:inline-block;flex:none;transform:translateY(-2px) rotate(45deg)}
+.why-eq{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;gap:22px;
+  padding:36px 0 8px;font-family:"Instrument Serif",serif;font-style:italic;
+  font-size:clamp(28px,4vw,52px);color:var(--ink);line-height:1}
+.why-eq span:nth-child(even){color:var(--ochre-deep);font-style:normal;font-family:"Inter Tight",sans-serif;font-weight:300}
+.why-eq em{font-style:italic;color:var(--ink)}
+
+/* Showcase */
+.showcase{padding:clamp(40px,8vw,120px) 0 clamp(80px,11vw,140px);background:var(--bone)}
+.show-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,2vw,28px);margin-top:48px}
+.show-card{position:relative;border-radius:14px;overflow:hidden;background:var(--ink);
+  box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 18px 40px -24px rgba(0,0,0,.35);
+  transition:transform .5s var(--ease-out),box-shadow .5s var(--ease-out)}
+.show-card:hover{transform:translateY(-4px);box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 26px 50px -22px rgba(0,0,0,.5)}
+.show-frame{position:relative;aspect-ratio:4/5;overflow:hidden;background:#0a0a09;cursor:default}
+.show-chrome{position:absolute;left:0;right:0;top:0;height:30px;display:flex;align-items:center;
+  gap:6px;padding:0 12px;background:linear-gradient(180deg,#1a1915 0,#121110 100%);
+  border-bottom:1px solid rgba(255,255,255,.05);z-index:3}
+.show-chrome i{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.18)}
+.show-chrome .url{flex:1;text-align:center;font-size:10px;color:rgba(255,255,255,.45);letter-spacing:.04em;font-family:ui-monospace,Menlo,monospace}
+.show-vp{position:absolute;left:0;right:0;top:30px;bottom:0;overflow:hidden;background:#000}
+.show-vp img{width:100%;display:block;will-change:transform;
+  transition:transform 14s linear;transform:translateY(0)}
+.show-card:hover .show-vp img,
+.show-card:focus-within .show-vp img{transform:translateY(calc(-100% + (100% * var(--vp-h,0))))}
+.show-vp::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,transparent 65%,rgba(0,0,0,.5) 100%);
+  opacity:0;transition:opacity .3s}
+.show-card:hover .show-vp::after{opacity:1}
+.show-meta{padding:16px 16px 18px;display:flex;justify-content:space-between;align-items:flex-start;gap:14px;
+  background:#0E0E0C;color:var(--bone)}
+.show-meta h4{margin:0;font-size:16px;font-weight:500;letter-spacing:-.01em}
+.show-meta p{margin:4px 0 0;font-size:12px;color:rgba(255,255,255,.55)}
+.show-tag{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.45);
+  border:1px solid rgba(255,255,255,.18);padding:5px 8px;border-radius:999px;flex:none;white-space:nowrap}
+.show-num{position:absolute;left:14px;top:42px;z-index:4;color:rgba(255,255,255,.6);
+  font-family:ui-monospace,Menlo,monospace;font-size:10.5px;letter-spacing:.06em;
+  background:rgba(0,0,0,.45);backdrop-filter:blur(6px);padding:4px 8px;border-radius:6px}
+.show-hint{position:absolute;right:14px;top:42px;z-index:4;color:rgba(255,255,255,.7);
+  font-size:10.5px;letter-spacing:.04em;display:inline-flex;align-items:center;gap:6px;
+  background:rgba(0,0,0,.45);backdrop-filter:blur(6px);padding:4px 8px;border-radius:6px;
+  opacity:1;transition:opacity .25s}
+.show-card:hover .show-hint{opacity:0}
+.show-hint .arr{display:inline-block;animation:bob 1.6s var(--ease) infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(2px)}}
+.show-foot{display:flex;align-items:center;justify-content:space-between;margin-top:36px;font-size:13px;color:var(--mute)}
+.show-foot a{display:inline-flex;gap:8px;align-items:center;color:var(--ink)}
+.show-foot a:hover{color:var(--ochre-deep)}
+
+/* Process */
+.process{padding:clamp(80px,11vw,140px) 0;background:var(--ink);color:var(--bone);position:relative;overflow:hidden}
+.process::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(60% 50% at 80% 0%,color-mix(in oklab,var(--ochre) 18%,transparent),transparent 60%)}
+.process .section-head h2{color:var(--bone)}
+.process .section-head h2 .it{color:rgba(255,255,255,.5)}
+.process .section-head .lede{color:rgba(255,255,255,.6)}
+.process .kicker{color:rgba(255,255,255,.55)}
+.proc-list{display:grid;grid-template-columns:1fr;gap:0;border-top:1px solid rgba(255,255,255,.08)}
+.proc-row{display:grid;grid-template-columns:80px 1.2fr 2fr 0.9fr;gap:32px;padding:32px 0;
+  border-bottom:1px solid rgba(255,255,255,.08);align-items:start;position:relative;
+  transition:background .3s,padding-inline .3s}
+.proc-row:hover{background:linear-gradient(90deg,rgba(255,255,255,.02),transparent 60%)}
+.proc-no{font-family:"Instrument Serif",serif;font-style:italic;color:var(--ochre);font-size:36px;line-height:1}
+.proc-row h3{margin:0;font-size:22px;font-weight:500;letter-spacing:-.015em;color:var(--bone)}
+.proc-row h3 small{display:block;font-family:"Instrument Serif",serif;font-style:italic;color:rgba(255,255,255,.5);font-size:14px;font-weight:400;margin-top:4px;letter-spacing:0}
+.proc-row p{margin:0;color:rgba(255,255,255,.65);font-size:14px;line-height:1.6;max-width:48ch}
+.proc-row .dur{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;letter-spacing:.06em;color:rgba(255,255,255,.5);text-align:right}
+.proc-row .dur b{display:block;color:var(--ochre-soft);font-weight:400;font-size:13px;letter-spacing:.04em;margin-bottom:4px}
+
+/* CTA */
+.cta{padding:clamp(80px,11vw,140px) 0;background:var(--bone)}
+.cta-card{position:relative;border:1px solid var(--line-2);border-radius:22px;padding:clamp(36px,6vw,72px);
+  background:linear-gradient(180deg,var(--bone) 0%,color-mix(in oklab,var(--bone) 80%,var(--bone-2)) 100%);
+  overflow:hidden}
+.cta-card::before{content:"";position:absolute;right:-180px;top:-220px;width:520px;height:520px;border-radius:50%;
+  background:radial-gradient(circle,color-mix(in oklab,var(--ochre) 35%,transparent) 0%,transparent 60%);
+  filter:blur(40px);pointer-events:none}
+.cta-grid{display:grid;grid-template-columns:1.4fr .9fr;gap:clamp(28px,5vw,80px);align-items:end;position:relative;z-index:1}
+.cta h2{font-family:"Instrument Serif",serif;font-weight:400;
+  font-size:clamp(44px,6vw,92px);line-height:.98;letter-spacing:-.02em;margin:14px 0 18px}
+.cta h2 .it{font-style:italic;color:var(--ink-3)}
+.cta p{font-size:16px;color:var(--ink-3);max-width:48ch;line-height:1.55;margin:0 0 28px}
+.cta-actions{display:flex;gap:10px;flex-wrap:wrap}
+.cta-side{display:flex;flex-direction:column;gap:14px}
+.cta-fact{padding:18px 20px;border-radius:14px;background:rgba(255,255,255,.5);
+  border:1px solid var(--line);backdrop-filter:blur(8px)}
+.cta-fact .k{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.cta-fact .v{font-family:"Instrument Serif",serif;font-style:italic;font-size:28px;color:var(--ink);line-height:1.1;margin-top:6px}
+.cta-fact small{display:block;color:var(--ink-3);font-size:12.5px;line-height:1.45;margin-top:6px;font-style:normal;font-family:"Inter Tight",sans-serif}
+
+/* Footer */
+.foot{padding:48px 0 36px;border-top:1px solid var(--line);background:var(--bone)}
+.foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:32px}
+.foot h5{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin:0 0 12px;font-weight:500}
+.foot ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;color:var(--ink-3)}
+.foot li a:hover{color:var(--ink)}
+.foot-tag{font-family:"Instrument Serif",serif;font-style:italic;font-size:22px;line-height:1.3;color:var(--ink);max-width:28ch;margin-top:14px}
+.foot-bot{display:flex;justify-content:space-between;align-items:center;margin-top:36px;padding-top:20px;border-top:1px solid var(--line);font-size:12px;color:var(--mute)}
+
+/* Responsive */
+@media(max-width:980px){
+  .hero-grid{grid-template-columns:1fr}
+  .show-grid{grid-template-columns:repeat(2,1fr)}
+  .why-grid{grid-template-columns:1fr}
+  .why-col+.why-col{border-left:0;border-top:1px solid var(--line);padding-left:0;padding-top:32px}
+  .section-head{grid-template-columns:1fr;gap:16px}
+  .cta-grid{grid-template-columns:1fr}
+  .foot-grid{grid-template-columns:1fr 1fr}
+  .proc-row{grid-template-columns:48px 1fr;gap:14px}
+  .proc-row .desc,.proc-row .dur{grid-column:2}
+  .proc-row .dur{text-align:left;margin-top:8px}
+  .nav-links{display:none}
+}
+@media(max-width:600px){
+  .show-grid{grid-template-columns:1fr}
+  .hero-meta{gap:18px 24px}
+  .duo-people{grid-template-columns:1fr 1fr}
+  .why-eq{font-size:24px;gap:12px}
+}
+
+/* Mobile-only utility */
+.mobile-only{display:none}
+@media(max-width:980px){.mobile-only{display:inline-flex}}
+
+/* Contact form */
+.modal-sub{font-size:15px;color:var(--ink-3);line-height:1.6;margin:-8px 0 28px}
+.form-group{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.form-group label{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);font-weight:500}
+.form-group input,.form-group textarea{
+  font:inherit;font-size:15px;color:var(--ink);
+  background:rgba(255,255,255,.6);border:1px solid var(--line-2);
+  border-radius:10px;padding:12px 14px;outline:none;
+  transition:border-color .2s,box-shadow .2s;resize:none}
+.form-group input::placeholder,.form-group textarea::placeholder{color:var(--mute-2)}
+.form-group input:focus,.form-group textarea:focus{
+  border-color:var(--ink);box-shadow:0 0 0 3px rgba(14,14,12,.07)}
+.form-submit{width:100%;justify-content:center;margin-top:6px;font-size:15px;padding:15px 20px}
+.form-submit:disabled{opacity:.5;pointer-events:none}
+.form-success{text-align:center;padding:40px 20px}
+.form-success .check{font-size:40px;margin-bottom:16px}
+.form-success p{font-size:16px;color:var(--ink-3);line-height:1.6}
+.form-success strong{color:var(--ink);display:block;margin-bottom:8px;font-size:18px}
+
+/* WhatsApp floating button */
+.wa-btn{position:fixed;bottom:28px;right:28px;z-index:120;
+  display:flex;align-items:center;gap:10px;
+  background:#25D366;color:#fff;
+  padding:13px 20px 13px 16px;border-radius:999px;
+  font-size:14px;font-weight:600;letter-spacing:-.01em;
+  box-shadow:0 4px 24px rgba(37,211,102,.35),0 1px 4px rgba(0,0,0,.15);
+  transition:transform .25s var(--ease),box-shadow .25s var(--ease),padding .25s var(--ease)}
+.wa-btn:hover{transform:translateY(-2px);
+  box-shadow:0 8px 32px rgba(37,211,102,.45),0 2px 8px rgba(0,0,0,.15)}
+.wa-btn svg{flex:none;width:22px;height:22px}
+.wa-label{white-space:nowrap;overflow:hidden;max-width:120px;
+  transition:max-width .35s var(--ease),opacity .3s}
+@media(max-width:600px){
+  .wa-label{max-width:0;opacity:0}
+  .wa-btn{padding:14px}
+  .wa-btn:hover .wa-label{max-width:120px;opacity:1}
+}
+/* pulse ring around WA button */
+.wa-btn::after{content:'';position:absolute;inset:-4px;border-radius:999px;
+  border:2px solid rgba(37,211,102,.5);
+  animation:wa-pulse 2.8s ease infinite;pointer-events:none}
+@keyframes wa-pulse{
+  0%{transform:scale(1);opacity:.7}
+  70%{transform:scale(1.18);opacity:0}
+  100%{transform:scale(1.18);opacity:0}}
+
+/* Custom cursor — only on pointer devices */
+@media(hover:hover){
+  body{cursor:none}
+  a,button{cursor:none}
+}
+.cursor-dot{position:fixed;top:0;left:0;width:7px;height:7px;border-radius:50%;
+  background:var(--ink);pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);mix-blend-mode:difference;
+  transition:width .2s var(--ease),height .2s var(--ease),opacity .3s}
+.cursor-ring{position:fixed;top:0;left:0;width:30px;height:30px;border-radius:50%;
+  border:1.5px solid rgba(14,14,12,.35);pointer-events:none;z-index:9998;
+  transform:translate(-50%,-50%);transition:opacity .3s}
+.cursor-dot.hidden,.cursor-ring.hidden{opacity:0}
+@media(hover:none){.cursor-dot,.cursor-ring{display:none}}
+
+/* Reveal */
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .9s var(--ease-out),transform .9s var(--ease-out)}
+.reveal.in{opacity:1;transform:none}
+.reveal.d1{transition-delay:.06s}.reveal.d2{transition-delay:.12s}.reveal.d3{transition-delay:.18s}.reveal.d4{transition-delay:.24s}.reveal.d5{transition-delay:.3s}
+
+/* Legal links in footer */
+.foot-legal{display:flex;gap:18px;align-items:center}
+.foot-legal a{color:var(--mute);font-size:12px;text-decoration:none;transition:color .2s}
+.foot-legal a:hover{color:var(--ink)}
+
+/* Modal */
+.modal-backdrop{position:fixed;inset:0;z-index:200;background:rgba(14,14,12,.55);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  display:flex;align-items:flex-end;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .3s var(--ease)}
+.modal-backdrop.open{opacity:1;pointer-events:all}
+.modal-box{background:var(--bone);border-radius:20px 20px 0 0;width:100%;max-width:720px;
+  max-height:85vh;overflow-y:auto;padding:clamp(28px,5vw,52px);
+  transform:translateY(40px);transition:transform .4s var(--ease-out)}
+.modal-backdrop.open .modal-box{transform:translateY(0)}
+.modal-box h2{font-family:"Instrument Serif",serif;font-weight:400;font-style:italic;
+  font-size:clamp(28px,4vw,42px);margin:0 0 24px;letter-spacing:-.02em}
+.modal-close{position:absolute;top:20px;right:20px;width:36px;height:36px;border-radius:50%;
+  background:rgba(14,14,12,.07);border:0;cursor:pointer;display:grid;place-items:center;
+  font-size:18px;color:var(--ink-3);transition:background .2s}
+.modal-close:hover{background:rgba(14,14,12,.14)}
+.modal-box{position:relative}
+.modal-section{margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--line)}
+.modal-section:last-child{border-bottom:0;margin-bottom:0;padding-bottom:0}
+.modal-section h3{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);
+  font-weight:500;margin:0 0 8px}
+.modal-section p{margin:0;font-size:14px;color:var(--ink-3);line-height:1.65}
+.modal-section a{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+</style>
+</head>
+<body>
+<div class="cursor-dot" id="cursor-dot"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<a class="wa-btn" href="https://wa.me/4367764292055?text=Guten%20Tag%2C%20ich%20interessiere%20mich%20f%C3%BCr%20eine%20Strategic%20Consultation." target="_blank" rel="noopener" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.107.549 4.09 1.51 5.814L.057 23.428a.75.75 0 0 0 .916.916l5.638-1.447A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.725 9.725 0 0 1-4.964-1.362l-.355-.211-3.685.945.974-3.564-.232-.368A9.718 9.718 0 0 1 2.25 12C2.25 6.615 6.615 2.25 12 2.25S21.75 6.615 21.75 12 17.385 21.75 12 21.75z"/></svg>
+  <span class="wa-label">WhatsApp</span>
+</a>
+
+<div id="root"></div>
+
+<script>
+(function(){
+
+var PROJECTS = [
+  { id:'hotel-alma',    industry:{de:'Hospitality',   en:'Hospitality'},     img:'project/assets/hotel-alma.webp' },
+  { id:'the-edge',      industry:{de:'Barbering',     en:'Barbering'},       img:'project/assets/the-edge.webp' },
+  { id:'kronenburg',    industry:{de:'Gastronomie',   en:'Gastronomy'},      img:'project/assets/kronenburg.webp' },
+  { id:'meister-huber', industry:{de:'Handwerk',      en:'Trade & Service'}, img:'project/assets/meister-huber.webp' },
+  { id:'pommes-doener', industry:{de:'Quick Service', en:'Quick Service'},   img:'project/assets/pommes-doener.webp' },
+  { id:'das-kleine-eck',industry:{de:'Café & Lokal',  en:'Café & Local'},    img:'project/assets/das-kleine-eck.webp' },
+];
+
+var PROJECT_NAMES = {
+  'hotel-alma':    { name:'Hotel Alma',     concept:{de:'Hospitality Digital Concept',     en:'Hospitality Digital Concept'} },
+  'the-edge':      { name:'The Edge',       concept:{de:'Identity Branding Case Study',    en:'Identity Branding Case Study'} },
+  'kronenburg':    { name:'Kronenburg',     concept:{de:'Gastronomie Conversion-Prototyp', en:'Gastronomy Conversion Prototype'} },
+  'meister-huber': { name:'Meister Huber',  concept:{de:'Service-Industry-Lösung',         en:'Service Industry Solution'} },
+  'pommes-doener': { name:'Pommes & Döner', concept:{de:'Digitales Quick-Service-Modell',  en:'Digital Fast-Food Model'} },
+  'das-kleine-eck':{ name:'Das Kleine Eck', concept:{de:'Blueprint für Lokal-Business',    en:'Local Business Blueprint'} },
+};
+
+var DICT = {
+  de: {
+    title: 'Namax · Boutique Web Studio Wien — Erfahrung trifft Innovation',
+    nav: { approach:'Ansatz', concepts:'Konzepte', process:'Prozess', studio:'Studio', cta:'Beratung anfragen' },
+    hero: {
+      kicker:'Boutique Web Studio · Wien',
+      h1a:'Erfahrung trifft', h1b:'Innovation.', h1c:'Zwei Generationen,', h1d:'ein Studio.',
+      lede:'Namax ist ein Vater-Sohn-Studio aus Wien. Wir verbinden 20 Jahre Strategie­handwerk mit kompromissloser, moderner Web-Engineering — und liefern digitale Auftritte, die für ihre Branche einen Standard setzen. <em class="serif">Handschlagqualität, in Code gegossen.</em>',
+      cta1:'Strategic Consultation', cta2:'Branchen­konzepte ansehen',
+      m1k:'Gegründet', m1v:'2006 · Wien, AT',
+      m2k:'Team',      m2v:'Zwei Spezialisten, end-to-end',
+      m3k:'Aufträge',  m3v:'Auf Empfehlung & Einladung',
+      m4k:'Sprachen',  m4v:'Deutsch · English',
+      duoTag:'Das Gründer-Duo',
+      p1Role:'Senior Strategist', p1Name:'Nasim · Vater',       p1Bio:'20 Jahre Markenstrategie & Kundenbeziehung. Versteht Branchen, bevor er Pixel berührt.',
+      p2Role:'Tech Lead',          p2Name:'Mehran · Sohn',       p2Bio:'Next-Gen Engineering. Performance, Motion & Architektur — ohne stilistische Kompromisse.',
+      quote:'<sup>01</sup>„Ein Auftritt, der die Hand seines Inhabers verdient — und die Geschwindigkeit der nächsten Dekade."',
+      manifesto:'Studio Manifest', seal:'Handschlagqualität',
+    },
+    why: {
+      kicker:'02 — Warum ein Duo',
+      h2a:'Erfahrung allein wird langsam.', h2b:'Innovation allein verfehlt das Ziel.',
+      c1Num:'I.', c1H:'Senior Strategy',
+      c1P:'Wir hören zu, bevor wir entwerfen. Branche, Kundschaft, Margen, Saisonalität — der Auftritt entsteht aus dem Geschäft, nicht aus dem Trend.',
+      c1L:['Positionierung & Markenarchitektur','Conversion- und Funnel-Logik','Redaktionelle Struktur, Tonalität DE/EN','Persönliche Betreuung — kein Account-Layer'],
+      c2Num:'II.', c2H:'Next-Gen Engineering',
+      c2P:'Jede Seite wird auf 100/100 entwickelt. Saubere Semantik, optimierte Assets, Motion mit Substanz — kein Page-Builder, kein Plugin-Schimmel.',
+      c2L:['Custom Frontend, &lt;200 ms LCP','Schema, Indexierung, Core Web Vitals','Smooth Motion & Interaction Design','Hosting, SSL, Care & Updates inklusive'],
+      eq:['Erfahrung','+','Innovation','=','Handschlagqualität'],
+    },
+    show: {
+      kicker:'03 — Industry Showcase',
+      h2a:'Sechs Branchen, sechs Auftritte —', h2b:'in Bewegung.',
+      lede:'Konzeptstudien, die wir intern für Schlüsselbranchen entwickelt haben. Jede zeigt, wie Strategie, Conversion und Editorial Engineering zusammen aussehen. <em class="serif">Bewegen Sie den Mauszeiger</em> über eine Karte, um die ganze Seite zu erleben.',
+      hint:'Hovern zum Scrollen', concept:'KONZEPT',
+      foot1:'Industry Solution Concepts · keine Live-Kunden · ausschließlich zur Portfolio-Referenz',
+      foot2:'Ihre Branche besprechen',
+    },
+    proc: {
+      kicker:'04 — Prozess',
+      h2a:'Fünf Schritte. Zwei Köpfe.', h2b:'Ein Handschlag.',
+      lede:'Unser Prozess ist transparent und persönlich. Sie sprechen mit uns — nicht mit einem Account, einem Junior und drei Tools.',
+      steps:[
+        { t:'Strategic Consultation',  s:'Erstgespräch · 60 min',         d:'Wir hören zu: Geschäftsmodell, Wettbewerb, Kundenpfade, Pain Points. Kein Pitch — eine Diagnose.', dur:'60 min', when:'Woche 0' },
+        { t:'Positioning & Concept',   s:'Strategie & Konzept',            d:'Markenkern, Tonalität, Inhaltsstruktur und ein einseitiges Konzeptbild. Vor jedem Pixel steht ein Argument.', dur:'1–2 W', when:'Woche 1–2' },
+        { t:'Editorial Design',        s:'Look, Feel, Type, Motion',       d:'Hi-fi-Designs für Schlüsselseiten, Type-System, Motion-Studies. Iteration in zwei klar definierten Runden.', dur:'2–3 W', when:'Woche 3–5' },
+        { t:'Performance Engineering', s:'Build & 100/100 Audit',          d:'Sauberer Custom-Build, Asset-Optimierung, Schema, A11y. Wir liefern keinen Auftritt unter 95/100 aus.', dur:'2–3 W', when:'Woche 5–7' },
+        { t:'Launch & Care',           s:'Go-live & laufende Betreuung',   d:'Migration, Monitoring, monatliche Care-Reviews, persönlicher Draht. Kein Ticket-System zwischen uns.', dur:'∞', when:'ab Launch' },
+      ],
+    },
+    cta: {
+      kicker:'05 — Strategic Consultation',
+      h2a:'Lassen Sie uns Ihre Branche', h2b:'ernst nehmen.',
+      p:'60 Minuten, kein Pitch, keine Slides — eine ehrliche Diagnose Ihres digitalen Auftritts. Im Anschluss erhalten Sie eine schriftliche Einschätzung, ob ein Engagement mit Namax sinnvoll ist. <em class="serif">Auf Handschlag.</em>',
+      b1:'Termin anfragen', b2:'+43 · Direktdraht',
+      f1k:'Verfügbarkeit', f1v:'2 Engagements / Quartal', f1s:'Wir nehmen nur an, was wir persönlich führen können.',
+      f2k:'Antwortzeit',   f2v:'< 24 Stunden, werktags',  f2s:'Schreiben Sie uns Branche und einen kurzen Kontext — wir melden uns mit einem Vorschlag.',
+      f3k:'Ort',           f3v:'Wien · Remote DACH',       f3s:'Erstgespräch persönlich oder über sicheren Video-Call.',
+    },
+    foot: {
+      tag:'Ein Boutique-Studio aus Wien. Zwei Spezialisten, ein Handschlag — für Unternehmen, die den Trendzyklus überdauern wollen.',
+      h1:'Studio',       l1:['Ansatz','Branchen­konzepte','Prozess','Studio'],
+      h2:'Disziplinen',  l2:['Strategie & Positionierung','Editorial Web Design','Performance Engineering','Care & Hosting'],
+      h3:'Kontakt',      l3:['Tscherttegasse 39','1120 Wien, AT','office@namax.at','+43 677 64292055'],
+      copy:'© 2026 Namax Studio · Wien', built:'In-house entwickelt · 100 / 100 · Handschlagqualität',
+    },
+    tape:['Strategie','Markenidentität','Conversion-Architektur','Performance Engineering','Editorial Web','Motion & Interaction','SEO & Schema','Hosting & Care'],
+  },
+  en: {
+    title: 'Namax · Boutique Web Studio Vienna — Experience meets Innovation',
+    nav: { approach:'Approach', concepts:'Concepts', process:'Process', studio:'Studio', cta:'Book a Consultation' },
+    hero: {
+      kicker:'Boutique Web Studio · Vienna',
+      h1a:'Experience meets', h1b:'innovation.', h1c:'Two generations,', h1d:'one studio.',
+      lede:'Namax is a father-and-son studio based in Vienna. We pair 20 years of strategic craft with uncompromising, modern web engineering — building digital presences that set the bar for their industry. <em class="serif">Handshake quality, cast in code.</em>',
+      cta1:'Strategic Consultation', cta2:'View Industry Concepts',
+      m1k:'Founded',     m1v:'2006 · Vienna, AT',
+      m2k:'Team',        m2v:'Two specialists, end-to-end',
+      m3k:'Engagements', m3v:'By referral & invitation',
+      m4k:'Languages',   m4v:'Deutsch · English',
+      duoTag:'The Founding Duo',
+      p1Role:'Senior Strategist', p1Name:'Nasim · Father',     p1Bio:'20 years of brand strategy and client relationships. Understands industries before he ever touches a pixel.',
+      p2Role:'Tech Lead',          p2Name:'Mehran · Son',       p2Bio:'Next-gen engineering. Performance, motion and architecture — with no stylistic compromise.',
+      quote:'<sup>01</sup>“A presence that lives up to the owner’s handshake — and the speed of the next decade.”',
+      manifesto:'Studio Manifesto', seal:'Handshake Quality',
+    },
+    why: {
+      kicker:'02 — Why a Duo',
+      h2a:'Experience alone gets slow.', h2b:'Innovation alone misses the point.',
+      c1Num:'I.', c1H:'Senior Strategy',
+      c1P:'We listen before we design. Industry, customer, margins, seasonality — the presence is born from the business, not from a trend.',
+      c1L:['Positioning & brand architecture','Conversion and funnel logic','Editorial structure, tone in DE/EN','Personal stewardship — no account layer'],
+      c2Num:'II.', c2H:'Next-Gen Engineering',
+      c2P:'Every site is engineered to 100/100. Clean semantics, optimised assets, motion with substance — no page builder, no plugin sprawl.',
+      c2L:['Custom frontend, &lt;200 ms LCP','Schema, indexation, Core Web Vitals','Smooth motion & interaction design','Hosting, SSL, care & updates included'],
+      eq:['Experience','+','Innovation','=','Handshake Quality'],
+    },
+    show: {
+      kicker:'03 — Industry Showcase',
+      h2a:'Six industries, six presences —', h2b:'in motion.',
+      lede:'Concept studies we developed in-house for key industries. Each shows what strategy, conversion and editorial engineering look like together. <em class="serif">Hover</em> a card to experience the full page.',
+      hint:'Hover to scroll', concept:'CONCEPT',
+      foot1:'Industry Solution Concepts · not live clients · for portfolio reference only',
+      foot2:'Discuss your industry',
+    },
+    proc: {
+      kicker:'04 — Process',
+      h2a:'Five steps. Two minds.', h2b:'One handshake.',
+      lede:'Our process is transparent and personal. You speak to us — not to an account manager, a junior and three tools.',
+      steps:[
+        { t:'Strategic Consultation',  s:'First call · 60 min',           d:'We listen: business model, competition, customer paths, pain points. No pitch — a diagnosis.', dur:'60 min', when:'Week 0' },
+        { t:'Positioning & Concept',   s:'Strategy & concept',            d:'Brand core, tone, content architecture and a one-page concept image. Every pixel earns its place.', dur:'1–2 wks', when:'Week 1–2' },
+        { t:'Editorial Design',        s:'Look, feel, type, motion',      d:'Hi-fi designs for key pages, type system, motion studies. Iterated in two clearly defined rounds.', dur:'2–3 wks', when:'Week 3–5' },
+        { t:'Performance Engineering', s:'Build & 100/100 audit',         d:'Clean custom build, asset optimisation, schema, a11y. We do not ship a presence below 95/100.', dur:'2–3 wks', when:'Week 5–7' },
+        { t:'Launch & Care',           s:'Go-live & ongoing care',        d:'Migration, monitoring, monthly care reviews, a personal line. No ticket system between us.', dur:'∞', when:'from launch' },
+      ],
+    },
+    cta: {
+      kicker:'05 — Strategic Consultation',
+      h2a:"Let's take your industry", h2b:'seriously.',
+      p:'60 minutes, no pitch, no slides — an honest diagnosis of your digital presence. Afterwards you receive a written assessment of whether an engagement with Namax makes sense. <em class="serif">On a handshake.</em>',
+      b1:'Request a meeting', b2:'+43 · Direct line',
+      f1k:'Availability',  f1v:'2 engagements / quarter', f1s:'We only take on what we can personally lead.',
+      f2k:'Response time', f2v:'< 24 hours, weekdays',    f2s:"Send us your industry and a short context — we'll come back with a proposal.",
+      f3k:'Location',      f3v:'Vienna · Remote DACH',    f3s:'First call in person or over a secure video link.',
+    },
+    foot: {
+      tag:'A boutique Vienna studio. Two specialists, one handshake — for businesses that want to outlast the trend cycle.',
+      h1:'Studio',       l1:['Approach','Industry Concepts','Process','Studio'],
+      h2:'Disciplines',  l2:['Strategy & Positioning','Editorial Web Design','Performance Engineering','Care & Hosting'],
+      h3:'Contact',      l3:['Tscherttegasse 39','1120 Vienna, AT','office@namax.at','+43 677 64292055'],
+      copy:'© 2026 Namax Studio · Vienna', built:'Built in-house · 100 / 100 · Handshake Quality',
+    },
+    tape:['Strategy','Brand Identity','Conversion Architecture','Performance Engineering','Editorial Web','Motion & Interaction','SEO & Schema','Hosting & Care'],
+  },
+};
+
+// ── State ──────────────────────────────────────────────────────────────────
+var lang = 'de';
+var revealedSet = new Set();
+var ioRef = null;
+
+function getLang() {
+  try { return localStorage.getItem('namax_lang') || 'de'; } catch(e){ return 'de'; }
+}
+
+// ── HTML builders ──────────────────────────────────────────────────────────
+var SVG_ARR12 = '<svg class="arr" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h7m0 0L6 3m3 3L6 9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>';
+var SVG_ARR14 = '<svg class="arr" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h9m0 0L7.5 3.5M11 7L7.5 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
+
+function buildNav(t) {
+  return '<header class="nav">'
+    + '<div class="container nav-inner">'
+    + '<a class="brand" href="#"><span class="brand-mark">n</span>'
+    + '<span class="brand-name"><b>namax</b><span class="dot">.at</span></span></a>'
+    + '<nav class="nav-links">'
+    + '<a href="#why">'+t.nav.approach+'</a>'
+    + '<a href="#showcase">'+t.nav.concepts+'</a>'
+    + '<a href="#process">'+t.nav.process+'</a>'
+    + '<a href="#contact">'+t.nav.studio+'</a>'
+    + '</nav>'
+    + '<div class="nav-cta">'
+    + '<div class="lang" role="group" aria-label="Language">'
+    + '<button class="lang-btn'+(lang==='de'?' on':'')+'" data-lang="de">DE</button>'
+    + '<span class="lang-sep">·</span>'
+    + '<button class="lang-btn'+(lang==='en'?' on':'')+'" data-lang="en">EN</button>'
+    + '</div>'
+    + '<a href="#contact" class="btn btn-primary btn-pill">'+t.nav.cta+' '+SVG_ARR12+'</a>'
+    + '</div></div></header>';
+}
+
+function buildTape(t) {
+  var items = t.tape.map(function(w){ return '<span>'+w+' <i>·</i></span>'; }).join('');
+  return '<div class="tape" aria-hidden="true"><div class="tape-track">'+items+items+'</div></div>';
+}
+
+function buildHero(t) {
+  var h = t.hero;
+  return '<section class="hero">'
+    + '<div class="container">'
+    + '<div class="reveal kicker"><span class="dot"></span> '+h.kicker+'</div>'
+    + '<div class="hero-grid">'
+    + '<div>'
+    + '<h1 class="reveal d1">'+h.h1a+' <span class="ochre">'+h.h1b+'</span><br>'
+    + '<span class="it">'+h.h1c+'</span> '+h.h1d+'</h1>'
+    + '<p class="hero-lede reveal d2">'+h.lede+'</p>'
+    + '<div class="hero-actions reveal d3">'
+    + '<a href="#contact" class="btn btn-primary">'+h.cta1+' '+SVG_ARR14+'</a>'
+    + '<a href="#showcase" class="btn btn-ghost">'+h.cta2+'</a>'
+    + '</div>'
+    + '<div class="hero-meta reveal d4">'
+    + '<div><span class="k">'+h.m1k+'</span><span class="v">'+h.m1v+'</span></div>'
+    + '<div><span class="k">'+h.m2k+'</span><span class="v">'+h.m2v+'</span></div>'
+    + '<div><span class="k">'+h.m3k+'</span><span class="v">'+h.m3v+'</span></div>'
+    + '<div><span class="k">'+h.m4k+'</span><span class="v">'+h.m4v+'</span></div>'
+    + '</div>'
+    + '</div>'
+    + '<div class="duo reveal d2">'
+    + '<div class="duo-tag"><span class="pulse"></span> '+h.duoTag+'</div>'
+    + '<div class="duo-people">'
+    + '<div class="person"><div class="avatar"><span class="glyph">N</span><span class="role">'+h.p1Role+'</span></div>'
+    + '<h4>'+h.p1Name+'</h4><p>'+h.p1Bio+'</p></div>'
+    + '<div class="person"><div class="avatar"><span class="glyph">M</span><span class="role">'+h.p2Role+'</span></div>'
+    + '<h4>'+h.p2Name+'</h4><p>'+h.p2Bio+'</p></div>'
+    + '</div>'
+    + '<div class="duo-rule"></div>'
+    + '<div class="duo-quote">'+h.quote+'</div>'
+    + '<div class="duo-foot"><span>'+h.manifesto+'</span>'
+    + '<span class="seal"><span class="seal-dot"></span> '+h.seal+'</span></div>'
+    + '</div>'
+    + '</div>'
+    + '</div>'
+    + buildTape(t)
+    + '</section>';
+}
+
+function buildWhy(t) {
+  var w = t.why;
+  var c1li = w.c1L.map(function(x){ return '<li>'+x+'</li>'; }).join('');
+  var c2li = w.c2L.map(function(x){ return '<li>'+x+'</li>'; }).join('');
+  return '<section class="why" id="why">'
+    + '<div class="container">'
+    + '<div class="section-head reveal">'
+    + '<span class="kicker"><span class="dot"></span> '+w.kicker+'</span>'
+    + '<div><h2>'+w.h2a+'<br><span class="it">'+w.h2b+'</span></h2></div>'
+    + '</div>'
+    + '<div class="why-grid">'
+    + '<div class="why-col reveal d1"><span class="why-num">'+w.c1Num+'</span><h3>'+w.c1H+'</h3><p>'+w.c1P+'</p><ul>'+c1li+'</ul></div>'
+    + '<div class="why-col reveal d2"><span class="why-num">'+w.c2Num+'</span><h3>'+w.c2H+'</h3><p>'+w.c2P+'</p><ul>'+c2li+'</ul></div>'
+    + '</div>'
+    + '<div class="why-eq reveal d3">'
+    + '<em>'+w.eq[0]+'</em><span>'+w.eq[1]+'</span><em>'+w.eq[2]+'</em><span>'+w.eq[3]+'</span><em>'+w.eq[4]+'</em>'
+    + '</div>'
+    + '</div></section>';
+}
+
+function buildShowCard(p, idx, t) {
+  var meta = PROJECT_NAMES[p.id];
+  var delayClass = 'd' + ((idx % 3) + 1);
+  return '<article class="show-card reveal '+delayClass+'" tabindex="0" aria-label="'+meta.name+' — '+meta.concept[lang]+'">'
+    + '<div class="show-frame">'
+    + '<div class="show-chrome"><i></i><i></i><i></i><span class="url">'+p.id+'.namax.at</span></div>'
+    + '<span class="show-num">'+t.show.concept+'&nbsp;/&nbsp;'+String(idx+1).padStart(2,'0')+'</span>'
+    + '<span class="show-hint">'+t.show.hint+' <span class="arr">↓</span></span>'
+    + '<div class="show-vp"><img src="'+p.img+'" alt="'+meta.name+' concept full-page mockup" loading="lazy" decoding="async"/></div>'
+    + '</div>'
+    + '<div class="show-meta"><div><h4>'+meta.name+'</h4><p>'+meta.concept[lang]+'</p></div>'
+    + '<span class="show-tag">'+p.industry[lang]+'</span></div>'
+    + '</article>';
+}
+
+function buildShowcase(t) {
+  var s = t.show;
+  var cards = PROJECTS.map(function(p, i){ return buildShowCard(p, i, t); }).join('');
+  return '<section class="showcase" id="showcase">'
+    + '<div class="container">'
+    + '<div class="section-head reveal">'
+    + '<span class="kicker"><span class="dot"></span> '+s.kicker+'</span>'
+    + '<div><h2>'+s.h2a+' <span class="it">'+s.h2b+'</span></h2><p class="lede">'+s.lede+'</p></div>'
+    + '</div>'
+    + '<div class="show-grid">'+cards+'</div>'
+    + '<div class="show-foot"><span>'+s.foot1+'</span>'
+    + '<a href="#contact">'+s.foot2+' '+SVG_ARR12+'</a>'
+    + '</div>'
+    + '</div></section>';
+}
+
+function buildProcess(t) {
+  var p = t.proc;
+  var nums = ['I','II','III','IV','V'];
+  var rows = p.steps.map(function(s, i){
+    var d = Math.min(i+1,5);
+    return '<div class="proc-row reveal d'+d+'">'
+      + '<div class="proc-no">'+nums[i]+'</div>'
+      + '<h3>'+s.t+'<small>'+s.s+'</small></h3>'
+      + '<p class="desc">'+s.d+'</p>'
+      + '<div class="dur"><b>'+s.dur+'</b>'+s.when+'</div>'
+      + '</div>';
+  }).join('');
+  return '<section class="process" id="process">'
+    + '<div class="container">'
+    + '<div class="section-head reveal">'
+    + '<span class="kicker"><span class="dot"></span> '+p.kicker+'</span>'
+    + '<div><h2>'+p.h2a+'<br><span class="it">'+p.h2b+'</span></h2><p class="lede">'+p.lede+'</p></div>'
+    + '</div>'
+    + '<div class="proc-list">'+rows+'</div>'
+    + '</div></section>';
+}
+
+function buildCTA(t) {
+  var c = t.cta;
+  return '<section class="cta" id="contact">'
+    + '<div class="container">'
+    + '<div class="cta-card reveal">'
+    + '<div class="cta-grid">'
+    + '<div>'
+    + '<span class="kicker"><span class="dot"></span> '+c.kicker+'</span>'
+    + '<h2>'+c.h2a+' <span class="it">'+c.h2b+'</span></h2>'
+    + '<p>'+c.p+'</p>'
+    + '<div class="cta-actions">'
+    + '<a href="#" data-modal="contact" class="btn btn-primary">'+c.b1+' '+SVG_ARR14+'</a>'
+    + '<a href="tel:+4367764292055" class="btn btn-ghost mobile-only">'+c.b2+'</a>'
+    + '</div>'
+    + '</div>'
+    + '<div class="cta-side">'
+    + '<div class="cta-fact"><div class="k">'+c.f1k+'</div><div class="v">'+c.f1v+'</div><small>'+c.f1s+'</small></div>'
+    + '<div class="cta-fact"><div class="k">'+c.f2k+'</div><div class="v">'+c.f2v+'</div><small>'+c.f2s+'</small></div>'
+    + '<div class="cta-fact"><div class="k">'+c.f3k+'</div><div class="v">'+c.f3v+'</div><small>'+c.f3s+'</small></div>'
+    + '</div>'
+    + '</div></div>'
+    + '</div></section>';
+}
+
+function buildFooter(t) {
+  var f = t.foot;
+  var l1 = f.l1.map(function(x){ return '<li><a href="#">'+x+'</a></li>'; }).join('');
+  var l2 = f.l2.map(function(x){ return '<li>'+x+'</li>'; }).join('');
+  var l3 = f.l3.map(function(x){
+    if (x.indexOf('@') > -1) return '<li><a href="mailto:'+x+'">'+x+'</a></li>';
+    if (x.indexOf('+43') > -1) return '<li><a href="tel:'+x.replace(/\s/g,'')+'">'+x+'</a></li>';
+    return '<li>'+x+'</li>';
+  }).join('');
+  var impLabel = lang === 'de' ? 'Impressum' : 'Imprint';
+  var dsgLabel = lang === 'de' ? 'Datenschutz' : 'Privacy Policy';
+  return '<footer class="foot">'
+    + '<div class="container">'
+    + '<div class="foot-grid">'
+    + '<div>'
+    + '<a class="brand" href="#"><span class="brand-mark">n</span>'
+    + '<span class="brand-name"><b>namax</b><span class="dot">.at</span></span></a>'
+    + '<div class="foot-tag">'+f.tag+'</div>'
+    + '</div>'
+    + '<div><h5>'+f.h1+'</h5><ul>'+l1+'</ul></div>'
+    + '<div><h5>'+f.h2+'</h5><ul>'+l2+'</ul></div>'
+    + '<div><h5>'+f.h3+'</h5><ul>'+l3+'</ul></div>'
+    + '</div>'
+    + '<div class="foot-bot">'
+    + '<span>'+f.copy+'</span>'
+    + '<div class="foot-legal">'
+    + '<a href="#" data-modal="impressum">'+impLabel+'</a>'
+    + '<a href="#" data-modal="datenschutz">'+dsgLabel+'</a>'
+    + '</div>'
+    + '</div>'
+    + '</div></footer>';
+}
+
+function buildModals() {
+  var isDE = lang === 'de';
+  var imp = isDE
+    ? '<div class="modal-section"><h3>Angaben gemäß § 5 ECG</h3><p>Nasim Nuridinov e.U<br>Tscherttegasse 39, 1120 Wien, Österreich<br>E-Mail: <a href="mailto:office@namax.at">office@namax.at</a><br>Tel: <a href="tel:+4367764292055">+43 677 64292055</a></p></div>'
+      + '<div class="modal-section"><h3>Unternehmensgegenstand</h3><p>Webdesign &amp; Webentwicklung</p></div>'
+      + '<div class="modal-section"><h3>UID-Nummer</h3><p>ATU80802758</p></div>'
+      + '<div class="modal-section"><h3>Aufsichtsbehörde</h3><p>Magistrat der Stadt Wien · Mitglied der WKO Wien</p></div>'
+      + '<div class="modal-section"><h3>Haftungsausschluss</h3><p>Alle Inhalte dieser Website wurden sorgfältig erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität wird keine Gewähr übernommen.</p></div>'
+    : '<div class="modal-section"><h3>According to § 5 ECG</h3><p>Nasim Nuridinov e.U<br>Tscherttegasse 39, 1120 Vienna, Austria<br>E-mail: <a href="mailto:office@namax.at">office@namax.at</a><br>Phone: <a href="tel:+4367764292055">+43 677 64292055</a></p></div>'
+      + '<div class="modal-section"><h3>Business activity</h3><p>Web Design &amp; Web Development</p></div>'
+      + '<div class="modal-section"><h3>VAT number</h3><p>ATU80802758</p></div>'
+      + '<div class="modal-section"><h3>Supervisory authority</h3><p>Magistrat der Stadt Wien · Member of WKO Wien</p></div>'
+      + '<div class="modal-section"><h3>Disclaimer</h3><p>All content on this website has been carefully created. No guarantee is given for the accuracy, completeness or timeliness of the information provided.</p></div>';
+
+  var dsg = isDE
+    ? '<div class="modal-section"><h3>Verantwortlicher gemäß DSGVO</h3><p>Nasim Nuridinov e.U, Tscherttegasse 39, 1120 Wien<br>E-Mail: <a href="mailto:office@namax.at">office@namax.at</a></p></div>'
+      + '<div class="modal-section"><h3>Welche Daten wir verarbeiten</h3><p>Diese Website erhebt keine personenbezogenen Daten über Formulare oder Tracking. Es werden keine Cookies gesetzt.</p>'
+      + '<p style="margin-top:10px">Im Browser wird ausschließlich <strong>localStorage</strong> verwendet, um Ihre Sprachpräferenz (DE/EN) zu speichern. Dies ist eine technisch notwendige Funktion und erfordert keine Einwilligung (§ 25 Abs. 2 TDSG / § 165 Abs. 3 TKG 2021).</p></div>'
+      + '<div class="modal-section"><h3>Schriftarten (selbst gehostet)</h3><p>Diese Website verwendet die Schriftarten <em>Inter Tight</em> und <em>Instrument Serif</em>, die ausschließlich von unserem eigenen Server geladen werden. Es findet keine Datenübertragung an Dritte statt.</p></div>'
+      + '<div class="modal-section"><h3>Kontakt per E-Mail oder Telefon</h3><p>Wenn Sie uns per E-Mail oder Telefon kontaktieren, werden Ihre Angaben zur Bearbeitung Ihrer Anfrage verwendet und nicht an Dritte weitergegeben. Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO.</p></div>'
+      + '<div class="modal-section"><h3>Ihre Rechte</h3><p>Sie haben das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung sowie Datenübertragbarkeit. Beschwerden können bei der österreichischen Datenschutzbehörde (<a href="https://www.dsb.gv.at" target="_blank" rel="noopener">dsb.gv.at</a>) eingereicht werden.</p></div>'
+    : '<div class="modal-section"><h3>Controller under GDPR</h3><p>Nasim Nuridinov e.U, Tscherttegasse 39, 1120 Vienna<br>E-mail: <a href="mailto:office@namax.at">office@namax.at</a></p></div>'
+      + '<div class="modal-section"><h3>What data we process</h3><p>This website does not collect personal data through forms or tracking. No cookies are set.</p>'
+      + '<p style="margin-top:10px"><strong>localStorage</strong> is used exclusively to remember your language preference (DE/EN). This is a technically necessary function and requires no consent (§ 25 (2) TDSG).</p></div>'
+      + '<div class="modal-section"><h3>Fonts (self-hosted)</h3><p>This website uses the fonts <em>Inter Tight</em> and <em>Instrument Serif</em>, loaded exclusively from our own server. No data is transferred to third parties.</p></div>'
+      + '<div class="modal-section"><h3>Contact by e-mail or phone</h3><p>If you contact us by e-mail or phone, your details will be used to process your enquiry and will not be passed on to third parties. Legal basis: Art. 6(1)(b) GDPR.</p></div>'
+      + '<div class="modal-section"><h3>Your rights</h3><p>You have the right to access, rectification, erasure, restriction of processing and data portability. Complaints may be lodged with the Austrian Data Protection Authority (<a href="https://www.dsb.gv.at" target="_blank" rel="noopener">dsb.gv.at</a>).</p></div>';
+
+  var impTitle = isDE ? 'Impressum' : 'Imprint';
+  var dsgTitle = isDE ? 'Datenschutz­erklärung' : 'Privacy Policy';
+
+  var isDE2 = isDE;
+  var ctitle  = isDE2 ? 'Termin anfragen'           : 'Request a Meeting';
+  var csub    = isDE2 ? '60 Minuten, kein Pitch — wir hören zu. Schreiben Sie uns kurz, wer Sie sind und was Sie beschäftigt. Wir melden uns innerhalb von 24 Stunden.'
+                      : '60 minutes, no pitch — we listen. Tell us briefly who you are and what\'s on your mind. We\'ll be in touch within 24 hours.';
+  var lName   = isDE2 ? 'Ihr Name'                  : 'Your name';
+  var lInd    = isDE2 ? 'Branche / Unternehmen'     : 'Industry / Company';
+  var lPhone  = isDE2 ? 'Telefon (optional)'        : 'Phone (optional)';
+  var lMsg    = isDE2 ? 'Was beschäftigt Sie?'      : 'What\'s on your mind?';
+  var lSend   = isDE2 ? 'Anfrage absenden'          : 'Send enquiry';
+  var lOk     = isDE2 ? 'Nachricht gesendet!'       : 'Message sent!';
+  var lOkSub  = isDE2 ? 'Wir melden uns innerhalb von 24 Stunden werktags. Bis bald.' : 'We\'ll be in touch within 24 hours on weekdays. Talk soon.';
+
+  var contactModal = '<div class="modal-backdrop" id="modal-contact" role="dialog" aria-modal="true" aria-label="'+ctitle+'">'
+    + '<div class="modal-box"><button class="modal-close" data-close aria-label="Schließen">✕</button>'
+    + '<h2>'+ctitle+'</h2>'
+    + '<p class="modal-sub">'+csub+'</p>'
+    + '<form id="contact-form" action="https://formsubmit.co/ajax/office@namax.at" method="POST">'
+    + '<input type="hidden" name="_subject" value="Neue Anfrage via namax.at"/>'
+    + '<input type="hidden" name="_captcha" value="false"/>'
+    + '<div class="form-group"><label>'+lName+'</label><input type="text" name="name" required placeholder="'+lName+'"/></div>'
+    + '<div class="form-group"><label>'+lInd+'</label><input type="text" name="industry" placeholder="'+lInd+'"/></div>'
+    + '<div class="form-group"><label>'+lPhone+'</label><input type="tel" name="phone" placeholder="+43 ..."/></div>'
+    + '<div class="form-group"><label>'+lMsg+'</label><textarea name="message" rows="4" required placeholder="'+lMsg+'"></textarea></div>'
+    + '<button type="submit" class="btn btn-primary form-submit">'+lSend+' '+SVG_ARR14+'</button>'
+    + '</form>'
+    + '<div class="form-success" id="form-success" hidden>'
+    + '<div class="check">✓</div>'
+    + '<p><strong>'+lOk+'</strong>'+lOkSub+'</p>'
+    + '</div>'
+    + '</div></div>';
+
+  return contactModal
+    + '<div class="modal-backdrop" id="modal-impressum" role="dialog" aria-modal="true" aria-label="'+impTitle+'">'
+    + '<div class="modal-box"><button class="modal-close" data-close aria-label="Schließen">✕</button>'
+    + '<h2>'+impTitle+'</h2>'+imp+'</div></div>'
+    + '<div class="modal-backdrop" id="modal-datenschutz" role="dialog" aria-modal="true" aria-label="'+dsgTitle+'">'
+    + '<div class="modal-box"><button class="modal-close" data-close aria-label="Schließen">✕</button>'
+    + '<h2>'+dsgTitle+'</h2>'+dsg+'</div></div>';
+}
+
+function buildPage() {
+  var t = DICT[lang];
+  return buildNav(t)
+    + '<main>'
+    + buildHero(t)
+    + buildWhy(t)
+    + buildShowcase(t)
+    + buildProcess(t)
+    + buildCTA(t)
+    + '</main>'
+    + buildFooter(t)
+    + buildModals();
+}
+
+// ── Reveal ────────────────────────────────────────────────────────────────
+function initReveal() {
+  if (ioRef) ioRef.disconnect();
+  ioRef = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        ioRef.unobserve(e.target);
+      }
+    });
+  }, { rootMargin:'0px 0px -8% 0px', threshold:0.08 });
+
+  var els = document.querySelectorAll('.reveal');
+  els.forEach(function(el, i){
+    if (revealedSet.has(i)) {
+      el.classList.add('in');
+    } else {
+      ioRef.observe(el);
+    }
+  });
+}
+
+function snapshotRevealed() {
+  revealedSet.clear();
+  document.querySelectorAll('.reveal').forEach(function(el, i){
+    if (el.classList.contains('in')) revealedSet.add(i);
+  });
+}
+
+// ── Show-card scroll ratio ────────────────────────────────────────────────
+var roRefs = [];
+
+function initShowCards() {
+  roRefs.forEach(function(ro){ ro.disconnect(); });
+  roRefs = [];
+
+  document.querySelectorAll('.show-card').forEach(function(card){
+    var img = card.querySelector('img');
+    if (!img) return;
+
+    function update() {
+      var frame = card.querySelector('.show-vp');
+      if (!frame || !img.naturalWidth) return;
+      var renderedH = img.getBoundingClientRect().height
+        || (img.naturalHeight * (frame.clientWidth / img.naturalWidth));
+      var ratio = frame.clientHeight / renderedH;
+      card.style.setProperty('--vp-h', ratio.toFixed(4));
+    }
+
+    if (img.complete && img.naturalWidth) { update(); }
+    else { img.addEventListener('load', update); }
+
+    var ro = new ResizeObserver(update);
+    ro.observe(card);
+    roRefs.push(ro);
+  });
+}
+
+// ── Lang switch ───────────────────────────────────────────────────────────
+function setLang(l) {
+  if (l === lang) return;
+  snapshotRevealed();
+  lang = l;
+  try { localStorage.setItem('namax_lang', l); } catch(e){}
+  document.documentElement.lang = l;
+  document.title = DICT[l].title;
+  render();
+}
+
+// ── Modal ─────────────────────────────────────────────────────────────────
+function openModal(id) {
+  var el = document.getElementById('modal-' + id);
+  if (!el) return;
+  el.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  el.querySelector('.modal-close').focus();
+}
+
+function closeAllModals() {
+  document.querySelectorAll('.modal-backdrop.open').forEach(function(el){
+    el.classList.remove('open');
+  });
+  document.body.style.overflow = '';
+}
+
+// ── Global click delegation ───────────────────────────────────────────────
+function handleClick(e) {
+  // lang switch
+  var langBtn = e.target.closest('.lang-btn');
+  if (langBtn) { setLang(langBtn.dataset.lang); return; }
+
+  // open modal
+  var modalTrigger = e.target.closest('[data-modal]');
+  if (modalTrigger) { e.preventDefault(); openModal(modalTrigger.dataset.modal); return; }
+
+  // close modal via button or backdrop click
+  if (e.target.closest('[data-close]')) { closeAllModals(); return; }
+  var backdrop = e.target.closest('.modal-backdrop');
+  if (backdrop && e.target === backdrop) { closeAllModals(); return; }
+}
+
+// ── Render ────────────────────────────────────────────────────────────────
+function render() {
+  document.getElementById('root').innerHTML = buildPage();
+  initReveal();
+  initShowCards();
+}
+
+// ── Contact form ──────────────────────────────────────────────────────────
+document.addEventListener('submit', function(e) {
+  var form = e.target.closest('#contact-form');
+  if (!form) return;
+  e.preventDefault();
+  var btn = form.querySelector('.form-submit');
+  btn.disabled = true;
+  btn.innerHTML = (lang === 'de' ? 'Wird gesendet…' : 'Sending…');
+  fetch(form.action, {
+    method: 'POST',
+    body: new FormData(form),
+    headers: { 'Accept': 'application/json' }
+  }).then(function(r){
+    if (r.ok) {
+      form.hidden = true;
+      var ok = document.getElementById('form-success');
+      if (ok) ok.hidden = false;
+    } else {
+      btn.disabled = false;
+      btn.innerHTML = (lang === 'de' ? 'Anfrage absenden' : 'Send enquiry');
+    }
+  }).catch(function(){
+    btn.disabled = false;
+    btn.innerHTML = (lang === 'de' ? 'Anfrage absenden' : 'Send enquiry');
+  });
+});
+
+// ── Parallax ──────────────────────────────────────────────────────────────
+function initParallax() {
+  window.addEventListener('scroll', function(){
+    var hero = document.querySelector('.hero');
+    if (!hero) return;
+    var y = window.scrollY;
+    if (y > hero.offsetHeight) return;
+    var grid = hero.querySelector('.hero-grid');
+    if (grid) grid.style.transform = 'translateY(' + (y * 0.06) + 'px)';
+  }, { passive: true });
+}
+
+// ── Cursor ────────────────────────────────────────────────────────────────
+function initCursor() {
+  var dot  = document.getElementById('cursor-dot');
+  var ring = document.getElementById('cursor-ring');
+  if (!dot || !ring) return;
+  if (!window.matchMedia('(hover:hover)').matches) return;
+
+  var mx = -100, my = -100, rx = -100, ry = -100;
+
+  document.addEventListener('mousemove', function(e){
+    mx = e.clientX; my = e.clientY;
+    dot.style.left = mx + 'px';
+    dot.style.top  = my + 'px';
+  });
+
+  document.addEventListener('mouseleave', function(){ dot.classList.add('hidden'); ring.classList.add('hidden'); });
+  document.addEventListener('mouseenter', function(){ dot.classList.remove('hidden'); ring.classList.remove('hidden'); });
+
+  (function raf(){
+    rx += (mx - rx) * 0.10;
+    ry += (my - ry) * 0.10;
+    ring.style.left = rx + 'px';
+    ring.style.top  = ry + 'px';
+    requestAnimationFrame(raf);
+  })();
+}
+
+// ── Boot ──────────────────────────────────────────────────────────────────
+lang = getLang();
+document.documentElement.lang = lang;
+document.title = DICT[lang].title;
+document.getElementById('root').innerHTML = buildPage();
+document.addEventListener('click', handleClick);
+document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeAllModals(); });
+initReveal();
+initShowCards();
+initParallax();
+initCursor();
+
+})();
+</script>
+</body>
+</html>
