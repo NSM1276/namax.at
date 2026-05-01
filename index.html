@@ -475,7 +475,7 @@ var DICT = {
       c1L:['Positionierung & Markenarchitektur','Conversion- und Funnel-Logik','Redaktionelle Struktur, Tonalität DE/EN','Persönliche Betreuung — kein Account-Layer'],
       c2Num:'II.', c2H:'Next-Gen Engineering',
       c2P:'Jede Seite wird auf 100/100 entwickelt. Saubere Semantik, optimierte Assets, Motion mit Substanz — kein Page-Builder, kein Plugin-Schimmel.',
-      c2L:['Custom Frontend, &lt;200 ms LCP · 100/100 Google Score','SEO: Schema, Indexierung, Core Web Vitals','Professionelle Business-E-Mail (name@firma.at) [Add-on]','Telegram Business Bot — Leads direkt aufs Smartphone [Add-on]'],
+      c2L:['Custom Frontend, &lt;200 ms LCP · 100/100 Google Score','SEO: Schema, Indexierung, Core Web Vitals','Smooth Motion & Interaction Design','Hosting, SSL, Care & Updates inklusive'],
       eq:['Erfahrung','+','Speed','=','€799 · 7 Tage'],
     },
     show: {
@@ -497,6 +497,18 @@ var DICT = {
         { t:'Review & Feedback',        s:'Tag 6',                  d:'Eine Feedback-Runde. Änderungen innerhalb von 24 Stunden umgesetzt. Klar, verbindlich, ohne Endlos-Schleifen.', dur:'1 Tag', when:'Tag 6' },
         { t:'Launch & Übergabe',   s:'Tag 7',                  d:'Live. Hosting, SSL, Business-E-Mail & Telegram-Benachrichtigungen — auf Wunsch alles eingerichtet.', dur:'∞', when:'Tag 7' },
       ],
+    },
+    addons: {
+      kicker:'04½ — Add-ons',
+      h2a:'Mehr Erreichbarkeit.', h2b:'Mehr Leads.',
+      lede:'Zwei optionale Module, die viele Selbständige sich nie einrichten — und damit jeden Tag Leads verlieren. Wir setzen sie für Sie auf, wenn Sie wollen.',
+      c1Num:'+1', c1H:'Professionelle Business-E-Mail',
+      c1P:'Ihre eigene Adresse <em class="serif">name@firma.at</em> — kein info@gmail.com mehr. Eingerichtet, abgesichert, sofort einsatzbereit.',
+      c1L:['Eigene Domain-E-Mail (name@firma.at)','DKIM, SPF & DMARC für maximale Zustellbarkeit','Sync auf Smartphone, Outlook, Apple Mail, Gmail','Bis zu 5 Postfächer für Ihr Team'],
+      c2Num:'+2', c2H:'Telegram Business Bot',
+      c2P:'Jeder Lead landet in <em class="serif">Sekunden</em> auf Ihrem Smartphone — als Telegram-Nachricht. Sie verpassen keine Anfrage mehr.',
+      c2L:['Sofortige Push-Benachrichtigung bei jeder Anfrage','Lead-Daten (Name, Telefon, Branche) sauber formatiert','Direkt-Anruf-Button im Telegram-Chat','Optional: Team-Verteilung im Gruppenchat'],
+      foot:'Auf Wunsch im Festpreis-Projekt enthalten — sprechen Sie uns einfach an.',
     },
     cta: {
       kicker:'05 — Ihr Festpreis-Projekt',
@@ -542,7 +554,7 @@ var DICT = {
       c1L:['Positioning & brand architecture','Conversion and funnel logic','Editorial structure, tone in DE/EN','Personal stewardship — no account layer'],
       c2Num:'II.', c2H:'Next-Gen Engineering',
       c2P:'Every site is engineered to 100/100. Clean semantics, optimised assets, motion with substance — no page builder, no plugin sprawl.',
-      c2L:['Custom frontend, &lt;200 ms LCP · 100/100 Google Score','SEO: Schema, indexation, Core Web Vitals','Professional business email (name@company.at) [Add-on]','Telegram business bot — leads straight to your phone [Add-on]'],
+      c2L:['Custom frontend, &lt;200 ms LCP · 100/100 Google Score','SEO: Schema, indexation, Core Web Vitals','Smooth motion & interaction design','Hosting, SSL, care & updates included'],
       eq:['Experience','+','Speed','=','€799 · 7 days'],
     },
     show: {
@@ -564,6 +576,18 @@ var DICT = {
         { t:'Review & Feedback',       s:'Day 6',            d:'One feedback round. Changes implemented within 24 hours. Clear, binding, no endless loops.', dur:'1 day', when:'Day 6' },
         { t:'Launch & Handover',       s:'Day 7',            d:'Live. Hosting, SSL, business email & Telegram notifications — all set up on request.', dur:'∞', when:'Day 7' },
       ],
+    },
+    addons: {
+      kicker:'04½ — Add-ons',
+      h2a:'More reachability.', h2b:'More leads.',
+      lede:'Two optional modules most freelancers never set up — losing leads every single day. We configure them for you, on request.',
+      c1Num:'+1', c1H:'Professional business email',
+      c1P:'Your own address <em class="serif">name@company.at</em> — no more info@gmail.com. Configured, secured, ready to go.',
+      c1L:['Custom domain email (name@company.at)','DKIM, SPF & DMARC for maximum deliverability','Sync to phone, Outlook, Apple Mail, Gmail','Up to 5 mailboxes for your team'],
+      c2Num:'+2', c2H:'Telegram business bot',
+      c2P:'Every lead arrives on your phone in <em class="serif">seconds</em> — as a Telegram message. Never miss an enquiry again.',
+      c2L:['Instant push notification on every enquiry','Lead data (name, phone, industry) cleanly formatted','One-tap call button inside the Telegram chat','Optional: team distribution in a group chat'],
+      foot:'Available within the fixed-price project on request — just ask.',
     },
     cta: {
       kicker:'05 — Your Fixed-Price Project',
@@ -737,6 +761,25 @@ function buildProcess(t) {
     + '</div></section>';
 }
 
+function buildAddons(t) {
+  var a = t.addons;
+  var c1li = a.c1L.map(function(x){ return '<li>'+x+'</li>'; }).join('');
+  var c2li = a.c2L.map(function(x){ return '<li>'+x+'</li>'; }).join('');
+  var ctaWord = (lang === 'de') ? 'Im Projekt anfragen' : 'Add to project';
+  return '<section class="why" id="addons">'
+    + '<div class="container">'
+    + '<div class="section-head reveal">'
+    + '<span class="kicker"><span class="dot"></span> '+a.kicker+'</span>'
+    + '<div><h2>'+a.h2a+'<br><span class="it">'+a.h2b+'</span></h2><p class="lede">'+a.lede+'</p></div>'
+    + '</div>'
+    + '<div class="why-grid">'
+    + '<div class="why-col reveal d1"><span class="why-num">'+a.c1Num+'</span><h3>'+a.c1H+'</h3><p>'+a.c1P+'</p><ul>'+c1li+'</ul></div>'
+    + '<div class="why-col reveal d2"><span class="why-num">'+a.c2Num+'</span><h3>'+a.c2H+'</h3><p>'+a.c2P+'</p><ul>'+c2li+'</ul></div>'
+    + '</div>'
+    + '<div class="show-foot reveal d3"><span>'+a.foot+'</span><a href="#contact" data-modal="contact">'+ctaWord+' '+SVG_ARR12+'</a></div>'
+    + '</div></section>';
+}
+
 function buildCTA(t) {
   var c = t.cta;
   return '<section class="cta" id="contact">'
@@ -873,6 +916,7 @@ function buildPage() {
     + buildWhy(t)
     + buildShowcase(t)
     + buildProcess(t)
+    + buildAddons(t)
     + buildCTA(t)
     + '</main>'
     + buildFooter(t)
