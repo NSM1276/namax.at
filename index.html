@@ -703,12 +703,23 @@ function getLang() {
       return q;
     }
   } catch(e){}
-  // 2) localStorage
+  // 2) Previously chosen language (localStorage)
   try {
     var s = localStorage.getItem('namax_lang');
     if (s && allowed.indexOf(s) > -1) return s;
   } catch(e){}
-  return 'de';
+  // 3) Browser language auto-detect (first match wins)
+  try {
+    var prefs = (navigator.languages && navigator.languages.length)
+      ? navigator.languages
+      : [navigator.language || navigator.userLanguage || ''];
+    for (var i = 0; i < prefs.length; i++) {
+      var code = (prefs[i] || '').toLowerCase().split('-')[0];
+      if (allowed.indexOf(code) > -1) return code;
+    }
+  } catch(e){}
+  // 4) Fallback for users whose browser is in some other language
+  return 'en';
 }
 
 // ── HTML builders ──────────────────────────────────────────────────────────
