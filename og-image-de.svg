@@ -1,99 +1,63 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
-  <!-- Background -->
-  <rect width="1200" height="630" fill="#F4F1EB"/>
-
-  <!-- Subtle grain overlay -->
   <defs>
     <pattern id="g" x="0" y="0" width="4" height="4" patternUnits="userSpaceOnUse">
       <rect width="4" height="4" fill="none"/>
-      <circle cx="1" cy="1" r=".6" fill="#0E0E0C" opacity=".03"/>
+      <circle cx="1" cy="1" r=".6" fill="#0E0E0C" opacity=".035"/>
     </pattern>
-    <radialGradient id="glow" cx="80%" cy="10%" r="60%">
-      <stop offset="0%" stop-color="#C8900A" stop-opacity=".18"/>
+    <radialGradient id="glow" cx="50%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="#C8900A" stop-opacity=".10"/>
       <stop offset="100%" stop-color="#C8900A" stop-opacity="0"/>
     </radialGradient>
   </defs>
-  <rect width="1200" height="630" fill="url(#g)"/>
 
-  <!-- Left: headline -->
-  <text x="72" y="188" font-family="Georgia,'Times New Roman',serif" font-style="italic"
-    font-size="88" letter-spacing="-2" fill="#0E0E0C">Erfahrung trifft</text>
-  <text x="72" y="284" font-family="Georgia,'Times New Roman',serif" font-style="italic"
-    font-size="88" letter-spacing="-2" fill="#8B6512">Speed.</text>
-  <text x="72" y="380" font-family="Georgia,'Times New Roman',serif" font-style="italic"
-    font-size="88" letter-spacing="-2" fill="#0E0E0C">€799 · 7 Tage.</text>
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#F4F1EB"/>
+  <rect width="1200" height="630" fill="url(#g)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <!-- Left wing (visible only in full landscape preview) -->
+  <text x="80" y="100" font-family="-apple-system,Helvetica Neue,Arial,sans-serif"
+    font-size="13" letter-spacing="3" fill="#6F6B5F">WIEN · 2006</text>
+  <text x="80" y="555" font-family="-apple-system,Helvetica Neue,Arial,sans-serif"
+    font-size="13" letter-spacing="3" fill="#6F6B5F">FESTPREIS</text>
+
+  <!-- Right wing (visible only in full landscape preview) -->
+  <text x="1120" y="100" text-anchor="end"
+    font-family="-apple-system,Helvetica Neue,Arial,sans-serif"
+    font-size="13" letter-spacing="3" fill="#6F6B5F">100 / 100</text>
+  <text x="1120" y="555" text-anchor="end"
+    font-family="-apple-system,Helvetica Neue,Arial,sans-serif"
+    font-size="13" letter-spacing="3" fill="#6F6B5F">HANDSCHLAG</text>
+
+  <!-- ─── CENTERED CONTENT (visible in both square crop and full preview) ─── -->
+
+  <!-- Brand mark + name (centered, top of safe zone) -->
+  <rect x="555" y="138" width="50" height="50" rx="9" fill="#0E0E0C"/>
+  <text x="580" y="174" text-anchor="middle"
+    font-family="Georgia,'Times New Roman',serif" font-style="italic"
+    font-size="32" fill="#F4F1EB">n</text>
+  <text x="618" y="172"
+    font-family="-apple-system,Helvetica Neue,Arial,sans-serif"
+    font-weight="600" font-size="26" letter-spacing="-0.4" fill="#0E0E0C">namax</text>
+  <text x="715" y="172"
+    font-family="-apple-system,Helvetica Neue,Arial,sans-serif"
+    font-size="26" fill="#8B6512">.at</text>
+
+  <!-- Massive headline: €799 -->
+  <text x="600" y="350" text-anchor="middle"
+    font-family="Georgia,'Times New Roman',serif" font-style="italic"
+    font-size="180" letter-spacing="-4" fill="#0E0E0C">€799.</text>
+
+  <!-- Subline: "in 7 Tagen live." (italic, ochre) -->
+  <text x="600" y="420" text-anchor="middle"
+    font-family="Georgia,'Times New Roman',serif" font-style="italic"
+    font-size="46" letter-spacing="-1" fill="#8B6512">in 7 Tagen live.</text>
 
   <!-- Divider -->
-  <line x1="72" y1="420" x2="560" y2="420" stroke="#0E0E0C" stroke-opacity=".12" stroke-width="1"/>
-
-  <!-- Brand mark -->
-  <rect x="72" y="446" width="38" height="38" rx="7" fill="#0E0E0C"/>
-  <text x="91" y="472" text-anchor="middle"
-    font-family="Georgia,'Times New Roman',serif" font-style="italic"
-    font-size="24" fill="#F4F1EB">n</text>
-
-  <!-- Brand name -->
-  <text x="122" y="469"
-    font-family="-apple-system,Helvetica Neue,Arial,sans-serif"
-    font-weight="600" font-size="20" letter-spacing="-0.3" fill="#0E0E0C">namax</text>
-  <text x="195" y="469"
-    font-family="-apple-system,Helvetica Neue,Arial,sans-serif"
-    font-size="20" fill="#8B6512">.at</text>
+  <line x1="500" y1="460" x2="700" y2="460" stroke="#0E0E0C" stroke-opacity=".2" stroke-width="1"/>
 
   <!-- Tagline -->
-  <text x="72" y="510"
+  <text x="600" y="495" text-anchor="middle"
     font-family="-apple-system,Helvetica Neue,Arial,sans-serif"
-    font-size="13" letter-spacing="2" fill="#6F6B5F">BUSINESS WEBSITES · FESTPREIS · WIEN</text>
-
-  <!-- Right: dark card -->
-  <rect x="660" y="48" width="492" height="534" rx="20" fill="#0E0E0C"/>
-  <rect x="660" y="48" width="492" height="534" rx="20"
-    fill="none" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
-  <rect x="660" y="48" width="492" height="534" rx="20" fill="url(#glow)"/>
-
-  <!-- Avatar N -->
-  <rect x="700" y="96" width="188" height="235" rx="12" fill="#1e1d1a"/>
-  <text x="794" y="237" text-anchor="middle"
-    font-family="Georgia,'Times New Roman',serif" font-style="italic"
-    font-size="84" fill="rgba(255,255,255,.82)">N</text>
-  <rect x="710" y="311" width="82" height="20" rx="4" fill="rgba(0,0,0,.35)"/>
-  <text x="751" y="325" text-anchor="middle"
-    font-family="-apple-system,Helvetica Neue,Arial,sans-serif"
-    font-size="9" letter-spacing="1.5" fill="rgba(255,255,255,.65)">STRATEGIE</text>
-
-  <!-- Avatar M -->
-  <rect x="904" y="96" width="188" height="235" rx="12" fill="#1e1d1a"/>
-  <text x="998" y="237" text-anchor="middle"
-    font-family="Georgia,'Times New Roman',serif" font-style="italic"
-    font-size="84" fill="rgba(255,255,255,.82)">M</text>
-  <rect x="914" y="311" width="82" height="20" rx="4" fill="rgba(0,0,0,.35)"/>
-  <text x="955" y="325" text-anchor="middle"
-    font-family="-apple-system,Helvetica Neue,Arial,sans-serif"
-    font-size="9" letter-spacing="1.5" fill="rgba(255,255,255,.65)">TECH LEAD</text>
-
-  <!-- Rule -->
-  <line x1="700" y1="365" x2="1112" y2="365" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
-
-  <!-- Quote -->
-  <text x="700" y="400"
-    font-family="Georgia,'Times New Roman',serif" font-style="italic"
-    font-size="19" fill="rgba(255,255,255,.88)">„Festpreis. In 7 Tagen.</text>
-  <text x="700" y="428"
-    font-family="Georgia,'Times New Roman',serif" font-style="italic"
-    font-size="19" fill="rgba(255,255,255,.88)">Auf Handschlag."</text>
-
-  <!-- Rule 2 -->
-  <line x1="700" y1="460" x2="1112" y2="460" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
-
-  <!-- Duo tag -->
-  <circle cx="708" cy="490" r="5" fill="#C8900A"/>
-  <text x="722" y="495"
-    font-family="-apple-system,Helvetica Neue,Arial,sans-serif"
-    font-size="11" letter-spacing="1.8" fill="rgba(255,255,255,.45)">DAS GRÜNDER-DUO</text>
-
-  <!-- Seal -->
-  <circle cx="708" cy="530" r="5" fill="#C8900A" opacity=".6"/>
-  <text x="722" y="535"
-    font-family="-apple-system,Helvetica Neue,Arial,sans-serif"
-    font-size="11" letter-spacing="1.4" fill="rgba(255,255,255,.35)">HANDSCHLAGQUALITÄT</text>
+    font-size="16" letter-spacing="3" fill="#0E0E0C" opacity=".75">PROFESSIONELLE BUSINESS-WEBSITE</text>
 </svg>
