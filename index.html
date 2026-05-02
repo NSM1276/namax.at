@@ -525,7 +525,7 @@ var DICT = {
       tag:'Business-Websites für €799. Zwei Spezialisten, ein Festpreis, sieben Tage — und Ihr Auftritt ist live.',
       h1:'Studio',       l1:['Ansatz','Branchen­konzepte','Prozess','Studio'],
       h2:'Disziplinen',  l2:['Strategie & Positionierung','Custom Web Development','Performance Engineering · 100/100','Business-E-Mail & Telegram Bot'],
-      h3:'Kontakt',      l3:['Tscherttegasse 39','1120 Wien, AT','office@namax.at','+43 677 64292055'],
+      h3:'Kontakt',      l3:['Tscherttegasse 39','1120 Wien, AT','office@na-max.com','+43 677 64292055'],
       copy:'© 2026 Namax Studio · Wien', built:'In-house entwickelt · 100 / 100 · Handschlagqualität',
     },
     tape:['Strategie','Markenidentität','Conversion-Architektur','Performance Engineering','Editorial Web','Motion & Interaction','SEO & Schema','Festpreis €799','7-Tage-Lieferung','Business-E-Mail','Telegram Business Bot'],
@@ -604,7 +604,7 @@ var DICT = {
       tag:'Business websites for €799. Two specialists, one fixed price, seven days — and your presence is live.',
       h1:'Studio',       l1:['Approach','Industry Concepts','Process','Studio'],
       h2:'Disciplines',  l2:['Strategy & Positioning','Custom Web Development','Performance Engineering · 100/100','Business Email & Telegram Bot'],
-      h3:'Contact',      l3:['Tscherttegasse 39','1120 Vienna, AT','office@namax.at','+43 677 64292055'],
+      h3:'Contact',      l3:['Tscherttegasse 39','1120 Vienna, AT','office@na-max.com','+43 677 64292055'],
       copy:'© 2026 Namax Studio · Vienna', built:'Built in-house · 100 / 100 · Handshake Quality',
     },
     tape:['Strategy','Brand Identity','Conversion Architecture','Performance Engineering','Editorial Web','Motion & Interaction','SEO & Schema','Fixed Price €799','7-Day Delivery','Business Email','Telegram Business Bot'],
@@ -683,7 +683,7 @@ var DICT = {
       tag:'Siti web per attività a 799€. Due specialisti, un prezzo fisso, sette giorni — e sei online.',
       h1:'Studio',      l1:['Approccio','Concept di settore','Processo','Studio'],
       h2:'Discipline',  l2:['Strategia & posizionamento','Sviluppo web custom','Performance Engineering · 100/100','E-mail aziendale & Bot Telegram'],
-      h3:'Contatti',    l3:['Tscherttegasse 39','1120 Vienna, AT','office@namax.at','+43 677 64292055'],
+      h3:'Contatti',    l3:['Tscherttegasse 39','1120 Vienna, AT','office@na-max.com','+43 677 64292055'],
       copy:'© 2026 Namax Studio · Vienna', built:'Sviluppato in casa · 100 / 100 · Parola d\'onore',
     },
     tape:['Strategia','Brand identity','Architettura di conversione','Performance Engineering','Editorial Web','Motion & Interaction','SEO & Schema','Prezzo fisso 799€','Consegna in 7 giorni','E-mail aziendale','Bot Telegram'],
@@ -948,38 +948,38 @@ function buildFooter(t) {
 function buildModals() {
   var isDE = lang === 'de'; var isIT = lang === 'it';
   var imp = isIT
-    ? '<div class="modal-section"><h3>Dati ai sensi del § 5 ECG (Austria)</h3><p>Nasim Nuridinov e.U<br>Tscherttegasse 39, 1120 Vienna, Austria<br>E-mail: <a href="mailto:office@namax.at">office@namax.at</a><br>Tel: <a href="tel:+4367764292055">+43 677 64292055</a></p></div>'
+    ? '<div class="modal-section"><h3>Dati ai sensi del § 5 ECG (Austria)</h3><p>Nasim Nuridinov e.U<br>Tscherttegasse 39, 1120 Vienna, Austria<br>E-mail: <a href="mailto:office@na-max.com">office@na-max.com</a><br>Tel: <a href="tel:+4367764292055">+43 677 64292055</a></p></div>'
       + '<div class="modal-section"><h3>Oggetto sociale</h3><p>Web design &amp; sviluppo web</p></div>'
       + '<div class="modal-section"><h3>Partita IVA</h3><p>ATU80802758</p></div>'
       + '<div class="modal-section"><h3>Autorità di vigilanza</h3><p>Magistrato della Città di Vienna · Membro della WKO Vienna</p></div>'
       + '<div class="modal-section"><h3>Esonero da responsabilità</h3><p>Tutti i contenuti di questo sito sono stati creati con cura. Non si garantisce la correttezza, la completezza e l\'attualità delle informazioni fornite.</p></div>'
     : isDE
-    ? '<div class="modal-section"><h3>Angaben gemäß § 5 ECG</h3><p>Nasim Nuridinov e.U<br>Tscherttegasse 39, 1120 Wien, Österreich<br>E-Mail: <a href="mailto:office@namax.at">office@namax.at</a><br>Tel: <a href="tel:+4367764292055">+43 677 64292055</a></p></div>'
+    ? '<div class="modal-section"><h3>Angaben gemäß § 5 ECG</h3><p>Nasim Nuridinov e.U<br>Tscherttegasse 39, 1120 Wien, Österreich<br>E-Mail: <a href="mailto:office@na-max.com">office@na-max.com</a><br>Tel: <a href="tel:+4367764292055">+43 677 64292055</a></p></div>'
       + '<div class="modal-section"><h3>Unternehmensgegenstand</h3><p>Webdesign &amp; Webentwicklung</p></div>'
       + '<div class="modal-section"><h3>UID-Nummer</h3><p>ATU80802758</p></div>'
       + '<div class="modal-section"><h3>Aufsichtsbehörde</h3><p>Magistrat der Stadt Wien · Mitglied der WKO Wien</p></div>'
       + '<div class="modal-section"><h3>Haftungsausschluss</h3><p>Alle Inhalte dieser Website wurden sorgfältig erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität wird keine Gewähr übernommen.</p></div>'
-    : '<div class="modal-section"><h3>According to § 5 ECG</h3><p>Nasim Nuridinov e.U<br>Tscherttegasse 39, 1120 Vienna, Austria<br>E-mail: <a href="mailto:office@namax.at">office@namax.at</a><br>Phone: <a href="tel:+4367764292055">+43 677 64292055</a></p></div>'
+    : '<div class="modal-section"><h3>According to § 5 ECG</h3><p>Nasim Nuridinov e.U<br>Tscherttegasse 39, 1120 Vienna, Austria<br>E-mail: <a href="mailto:office@na-max.com">office@na-max.com</a><br>Phone: <a href="tel:+4367764292055">+43 677 64292055</a></p></div>'
       + '<div class="modal-section"><h3>Business activity</h3><p>Web Design &amp; Web Development</p></div>'
       + '<div class="modal-section"><h3>VAT number</h3><p>ATU80802758</p></div>'
       + '<div class="modal-section"><h3>Supervisory authority</h3><p>Magistrat der Stadt Wien · Member of WKO Wien</p></div>'
       + '<div class="modal-section"><h3>Disclaimer</h3><p>All content on this website has been carefully created. No guarantee is given for the accuracy, completeness or timeliness of the information provided.</p></div>';
 
   var dsg = isIT
-    ? '<div class="modal-section"><h3>Titolare del trattamento (GDPR)</h3><p>Nasim Nuridinov e.U, Tscherttegasse 39, 1120 Vienna, Austria<br>E-mail: <a href="mailto:office@namax.at">office@namax.at</a></p></div>'
+    ? '<div class="modal-section"><h3>Titolare del trattamento (GDPR)</h3><p>Nasim Nuridinov e.U, Tscherttegasse 39, 1120 Vienna, Austria<br>E-mail: <a href="mailto:office@na-max.com">office@na-max.com</a></p></div>'
       + '<div class="modal-section"><h3>Quali dati trattiamo</h3><p>Questo sito non raccoglie dati personali tramite moduli o tracciamento. Non vengono utilizzati cookie.</p>'
       + '<p style="margin-top:10px">Nel browser viene utilizzato esclusivamente <strong>localStorage</strong> per memorizzare la tua preferenza linguistica (DE/EN/IT). Si tratta di una funzione tecnicamente necessaria che non richiede consenso (Art. 122 Codice Privacy / GDPR).</p></div>'
       + '<div class="modal-section"><h3>Font (self-hosted)</h3><p>Questo sito utilizza i font <em>Inter Tight</em> e <em>Instrument Serif</em>, caricati esclusivamente dal nostro server. Nessun dato viene trasmesso a terzi.</p></div>'
       + '<div class="modal-section"><h3>Contatti via e-mail o telefono</h3><p>Se ci contatti via e-mail o telefono, i tuoi dati saranno utilizzati per gestire la tua richiesta e non saranno comunicati a terzi. Base giuridica: art. 6, par. 1, lett. b GDPR.</p></div>'
       + '<div class="modal-section"><h3>I tuoi diritti</h3><p>Hai il diritto di accesso, rettifica, cancellazione, limitazione del trattamento e portabilità dei dati. I reclami possono essere presentati all\'Autorità austriaca per la protezione dei dati (<a href="https://www.dsb.gv.at" target="_blank" rel="noopener">dsb.gv.at</a>) o al Garante italiano (<a href="https://www.garanteprivacy.it" target="_blank" rel="noopener">garanteprivacy.it</a>).</p></div>'
     : isDE
-    ? '<div class="modal-section"><h3>Verantwortlicher gemäß DSGVO</h3><p>Nasim Nuridinov e.U, Tscherttegasse 39, 1120 Wien<br>E-Mail: <a href="mailto:office@namax.at">office@namax.at</a></p></div>'
+    ? '<div class="modal-section"><h3>Verantwortlicher gemäß DSGVO</h3><p>Nasim Nuridinov e.U, Tscherttegasse 39, 1120 Wien<br>E-Mail: <a href="mailto:office@na-max.com">office@na-max.com</a></p></div>'
       + '<div class="modal-section"><h3>Welche Daten wir verarbeiten</h3><p>Diese Website erhebt keine personenbezogenen Daten über Formulare oder Tracking. Es werden keine Cookies gesetzt.</p>'
       + '<p style="margin-top:10px">Im Browser wird ausschließlich <strong>localStorage</strong> verwendet, um Ihre Sprachpräferenz (DE/EN) zu speichern. Dies ist eine technisch notwendige Funktion und erfordert keine Einwilligung (§ 25 Abs. 2 TDSG / § 165 Abs. 3 TKG 2021).</p></div>'
       + '<div class="modal-section"><h3>Schriftarten (selbst gehostet)</h3><p>Diese Website verwendet die Schriftarten <em>Inter Tight</em> und <em>Instrument Serif</em>, die ausschließlich von unserem eigenen Server geladen werden. Es findet keine Datenübertragung an Dritte statt.</p></div>'
       + '<div class="modal-section"><h3>Kontakt per E-Mail oder Telefon</h3><p>Wenn Sie uns per E-Mail oder Telefon kontaktieren, werden Ihre Angaben zur Bearbeitung Ihrer Anfrage verwendet und nicht an Dritte weitergegeben. Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO.</p></div>'
       + '<div class="modal-section"><h3>Ihre Rechte</h3><p>Sie haben das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung sowie Datenübertragbarkeit. Beschwerden können bei der österreichischen Datenschutzbehörde (<a href="https://www.dsb.gv.at" target="_blank" rel="noopener">dsb.gv.at</a>) eingereicht werden.</p></div>'
-    : '<div class="modal-section"><h3>Controller under GDPR</h3><p>Nasim Nuridinov e.U, Tscherttegasse 39, 1120 Vienna<br>E-mail: <a href="mailto:office@namax.at">office@namax.at</a></p></div>'
+    : '<div class="modal-section"><h3>Controller under GDPR</h3><p>Nasim Nuridinov e.U, Tscherttegasse 39, 1120 Vienna<br>E-mail: <a href="mailto:office@na-max.com">office@na-max.com</a></p></div>'
       + '<div class="modal-section"><h3>What data we process</h3><p>This website does not collect personal data through forms or tracking. No cookies are set.</p>'
       + '<p style="margin-top:10px"><strong>localStorage</strong> is used exclusively to remember your language preference (DE/EN). This is a technically necessary function and requires no consent (§ 25 (2) TDSG).</p></div>'
       + '<div class="modal-section"><h3>Fonts (self-hosted)</h3><p>This website uses the fonts <em>Inter Tight</em> and <em>Instrument Serif</em>, loaded exclusively from our own server. No data is transferred to third parties.</p></div>'
@@ -1007,7 +1007,7 @@ function buildModals() {
     + '<div class="modal-box"><button class="modal-close" data-close aria-label="Schließen">✕</button>'
     + '<h2>'+ctitle+'</h2>'
     + '<p class="modal-sub">'+csub+'</p>'
-    + '<form id="contact-form" action="https://formsubmit.co/ajax/office@namax.at" method="POST">'
+    + '<form id="contact-form" action="https://formsubmit.co/ajax/office@na-max.com" method="POST">'
     + '<input type="hidden" name="_subject" value="Neue Anfrage via namax.at"/>'
     + '<input type="hidden" name="_captcha" value="false"/>'
     + '<div class="form-group"><label>'+lName+'</label><input type="text" name="name" required placeholder="'+lName+'"/></div>'
