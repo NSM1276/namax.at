@@ -2,22 +2,26 @@
   <!-- Background -->
   <rect width="1200" height="630" fill="#F4F1EB"/>
 
-  <!-- Subtle grain overlay via pattern -->
+  <!-- Subtle grain overlay -->
   <defs>
     <pattern id="g" x="0" y="0" width="4" height="4" patternUnits="userSpaceOnUse">
       <rect width="4" height="4" fill="none"/>
       <circle cx="1" cy="1" r=".6" fill="#0E0E0C" opacity=".03"/>
     </pattern>
+    <radialGradient id="glow" cx="80%" cy="10%" r="60%">
+      <stop offset="0%" stop-color="#C8900A" stop-opacity=".18"/>
+      <stop offset="100%" stop-color="#C8900A" stop-opacity="0"/>
+    </radialGradient>
   </defs>
   <rect width="1200" height="630" fill="url(#g)"/>
 
   <!-- Left: headline -->
   <text x="72" y="188" font-family="Georgia,'Times New Roman',serif" font-style="italic"
-    font-size="88" letter-spacing="-2" fill="#0E0E0C">Erfahrung</text>
+    font-size="88" letter-spacing="-2" fill="#0E0E0C">Erfahrung trifft</text>
   <text x="72" y="284" font-family="Georgia,'Times New Roman',serif" font-style="italic"
-    font-size="88" letter-spacing="-2" fill="#8B6512">trifft</text>
+    font-size="88" letter-spacing="-2" fill="#8B6512">Speed.</text>
   <text x="72" y="380" font-family="Georgia,'Times New Roman',serif" font-style="italic"
-    font-size="88" letter-spacing="-2" fill="#0E0E0C">Innovation.</text>
+    font-size="88" letter-spacing="-2" fill="#0E0E0C">€799 · 7 Tage.</text>
 
   <!-- Divider -->
   <line x1="72" y1="420" x2="560" y2="420" stroke="#0E0E0C" stroke-opacity=".12" stroke-width="1"/>
@@ -39,18 +43,12 @@
   <!-- Tagline -->
   <text x="72" y="510"
     font-family="-apple-system,Helvetica Neue,Arial,sans-serif"
-    font-size="13" letter-spacing="2" fill="#6F6B5F">BOUTIQUE WEB STUDIO · WIEN</text>
+    font-size="13" letter-spacing="2" fill="#6F6B5F">BUSINESS WEBSITES · FESTPREIS · WIEN</text>
 
   <!-- Right: dark card -->
   <rect x="660" y="48" width="492" height="534" rx="20" fill="#0E0E0C"/>
   <rect x="660" y="48" width="492" height="534" rx="20"
     fill="none" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
-
-  <!-- Radial glow -->
-  <radialGradient id="glow" cx="80%" cy="10%" r="60%">
-    <stop offset="0%" stop-color="#C8900A" stop-opacity=".18"/>
-    <stop offset="100%" stop-color="#C8900A" stop-opacity="0"/>
-  </radialGradient>
   <rect x="660" y="48" width="492" height="534" rx="20" fill="url(#glow)"/>
 
   <!-- Avatar N -->
@@ -79,10 +77,10 @@
   <!-- Quote -->
   <text x="700" y="400"
     font-family="Georgia,'Times New Roman',serif" font-style="italic"
-    font-size="19" fill="rgba(255,255,255,.88)">„Erfahrung trifft Innovation —</text>
+    font-size="19" fill="rgba(255,255,255,.88)">„Festpreis. In 7 Tagen.</text>
   <text x="700" y="428"
     font-family="Georgia,'Times New Roman',serif" font-style="italic"
-    font-size="19" fill="rgba(255,255,255,.88)">auf Handschlag."</text>
+    font-size="19" fill="rgba(255,255,255,.88)">Auf Handschlag."</text>
 
   <!-- Rule 2 -->
   <line x1="700" y1="460" x2="1112" y2="460" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
