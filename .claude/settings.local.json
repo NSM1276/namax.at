@@ -1,7 +1,32 @@
 {
   "permissions": {
     "allow": [
-      "WebFetch(domain:raw.githubusercontent.com)"
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(python3)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(node --check check.js)",
+      "Bash(python3 -c ' *)",
+      "Bash(python3 fix_quotes.py)",
+      "Bash(rm check.js)",
+      "Bash(python3 apply_addons.py)",
+      "Bash(rm check.js apply_addons.py)",
+      "Bash(mkdir -p .claude)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(python3 add_italian.py)",
+      "Bash(PYTHONIOENCODING=utf-8 python3 add_italian.py)",
+      "Bash(PYTHONIOENCODING=utf-8 python3)",
+      "Bash(git rm *)",
+      "Bash(python3 -c \"import cairosvg; print\\('cairosvg OK'\\)\")",
+      "Bash(node -e \"console.log\\(require\\('sharp'\\)?'sharp OK':''\\)\")",
+      "Bash(pip install *)",
+      "Bash(npm install *)",
+      "Bash(node -e \"console.log\\(require\\('sharp'\\).versions\\)\")",
+      "Bash(node convert_og.js)",
+      "Bash(curl -sI -A \"facebookexternalhit/1.1\" https://www.namax.at/)",
+      "Bash(curl -sI https://www.namax.at/)",
+      "Bash(curl -sI https://www.namax.at/__TRACKED_VAR__)"
     ]
   }
 }
