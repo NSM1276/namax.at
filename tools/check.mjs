@@ -38,7 +38,7 @@ for (const page of pages) {
   rule(/<meta name="description" content="[^"]{50,160}"/.test(html), 'description');
   rule(!/aggregateRating|priceRange|foundingDate/.test(html), 'no-invented-structured-data');
 
-  if (!isLegal) rule(!/mailto:|office@na-max\.com/.test(html), 'no-email-outside-legal');
+  if (!isLegal) rule(!/mailto:|@na-max\.com|@gmail\.com/.test(html), 'no-email-outside-legal');
 
   if (isHome) {
     for (const id of ['hero', 'services', 'showcase', 'how', 'contact']) {

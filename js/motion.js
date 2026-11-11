@@ -20,14 +20,23 @@
     var d = Math.min(height, viewport);
     return d <= 0 ? 0 : clamp01((viewport - top) / d);
   }
+  // Scenes that show one thing per equal slice of the scroll.
   function stepOf(p, steps) {
     return Math.min(steps - 1, Math.floor(p * steps));
+  }
+  // Stacked cards: card k is fully on top at p = k / (steps - 1).
+  function stackStep(p, steps) {
+    return steps <= 1 ? 0 : Math.round(p * (steps - 1));
+  }
+  // Pinned content taller than its box would be clipped, so that scene must not be pinned.
+  function needsUnpin(contentHeight, boxHeight) {
+    return contentHeight > boxHeight + 1;
   }
 
   if (typeof document === 'undefined') {
     globalThis.__motion = {
-      sceneProgress: sceneProgress, exitProgress: exitProgress,
-      enterProgress: enterProgress, stepOf: stepOf
+      sceneProgress: sceneProgress, exitProgress: exitProgress, enterProgress: enterProgress,
+      stepOf: stepOf, stackStep: stackStep, needsUnpin: needsUnpin
     };
     return;
   }
@@ -40,6 +49,7 @@
   var dockBlockers = ['hero', 'how', 'contact']
     .map(function (id) { return document.getElementById(id); }).filter(Boolean);
   if ('IntersectionObserver' in window && dockBlockers.length) {
+    root.classList.add('dock-hidden'); // the page opens on the hero
     var onScreen = new Set();
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
@@ -59,6 +69,7 @@
       el: el,
       mode: el.getAttribute('data-scene') || 'pin',
       steps: parseInt(el.getAttribute('data-steps') || '1', 10),
+      boxes: el.querySelectorAll('.scene-pin, .svc'),
       top: 0, height: 0, p: -1, step: -1
     };
   });
@@ -66,7 +77,24 @@
   var lastWidth = -1;
   var ticking = false;
 
+  // A scene is pinned only if everything in it fits on this screen; otherwise it gets
+  // .no-pin and reads as a normal section (small phones, landscape, enlarged text).
+  function fitScenes() {
+    scenes.forEach(function (s) {
+      if (!s.boxes.length) return;
+      s.el.classList.remove('no-pin');
+      var over = false;
+      for (var i = 0; i < s.boxes.length && !over; i++) {
+        var box = s.boxes[i];
+        var content = box.firstElementChild;
+        if (content && needsUnpin(content.offsetHeight, box.clientHeight)) over = true;
+      }
+      if (over) s.el.classList.add('no-pin');
+    });
+  }
+
   function measure() {
+    fitScenes();
     var y = window.scrollY;
     viewport = window.innerHeight;
     lastWidth = window.innerWidth;
@@ -90,7 +118,7 @@
         s.p = p;
         s.el.style.setProperty('--p', p);
       }
-      var step = stepOf(p, s.steps);
+      var step = s.mode === 'stack' ? stackStep(p, s.steps) : stepOf(p, s.steps);
       if (step !== s.step) {
         s.step = step;
         s.el.setAttribute('data-step', step);
@@ -101,16 +129,20 @@
   function requestUpdate() {
     if (!ticking) { ticking = true; requestAnimationFrame(update); }
   }
+  function remeasure() { measure(); requestUpdate(); }
 
-  // Phone address bars change the height on every scroll; only a width change re-measures.
+  // Scenes are sized in svh, so a phone's address bar sliding away does not resize them and
+  // nothing is re-measured mid-scroll. A real change (rotation, window resize, text zoom) does.
+  if ('ResizeObserver' in window) {
+    var ro = new ResizeObserver(remeasure);
+    scenes.forEach(function (s) { ro.observe(s.el); });
+  }
   window.addEventListener('resize', function () {
-    if (window.innerWidth !== lastWidth) { measure(); requestUpdate(); }
+    if (window.innerWidth !== lastWidth) remeasure();
   });
   window.addEventListener('scroll', requestUpdate, { passive: true });
-  window.addEventListener('load', function () { measure(); requestUpdate(); });
-  if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(function () { measure(); requestUpdate(); });
-  }
+  window.addEventListener('load', remeasure);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(remeasure);
 
   measure();
   update();

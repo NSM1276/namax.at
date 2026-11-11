@@ -29,3 +29,17 @@ assert.equal(stepOf(0, 5), 0);
 assert.equal(stepOf(0.5, 5), 2);
 assert.equal(stepOf(1, 5), 4); // never past the last step
 assert.equal(stepOf(0.99, 1), 0);
+
+// stacked cards: the step is the card that is fully on top, so it rounds to the nearest card
+const { stackStep, needsUnpin } = globalThis.__motion;
+assert.equal(stackStep(0, 5), 0);
+assert.equal(stackStep(0.2, 5), 1);   // card 1 is 80% in: it is the one being looked at
+assert.equal(stackStep(0.5, 5), 2);
+assert.equal(stackStep(1, 5), 4);
+assert.equal(stackStep(0.7, 1), 0);
+
+// a pinned scene whose content is taller than its box must not be pinned (content would be clipped)
+assert.equal(needsUnpin(600, 640), false);
+assert.equal(needsUnpin(640, 640), false);
+assert.equal(needsUnpin(641, 640), false); // sub-pixel rounding tolerance
+assert.equal(needsUnpin(660, 640), true);
