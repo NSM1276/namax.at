@@ -33,6 +33,11 @@ for (const page of pages) {
   rule(/<link rel="canonical" href="https:\/\/www\.namax\.at\//.test(html), 'canonical');
   rule(/hreflang="de"/.test(html) && /hreflang="en"/.test(html) && /hreflang="x-default"/.test(html), 'hreflang');
 
+  rule(/<meta property="og:image" content="https:\/\/www\.namax\.at\/og-(de|en)\.png"/.test(html), 'og-image');
+  rule(/<script type="application\/ld\+json">/.test(html) === isHome, 'json-ld-on-home-only');
+  rule(/<meta name="description" content="[^"]{50,160}"/.test(html), 'description');
+  rule(!/aggregateRating|priceRange|foundingDate/.test(html), 'no-invented-structured-data');
+
   if (!isLegal) rule(!/mailto:|office@na-max\.com/.test(html), 'no-email-outside-legal');
 
   if (isHome) {

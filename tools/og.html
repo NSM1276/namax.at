@@ -1,0 +1,45 @@
+<!doctype html>
+<!-- Source for og-de.png / og-en.png. Open at 1200x630 (add ?lang=en for English) and screenshot.
+     The important content sits in the centre 630x630 square: messengers crop previews to a square. -->
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<title>og</title>
+<link rel="stylesheet" href="/css/site.css">
+<style>
+  html,body{width:1200px;height:630px;overflow:hidden}
+  body{display:grid;place-items:center;background:var(--cream)}
+  *{animation:none !important}
+  .side{position:absolute;top:0;bottom:0;width:285px;display:grid;gap:14px;padding:40px 26px;align-content:center}
+  .side.l{left:0}.side.r{right:0}
+  .side i{display:block;border:3px solid var(--ink);border-radius:26px;height:150px}
+  .l i:nth-child(1){background:var(--red);rotate:-5deg}
+  .l i:nth-child(2){background:var(--violet);rotate:4deg}
+  .l i:nth-child(3){background:var(--ink);rotate:-3deg}
+  .r i:nth-child(1){background:var(--lime);rotate:5deg}
+  .r i:nth-child(2){background:var(--white);rotate:-4deg}
+  .r i:nth-child(3){background:var(--red);rotate:3deg}
+  .mid{width:630px;height:630px;display:grid;align-content:center;justify-items:center;gap:26px;text-align:center}
+  .mid .logo{font-size:44px}
+  .mid h1{font-size:104px;line-height:.92}
+  .mid p{font:700 25px/1.2 var(--body);letter-spacing:-.01em;max-width:520px}
+</style>
+</head>
+<body>
+  <div class="side l"><i></i><i></i><i></i></div>
+  <div class="mid">
+    <span class="logo"><span class="logo-n">n</span>amax</span>
+    <h1 id="h">Online, aber<br><mark>richtig</mark> <span class="accent" style="color:var(--red)">gut.</span></h1>
+    <p id="p">Websites · Social Media · Content · SEO · Werbung</p>
+  </div>
+  <div class="side r"><i></i><i></i><i></i></div>
+<script>
+  if (new URLSearchParams(location.search).get('lang') === 'en') {
+    document.documentElement.lang = 'en';
+    document.getElementById('h').innerHTML = 'Online, but<br><mark>really</mark> <span style="color:var(--red)">good.</span>';
+    document.getElementById('p').textContent = 'Websites · Social media · Content · SEO · Ads';
+  }
+</script>
+</body>
+</html>

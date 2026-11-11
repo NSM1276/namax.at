@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://namax.at/</loc>
-    <lastmod>2026-04-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="de" href="https://namax.at/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://namax.at/"/>
-    <xhtml:link rel="alternate" hreflang="tr" href="https://namax.at/"/>
-    <xhtml:link rel="alternate" hreflang="ru" href="https://namax.at/"/>
-    <xhtml:link rel="alternate" hreflang="sr" href="https://namax.at/"/>
-    <xhtml:link rel="alternate" hreflang="hr" href="https://namax.at/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://namax.at/"/>
+    <loc>https://www.namax.at/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.namax.at/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.namax.at/en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.namax.at/"/>
   </url>
+  <url>
+    <loc>https://www.namax.at/en</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.namax.at/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.namax.at/en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.namax.at/"/>
+  </url>
+  <url><loc>https://www.namax.at/impressum</loc></url>
+  <url><loc>https://www.namax.at/datenschutz</loc></url>
+  <url><loc>https://www.namax.at/en/impressum</loc></url>
+  <url><loc>https://www.namax.at/en/datenschutz</loc></url>
 </urlset>

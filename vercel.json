@@ -1,4 +1,9 @@
 {
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/de", "destination": "/", "permanent": true },
+    { "source": "/it", "destination": "/", "permanent": true },
+    { "source": "/", "has": [{ "type": "query", "key": "lang", "value": "en" }], "destination": "/en", "permanent": false }
+  ]
 }
