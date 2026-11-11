@@ -35,8 +35,10 @@
   var root = document.documentElement;
   root.classList.add('js');
 
-  // Floating contact button hides while the hero or the final call to action is on screen.
-  var dockBlockers = [document.getElementById('hero'), document.getElementById('contact')].filter(Boolean);
+  // Floating contact button hides wherever the page already shows its own WhatsApp button:
+  // the hero, the chat (whose last message is the button) and the final call to action.
+  var dockBlockers = ['hero', 'how', 'contact']
+    .map(function (id) { return document.getElementById(id); }).filter(Boolean);
   if ('IntersectionObserver' in window && dockBlockers.length) {
     var onScreen = new Set();
     var io = new IntersectionObserver(function (entries) {
@@ -44,7 +46,7 @@
         if (e.isIntersecting) onScreen.add(e.target); else onScreen.delete(e.target);
       });
       root.classList.toggle('dock-hidden', onScreen.size > 0);
-    }, { threshold: 0.25 });
+    }, { rootMargin: '-35% 0px -35% 0px' });
     dockBlockers.forEach(function (el) { io.observe(el); });
   }
 
