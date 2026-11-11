@@ -13,7 +13,7 @@
 :root{
   --cream:#FFF8E7; --ink:#141414; --lime:#D6FF3F; --red:#FF4D2E; --violet:#8C7BFF; --white:#FFFFFF; --wa:#25D366;
   --radius:22px;
-  --display:"Bricolage Grotesque","Inter Tight",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  --display:"Inter Tight",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
   --body:"Inter Tight",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
   --gutter:clamp(18px,4vw,48px);
   --spring:cubic-bezier(.34,1.56,.64,1);
