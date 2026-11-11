@@ -12,8 +12,88 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://www.namax.at/en"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.namax.at/"/>
   </url>
-  <url><loc>https://www.namax.at/impressum</loc></url>
-  <url><loc>https://www.namax.at/datenschutz</loc></url>
-  <url><loc>https://www.namax.at/en/impressum</loc></url>
-  <url><loc>https://www.namax.at/en/datenschutz</loc></url>
+  <url>
+    <loc>https://www.namax.at/webdesign-wien</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.namax.at/webdesign-wien"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.namax.at/en/web-design-vienna"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.namax.at/webdesign-wien"/>
+  </url>
+  <url>
+    <loc>https://www.namax.at/en/web-design-vienna</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.namax.at/webdesign-wien"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.namax.at/en/web-design-vienna"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.namax.at/webdesign-wien"/>
+  </url>
+  <url>
+    <loc>https://www.namax.at/social-media-wien</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.namax.at/social-media-wien"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.namax.at/en/social-media-vienna"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.namax.at/social-media-wien"/>
+  </url>
+  <url>
+    <loc>https://www.namax.at/en/social-media-vienna</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.namax.at/social-media-wien"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.namax.at/en/social-media-vienna"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.namax.at/social-media-wien"/>
+  </url>
+  <url>
+    <loc>https://www.namax.at/content-reels-wien</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.namax.at/content-reels-wien"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.namax.at/en/content-reels-vienna"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.namax.at/content-reels-wien"/>
+  </url>
+  <url>
+    <loc>https://www.namax.at/en/content-reels-vienna</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.namax.at/content-reels-wien"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.namax.at/en/content-reels-vienna"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.namax.at/content-reels-wien"/>
+  </url>
+  <url>
+    <loc>https://www.namax.at/seo-wien</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.namax.at/seo-wien"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.namax.at/en/seo-vienna"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.namax.at/seo-wien"/>
+  </url>
+  <url>
+    <loc>https://www.namax.at/en/seo-vienna</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.namax.at/seo-wien"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.namax.at/en/seo-vienna"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.namax.at/seo-wien"/>
+  </url>
+  <url>
+    <loc>https://www.namax.at/online-werbung-wien</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.namax.at/online-werbung-wien"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.namax.at/en/online-ads-vienna"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.namax.at/online-werbung-wien"/>
+  </url>
+  <url>
+    <loc>https://www.namax.at/en/online-ads-vienna</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.namax.at/online-werbung-wien"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.namax.at/en/online-ads-vienna"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.namax.at/online-werbung-wien"/>
+  </url>
+  <url>
+    <loc>https://www.namax.at/impressum</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.namax.at/impressum"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.namax.at/en/impressum"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.namax.at/impressum"/>
+  </url>
+  <url>
+    <loc>https://www.namax.at/en/impressum</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.namax.at/impressum"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.namax.at/en/impressum"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.namax.at/impressum"/>
+  </url>
+  <url>
+    <loc>https://www.namax.at/datenschutz</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.namax.at/datenschutz"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.namax.at/en/datenschutz"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.namax.at/datenschutz"/>
+  </url>
+  <url>
+    <loc>https://www.namax.at/en/datenschutz</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.namax.at/datenschutz"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.namax.at/en/datenschutz"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.namax.at/datenschutz"/>
+  </url>
 </urlset>
