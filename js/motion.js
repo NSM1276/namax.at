@@ -1,5 +1,5 @@
 /* namax — scroll progress engine.
-   Writes --p (0…1) and data-step on every [data-scene]; all movement lives in CSS.
+   Writes data-step on every [data-scene] (and --p on the hero); all movement lives in CSS.
    Without this script (or with reduced motion) the page is a plain readable column. */
 (function () {
   'use strict';
@@ -113,10 +113,13 @@
       var p = s.mode === 'exit' ? exitProgress(top, s.height)
             : s.mode === 'enter' ? enterProgress(top, s.height, viewport)
             : sceneProgress(top, s.height, viewport);
-      p = Math.round(p * 1000) / 1000;
+      p = Math.round(p * 10000) / 10000;
+      // Only the hero follows the finger. Everything else changes state once per step and
+      // lets a CSS transition do the moving: per-frame values made cards and phones tremble
+      // while a touch scroll was coasting to a stop.
       if (p !== s.p) {
         s.p = p;
-        s.el.style.setProperty('--p', p);
+        if (s.mode === 'exit') s.el.style.setProperty('--p', p);
       }
       var step = s.mode === 'stack' ? stackStep(p, s.steps) : stepOf(p, s.steps);
       if (step !== s.step) {

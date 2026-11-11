@@ -323,10 +323,30 @@ mark::before{content:"";position:absolute;z-index:-1;inset:.06em 0 .02em;backgro
 
   /* services: each card sticks, the next one slides over it */
   .js-motion .svc{position:sticky;top:0;height:100svh;min-height:0;padding-block:0;
-    --c:clamp(0, calc(var(--p,0) * 4 - var(--i)), 1);
-    scale:calc(1 - .07 * var(--c));transform-origin:center top}
+    transform-origin:center top;transition:scale .6s var(--out)}
   .js-motion .svc+.svc{border-radius:30px 30px 0 0;box-shadow:0 -18px 50px #00000030}
-  .js-motion .svc::after{content:"";position:absolute;inset:0;background:#000;opacity:calc(var(--c) * .5);pointer-events:none}
+  .js-motion .svc::after{content:"";position:absolute;inset:0;background:#000;opacity:0;pointer-events:none;transition:opacity .6s var(--out)}
+  /* cards lying under the current one step back once, with a transition — nothing follows the finger */
+  .js-motion #services[data-step="1"] .svc-1,
+  .js-motion #services[data-step="2"] .svc-1,
+  .js-motion #services[data-step="2"] .svc-2,
+  .js-motion #services[data-step="3"] .svc-1,
+  .js-motion #services[data-step="3"] .svc-2,
+  .js-motion #services[data-step="3"] .svc-3,
+  .js-motion #services[data-step="4"] .svc-1,
+  .js-motion #services[data-step="4"] .svc-2,
+  .js-motion #services[data-step="4"] .svc-3,
+  .js-motion #services[data-step="4"] .svc-4{scale:.93}
+  .js-motion #services[data-step="1"] .svc-1::after,
+  .js-motion #services[data-step="2"] .svc-1::after,
+  .js-motion #services[data-step="2"] .svc-2::after,
+  .js-motion #services[data-step="3"] .svc-1::after,
+  .js-motion #services[data-step="3"] .svc-2::after,
+  .js-motion #services[data-step="3"] .svc-3::after,
+  .js-motion #services[data-step="4"] .svc-1::after,
+  .js-motion #services[data-step="4"] .svc-2::after,
+  .js-motion #services[data-step="4"] .svc-3::after,
+  .js-motion #services[data-step="4"] .svc-4::after{opacity:.5}
   .js-motion #services .svc-art *{animation-play-state:paused}
   .js-motion #services[data-step="0"] .svc-1 .svc-art *,
   .js-motion #services[data-step="1"] .svc-2 .svc-art *,
@@ -346,27 +366,36 @@ mark::before{content:"";position:absolute;z-index:-1;inset:.06em 0 .02em;backgro
   .js-motion .phones{display:block;position:relative;height:min(60svh,560px);aspect-ratio:9/16}
   .js-motion .phone{width:auto;height:100%}
   .js-motion .shot{position:absolute;inset:0;z-index:calc(var(--i) + 1);
-    --u:calc(var(--p,0) * 3 - var(--i));
-    --e:clamp(0, calc(var(--u) * -2.6), 1);
-    --x:clamp(0, calc((var(--u) - 1) * 2.6), 1);
-    translate:calc((var(--e) - var(--x)) * 110vw) calc(var(--x) * -4svh);
-    rotate:calc((var(--e) - var(--x)) * 14deg)}
+    translate:115vw 0;rotate:14deg;transition:translate .7s var(--out),rotate .7s var(--out)}
+  .js-motion #showcase[data-step="0"] .shot-1,
+  .js-motion #showcase[data-step="1"] .shot-2,
+  .js-motion #showcase[data-step="2"] .shot-3{translate:0 0;rotate:0deg}
+  .js-motion #showcase[data-step="1"] .shot-1,
+  .js-motion #showcase[data-step="2"] .shot-1,
+  .js-motion #showcase[data-step="2"] .shot-2{translate:-115vw -4svh;rotate:-14deg}
   .js-motion #showcase .slides-track,.js-motion #showcase .reel-words span,.js-motion #showcase .post.ad{animation-play-state:paused}
   .js-motion #showcase[data-step="0"] .slides-track,
   .js-motion #showcase[data-step="1"] .reel-words span,
   .js-motion #showcase[data-step="2"] .post.ad{animation-play-state:running}
 
   /* chat: messages arrive as you scroll */
-  .js-motion #how .msg{--v:clamp(0, calc((var(--p,0) - var(--at)) * 14), 1);
-    opacity:var(--v);translate:0 calc((1 - var(--v)) * 18px);scale:calc(.9 + .1 * var(--v))}
+  .js-motion #how .msg{opacity:0;visibility:hidden;translate:0 18px;scale:.9;
+    transition:opacity .35s,translate .5s var(--spring),scale .5s var(--spring),visibility 0s .35s}
+  .js-motion #how .msg-1,
+  .js-motion #how[data-step="1"] .msg-2,.js-motion #how[data-step="2"] .msg-2,.js-motion #how[data-step="3"] .msg-2,
+  .js-motion #how[data-step="2"] .msg-3,.js-motion #how[data-step="3"] .msg-3,
+  .js-motion #how[data-step="3"] .msg-4{opacity:1;visibility:visible;translate:0 0;scale:1;
+    transition:opacity .35s,translate .5s var(--spring),scale .5s var(--spring),visibility 0s}
   .js-motion #how[data-step="0"] .steps li:nth-child(1),
   .js-motion #how[data-step="1"] .steps li:nth-child(2),
   .js-motion #how[data-step="2"] .steps li:nth-child(3),
   .js-motion #how[data-step="3"] .steps li:nth-child(3){background:var(--ink);color:var(--cream);scale:1.06}
 
   /* finale: the headline grows into place */
-  .js-motion #contact h2{scale:calc(.62 + .38 * var(--p,1))}
-  .js-motion #contact p,.js-motion #contact .btn{opacity:calc(var(--p,1) * 3 - 2)}
+  .js-motion #contact h2{scale:.7;transition:scale .9s var(--out)}
+  .js-motion #contact p,.js-motion #contact .btn{opacity:0;transition:opacity .6s .25s,transform .2s var(--out),box-shadow .2s var(--out)}
+  .js-motion #contact[data-step="1"] h2{scale:1}
+  .js-motion #contact[data-step="1"] p,.js-motion #contact[data-step="1"] .btn{opacity:1}
 
   /* a scene whose content does not fit this screen is not pinned (class set by the script) */
   .js-motion #services.no-pin .svc{position:relative;height:auto;min-height:70svh;padding-block:56px;scale:none;border-radius:0;box-shadow:none}
@@ -376,8 +405,8 @@ mark::before{content:"";position:absolute;z-index:-1;inset:.06em 0 .02em;backgro
   .js-motion .no-pin .scene-pin{position:static;height:auto;overflow:visible;display:block}
   .js-motion #showcase.no-pin .phones{display:grid;height:auto;aspect-ratio:auto}
   .js-motion #showcase.no-pin .phone{width:min(260px,72vw);height:auto}
-  .js-motion #showcase.no-pin .shot{position:relative;inset:auto;translate:none;rotate:none}
+  .js-motion #showcase.no-pin .shot{position:relative;inset:auto;translate:none;rotate:none;transition:none}
   .js-motion #showcase.no-pin .slides-track,.js-motion #showcase.no-pin .reel-words span,.js-motion #showcase.no-pin .post.ad{animation-play-state:running}
-  .js-motion #how.no-pin .msg{opacity:1;translate:none;scale:none}
+  .js-motion #how.no-pin .msg{opacity:1;visibility:visible;translate:none;scale:none}
 }
 }
