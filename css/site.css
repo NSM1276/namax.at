@@ -260,52 +260,52 @@ mark::before{content:"";position:absolute;z-index:-1;inset:.06em 0 .02em;backgro
 .legal .back{display:inline-block;margin-top:44px;font-weight:700}
 
 /* ───────── 11 load + looping animations (no script needed) ───────── */
-@keyframes rise{from{opacity:0;transform:translateY(.5em) rotate(4deg)}}
+@keyframes rise{from{opacity:0;transform:translateY(.35em)}}
 @keyframes swipe{from{transform:scaleX(0)}}
-@keyframes drop{0%{opacity:0;transform:translateY(-70px) rotate(-9deg) scale(.9)}60%{opacity:1}100%{opacity:1;transform:none}}
+@keyframes drop{from{opacity:0;transform:translateY(22px)}}
 @keyframes fade-up{from{opacity:0;transform:translateY(16px)}}
-@keyframes pop{0%{opacity:0;transform:scale(.2)}12%{opacity:1;transform:scale(1.08)}18%,86%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(.2)}}
-@keyframes fan-l{0%,100%{rotate:-4deg;translate:-8% 0}45%,70%{rotate:-14deg;translate:-46% 4%}}
-@keyframes fan-r{0%,100%{rotate:4deg;translate:8% 0}45%,70%{rotate:12deg;translate:46% 6%}}
-@keyframes climb{0%,18%{transform:none}48%,100%{transform:translateY(calc((var(--row) + 10px) * -2))}}
-@keyframes sink{0%,18%{transform:none}48%,100%{transform:translateY(calc(var(--row) + 10px))}}
-@keyframes slide-in{0%,12%{opacity:0;transform:translateX(70%) rotate(8deg)}40%,100%{opacity:1;transform:none}}
-@keyframes carousel{0%,22%{transform:none}33%,55%{transform:translateX(-33.333%)}66%,90%{transform:translateX(-66.666%)}100%{transform:none}}
-@keyframes word{0%,8%{opacity:0;transform:translateY(.6em) scale(.8)}22%,82%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-.4em)}}
-@keyframes ad-in{0%,10%{opacity:0;transform:translateY(46%) scale(.9)}38%,100%{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:translateY(12px) scale(.97)}}
+@keyframes fan-l{from{rotate:-3deg;translate:-6% 0}}
+@keyframes fan-r{from{rotate:3deg;translate:6% 0}}
+@keyframes climb{to{transform:translateY(calc((var(--row) + 10px) * -2))}}
+@keyframes sink{to{transform:translateY(calc(var(--row) + 10px))}}
+@keyframes slide-in{from{opacity:0;transform:translateX(36%)}}
+@keyframes carousel{0%,24%{transform:none}33%,57%{transform:translateX(-33.333%)}66%,90%{transform:translateX(-66.666%)}100%{transform:none}}
+@keyframes word{from{opacity:0;transform:translateY(.5em)}}
+@keyframes ad-in{from{opacity:0;transform:translateY(28%)}}
 
 @media (prefers-reduced-motion:no-preference){
-  h1 .w{animation:rise .7s var(--spring) both}
+  h1 .w{animation:rise .6s var(--out) both}
   h1 .w:nth-of-type(2){animation-delay:.07s}
   h1 .w:nth-of-type(3){animation-delay:.14s}
   h1 .w:nth-of-type(4){animation-delay:.21s}
   mark::before{animation:swipe .55s var(--out) .5s both}
   .lede,.hero-copy .btn{animation:fade-up .7s var(--out) .35s both}
   .hero-copy .btn{animation-delay:.45s}
-  .tile{animation:drop .8s var(--spring) both}
+  .tile{animation:drop .6s var(--out) both}
   .tile-1{animation-delay:.25s}.tile-2{animation-delay:.34s}.tile-3{animation-delay:.43s}
   .tile-4{animation-delay:.52s}.tile-5{animation-delay:.61s}
 
-  .browser i{animation:pop 5s var(--out) infinite both}
+  .browser i{animation:pop .5s var(--out) both}
   .browser i:nth-child(2){animation-delay:.15s}.browser i:nth-child(3){animation-delay:.3s}
   .browser i:nth-child(4){animation-delay:.42s}.browser i:nth-child(5){animation-delay:.54s}
   .browser i:nth-child(6){animation-delay:.7s}
-  .grid9 i{animation:pop 5.4s var(--out) infinite both}
+  .grid9 i{animation:pop .5s var(--out) both}
   .grid9 i:nth-child(2){animation-delay:.12s}.grid9 i:nth-child(3){animation-delay:.24s}
   .grid9 i:nth-child(4){animation-delay:.36s}.grid9 i:nth-child(5){animation-delay:.48s}
   .grid9 i:nth-child(6){animation-delay:.6s}.grid9 i:nth-child(7){animation-delay:.72s}
   .grid9 i:nth-child(8){animation-delay:.84s}.grid9 i:nth-child(9){animation-delay:.96s}
-  .fan i:nth-child(1){animation:fan-l 4.6s var(--out) infinite}
-  .fan i:nth-child(2){animation:fan-r 4.6s var(--out) infinite}
-  .s-you{animation:climb 4.8s var(--out) infinite}
-  .s-other{animation:sink 4.8s var(--out) infinite}
-  .f-ad{animation:slide-in 4.6s var(--out) infinite}
+  .fan i:nth-child(1){animation:fan-l .8s var(--out) .15s both}
+  .fan i:nth-child(2){animation:fan-r .8s var(--out) .15s both}
+  .s-you{animation:climb .9s var(--out) .4s both}
+  .s-other{animation:sink .9s var(--out) .4s both}
+  .f-ad{animation:slide-in .7s var(--out) .15s both}
 
-  .slides-track{animation:carousel 7s var(--out) infinite}
-  .reel-words span{animation:word 3.6s var(--out) infinite both}
+  .slides-track{animation:carousel 10s ease-in-out infinite}
+  .reel-words span{animation:word .6s var(--out) both}
   .reel-words span:nth-child(2){animation-delay:.25s}
   .reel-words span:nth-child(3){animation-delay:.5s}
-  .post.ad{animation:ad-in 4.4s var(--out) infinite}
+  .post.ad{animation:ad-in .7s var(--out) .1s both}
 }
 
 /* ───────── 12 scroll scenes — only with the script, with motion allowed, in browsers that know svh ───────── */
@@ -322,7 +322,7 @@ mark::before{content:"";position:absolute;z-index:-1;inset:.06em 0 .02em;backgro
   .tile-5{--dx:44vw;--dy:24vh;--r:-16deg}
 
   /* services: each card sticks, the next one slides over it */
-  .js-motion .svc{position:sticky;top:0;height:100svh;min-height:0;padding-block:0;
+  .js-motion .svc{position:sticky;top:0;height:calc(var(--svh,1svh) * 100);min-height:0;padding-block:0;
     transform-origin:center top;transition:scale .6s var(--out)}
   .js-motion .svc+.svc{border-radius:30px 30px 0 0;box-shadow:0 -18px 50px #00000030}
   .js-motion .svc::after{content:"";position:absolute;inset:0;background:#000;opacity:0;pointer-events:none;transition:opacity .6s var(--out)}
@@ -356,14 +356,14 @@ mark::before{content:"";position:absolute;z-index:-1;inset:.06em 0 .02em;backgro
 
   /* pinned scenes */
   .js-motion #showcase,.js-motion #how{padding-block:0}
-  .js-motion #showcase{height:280svh}
-  .js-motion #how{height:260svh}
-  .js-motion .scene-pin{position:sticky;top:0;height:100svh;display:grid;align-items:center;overflow:hidden}
+  .js-motion #showcase{height:calc(var(--svh,1svh) * 280)}
+  .js-motion #how{height:calc(var(--svh,1svh) * 260)}
+  .js-motion .scene-pin{position:sticky;top:0;height:calc(var(--svh,1svh) * 100);display:grid;align-items:center;overflow:hidden}
 
   /* showcase: a deck of phones; the next one flies in over the previous, which then leaves */
   .js-motion .show-in{display:grid;justify-items:center}
-  .js-motion .sec-head{margin-bottom:clamp(20px,4svh,40px)}
-  .js-motion .phones{display:block;position:relative;height:min(60svh,560px);aspect-ratio:9/16}
+  .js-motion .sec-head{margin-bottom:28px}
+  .js-motion .phones{display:block;position:relative;height:min(calc(var(--svh,1svh) * 60),560px);aspect-ratio:9/16}
   .js-motion .phone{width:auto;height:100%}
   .js-motion .shot{position:absolute;inset:0;z-index:calc(var(--i) + 1);
     translate:115vw 0;rotate:14deg;transition:translate .7s var(--out),rotate .7s var(--out)}
@@ -372,7 +372,7 @@ mark::before{content:"";position:absolute;z-index:-1;inset:.06em 0 .02em;backgro
   .js-motion #showcase[data-step="2"] .shot-3{translate:0 0;rotate:0deg}
   .js-motion #showcase[data-step="1"] .shot-1,
   .js-motion #showcase[data-step="2"] .shot-1,
-  .js-motion #showcase[data-step="2"] .shot-2{translate:-115vw -4svh;rotate:-14deg}
+  .js-motion #showcase[data-step="2"] .shot-2{translate:-115vw -30px;rotate:-14deg}
   .js-motion #showcase .slides-track,.js-motion #showcase .reel-words span,.js-motion #showcase .post.ad{animation-play-state:paused}
   .js-motion #showcase[data-step="0"] .slides-track,
   .js-motion #showcase[data-step="1"] .reel-words span,

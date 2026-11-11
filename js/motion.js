@@ -93,7 +93,22 @@
     });
   }
 
+  // The height of pinned boxes is frozen in pixels and only recomputed when the width changes
+  // (rotation, window resize). Browser bars sliding in and out while scrolling cannot touch it.
+  var unitWidth = -1;
+  function freezeUnit() {
+    if (window.innerWidth === unitWidth) return;
+    unitWidth = window.innerWidth;
+    var probe = document.createElement('div');
+    probe.style.cssText = 'position:fixed;top:0;left:0;width:0;height:100svh;visibility:hidden;pointer-events:none';
+    document.body.appendChild(probe);
+    var h = probe.offsetHeight || window.innerHeight;
+    document.body.removeChild(probe);
+    root.style.setProperty('--svh', (h / 100) + 'px');
+  }
+
   function measure() {
+    freezeUnit();
     fitScenes();
     var y = window.scrollY;
     viewport = window.innerHeight;
@@ -134,12 +149,7 @@
   }
   function remeasure() { measure(); requestUpdate(); }
 
-  // Scenes are sized in svh, so a phone's address bar sliding away does not resize them and
-  // nothing is re-measured mid-scroll. A real change (rotation, window resize, text zoom) does.
-  if ('ResizeObserver' in window) {
-    var ro = new ResizeObserver(remeasure);
-    scenes.forEach(function (s) { ro.observe(s.el); });
-  }
+  // Only a width change re-measures; height changes come from browser bars and are ignored.
   window.addEventListener('resize', function () {
     if (window.innerWidth !== lastWidth) remeasure();
   });
