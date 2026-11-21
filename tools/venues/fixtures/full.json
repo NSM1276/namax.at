@@ -1,0 +1,22 @@
+{
+  "slug": "friseur-meidling",
+  "status": "hidden",
+  "kind": "friseur",
+  "name": "Friseur Meidling",
+  "area": "Meidling · Meidlinger Hauptstraße",
+  "address": { "street": "Meidlinger Hauptstraße 32", "zip": "1120", "city": "Wien" },
+  "phone": "+436604130063",
+  "hours": [null, [540, 1140], [540, 1140], [540, 1140], [540, 1140], [540, 1140], [540, 1080]],
+  "rating": { "value": 4.9, "count": 157, "source": "Google", "date": "2026-11" },
+  "list": {
+    "asOf": "2026-11",
+    "groups": [
+      { "title": { "de": "Herren", "en": "Men" },
+        "items": [ { "name": { "de": "Haarschnitt", "en": "Haircut" }, "price": 15, "note": null } ] }
+    ]
+  },
+  "facts": { "walkIn": true, "payment": ["cash", "card"], "transit": "U6 Niederhofstraße", "languages": ["de", "tr"] },
+  "theme": { "palette": "black-gold", "lettering": "block" },
+  "photos": [],
+  "internal": { "owner": "", "sources": [], "notes": "" }
+}

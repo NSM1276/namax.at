@@ -25,8 +25,12 @@ async function resolve(pathname) {
 }
 
 createServer(async (req, res) => {
-  const { pathname } = new URL(req.url, 'http://localhost');
-  const file = await resolve(pathname);
+  let { pathname } = new URL(req.url, 'http://localhost');
+  // Venue pages: <slug>.localhost shows /v/<slug>/, like <slug>.namax.at on Vercel.
+  const venue = /^([a-z0-9-]+)\.localhost(:\d+)?$/.exec(req.headers.host || '');
+  if (venue && venue[1] !== 'www' && !pathname.startsWith('/v/_shared/')) pathname = `/v/${venue[1]}${pathname}`;
+  let file = await resolve(pathname);
+  if (!file && venue && pathname.startsWith('/v/')) file = await resolve('/v-preview/' + pathname.slice(3));
   if (!file) { res.writeHead(404, { 'content-type': 'text/plain' }); res.end('404'); return; }
   res.writeHead(200, { 'content-type': types[extname(file)] || 'application/octet-stream', 'cache-control': 'no-store' });
   res.end(await readFile(file));

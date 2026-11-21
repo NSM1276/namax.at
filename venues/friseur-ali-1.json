@@ -1,0 +1,142 @@
+{
+  "slug": "friseur-ali-1",
+  "status": "hidden",
+  "kind": "friseur",
+  "name": "Friseur Ali 1",
+  "area": "Meidling · Meidlinger Hauptstraße",
+  "address": {
+    "street": "Meidlinger Hauptstraße 5",
+    "zip": "1120",
+    "city": "Wien"
+  },
+  "phone": "+4368120817437",
+  "hours": [
+    null,
+    [
+      540,
+      1140
+    ],
+    [
+      540,
+      1140
+    ],
+    [
+      540,
+      1140
+    ],
+    [
+      540,
+      1140
+    ],
+    [
+      540,
+      1140
+    ],
+    [
+      540,
+      1140
+    ]
+  ],
+  "rating": {
+    "value": 5,
+    "count": 157,
+    "source": "Google",
+    "date": "2026-11"
+  },
+  "list": {
+    "asOf": "2026-11",
+    "groups": [
+      {
+        "title": {
+          "de": "Herren & Kinder",
+          "en": "Men & children"
+        },
+        "items": [
+          {
+            "name": {
+              "de": "Haarschnitt + Föhnen",
+              "en": "Haircut + blow-dry"
+            },
+            "price": 13
+          },
+          {
+            "name": {
+              "de": "Kinder bis 10 Jahre",
+              "en": "Children up to 10"
+            },
+            "price": 10
+          },
+          {
+            "name": {
+              "de": "Haare färben",
+              "en": "Hair colouring"
+            },
+            "price": 15
+          },
+          {
+            "name": {
+              "de": "Kopfrasur",
+              "en": "Head shave"
+            },
+            "price": 15
+          },
+          {
+            "name": {
+              "de": "Modellrasur",
+              "en": "Styled shave"
+            },
+            "price": 10
+          },
+          {
+            "name": {
+              "de": "Komplettrasur",
+              "en": "Full shave"
+            },
+            "price": 8
+          },
+          {
+            "name": {
+              "de": "Maschinenrasur",
+              "en": "Clipper shave"
+            },
+            "price": 5
+          },
+          {
+            "name": {
+              "de": "Augenbrauen zupfen",
+              "en": "Eyebrow shaping"
+            },
+            "price": 5
+          },
+          {
+            "name": {
+              "de": "Wachs",
+              "en": "Wax"
+            },
+            "price": 5
+          },
+          {
+            "name": {
+              "de": "Waschen",
+              "en": "Wash"
+            },
+            "price": 3
+          }
+        ]
+      }
+    ]
+  },
+  "theme": {
+    "palette": "white-black",
+    "lettering": "block"
+  },
+  "internal": {
+    "owner": "AMD KG, FN 447037h; gewerberechtl. GF Süleyman Aşan",
+    "sources": [
+      "Google Maps",
+      "firmen.wko.at/amd-kg",
+      "herold.at"
+    ],
+    "notes": "Preise von der Tafel im Schaufenster (Google-Maps-Foto, Datum unbekannt). Schild: weiß, schwarze Blockschrift, \"Herren & Kinder\". Instagram @friseur_ali_1 stillgelegt. Nasim war dort: Website abgelehnt."
+  }
+}

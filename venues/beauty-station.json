@@ -1,0 +1,156 @@
+{
+  "slug": "beauty-station",
+  "status": "hidden",
+  "kind": "nails",
+  "name": "Beauty Station",
+  "area": "Meidling · Meidlinger Hauptstraße",
+  "address": {
+    "street": "Meidlinger Hauptstraße 37",
+    "zip": "1120",
+    "city": "Wien"
+  },
+  "phone": "+436609803108",
+  "hours": [
+    null,
+    [
+      600,
+      1080
+    ],
+    [
+      600,
+      1080
+    ],
+    [
+      600,
+      1080
+    ],
+    [
+      600,
+      1080
+    ],
+    [
+      600,
+      1080
+    ],
+    [
+      600,
+      840
+    ]
+  ],
+  "rating": {
+    "value": 4.3,
+    "count": 25,
+    "source": "Google",
+    "date": "2026-11"
+  },
+  "list": {
+    "asOf": "2026-11",
+    "groups": [
+      {
+        "title": {
+          "de": "Maniküre",
+          "en": "Manicure"
+        },
+        "items": [
+          {
+            "name": {
+              "de": "Maniküre ohne Lack",
+              "en": "Manicure without polish"
+            },
+            "price": 28
+          },
+          {
+            "name": {
+              "de": "Maniküre mit Shellac",
+              "en": "Manicure with shellac"
+            },
+            "price": 39.9
+          },
+          {
+            "name": {
+              "de": "Maniküre mit Shellac inkl. Entfernen",
+              "en": "Manicure with shellac incl. removal"
+            },
+            "price": 45
+          }
+        ]
+      },
+      {
+        "title": {
+          "de": "Nägel lackieren",
+          "en": "Nail polish"
+        },
+        "items": [
+          {
+            "name": {
+              "de": "Lackieren mit Shellac",
+              "en": "Shellac polish"
+            },
+            "price": 29
+          },
+          {
+            "name": {
+              "de": "French mit Shellac",
+              "en": "French with shellac"
+            },
+            "price": 39.9
+          }
+        ]
+      },
+      {
+        "title": {
+          "de": "Entfernen",
+          "en": "Removal"
+        },
+        "items": [
+          {
+            "name": {
+              "de": "Shellac entfernen",
+              "en": "Shellac removal"
+            },
+            "price": 15
+          },
+          {
+            "name": {
+              "de": "Gel entfernen",
+              "en": "Gel removal"
+            },
+            "price": 20
+          },
+          {
+            "name": {
+              "de": "Acryl entfernen",
+              "en": "Acrylic removal"
+            },
+            "price": 20
+          }
+        ]
+      }
+    ]
+  },
+  "facts": {
+    "payment": [
+      "cash"
+    ],
+    "transit": "Bus Meidlinger Hauptstraße, Pohlgasse",
+    "languages": [
+      "de",
+      "en",
+      "sr",
+      "ru",
+      "uk",
+      "pl",
+      "ro",
+      "es",
+      "fa"
+    ]
+  },
+  "internal": {
+    "owner": "nicht gefunden",
+    "sources": [
+      "Google Maps",
+      "https://www.treatwell.at/ort/beauty-station-wien-meidling/"
+    ],
+    "notes": "Google-Name: Beauty Station Wien Meidling. Öffnungszeiten widersprüchlich: Google Mo–Fr 8–19, Sa 9–14; Treatwell Mo–Fr 10–18, Sa 10–14; die engeren Treatwell-Zeiten übernommen. Treatwell-Bewertung 4,6 (176). Pediküre ab 45 € nicht aufgenommen. Zahlt bereits Treatwell. Schild nicht gesehen."
+  }
+}

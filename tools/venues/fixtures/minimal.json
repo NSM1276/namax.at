@@ -1,0 +1,7 @@
+{
+  "slug": "minimal",
+  "status": "hidden",
+  "kind": "other",
+  "name": "Minimal",
+  "address": { "street": "Teststraße 1", "zip": "1120", "city": "Wien" }
+}

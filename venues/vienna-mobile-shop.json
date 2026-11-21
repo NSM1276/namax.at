@@ -1,0 +1,57 @@
+{
+  "slug": "vienna-mobile-shop",
+  "status": "hidden",
+  "kind": "handy",
+  "name": "Vienna Mobile Shop",
+  "area": "Meidling · Meidlinger Hauptstraße",
+  "address": {
+    "street": "Meidlinger Hauptstraße 5",
+    "zip": "1120",
+    "city": "Wien"
+  },
+  "phone": "+4368181917838",
+  "hours": [
+    null,
+    [
+      660,
+      1200
+    ],
+    [
+      660,
+      1200
+    ],
+    [
+      660,
+      1200
+    ],
+    [
+      660,
+      1200
+    ],
+    [
+      660,
+      1200
+    ],
+    [
+      660,
+      1200
+    ]
+  ],
+  "rating": {
+    "value": 3.3,
+    "count": 18,
+    "source": "Google",
+    "date": "2026-11"
+  },
+  "theme": {
+    "palette": "white-black",
+    "lettering": "narrow"
+  },
+  "internal": {
+    "owner": "nicht gefunden",
+    "sources": [
+      "Google Maps"
+    ],
+    "notes": "Google-Name: Vienna Mobile Shop - Express Handy Reparatur Wien. Am Schild: Ankauf, Verkauf, Tausch, SIM Karten, Ladebons. Keine Preise. Schild: weiß, dunkelblaue Blockschrift."
+  }
+}

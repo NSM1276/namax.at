@@ -1,0 +1,183 @@
+{
+  "slug": "friseur-meidling",
+  "status": "hidden",
+  "kind": "friseur",
+  "name": "Friseur Meidling",
+  "area": "Meidling · Meidlinger Hauptstraße",
+  "address": {
+    "street": "Meidlinger Hauptstraße 32",
+    "zip": "1120",
+    "city": "Wien"
+  },
+  "phone": "+436604130063",
+  "hours": [
+    null,
+    [
+      540,
+      1140
+    ],
+    [
+      540,
+      1140
+    ],
+    [
+      540,
+      1140
+    ],
+    [
+      540,
+      1140
+    ],
+    [
+      540,
+      1140
+    ],
+    [
+      540,
+      1080
+    ]
+  ],
+  "rating": {
+    "value": 4.9,
+    "count": 157,
+    "source": "Google",
+    "date": "2026-11"
+  },
+  "list": {
+    "asOf": "2026-11",
+    "groups": [
+      {
+        "title": {
+          "de": "Herren",
+          "en": "Men"
+        },
+        "items": [
+          {
+            "name": {
+              "de": "Haarschnitt",
+              "en": "Haircut"
+            },
+            "price": 15
+          },
+          {
+            "name": {
+              "de": "Haarschnitt, Waschen, Föhnen",
+              "en": "Cut, wash, blow-dry"
+            },
+            "price": 20
+          },
+          {
+            "name": {
+              "de": "Haarschnitt mit Muster",
+              "en": "Haircut with pattern"
+            },
+            "price": 17
+          },
+          {
+            "name": {
+              "de": "Haare färben",
+              "en": "Hair colouring"
+            },
+            "price": 25
+          },
+          {
+            "name": {
+              "de": "Bart färben",
+              "en": "Beard colouring"
+            },
+            "price": 20
+          },
+          {
+            "name": {
+              "de": "Modell-Bartrasur",
+              "en": "Styled beard shave"
+            },
+            "price": 12
+          },
+          {
+            "name": {
+              "de": "Bartrasur",
+              "en": "Beard shave"
+            },
+            "price": 10
+          },
+          {
+            "name": {
+              "de": "Waschen, Föhnen",
+              "en": "Wash, blow-dry"
+            },
+            "price": 10
+          },
+          {
+            "name": {
+              "de": "Komplettpaket",
+              "en": "Full package"
+            },
+            "price": 35,
+            "note": {
+              "de": "Schnitt, Waschen, Rasur, Styling, Ohren- und Nasenhaare",
+              "en": "Cut, wash, shave, styling, ear and nose hair"
+            }
+          },
+          {
+            "name": {
+              "de": "Augenbrauen-Waxing",
+              "en": "Eyebrow waxing"
+            },
+            "price": 7
+          },
+          {
+            "name": {
+              "de": "Waxing",
+              "en": "Waxing"
+            },
+            "price": 7
+          },
+          {
+            "name": {
+              "de": "Maske",
+              "en": "Face mask"
+            },
+            "price": 7
+          }
+        ]
+      },
+      {
+        "title": {
+          "de": "Kinder bis 10 Jahre",
+          "en": "Children up to 10"
+        },
+        "items": [
+          {
+            "name": {
+              "de": "Haarschnitt",
+              "en": "Haircut"
+            },
+            "price": 12
+          },
+          {
+            "name": {
+              "de": "Mit Waschen und Föhnen",
+              "en": "With wash and blow-dry"
+            },
+            "price": 15
+          }
+        ]
+      }
+    ]
+  },
+  "theme": {
+    "palette": "black-gold",
+    "lettering": "block"
+  },
+  "internal": {
+    "owner": "Bozan Engin, Einzelunternehmen seit 01.04.2023; gewerberechtl. GF Mahmut Ağaç",
+    "sources": [
+      "Google Maps",
+      "firmen.wko.at/bozan-engin",
+      "herold.at",
+      "Instagram @friseurmeidling_"
+    ],
+    "notes": "Preise von der Tafel am Eingang (Foto, Datum unbekannt). Domain friseurmeidling.at steht am Schild, ist aber leer. Schild: schwarz, weiß-goldene Blockschrift. Nasim war dort: Website abgelehnt."
+  }
+}

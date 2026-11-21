@@ -1,0 +1,55 @@
+{
+  "slug": "friseur-kreativ",
+  "status": "hidden",
+  "kind": "friseur",
+  "name": "Friseur Kreativ",
+  "area": "Meidling · Meidlinger Hauptstraße",
+  "address": {
+    "street": "Meidlinger Hauptstraße 8–10",
+    "zip": "1120",
+    "city": "Wien"
+  },
+  "phone": "+4319676893",
+  "hours": [
+    null,
+    null,
+    [
+      540,
+      1080
+    ],
+    [
+      540,
+      1080
+    ],
+    [
+      540,
+      1140
+    ],
+    [
+      540,
+      1140
+    ],
+    [
+      540,
+      900
+    ]
+  ],
+  "rating": {
+    "value": 4.7,
+    "count": 63,
+    "source": "Google",
+    "date": "2026-11"
+  },
+  "theme": {
+    "palette": "white-black",
+    "lettering": "narrow"
+  },
+  "internal": {
+    "owner": "nicht gefunden",
+    "sources": [
+      "Google Maps",
+      "treatwell.at/ort/friseur-kreativ (derzeit nicht verfügbar)"
+    ],
+    "notes": "Keine Preise gefunden. Schild: hellgraues Band, dunkle Großbuchstaben. Google-Eintrag nicht beansprucht."
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "slug": "ariana-mobile",
+  "status": "hidden",
+  "kind": "handy",
+  "name": "Ariana Mobile",
+  "area": "Meidling · Meidlinger Hauptstraße",
+  "address": {
+    "street": "Meidlinger Hauptstraße 31",
+    "zip": "1120",
+    "city": "Wien"
+  },
+  "phone": "+4368181812727",
+  "hours": [
+    null,
+    [
+      540,
+      1140
+    ],
+    [
+      540,
+      1140
+    ],
+    [
+      540,
+      1140
+    ],
+    [
+      540,
+      1140
+    ],
+    [
+      540,
+      1140
+    ],
+    [
+      540,
+      1140
+    ]
+  ],
+  "rating": {
+    "value": 3.9,
+    "count": 12,
+    "source": "Google",
+    "date": "2026-11"
+  },
+  "theme": {
+    "palette": "blue-white",
+    "lettering": "narrow"
+  },
+  "internal": {
+    "owner": "nicht gefunden",
+    "sources": [
+      "Google Maps"
+    ],
+    "notes": "Keine Preise; Reparatur-Theke im Foto sichtbar. Schild: dunkelblau, weiße Blockschrift (Foto wirkt wie ein Rendering)."
+  }
+}

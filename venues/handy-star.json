@@ -1,0 +1,57 @@
+{
+  "slug": "handy-star",
+  "status": "hidden",
+  "kind": "handy",
+  "name": "Handy Star",
+  "area": "Meidling · Meidlinger Hauptstraße",
+  "address": {
+    "street": "Meidlinger Hauptstraße 32",
+    "zip": "1120",
+    "city": "Wien"
+  },
+  "phone": "+4368864913000",
+  "hours": [
+    null,
+    [
+      540,
+      1140
+    ],
+    [
+      540,
+      1140
+    ],
+    [
+      540,
+      1140
+    ],
+    [
+      540,
+      1140
+    ],
+    [
+      540,
+      1155
+    ],
+    [
+      540,
+      1110
+    ]
+  ],
+  "rating": {
+    "value": 4,
+    "count": 34,
+    "source": "Google",
+    "date": "2026-11"
+  },
+  "theme": {
+    "palette": "red-yellow",
+    "lettering": "narrow"
+  },
+  "internal": {
+    "owner": "nicht gefunden",
+    "sources": [
+      "Google Maps"
+    ],
+    "notes": "Western-Union-Agentur im selben Lokal. Keine Preise. Schild: rot, weiße Blockschrift, daneben Western Union gelb/schwarz."
+  }
+}

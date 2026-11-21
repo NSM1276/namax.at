@@ -1,2 +1,9 @@
 .claude/
 .superpowers/
+node_modules/
+.env.local
+.env*.local
+venues/.keys.tsv
+venues-preview/
+v-preview/
+data/raw/

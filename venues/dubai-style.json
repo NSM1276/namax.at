@@ -1,0 +1,155 @@
+{
+  "slug": "dubai-style",
+  "status": "hidden",
+  "kind": "friseur",
+  "name": "Dubai Style",
+  "area": "Meidling · Meidlinger Hauptstraße",
+  "address": {
+    "street": "Meidlinger Hauptstraße 31",
+    "zip": "1120",
+    "city": "Wien"
+  },
+  "phone": "+436765609118",
+  "hours": [
+    null,
+    [
+      540,
+      1140
+    ],
+    [
+      540,
+      1140
+    ],
+    [
+      540,
+      1140
+    ],
+    [
+      540,
+      1140
+    ],
+    [
+      540,
+      1140
+    ],
+    [
+      540,
+      1140
+    ]
+  ],
+  "rating": {
+    "value": 4.5,
+    "count": 145,
+    "source": "Google",
+    "date": "2026-11"
+  },
+  "list": {
+    "asOf": "2026-11",
+    "groups": [
+      {
+        "title": {
+          "de": "Herren & Kinder",
+          "en": "Men & children"
+        },
+        "items": [
+          {
+            "name": {
+              "de": "Haarschnitt + Föhnen",
+              "en": "Haircut + blow-dry"
+            },
+            "price": 15
+          },
+          {
+            "name": {
+              "de": "Schneiden, Waschen + Föhnen",
+              "en": "Cut, wash + blow-dry"
+            },
+            "price": 20
+          },
+          {
+            "name": {
+              "de": "Kinder bis 10 Jahre",
+              "en": "Children up to 10"
+            },
+            "price": 13
+          },
+          {
+            "name": {
+              "de": "Haare färben",
+              "en": "Hair colouring"
+            },
+            "price": 20
+          },
+          {
+            "name": {
+              "de": "Bart färben",
+              "en": "Beard colouring"
+            },
+            "price": 15
+          },
+          {
+            "name": {
+              "de": "Kopfrasur",
+              "en": "Head shave"
+            },
+            "price": 17
+          },
+          {
+            "name": {
+              "de": "Modell-Bartrasur",
+              "en": "Styled beard shave"
+            },
+            "price": 13
+          },
+          {
+            "name": {
+              "de": "Komplett-Bartrasur",
+              "en": "Full beard shave"
+            },
+            "price": 10
+          },
+          {
+            "name": {
+              "de": "Augenbrauen zupfen",
+              "en": "Eyebrow shaping"
+            },
+            "price": 7
+          },
+          {
+            "name": {
+              "de": "Wachs",
+              "en": "Wax"
+            },
+            "price": 8
+          },
+          {
+            "name": {
+              "de": "Waschen",
+              "en": "Wash"
+            },
+            "price": 5
+          },
+          {
+            "name": {
+              "de": "Komplett-Service",
+              "en": "Full service"
+            },
+            "price": 40
+          }
+        ]
+      }
+    ]
+  },
+  "theme": {
+    "palette": "black-gold",
+    "lettering": "serif"
+  },
+  "internal": {
+    "owner": "Alaa Hajhussein, Einzelunternehmen seit 15.09.2025; gewerberechtl. GF Khalil Fadil",
+    "sources": [
+      "Google Maps",
+      "firmen.wko.at/alaa-hajhussein"
+    ],
+    "notes": "Telefon nur vom Schaufenster abgelesen (bei Google keine Nummer). Preise von der Tafel im Schaufenster (Foto, Datum unbekannt). Schild: schwarz, goldene Serifenschrift. Nasim war dort: Website abgelehnt."
+  }
+}

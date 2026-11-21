@@ -4,3 +4,13 @@ project
 README.md
 .superpowers
 .claude
+demo/*/og.html
+
+venues
+venues-preview
+v-preview
+reports
+research_notes
+data
+node_modules
+.env.local

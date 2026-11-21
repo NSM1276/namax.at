@@ -23,6 +23,17 @@
       ],
       "destination": "/en",
       "permanent": false
+    },
+    {
+      "source": "/v/:slug((?!_shared)[a-z0-9-]+)",
+      "has": [
+        {
+          "type": "host",
+          "value": "^(www.)?namax.at$"
+        }
+      ],
+      "destination": "https://:slug.namax.at/",
+      "permanent": false
     }
   ],
   "headers": [
@@ -32,6 +43,15 @@
         {
           "key": "Cache-Control",
           "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/v/_shared/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800"
         }
       ]
     }

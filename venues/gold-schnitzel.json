@@ -1,0 +1,230 @@
+{
+  "slug": "gold-schnitzel",
+  "status": "hidden",
+  "kind": "imbiss",
+  "name": "Gold Schnitzel",
+  "area": "Meidling · Meidlinger Hauptstraße",
+  "address": {
+    "street": "Meidlinger Hauptstraße 5",
+    "zip": "1120",
+    "city": "Wien"
+  },
+  "phone": "+4366567138790",
+  "hours": [
+    [
+      570,
+      1290
+    ],
+    [
+      570,
+      1290
+    ],
+    [
+      570,
+      1290
+    ],
+    [
+      570,
+      1290
+    ],
+    [
+      570,
+      1290
+    ],
+    [
+      570,
+      1290
+    ],
+    [
+      570,
+      1290
+    ]
+  ],
+  "rating": {
+    "value": 5,
+    "count": 8,
+    "source": "Google",
+    "date": "2026-11"
+  },
+  "list": {
+    "asOf": "2026-11",
+    "groups": [
+      {
+        "title": {
+          "de": "Schnitzel",
+          "en": "Schnitzel"
+        },
+        "items": [
+          {
+            "name": {
+              "de": "Schnitzel Semmel",
+              "en": "Schnitzel roll"
+            },
+            "price": 6
+          },
+          {
+            "name": "Schnitzel Spezial",
+            "price": 6.5
+          },
+          {
+            "name": "Schnitzel Wrap",
+            "price": 6.5
+          },
+          {
+            "name": "Crispy Wrap",
+            "price": 7
+          },
+          {
+            "name": {
+              "de": "Schnitzel Teller",
+              "en": "Schnitzel plate"
+            },
+            "price": 11.5
+          },
+          {
+            "name": {
+              "de": "Schnitzel Teller Menü",
+              "en": "Schnitzel plate meal"
+            },
+            "price": 14.5
+          }
+        ]
+      },
+      {
+        "title": {
+          "de": "Cordon Bleu",
+          "en": "Cordon bleu"
+        },
+        "items": [
+          {
+            "name": {
+              "de": "Cordon Bleu Semmel",
+              "en": "Cordon bleu roll"
+            },
+            "price": 7
+          },
+          {
+            "name": {
+              "de": "Cordon Bleu Teller",
+              "en": "Cordon bleu plate"
+            },
+            "price": 12.5
+          },
+          {
+            "name": {
+              "de": "Cordon Bleu Teller Menü",
+              "en": "Cordon bleu plate meal"
+            },
+            "price": 15.5
+          }
+        ]
+      },
+      {
+        "title": {
+          "de": "Grillhendl",
+          "en": "Grilled chicken"
+        },
+        "items": [
+          {
+            "name": {
+              "de": "Halbes Grillhendl",
+              "en": "Half grilled chicken"
+            },
+            "price": 6.5
+          },
+          {
+            "name": {
+              "de": "Ganzes Grillhendl",
+              "en": "Whole grilled chicken"
+            },
+            "price": 12
+          }
+        ]
+      },
+      {
+        "title": {
+          "de": "Fisch & Gebackenes",
+          "en": "Fish & fried dishes"
+        },
+        "items": [
+          {
+            "name": {
+              "de": "Fisch Semmel",
+              "en": "Fish roll"
+            },
+            "price": 7
+          },
+          {
+            "name": {
+              "de": "Fisch Teller",
+              "en": "Fish plate"
+            },
+            "price": 14.5
+          },
+          {
+            "name": {
+              "de": "Gebackene Champignons",
+              "en": "Fried mushrooms"
+            },
+            "price": 7.9
+          },
+          {
+            "name": {
+              "de": "Gemüseteller",
+              "en": "Vegetable plate"
+            },
+            "price": 8.9
+          },
+          {
+            "name": {
+              "de": "Leber Teller",
+              "en": "Liver plate"
+            },
+            "price": 10
+          }
+        ]
+      },
+      {
+        "title": {
+          "de": "Suppen & Salate",
+          "en": "Soups & salads"
+        },
+        "items": [
+          {
+            "name": {
+              "de": "Hühnersuppe",
+              "en": "Chicken soup"
+            },
+            "price": 4.9
+          },
+          {
+            "name": {
+              "de": "Linsensuppe",
+              "en": "Lentil soup"
+            },
+            "price": 4.9
+          },
+          {
+            "name": {
+              "de": "Salat",
+              "en": "Salad"
+            },
+            "price": 3.5
+          }
+        ]
+      }
+    ]
+  },
+  "theme": {
+    "palette": "black-gold",
+    "lettering": "block"
+  },
+  "internal": {
+    "owner": "nicht gefunden (WKO 0 Treffer)",
+    "sources": [
+      "Google Maps",
+      "https://gold-schnitzel.gleichbeidir.at"
+    ],
+    "notes": "Hat eine eigene Bestellseite (gleichbeidir.at). Schild über dem Lokal lautet GOLDKEBAP — Schnitzel, Grillhendl; Google-Name und Fensteraufkleber: Gold Schnitzel. Neueröffnung, nur 8 Bewertungen. Halal-Zeichen am Fenster."
+  }
+}

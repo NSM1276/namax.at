@@ -1,0 +1,57 @@
+{
+  "slug": "handy-meidling",
+  "status": "hidden",
+  "kind": "handy",
+  "name": "Handy Meidling",
+  "area": "Meidling · Meidlinger Hauptstraße",
+  "address": {
+    "street": "Meidlinger Hauptstraße 16",
+    "zip": "1120",
+    "city": "Wien"
+  },
+  "phone": "+436607356341",
+  "hours": [
+    null,
+    [
+      540,
+      1140
+    ],
+    [
+      540,
+      1140
+    ],
+    [
+      540,
+      1140
+    ],
+    [
+      540,
+      1140
+    ],
+    [
+      540,
+      1140
+    ],
+    [
+      540,
+      1080
+    ]
+  ],
+  "rating": {
+    "value": 4.7,
+    "count": 271,
+    "source": "Google",
+    "date": "2026-11"
+  },
+  "theme": {
+    "palette": "black-white",
+    "lettering": "narrow"
+  },
+  "internal": {
+    "owner": "nicht gefunden",
+    "sources": [
+      "Google Maps"
+    ],
+    "notes": "Keine Preise. Schild: schwarz, weiße beleuchtete Blockschrift."
+  }
+}

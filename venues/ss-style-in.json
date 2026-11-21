@@ -1,0 +1,54 @@
+{
+  "slug": "ss-style-in",
+  "status": "hidden",
+  "kind": "friseur",
+  "name": "S&S Style In Hairsalon",
+  "area": "Meidling · Meidlinger Hauptstraße",
+  "address": {
+    "street": "Meidlinger Hauptstraße 7–9",
+    "zip": "1120",
+    "city": "Wien"
+  },
+  "phone": "+4318100399",
+  "hours": [
+    null,
+    [
+      600,
+      1020
+    ],
+    [
+      540,
+      1080
+    ],
+    [
+      540,
+      1080
+    ],
+    [
+      540,
+      1080
+    ],
+    [
+      540,
+      1080
+    ],
+    [
+      540,
+      960
+    ]
+  ],
+  "rating": {
+    "value": 4.9,
+    "count": 37,
+    "source": "Google",
+    "date": "2026-11"
+  },
+  "internal": {
+    "owner": "Selda Baş, Einzelunternehmen seit 12.04.2021",
+    "sources": [
+      "Google Maps",
+      "firmen.wko.at/selda-ba"
+    ],
+    "notes": "Keine Preise gefunden. Kein Foto vom Schild gesehen, daher Standard-Aussehen. Bewertungen überwiegend von Frauen."
+  }
+}

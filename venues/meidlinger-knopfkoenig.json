@@ -1,0 +1,57 @@
+{
+  "slug": "meidlinger-knopfkoenig",
+  "status": "hidden",
+  "kind": "other",
+  "name": "Meidlinger Knopfkönig",
+  "area": "Meidling · Meidlinger Hauptstraße",
+  "address": {
+    "street": "Meidlinger Hauptstraße 32",
+    "zip": "1120",
+    "city": "Wien"
+  },
+  "phone": "+4318174073",
+  "hours": [
+    null,
+    [
+      600,
+      1080
+    ],
+    [
+      600,
+      1080
+    ],
+    [
+      600,
+      1080
+    ],
+    [
+      600,
+      1080
+    ],
+    [
+      600,
+      1080
+    ],
+    [
+      600,
+      960
+    ]
+  ],
+  "rating": {
+    "value": 4.7,
+    "count": 60,
+    "source": "Google",
+    "date": "2026-11"
+  },
+  "theme": {
+    "palette": "black-gold",
+    "lettering": "serif"
+  },
+  "internal": {
+    "owner": "nicht gefunden",
+    "sources": [
+      "Google Maps"
+    ],
+    "notes": "Nähgeschäft: Knöpfe, Reißverschlüsse, Strickbedarf (laut Bewertungen). Keine Preise. Schild: dunkel, cremefarbene Zierschrift mit Krone. Google-Eintrag nicht beansprucht."
+  }
+}
