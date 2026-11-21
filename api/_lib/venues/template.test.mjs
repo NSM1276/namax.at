@@ -68,3 +68,10 @@ test('item without price shows no euro sign for it; photos render when present',
   const html = renderVenue(p);
   assert.ok(html.includes('data-photos') && (html.match(/<img /g) || []).length === 2);
 });
+test('a long word in the name shrinks the title so it fits a phone', () => {
+  const long = renderVenue({ ...load('minimal'), name: 'Änderungsschneiderei Fa. Orhan' });
+  const m = /<h1 style="font-size:clamp\(22px,([\d.]+)vw,72px\)">/.exec(long);
+  assert.ok(m, 'long name gets an inline size');
+  assert.ok(Number(m[1]) * 20 * 0.6 * 3.75 <= 300, 'Änderungsschneiderei fits ~300px at 375px wide');
+  assert.match(renderVenue({ ...load('minimal'), name: 'Adonis' }), /<h1>Adonis<\/h1>/);
+});

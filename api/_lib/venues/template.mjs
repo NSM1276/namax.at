@@ -13,6 +13,13 @@ export function esc(text) {
     .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
+// A long single word ("Änderungsschneiderei") cannot wrap, so the title shrinks until that word fits a phone.
+function titleSize(name) {
+  const longest = Math.max(...String(name).split(/\s+/).map((w) => w.length));
+  const vw = Math.round((130 / longest) * 10) / 10;
+  return vw < 12.5 ? ` style="font-size:clamp(22px,${vw}vw,72px)"` : '';
+}
+
 // An element whose text switches with the language toggle.
 const tr = (de, en, tag = 'span', attrs = '') =>
   `<${tag}${attrs ? ' ' + attrs : ''} data-de="${esc(de)}" data-en="${esc(en)}">${esc(de)}</${tag}>`;
@@ -108,7 +115,7 @@ function sign(v) {
   const area = v.area ? `<p class="area">${esc(v.area)}</p>` : '';
   return `<header class="sign"><div class="wrap">
 <div class="lang" role="group" aria-label="Sprache / Language"><button type="button" data-lang="de" lang="de" aria-label="Deutsch" aria-pressed="true">DE</button><button type="button" data-lang="en" lang="en" aria-label="English" aria-pressed="false">EN</button></div>
-<div class="plate">${area}<h1>${esc(v.name)}</h1></div>
+<div class="plate">${area}<h1${titleSize(v.name)}>${esc(v.name)}</h1></div>
 </div></header>`;
 }
 
