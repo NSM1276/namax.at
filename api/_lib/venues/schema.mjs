@@ -10,6 +10,10 @@ const isLabel = (x) => isText(x) || (isObj(x) && isText(x.de) && isText(x.en));
 const isMonth = (x) => typeof x === 'string' && /^\d{4}-(0[1-9]|1[0-2])$/.test(x);
 const isMinute = (x) => Number.isInteger(x) && x >= 0 && x <= 1440;
 
+const BLOB_PHOTO = /^https:\/\/[a-z0-9-]+\.public\.blob\.vercel-storage\.com\/[A-Za-z0-9._\/-]+\.(jpe?g|webp|png)$/;
+/** A photo is a plain file name served from the venue host, or an image in the project's Vercel Blob store. */
+export const isPhoto = (p) => typeof p === 'string' && (/^[a-z0-9-]+\.(jpe?g|webp|png)$/.test(p) || (BLOB_PHOTO.test(p) && !p.includes('..')));
+
 /** Returns a list of human-readable problems; an empty list means the venue is valid. */
 export function validateVenue(venue, fileSlug) {
   const e = [];
@@ -79,9 +83,14 @@ export function validateVenue(venue, fileSlug) {
   }
 
   if (venue.photos != null) {
-    const isPhoto = (p) => typeof p === 'string' && /^[a-z0-9-]+.(jpe?g|webp|png)$/.test(p);
-    if (!Array.isArray(venue.photos) || venue.photos.length > 4 || !venue.photos.every(isPhoto)) e.push('photos: at most 4 plain file names such as foto-1.jpg (the files live in v/<slug>/)');
+    if (!Array.isArray(venue.photos) || venue.photos.length > 4 || !venue.photos.every(isPhoto)) {
+      e.push('photos: at most 4, each a plain file name such as foto-1.jpg or an https Vercel Blob image URL');
+    }
   }
+  if (venue.uncertain != null && !(Array.isArray(venue.uncertain) && venue.uncertain.every((u) => ['hours', 'phone', 'list', 'address'].includes(u)))) {
+    e.push('uncertain may list hours, phone, list, address');
+  }
+  if (venue.source != null && venue.source !== 'osm') e.push('source must be "osm" when set');
   if (venue.theme != null) {
     const t = venue.theme;
     if (!isObj(t)) e.push('theme must be an object');

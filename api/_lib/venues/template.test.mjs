@@ -24,7 +24,7 @@ test('venue text is escaped', () => {
 });
 test('hidden has noindex and the unconfirmed line; public has neither', () => {
   const hidden = renderVenue({ ...load('full'), status: 'hidden' });
-  const pub = renderVenue({ ...load('full'), status: 'public' });
+  const pub = renderVenue({ ...load('full'), status: 'public', confirmed: true });
   assert.match(hidden, /<meta name="robots" content="noindex, nofollow">/);
   assert.ok(hidden.includes('Angaben nicht vom Inhaber bestätigt'));
   assert.doesNotMatch(pub, /noindex/);

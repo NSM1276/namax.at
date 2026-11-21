@@ -168,7 +168,8 @@ function rating(v) {
 
 function photos(v) {
   if (!v.photos || !v.photos.length) return '';
-  const imgs = v.photos.map((file) => `<img src="/${esc(file)}" alt="${esc(v.name)}" loading="lazy">`).join('');
+  const src = (p) => (p.startsWith('https://') ? p : '/' + p);
+  const imgs = v.photos.map((p) => `<img src="${esc(src(p))}" alt="${esc(v.name)}" loading="lazy">`).join('');
   return `<section class="photos" data-photos>${imgs}</section>`;
 }
 
@@ -190,10 +191,13 @@ function address(v) {
 }
 
 function footer(v) {
-  const by = v.status === 'public'
+  const by = v.confirmed === true
     ? ui('by')
     : tr(`${T.de.by} · ${T.de.unconfirmed}`, `${T.en.by} · ${T.en.unconfirmed}`);
-  return `<footer><p>${by}</p><a href="${SITE}/impressum">${ui('imprint')}</a><a href="${SITE}/datenschutz">${ui('privacy')}</a></footer>`;
+  // OpenStreetMap data is licensed under the ODbL and must be credited where it is shown.
+  const osm = v.source === 'osm'
+    ? `<p>${ui('osmData')} <a href="https://www.openstreetmap.org/copyright" rel="noopener">© OpenStreetMap</a></p>` : '';
+  return `<footer><p>${by}</p>${osm}<a href="${SITE}/impressum">${ui('imprint')}</a><a href="${SITE}/datenschutz">${ui('privacy')}</a></footer>`;
 }
 
 function owner() {
