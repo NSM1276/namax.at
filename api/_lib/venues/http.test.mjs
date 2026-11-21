@@ -170,3 +170,14 @@ test('removing the page deletes all its photos and their files', async () => {
   assert.equal((await s.store.listPhotos(SLUG)).length, 0);
   assert.equal(s.blob.deleted.length, 3);
 });
+
+test('removing the page deletes its facade photo too', async () => {
+  const s = await services();
+  await s.store.setFacade(SLUG, 'https://abc.public.blob.vercel-storage.com/venues/x/facade-1.jpg');
+  await handleChat(chatReq({ k: KEY, input: { start: true } }), s);
+  await handleChat(chatReq({ k: KEY, input: { chip: 'lang_de' } }), s);
+  await handleChat(chatReq({ k: KEY, input: { chip: 'delete' } }), s);
+  await handleChat(chatReq({ k: KEY, input: { chip: 'delete_yes' } }), s);
+  assert.equal((await s.store.getVenue(SLUG)).facadeUrl, null);
+  assert.ok(s.blob.deleted.includes('https://abc.public.blob.vercel-storage.com/venues/x/facade-1.jpg'));
+});

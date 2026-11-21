@@ -182,6 +182,16 @@ export function storeContract(makeStore, prefix = '') {
     assert.equal((await s.getVenue(A)).keyHash, 'f'.repeat(64));
   });
 
+  test('the facade photo url is stored, listed and cleared', async () => {
+    const s = await fresh();
+    assert.equal((await s.getVenue(A)).facadeUrl, null);
+    await s.setFacade(A, 'https://x/f.jpg');
+    assert.equal((await s.getVenue(A)).facadeUrl, 'https://x/f.jpg');
+    assert.equal((await s.listForAdmin()).find((r) => r.slug === A).facadeUrl, 'https://x/f.jpg');
+    await s.setFacade(A, null);
+    assert.equal((await s.getVenue(A)).facadeUrl, null);
+  });
+
   test('listSlugs by status', async () => {
     const s = await fresh();
     assert.deepEqual((await s.listSlugs('public')).filter((x) => x.startsWith(prefix)), [A]);

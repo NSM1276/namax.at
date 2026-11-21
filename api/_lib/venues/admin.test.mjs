@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { memoryStore } from './store.mjs';
 import { sealOwnerKey, openOwnerKey, isAdmin, renderAdmin } from './admin.mjs';
-import { handleAdmin, handleAdminRotate } from './http.mjs';
+import { handleAdmin, handleAdminRotate, handleAdminPost, MAX_FACADE_BYTES } from './http.mjs';
 
 const ADMIN = 'b'.repeat(32), OWNER = 'c'.repeat(32);
 const hash = (k) => createHash('sha256').update(k).digest('hex');
@@ -103,4 +103,59 @@ test('every script in the list is closed and parses (search, chips and QR all de
   assert.equal((html.match(/<script\b/g) || []).length, (html.match(/<\/script>/g) || []).length);
   for (const m of html.matchAll(/<script>([\s\S]*?)<\/script>/g)) assert.doesNotThrow(() => new Function(m[1]));
   assert.match(html, /addEventListener\('input'/);
+});
+
+// Facade photo: Nasim adds a cropped photo of the front from the private list.
+const fakeBlob = () => {
+  const b = { puts: [], deleted: [] };
+  b.put = async (path, bytes, opts) => { b.puts.push({ path, bytes, opts }); return { url: 'https://abc.public.blob.vercel-storage.com/' + path }; };
+  b.del = async (urls) => { b.deleted.push(...[].concat(urls)); };
+  return b;
+};
+const jpegBytes = (n = 2000) => { const a = new Uint8Array(n); a.set([0xff, 0xd8, 0xff, 0xe0]); return a; };
+const facadeReq = (fields) => {
+  const form = new FormData();
+  for (const [k, v] of Object.entries(fields)) {
+    if (v instanceof Uint8Array) form.append(k, new Blob([v], { type: 'image/jpeg' }), 'f.jpg'); else form.append(k, v);
+  }
+  return new Request('https://www.namax.at/liste', { method: 'POST', headers: { host: 'www.namax.at' }, body: form });
+};
+async function facadeSvc() { const s = await svc(); s.blob = fakeBlob(); return s; }
+
+test('facade: upload stores one file per venue, a second upload deletes the first, delete clears it', async () => {
+  const s = await facadeSvc();
+  const r1 = await handleAdminPost(facadeReq({ k: ADMIN, slug: 'cafe-a', photo: jpegBytes() }), s);
+  assert.equal(r1.status, 200);
+  const { url: u1 } = await r1.json();
+  assert.match(s.blob.puts[0].path, /^venues\/cafe-a\/facade-[0-9a-f]{32}\.jpg$/);
+  assert.equal((await s.store.getVenue('cafe-a')).facadeUrl, u1);
+  assert.equal((await s.store.listForAdmin()).find((r) => r.slug === 'cafe-a').facadeUrl, u1);
+  const { url: u2 } = await (await handleAdminPost(facadeReq({ k: ADMIN, slug: 'cafe-a', photo: jpegBytes() }), s)).json();
+  assert.notEqual(u1, u2);
+  assert.deepEqual(s.blob.deleted, [u1]);
+  const r3 = await handleAdminPost(facadeReq({ k: ADMIN, slug: 'cafe-a', delete: '1' }), s);
+  assert.equal(r3.status, 200);
+  assert.deepEqual(await r3.json(), { url: null });
+  assert.equal((await s.store.getVenue('cafe-a')).facadeUrl, null);
+  assert.deepEqual(s.blob.deleted, [u1, u2]);
+});
+
+test('facade: no key, wrong key, unknown or removed venue → 404 and nothing stored; text → 415; too big → 413', async () => {
+  const s = await facadeSvc();
+  for (const k of ['', 'x'.repeat(32)]) assert.equal((await handleAdminPost(facadeReq({ k, slug: 'cafe-a', photo: jpegBytes() }), s)).status, 404);
+  assert.equal((await handleAdminPost(facadeReq({ slug: 'cafe-a', photo: jpegBytes() }), s)).status, 404);
+  assert.equal((await handleAdminPost(facadeReq({ k: ADMIN, slug: 'nope', photo: jpegBytes() }), s)).status, 404);
+  await s.store.setStatus('friseur-b', 'removed');
+  assert.equal((await handleAdminPost(facadeReq({ k: ADMIN, slug: 'friseur-b', photo: jpegBytes() }), s)).status, 404);
+  assert.equal(s.blob.puts.length, 0);
+  assert.equal((await handleAdminPost(facadeReq({ k: ADMIN, slug: 'cafe-a', photo: new TextEncoder().encode('hello world, not an image') }), s)).status, 415);
+  assert.equal((await handleAdminPost(facadeReq({ k: ADMIN, slug: 'cafe-a', photo: jpegBytes(MAX_FACADE_BYTES + 10) }), s)).status, 413);
+  assert.equal(s.blob.puts.length, 0);
+});
+
+test('facade: a JSON post still rotates the owner link', async () => {
+  const s = await facadeSvc();
+  const res = await handleAdminPost(rotateReq({ k: ADMIN, slug: 'cafe-a' }), s);
+  assert.equal(res.status, 200);
+  assert.match((await res.json()).ownerUrl, /^https:\/\/cafe-a\.namax\.at\/\?k=[0-9a-f]{32}$/);
 });

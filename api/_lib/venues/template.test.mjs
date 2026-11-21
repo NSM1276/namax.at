@@ -141,3 +141,19 @@ test('motion: plays once, nothing moves with reduced motion, and the page is rea
   const css = /<style>([\s\S]*?)<\/style>/.exec(html)[1].replace(/@keyframes [a-z-]+\{(?:[^{}]*\{[^}]*\})+\}/g, '');
   assert.doesNotMatch(css, /opacity:0[;}]/, 'no element waits invisible for an animation');
 });
+
+test('a facade photo shows under the plate at a fixed 4:3 size; without one there is nothing', () => {
+  const url = 'https://abc.public.blob.vercel-storage.com/venues/x/facade-1.jpg';
+  const html = renderVenue({ ...load('minimal'), facade: url });
+  assert.match(html, new RegExp(`<figure class="facade"><img src="${url.replace(/[./]/g, '\$&')}"[^>]* width="1600" height="1200"`));
+  assert.ok(html.indexOf('class="facade"') > html.indexOf('</header>'));
+  assert.ok(!renderVenue(load('minimal')).includes('class="facade"'));
+  assert.ok(!renderVenue({ ...load('minimal'), facade: 'javascript:alert(1)' }).includes('class="facade"'), 'only Blob https urls');
+});
+
+test('merge: the stored facade url reaches the page', async () => {
+  const { effectiveVenue } = await import('./merge.mjs');
+  const rec = { slug: 'a', status: 'public', facts: load('minimal'), changes: {}, confirmedAt: null, facadeUrl: 'https://x.public.blob.vercel-storage.com/f.jpg' };
+  assert.equal(effectiveVenue(rec).facade, 'https://x.public.blob.vercel-storage.com/f.jpg');
+  assert.equal(effectiveVenue({ ...rec, facadeUrl: null }).facade, undefined);
+});

@@ -97,6 +97,7 @@ box-shadow:0 14px 28px color-mix(in srgb,var(--ink) 26%,transparent),inset 0 1px
 .gleam{position:absolute;top:-40%;bottom:-40%;left:-60%;width:40%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.38),transparent);transform:skewX(-18deg);pointer-events:none;animation:gleam 1.1s ease-in-out 1.1s both}
 h1{font-size:clamp(40px,15vw,80px);line-height:.95;overflow-wrap:anywhere;hyphens:auto}
 main.page{animation:rise .7s ease-out .6s both}
+.facade{margin:18px 0 0}.facade img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;border-radius:14px;box-shadow:0 8px 20px color-mix(in srgb,var(--ink) 18%,transparent)}
 @keyframes swing{0%{transform:translateY(-115%) rotateX(-50deg)}55%{transform:translateY(0) rotateX(9deg)}75%{transform:rotateX(-3deg)}100%{transform:none}}
 @keyframes gleam{0%{left:-60%}100%{left:130%}}
 @keyframes rise{0%{opacity:0;transform:translateY(12px)}100%{opacity:1;transform:none}}
@@ -139,6 +140,7 @@ footer a{display:inline-flex;align-items:center;min-height:44px;margin-right:18p
 @media (min-width:900px){.wrap{max-width:1080px;padding:0 32px}.sign .wrap{padding:0 32px}.plate{max-width:760px;margin:4px auto 0}.rim{padding:44px 40px 40px}
 .page{display:grid;grid-template-columns:minmax(0,1fr) 320px;column-gap:56px;align-items:start}
 .col{grid-column:1;grid-row:1}.side{grid-column:2;grid-row:1;position:sticky;top:24px;margin-top:30px;padding:20px;border:2px solid var(--ink);border-radius:8px}
+.facade{grid-column:1;grid-row:1}.facade~.col{grid-row:2}.facade~.side{grid-row:1/span 2}
 .side .status{margin:0 0 4px}.side .actions{grid-template-columns:1fr}footer{grid-column:1/-1}.photos{grid-template-columns:repeat(3,1fr)}}
 `;
 }
@@ -210,6 +212,13 @@ function rating(v) {
   const de = `${T.de.ratingOf} · ${r.count} ${T.de.reviewsOn} ${r.source} · ${T.de.asOf} ${month(r.date)}`;
   const en = `${T.en.ratingOf} · ${r.count} ${T.en.reviewsOn} ${r.source} · ${T.en.asOf} ${month(r.date)}`;
   return `<section><p class="rating"><b>${comma(r.value)}</b>${tr(de, en)}</p></section>`;
+}
+
+/** Nasim's photo of the front, under the plate (4:3, cropped on his phone). Only our Blob store or the local preview. */
+function facade(v) {
+  const u = typeof v.facade === 'string' ? v.facade : '';
+  const src = /^https:\/\/[a-z0-9-]+\.public\.blob\.vercel-storage\.com\/venues\/[\w./-]+$/.test(u) ? u : /^__blob\/venues\/[\w./-]+$/.test(u) ? '/' + u : '';
+  return src ? `<figure class="facade"><img src="${esc(src)}" alt="${esc(v.name)}" width="1600" height="1200" fetchpriority="high"></figure>` : '';
 }
 
 function photos(v) {
@@ -313,7 +322,7 @@ ${head(v, pal, let_)}
 </head>
 <body${owner ? ' class="has-owner"' : ''}>
 ${sign(v)}
-<main class="wrap page">
+<main class="wrap page">${facade(v)}
 <aside class="side">${status}
 ${actions(v)}</aside><div class="col">
 ${board(v)}

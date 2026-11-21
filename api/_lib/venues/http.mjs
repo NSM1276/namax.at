@@ -12,6 +12,8 @@ export const MAX_PHOTO_BYTES = 3 * 1024 * 1024;
 export const DAILY_PHOTOS = 12;
 /** Free pages keep at most this many photos: the next upload replaces the oldest, so storage never grows. */
 export const MAX_STORED_PHOTOS = 4;
+/** The facade photo arrives already cropped and shrunk on the phone (about 250 KB); this is only the ceiling. */
+export const MAX_FACADE_BYTES = 3 * 1024 * 1024;
 const MAX_CHAT_BODY = 8 * 1024;
 
 const json = (status, data) => new Response(JSON.stringify(data), {
@@ -58,6 +60,11 @@ async function dropPhotos(store, blob, slug, photos) {
   try { await blob.del(photos.map((p) => p.url)); } catch (e) { console.error('blob del failed', slug, e?.message); }
 }
 
+async function dropFacade(store, blob, slug, url) {
+  await store.setFacade(slug, null);
+  try { await blob.del([url]); } catch (e) { console.error('blob del failed', slug, e?.message); }
+}
+
 export async function handleChat(req, { store, llm, blob, now }) {
   if (req.method !== 'POST') return fail(405, 'POST only');
   const body = await readJson(req, MAX_CHAT_BODY);
@@ -66,7 +73,11 @@ export async function handleChat(req, { store, llm, blob, now }) {
   if (res) return res;
   const out = await chatTurn({ store, llm, now }, { slug, input: body.input });
   if (!out) return fail(404, 'not found');
-  if (blob && (await store.getVenue(slug))?.status === 'removed') await dropPhotos(store, blob, slug, await store.listPhotos(slug));
+  const after = blob && await store.getVenue(slug);
+  if (after && after.status === 'removed') {
+    await dropPhotos(store, blob, slug, await store.listPhotos(slug));
+    if (after.facadeUrl) await dropFacade(store, blob, slug, after.facadeUrl);
+  }
   return json(200, out);
 }
 
@@ -145,7 +156,7 @@ export async function handleAdmin(req, { store, adminKeyHash = ADMIN_KEY_HASH })
     const v = effectiveVenue(r, []);
     const ownerKey = r.ownerKeyEnc ? openOwnerKey(key, r.slug, r.ownerKeyEnc) : null;
     return { slug: r.slug, name: v.name, kind: v.kind, street: v.address?.street || '', district: r.facts.internal?.district || null,
-      status: r.status, confirmed: Boolean(r.confirmedAt), ownerUrl: ownerKey ? `https://${r.slug}.namax.at/?k=${ownerKey}` : null };
+      status: r.status, confirmed: Boolean(r.confirmedAt), facadeUrl: r.facadeUrl || null, ownerUrl: ownerKey ? `https://${r.slug}.namax.at/?k=${ownerKey}` : null };
   }).sort((a, b) => a.name.localeCompare(b.name, 'de'));
   return new Response(renderAdmin(rows), { headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'private, no-store', 'X-Robots-Tag': 'noindex, nofollow' } });
 }
@@ -163,4 +174,37 @@ export async function handleAdminRotate(req, { store, adminKeyHash = ADMIN_KEY_H
   await store.setKeyHash(slug, hashKey(ownerKey));
   await store.setOwnerKeyEnc(slug, sealOwnerKey(key, slug, ownerKey));
   return json(200, { ownerUrl: `https://${slug}.namax.at/?k=${ownerKey}` });
+}
+
+/** POST www.namax.at/liste, multipart {k, slug, photo} or {k, slug, delete=1} → the venue's facade photo. */
+export async function handleAdminFacade(req, { store, blob, adminKeyHash = ADMIN_KEY_HASH }) {
+  if (req.method !== 'POST') return fail(405, 'POST only');
+  if (Number(req.headers.get('content-length') || 0) > MAX_FACADE_BYTES + 64 * 1024) return fail(413, 'too large');
+  let form;
+  try { form = await req.formData(); } catch { return fail(400, 'bad request'); }
+  const key = typeof form.get('k') === 'string' ? form.get('k') : '';
+  if (!isAdmin(key, adminKeyHash)) return fail(404, 'not found');
+  const slug = typeof form.get('slug') === 'string' ? form.get('slug') : '';
+  const v = slug && await store.getVenue(slug);
+  if (!v || v.status === 'removed') return fail(404, 'not found');
+  if (form.get('delete') === '1') {
+    if (v.facadeUrl) await dropFacade(store, blob, slug, v.facadeUrl);
+    return json(200, { url: null });
+  }
+  const file = form.get('photo');
+  if (!file || typeof file.arrayBuffer !== 'function') return fail(400, 'no photo');
+  if (file.size > MAX_FACADE_BYTES) return fail(413, 'too large');
+  const bytes = new Uint8Array(await file.arrayBuffer());
+  const kind = sniff(bytes);
+  if (!kind) return fail(415, 'jpeg, png or webp only');
+  const path = `venues/${slug}/facade-${randomBytes(16).toString('hex')}.${kind.ext}`;
+  const { url } = await blob.put(path, bytes, { access: 'public', contentType: kind.type, addRandomSuffix: false });
+  await store.setFacade(slug, url);
+  if (v.facadeUrl) { try { await blob.del([v.facadeUrl]); } catch (e) { console.error('blob del failed', slug, e?.message); } }
+  return json(200, { url });
+}
+
+/** Every POST to the private list: a photo upload comes as multipart, a new owner link as JSON. */
+export function handleAdminPost(req, services) {
+  return /multipart\/form-data/i.test(req.headers.get('content-type') || '') ? handleAdminFacade(req, services) : handleAdminRotate(req, services);
 }

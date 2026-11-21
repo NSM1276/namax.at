@@ -24,6 +24,7 @@ export function effectiveVenue(record, photos = []) {
   }
   const shown = photos.filter((p) => p.kind === 'show').slice(0, MAX_SHOWN_PHOTOS).map((p) => p.url);
   if (shown.length) venue.photos = shown; else delete venue.photos;
+  if (record.facadeUrl) venue.facade = record.facadeUrl; else delete venue.facade;
   return venue;
 }
 

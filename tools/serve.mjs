@@ -11,7 +11,7 @@ import { fileURLToPath } from 'node:url';
 import { memoryStore } from '../api/_lib/venues/store.mjs';
 import { hashKey } from '../api/_lib/venues/owner.mjs';
 import { Readable } from 'node:stream';
-import { handlePage, handleChat, handlePhoto, handleHit, handleAdmin, handleAdminRotate } from '../api/_lib/venues/http.mjs';
+import { handlePage, handleChat, handlePhoto, handleHit, handleAdmin, handleAdminPost } from '../api/_lib/venues/http.mjs';
 import { sealOwnerKey } from '../api/_lib/venues/admin.mjs';
 import { ownerPanel } from '../api/_lib/venues/owner-ui.mjs';
 
@@ -85,7 +85,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     if (url.pathname === '/liste') {
       const body = ['GET', 'HEAD'].includes(req.method) ? undefined : Readable.toWeb(req);
       const request = new Request('https://www.namax.at' + url.pathname + url.search, { method: req.method, headers: req.headers, body, duplex: 'half' });
-      const r = await (req.method === 'POST' ? handleAdminRotate : handleAdmin)(request, svc);
+      const r = await (req.method === 'POST' ? handleAdminPost : handleAdmin)(request, svc);
       res.writeHead(r.status, Object.fromEntries(r.headers)); res.end(Buffer.from(await r.arrayBuffer())); return;
     }
     const file = await resolve(url.pathname);

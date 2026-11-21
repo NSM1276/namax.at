@@ -12,11 +12,11 @@ export function pgStore(query) {
 
   return {
     async getVenue(slug) {
-      const r = await one(`select slug, key_hash, status, facts, changes, pending, confirmed_at, do_not_contact, chat_state
+      const r = await one(`select slug, key_hash, status, facts, changes, pending, confirmed_at, do_not_contact, chat_state, facade_url
         from venues where slug = $1`, [slug]);
       if (!r) return null;
       return { slug: r.slug, keyHash: r.key_hash, status: r.status, facts: r.facts, changes: r.changes || {},
-        pending: r.pending || null, confirmedAt: iso(r.confirmed_at), doNotContact: Boolean(r.do_not_contact), chatState: r.chat_state || {} };
+        pending: r.pending || null, confirmedAt: iso(r.confirmed_at), doNotContact: Boolean(r.do_not_contact), chatState: r.chat_state || {}, facadeUrl: r.facade_url || null };
     },
     async upsertFacts(slug, { facts, keyHash, status = 'hidden' }) {
       await query(`insert into venues (slug, key_hash, status, facts) values ($1, $2, $3, $4::jsonb)
@@ -99,11 +99,12 @@ export function pgStore(query) {
     },
     async setKeyHash(slug, hash) { await query('update venues set key_hash = $2 where slug = $1', [slug, hash]); },
     async setOwnerKeyEnc(slug, enc) { await query('update venues set owner_key_enc = $2 where slug = $1', [slug, enc]); },
+    async setFacade(slug, url) { await query('update venues set facade_url = $2 where slug = $1', [slug, url || null]); },
     async listForAdmin() {
-      const rows = await query(`select slug, status, facts, changes, confirmed_at, owner_key_enc
+      const rows = await query(`select slug, status, facts, changes, confirmed_at, owner_key_enc, facade_url
         from venues where status <> 'removed' order by slug`);
       return rows.map((r) => ({ slug: r.slug, status: r.status, facts: r.facts, changes: r.changes || {},
-        confirmedAt: iso(r.confirmed_at), ownerKeyEnc: r.owner_key_enc || null }));
+        confirmedAt: iso(r.confirmed_at), ownerKeyEnc: r.owner_key_enc || null, facadeUrl: r.facade_url || null }));
     },
   };
 }
