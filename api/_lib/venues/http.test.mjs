@@ -8,9 +8,10 @@ import { handleChat, handleClaim, handlePhoto, handleHit, handlePage, handleSite
 const KEY = 'a'.repeat(32);
 const SLUG = 'friseur-meidling';
 const facts = JSON.parse(readFileSync(new URL('./fixtures/full.json', import.meta.url)));
-async function services(status = 'public') {
+async function services(status = 'public', { chatOpen = true } = {}) {
   const store = memoryStore();
   await store.upsertFacts(SLUG, { facts, keyHash: hashKey(KEY), status });
+  if (chatOpen) await store.setChatOpen(SLUG, true);
   const uploads = [];
   const deleted = [];
   const blob = { deleted, async put(path, body, opts) { uploads.push({ path, size: body.byteLength ?? body.size, opts }); return { url: `https://abc.public.blob.vercel-storage.com/${path}` }; },
@@ -231,4 +232,13 @@ test('claim: unknown or removed venue → 404; GET → 405', async () => {
   await s.store.setStatus(SLUG, 'removed');
   assert.equal((await handleClaim(claimReq(claim), s)).status, 404);
   assert.equal((await handleClaim(new Request(`https://${host}/api/venue/claim`, { headers: { host } }), s)).status, 405);
+});
+
+test('chat and photo upload → 404 while Nasim has not opened the chat for the venue', async () => {
+  const s = await services('public', { chatOpen: false });
+  assert.equal((await handleChat(chatReq({ k: KEY, input: { start: true } }), s)).status, 404);
+  assert.equal((await handlePhoto(photoReq(jpeg(1000)), s)).status, 404);
+  assert.equal(s.uploads.length, 0);
+  assert.equal(s.llm.calls, 0);
+  assert.equal((await s.store.listMessages(SLUG, 10)).length, 0);
 });

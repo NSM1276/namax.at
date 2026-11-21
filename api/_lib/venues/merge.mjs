@@ -3,7 +3,7 @@ import { validateVenue } from './schema.mjs';
 
 export const CHANGEABLE = ['phone', 'hours', 'list', 'facts'];
 const MAX_ITEMS = 40;
-const MAX_SHOWN_PHOTOS = 4;
+const MAX_SHOWN_PHOTOS = 3; // free pages; more photos are a paid feature
 // Blocks a facts file may mark as uncertain; they stay off the page until the owner confirms or changes them.
 const HIDE_WHEN_UNCERTAIN = ['hours', 'phone', 'list'];
 

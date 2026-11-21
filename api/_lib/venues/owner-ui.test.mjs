@@ -12,6 +12,7 @@ const facts = JSON.parse(readFileSync(new URL('./fixtures/full.json', import.met
 async function pages() {
   const store = memoryStore();
   await store.upsertFacts('friseur-meidling', { facts, keyHash: hashKey(KEY), status: 'public' });
+  await store.setChatOpen('friseur-meidling', true);
   const owner = await renderPage({ store, slug: 'friseur-meidling', key: KEY, ownerPart: ownerPanel });
   const pub = await renderPage({ store, slug: 'friseur-meidling', key: '', ownerPart: ownerPanel });
   return { owner: owner.body, pub: pub.body };

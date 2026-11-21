@@ -27,12 +27,13 @@ async function readJson(req, limit) {
   try { const v = JSON.parse(text); return v && typeof v === 'object' && !Array.isArray(v) ? v : null; } catch { return null; }
 }
 
-/** Owner record for this request, or a Response explaining why not. */
-async function ownerRecord(req, store, key) {
+/** Owner record for this request, or a Response explaining why not. Chat and photo upload need the chat opened by Nasim. */
+async function ownerRecord(req, store, key, { needChat = false } = {}) {
   const slug = hostSlug(req);
   const record = slug ? await store.getVenue(slug) : null;
   if (!record) return { res: fail(404, 'not found') };
   if (!isOwner(record, typeof key === 'string' ? key : '')) return { res: fail(403, 'forbidden') };
+  if (needChat && !record.chatOpen) return { res: fail(404, 'not found') };
   return { slug, record };
 }
 
@@ -69,7 +70,7 @@ export async function handleChat(req, { store, llm, blob, now }) {
   if (req.method !== 'POST') return fail(405, 'POST only');
   const body = await readJson(req, MAX_CHAT_BODY);
   if (!body || typeof body.input !== 'object' || body.input === null) return fail(400, 'bad request');
-  const { slug, res } = await ownerRecord(req, store, body.k);
+  const { slug, res } = await ownerRecord(req, store, body.k, { needChat: true });
   if (res) return res;
   const out = await chatTurn({ store, llm, now }, { slug, input: body.input });
   if (!out) return fail(404, 'not found');
@@ -125,7 +126,7 @@ export async function handlePhoto(req, { store, blob, now = () => new Date() }) 
   if (length > MAX_PHOTO_BYTES + 64 * 1024) return fail(413, 'too large');
   let form;
   try { form = await req.formData(); } catch { return fail(400, 'bad request'); }
-  const { slug, record, res } = await ownerRecord(req, store, form.get('k'));
+  const { slug, record, res } = await ownerRecord(req, store, form.get('k'), { needChat: true });
   if (res) return res;
   if (record.status === 'removed') return fail(410, 'removed');
   const file = form.get('photo');

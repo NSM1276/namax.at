@@ -248,7 +248,7 @@ test('the model gets the rules, the venue, at most 6 earlier messages and a smal
   assert.equal(p.tool_choice, undefined, 'forced tool choice returns 400 on newer models');
 });
 
-test('photos: shown at once, never a fifth', async () => {
+test('photos: shown at once, never a fourth (free pages keep 3)', async () => {
   const store = await setup(); const llm = fakeLlm();
   await inGerman(store, llm);
   await turn(store, llm, { chip: 'yes_all' }); await turn(store, llm, { chip: 'photos_yes' });
@@ -256,7 +256,7 @@ test('photos: shown at once, never a fifth', async () => {
     const id = await store.addPhoto(SLUG, { url: `https://abc.public.blob.vercel-storage.com/venues/x/${i}.jpg`, kind: 'priceboard' });
     await turn(store, llm, { photo: { id } });
   }
-  assert.equal((await store.listPhotos(SLUG)).filter((p) => p.kind === 'show').length, 4);
+  assert.equal((await store.listPhotos(SLUG)).filter((p) => p.kind === 'show').length, 3);
 });
 
 test('R5: the yes applies only the proposal the owner saw', async () => {

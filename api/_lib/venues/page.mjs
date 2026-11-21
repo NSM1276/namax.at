@@ -39,7 +39,8 @@ export async function renderPage({ store, slug, key, ownerPart }) {
     return { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, s-maxage=60' },
       body: renderVenue(venue).replace('</body>', `${HIT}</body>`) };
   }
-  const part = ownerPart ? await ownerPart({ store, slug, record, venue, photos }) : ownerBar();
+  // The chat works only where Nasim opened it after talking to the owner; elsewhere the bar leads to him.
+  const part = ownerPart && record.chatOpen ? await ownerPart({ store, slug, record, venue, photos }) : ownerBar();
   return { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'private, no-store', 'X-Robots-Tag': 'noindex' },
     body: renderVenue(venue, { owner: part }) };
 }

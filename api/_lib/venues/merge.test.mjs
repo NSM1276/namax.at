@@ -37,10 +37,10 @@ test('status comes from the record, confirmed from confirmedAt, internal never s
   assert.equal(effectiveVenue(record(f), []).confirmed, false);
 });
 
-test('only shown photos, never more than 4', () => {
+test('only shown photos, never more than 3', () => {
   const photos = [1, 2, 3, 4, 5, 6].map((i) => ({ id: i, url: blob('p' + i), kind: i === 2 ? 'priceboard' : 'show' }));
   const v = effectiveVenue(record(load('minimal')), photos);
-  assert.deepEqual(v.photos, [blob('p1'), blob('p3'), blob('p4'), blob('p5')]);
+  assert.deepEqual(v.photos, [blob('p1'), blob('p3'), blob('p4')]);
   assert.equal(effectiveVenue(record(load('minimal')), []).photos, undefined);
 });
 

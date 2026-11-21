@@ -125,3 +125,14 @@ test('slugFromHost and venuePath', () => {
   assert.equal(venuePath('www.namax.at', '/'), null);
   assert.equal(venuePath('namax.at', '/api/venue/page'), null);
 });
+
+test('owner chat: closed by default → the WhatsApp bar; open → the chat part', async () => {
+  const { store, slug } = await setup();
+  const ownerPart = async () => ({ css: '', script: '', html: '<section data-ob-test>CHAT</section>' });
+  const closed = await renderPage({ store, slug, key: KEY, ownerPart });
+  assert.ok(!closed.body.includes('data-ob-test'));
+  assert.ok(closed.body.includes('wa.me'));
+  await store.setChatOpen(slug, true);
+  const open = await renderPage({ store, slug, key: KEY, ownerPart });
+  assert.ok(open.body.includes('data-ob-test'));
+});

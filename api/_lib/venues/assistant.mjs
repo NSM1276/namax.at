@@ -14,7 +14,7 @@ import { viennaDayStart, viennaDay } from './owner.mjs';
 export const MODEL = 'claude-haiku-5-5';
 export const FREE_MODEL_CALLS = { perDay: 10, total: 40 };
 export const DAILY_REQUESTS = 40;
-const MAX_SHOWN_PHOTOS = 4;
+const MAX_SHOWN_PHOTOS = 3; // free pages; more photos are a paid feature
 const HISTORY = 6;
 
 const HHMM = { type: 'string', description: 'time as HH:MM, 24-hour clock' };
