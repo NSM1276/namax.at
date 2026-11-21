@@ -71,6 +71,15 @@ export function storeContract(makeStore, prefix = '') {
     assert.deepEqual(v.changes.hours[6], [540, 1020]);
   });
 
+  test('clearPending drops the proposal and keeps the changes', async () => {
+    const s = await fresh();
+    await s.setPending(A, { phone: '+4312345678' });
+    await s.clearPending(A);
+    const v = await s.getVenue(A);
+    assert.equal(v.pending, null);
+    assert.deepEqual(v.changes, {});
+  });
+
   test('pending remembers the last message id at the time it was made', async () => {
     const s = await fresh();
     const m = await s.addMessage(A, { role: 'owner', content: 'Samstag bis 17' });
