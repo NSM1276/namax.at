@@ -125,8 +125,8 @@ test('chainReason spots brands, known chains and repeated names', () => {
   assert.equal(chainReason({ name: 'Kebab' }, new Map([[normName('Kebab'), 9]])), null);
 });
 
-import { KINDS } from '../venues/schema.mjs';
-import { kindLabel } from '../venues/i18n.mjs';
+import { KINDS } from '../../api/_lib/venues/schema.mjs';
+import { kindLabel } from '../../api/_lib/venues/i18n.mjs';
 test('every kind the pipeline produces is a schema kind with DE and EN labels', () => {
   for (const k of ['imbiss', 'restaurant', 'cafe', 'friseur', 'nails', 'kosmetik', 'handy', 'schneider']) {
     assert.ok(KINDS.includes(k), k);

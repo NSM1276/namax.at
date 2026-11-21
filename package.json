@@ -1,0 +1,8 @@
+{
+  "name": "namax-at",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test \"api/_lib/**/*.test.mjs\" \"tools/venues/*.test.mjs\" \"tools/city/*.test.mjs\""
+  }
+}

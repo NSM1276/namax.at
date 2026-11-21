@@ -3,8 +3,8 @@
 import { readFileSync, writeFileSync, mkdirSync, readdirSync, rmSync, existsSync, statSync } from 'node:fs';
 import { join, dirname, basename } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { validateVenue } from './venues/schema.mjs';
-import { renderVenue } from './venues/template.mjs';
+import { validateVenue } from '../api/_lib/venues/schema.mjs';
+import { renderVenue } from '../api/_lib/venues/template.mjs';
 
 const KEEP = new Set(['_shared']);
 

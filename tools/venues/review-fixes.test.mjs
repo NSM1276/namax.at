@@ -4,10 +4,10 @@ import { mkdtempSync, mkdirSync, readFileSync, writeFileSync, existsSync } from 
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { buildVenues } from '../build-venues.mjs';
-import { validateVenue } from './schema.mjs';
-import { renderVenue } from './template.mjs';
+import { validateVenue } from '../../api/_lib/venues/schema.mjs';
+import { renderVenue } from '../../api/_lib/venues/template.mjs';
 import { venuePath } from '../../middleware.js';
-const fixture = (n) => JSON.parse(readFileSync(new URL(`./fixtures/${n}.json`, import.meta.url)));
+const fixture = (n) => JSON.parse(readFileSync(new URL(`../../api/_lib/venues/fixtures/${n}.json`, import.meta.url)));
 
 test('C1: venue hosts map to /v/<slug>, everything else is left alone', () => {
   assert.equal(venuePath('friseur-meidling.namax.at', '/'), '/v/friseur-meidling');
@@ -39,7 +39,7 @@ test('I4: inherited object keys are not palettes or letterings', () => {
   assert.deepEqual(validateVenue({ ...fixture('minimal'), theme: { palette: 'black-gold' } }, 'minimal'), []);
 });
 
-import { openState } from './hours.mjs';
+import { openState } from '../../api/_lib/venues/hours.mjs';
 test('M1: a venue open one day a week does not claim it opens today after closing', () => {
   const monday = [null, [540, 1140], null, null, null, null, null];
   assert.deepEqual(openState(monday, 1, 1200).opensAt, { day: 1, minute: 540, nextWeek: true });

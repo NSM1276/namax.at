@@ -1,5 +1,5 @@
 // Page addresses (<slug>.namax.at) for venues from the city dataset.
-import { RESERVED_SLUGS } from '../venues/schema.mjs';
+import { RESERVED_SLUGS } from '../../api/_lib/venues/schema.mjs';
 
 const MAP = { ä: 'ae', ö: 'oe', ü: 'ue', ß: 'ss', ı: 'i', ł: 'l', ø: 'o', æ: 'ae', œ: 'oe', đ: 'd', ð: 'd', þ: 'th' };
 

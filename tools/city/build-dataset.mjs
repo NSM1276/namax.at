@@ -6,7 +6,7 @@ import { kindOf, normalizePhone, parseOpeningHours, siteKind } from './normalize
 import { assignSlugs } from './slug.mjs';
 import { makeDistrictLocator, zipDistrict, DISTRICT_NAMES } from './district.mjs';
 import { chainReason, normName } from './chains.mjs';
-import { validateVenue } from '../venues/schema.mjs';
+import { validateVenue } from '../../api/_lib/venues/schema.mjs';
 
 const read = (p) => JSON.parse(readFileSync(p, 'utf8'));
 const osm = read('data/raw/osm-wien.json').elements;

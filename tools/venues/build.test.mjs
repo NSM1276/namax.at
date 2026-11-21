@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { buildVenues } from '../build-venues.mjs';
 
-const fixture = (n) => JSON.parse(readFileSync(new URL(`./fixtures/${n}.json`, import.meta.url)));
+const fixture = (n) => JSON.parse(readFileSync(new URL(`../../api/_lib/venues/fixtures/${n}.json`, import.meta.url)));
 function setup(venues = [fixture('full'), fixture('minimal')]) {
   const srcDir = mkdtempSync(join(tmpdir(), 'venues-src-'));
   const outDir = mkdtempSync(join(tmpdir(), 'venues-out-'));
