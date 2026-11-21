@@ -100,13 +100,6 @@ address a{display:inline-flex;align-items:center;min-height:44px;margin-top:2px;
 footer{margin:40px 0 0;padding:20px 0 28px;border-top:1px solid color-mix(in srgb,var(--ink) 18%,transparent);font-size:13px;opacity:.8}
 footer p{margin:0 0 6px}
 footer a{display:inline-flex;align-items:center;min-height:44px;margin-right:18px}
-.owner{position:fixed;left:0;right:0;bottom:0;z-index:5;background:#111;color:#fff;padding:14px 16px calc(14px + env(safe-area-inset-bottom));box-shadow:0 -6px 24px rgba(0,0,0,.25)}
-.owner[hidden]{display:none}
-.owner .wrap{padding:0}
-.owner strong{display:block;font-size:19px}
-.owner p{margin:4px 0 12px;font-size:15px;line-height:1.35;opacity:.9}
-.owner a{display:flex;align-items:center;justify-content:center;min-height:56px;border-radius:6px;background:#ffc93c;color:#111;font-weight:800;font-size:20px;text-decoration:none}
-body.has-owner{padding-bottom:210px}
 @media (min-width:700px){.sign{padding:16px 16px 22px}.plate{padding:40px 24px 36px}}
 `;
 }
@@ -200,11 +193,18 @@ function footer(v) {
   return `<footer><p>${by}</p>${osm}<a href="${SITE}/impressum">${ui('imprint')}</a><a href="${SITE}/datenschutz">${ui('privacy')}</a></footer>`;
 }
 
-function owner() {
-  return `<section class="owner" data-owner hidden><div class="wrap">
+/** The part-1 owner bar (WhatsApp hook), used until the chat from owner-ui.mjs is passed instead. */
+const OWNER_BAR_CSS = `.owner{position:fixed;left:0;right:0;bottom:0;z-index:5;background:#111;color:#fff;padding:14px 16px calc(14px + env(safe-area-inset-bottom));box-shadow:0 -6px 24px rgba(0,0,0,.25)}
+.owner .wrap{padding:0}
+.owner strong{display:block;font-size:19px}
+.owner p{margin:4px 0 12px;font-size:15px;line-height:1.35;opacity:.9}
+.owner a{display:flex;align-items:center;justify-content:center;min-height:56px;border-radius:6px;background:#ffc93c;color:#111;font-weight:800;font-size:20px;text-decoration:none}
+body.has-owner{padding-bottom:210px}`;
+export function ownerBar() {
+  return { css: OWNER_BAR_CSS, script: '', html: `<section class="owner" data-owner><div class="wrap">
 ${ui('ownerHead', 'strong')}<p dir="auto">${esc(OWNER_LINE)}</p>
 <a href="${OWNER_CHAT_FALLBACK}" data-chat-hook rel="noopener">${ui('chat')}</a>
-</div></section>`;
+</div></section>` };
 }
 
 function script(v) {
@@ -220,7 +220,6 @@ for(var j=0;j<bs.length;j++)bs[j].setAttribute('aria-pressed',String(bs[j].getAt
 for(var k=0;k<onLang.length;k++)onLang[k]()}
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-lang]');if(!b)return;
 setLang(b.getAttribute('data-lang'));try{localStorage.setItem('namax-venue-lang',lang)}catch(e){}});
-try{if(new URLSearchParams(location.search).has('k')){document.querySelector('[data-owner]').hidden=false;document.body.classList.add('has-owner')}}catch(e){}
 `;
   const status = !v.hours ? '' : `
 ${openState.toString()}
@@ -244,7 +243,8 @@ onLang.push(renderStatus);setInterval(renderStatus,60000);
   return `<script>(function(){${base}${status}setLang(lang)})();</script>`;
 }
 
-export function renderVenue(venue) {
+/** venue → HTML. options.owner = { html, css, script } is added for the venue's owner only. */
+export function renderVenue(venue, { owner } = {}) {
   const theme = { ...DEFAULT_THEME, ...(venue.theme || {}) };
   const pal = Object.hasOwn(PALETTES, theme.palette) ? PALETTES[theme.palette] : null;
   const let_ = Object.hasOwn(LETTERINGS, theme.lettering) ? LETTERINGS[theme.lettering] : null;
@@ -257,7 +257,7 @@ export function renderVenue(venue) {
 <head>
 ${head(v, pal, let_)}
 </head>
-<body>
+<body${owner ? ' class="has-owner"' : ''}>
 ${sign(v)}
 <main class="wrap">
 ${status}
@@ -270,8 +270,8 @@ ${hoursTable(v)}
 ${address(v)}
 ${footer(v)}
 </main>
-${owner()}
-${script(v)}
+${owner ? (owner.css ? `<style>${owner.css}</style>` : '') + owner.html : ''}
+${script(v)}${owner && owner.script ? `\n<script>${owner.script}</script>` : ''}
 </body>
 </html>
 `;

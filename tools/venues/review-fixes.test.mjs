@@ -5,15 +5,15 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { buildVenues } from '../build-venues.mjs';
 import { validateVenue } from '../../api/_lib/venues/schema.mjs';
-import { renderVenue } from '../../api/_lib/venues/template.mjs';
+import { renderVenue, ownerBar } from '../../api/_lib/venues/template.mjs';
 import { venuePath } from '../../middleware.js';
 const fixture = (n) => JSON.parse(readFileSync(new URL(`../../api/_lib/venues/fixtures/${n}.json`, import.meta.url)));
 
-test('C1: venue hosts map to /v/<slug>, everything else is left alone', () => {
-  assert.equal(venuePath('friseur-meidling.namax.at', '/'), '/v/friseur-meidling');
-  assert.equal(venuePath('Friseur-Meidling.namax.at:443', '/'), '/v/friseur-meidling');
-  assert.equal(venuePath('friseur-meidling.namax.at', '/p1.jpg'), '/v/friseur-meidling/p1.jpg');
-  assert.equal(venuePath('friseur-meidling.namax.at', '/impressum'), '/v/friseur-meidling/impressum');
+test('C1: venue hosts go to the page function, everything else is left alone', () => {
+  assert.equal(venuePath('friseur-meidling.namax.at', '/'), '/api/venue/page');
+  assert.equal(venuePath('Friseur-Meidling.namax.at:443', '/'), '/api/venue/page');
+  assert.equal(venuePath('friseur-meidling.namax.at', '/impressum'), '/api/venue/page');
+  assert.equal(venuePath('friseur-meidling.namax.at', '/api/venue/chat'), null);
   assert.equal(venuePath('friseur-meidling.namax.at', '/v/_shared/fonts/anton-latin.woff2'), null);
   for (const host of ['www.namax.at', 'namax.at', 'namax-at.vercel.app', 'a.b.namax.at', 'x.namax.at.evil.com', 'wwwxnamax.at', '', null])
     assert.equal(venuePath(host, '/'), null, String(host));
@@ -59,6 +59,6 @@ test('M7: language buttons are labelled, the title has an English form, the owne
   const html = renderVenue(fixture('full'));
   assert.ok(html.includes('aria-label="Deutsch"') && html.includes('aria-label="English"'));
   assert.ok(html.includes('data-title-en="Friseur Meidling — '));
-  assert.ok(html.includes('<p dir="auto">'));
+  assert.ok(renderVenue(fixture('full'), { owner: ownerBar() }).includes('<p dir="auto">'));
   assert.ok(renderVenue(fixture('minimal')).includes('data-title-en="Minimal — 1120 Wien"'));
 });

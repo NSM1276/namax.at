@@ -1,14 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { renderVenue, esc } from './template.mjs';
+import { renderVenue, esc, ownerBar } from './template.mjs';
 const load = (n) => JSON.parse(readFileSync(new URL(`./fixtures/${n}.json`, import.meta.url)));
 const text = (html) => html.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, ' ').replace(/<[^>]+>/g, ' ');
 
 test('full venue renders every block', () => {
   const html = renderVenue(load('full'));
-  for (const s of ['<h1', 'Friseur Meidling', 'Haarschnitt', '15', 'Stand: 11/2026', '4,9', '157', 'tel:+436604130063', 'data-status', 'data-owner', 'data-chat-hook'])
+  for (const s of ['<h1', 'Friseur Meidling', 'Haarschnitt', '15', 'Stand: 11/2026', '4,9', '157', 'tel:+436604130063', 'data-status'])
     assert.ok(html.includes(s), s);
+  const own = renderVenue(load('full'), { owner: ownerBar() });
+  for (const s of ['data-owner', 'data-chat-hook', 'class="has-owner"']) assert.ok(own.includes(s), s);
 });
 test('minimal venue renders without leftovers', () => {
   const html = renderVenue(load('minimal'));
