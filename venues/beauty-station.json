@@ -145,6 +145,9 @@
       "fa"
     ]
   },
+  "uncertain": [
+    "hours"
+  ],
   "internal": {
     "owner": "nicht gefunden",
     "sources": [

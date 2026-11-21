@@ -144,6 +144,9 @@
     "palette": "black-gold",
     "lettering": "serif"
   },
+  "uncertain": [
+    "phone"
+  ],
   "internal": {
     "owner": "Alaa Hajhussein, Einzelunternehmen seit 15.09.2025; gewerberechtl. GF Khalil Fadil",
     "sources": [
