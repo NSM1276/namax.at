@@ -1,0 +1,116 @@
+// Storage for venues, owner changes, chat, photos, events and visits.
+// memoryStore() is used by tests and the local preview; pg-store.mjs implements the same interface on Postgres.
+//
+// getVenue(slug) → { slug, keyHash, status, facts, changes, pending, confirmedAt, doNotContact, chatState } | null
+// upsertFacts(slug, { facts, keyHash, status })  insert; on an existing slug replace facts only
+// setPending(slug, changes) → id                  pending.createdAfterMessageId = last message id at that moment
+// applyPending(slug) → changes | null
+// setStatus, setConfirmed, setDoNotContact, setChatState
+// addMessage(slug, { role, content }) → id;  listMessages(slug, limit);  countOwnerMessagesSince(slug, iso)
+// addPhoto(slug, { url, kind }) → id;  listPhotos;  setPhotoKind(slug, id, kind);  removePhoto;  countPhotosSince
+// addEvent(slug, { type, text });  listEvents(sinceIso)
+// addHit(slug, { owner, day });  getHits(slug) → { visitors, owner }
+// recordModelCall(slug);  countModelCalls(slug, sinceIso?)
+// listSlugs(status) → slugs
+
+const clone = (x) => (x == null ? x : structuredClone(x));
+
+export function memoryStore() {
+  const venues = new Map();
+  const messages = [], photos = [], events = [], hits = [], modelCalls = [];
+  let seq = 0;
+  const nowIso = () => new Date().toISOString();
+  const need = (slug) => {
+    const v = venues.get(slug);
+    if (!v) throw new Error(`unknown venue ${slug}`);
+    return v;
+  };
+
+  return {
+    async getVenue(slug) {
+      const v = venues.get(slug);
+      return v ? clone(v) : null;
+    },
+    async upsertFacts(slug, { facts, keyHash, status = 'hidden' }) {
+      const v = venues.get(slug);
+      if (v) { v.facts = clone(facts); return; }
+      venues.set(slug, { slug, keyHash, status, facts: clone(facts), changes: {}, pending: null,
+        confirmedAt: null, doNotContact: false, chatState: {} });
+    },
+    async setPending(slug, changes) {
+      const v = need(slug);
+      const mine = messages.filter((m) => m.slug === slug);
+      const id = ++seq;
+      v.pending = { id, changes: clone(changes), createdAfterMessageId: mine.length ? mine[mine.length - 1].id : 0 };
+      return id;
+    },
+    async applyPending(slug) {
+      const v = need(slug);
+      if (!v.pending) return null;
+      const c = v.pending.changes;
+      v.changes = { ...v.changes, ...clone(c) };
+      v.pending = null;
+      return clone(c);
+    },
+    async setStatus(slug, status) { need(slug).status = status; },
+    async setConfirmed(slug, iso) { need(slug).confirmedAt = iso; },
+    async setDoNotContact(slug, value) { need(slug).doNotContact = Boolean(value); },
+    async setChatState(slug, state) { need(slug).chatState = clone(state); },
+
+    async addMessage(slug, { role, content }) {
+      need(slug);
+      const id = ++seq;
+      messages.push({ id, slug, role, content, at: nowIso() });
+      return id;
+    },
+    async listMessages(slug, limit) {
+      return messages.filter((m) => m.slug === slug).slice(-limit).map(({ slug: _, ...m }) => ({ ...m }));
+    },
+    async countOwnerMessagesSince(slug, iso) {
+      return messages.filter((m) => m.slug === slug && m.role === 'owner' && m.at >= iso).length;
+    },
+
+    async addPhoto(slug, { url, kind }) {
+      need(slug);
+      const id = ++seq;
+      photos.push({ id, slug, url, kind, at: nowIso() });
+      return id;
+    },
+    async listPhotos(slug) {
+      return photos.filter((p) => p.slug === slug).map(({ slug: _, ...p }) => ({ ...p }));
+    },
+    async setPhotoKind(slug, id, kind) {
+      const p = photos.find((x) => x.slug === slug && x.id === Number(id));
+      if (p) p.kind = kind;
+    },
+    async removePhoto(slug, id) {
+      const i = photos.findIndex((x) => x.slug === slug && x.id === Number(id));
+      if (i >= 0) photos.splice(i, 1);
+    },
+    async countPhotosSince(slug, iso) {
+      return photos.filter((p) => p.slug === slug && p.at >= iso).length;
+    },
+
+    async addEvent(slug, { type, text = '' }) { events.push({ slug, type, text, at: nowIso() }); },
+    async listEvents(sinceIso) { return events.filter((e) => e.at >= sinceIso).map((e) => ({ ...e })); },
+
+    async addHit(slug, { owner, day }) {
+      let h = hits.find((x) => x.slug === slug && x.day === day);
+      if (!h) { h = { slug, day, visitors: 0, owner: 0 }; hits.push(h); }
+      if (owner) h.owner++; else h.visitors++;
+    },
+    async getHits(slug) {
+      const mine = hits.filter((h) => h.slug === slug);
+      return { visitors: mine.reduce((a, h) => a + h.visitors, 0), owner: mine.reduce((a, h) => a + h.owner, 0) };
+    },
+
+    async recordModelCall(slug) { modelCalls.push({ slug, at: nowIso() }); },
+    async countModelCalls(slug, sinceIso) {
+      return modelCalls.filter((c) => c.slug === slug && (!sinceIso || c.at >= sinceIso)).length;
+    },
+
+    async listSlugs(status) {
+      return [...venues.values()].filter((v) => v.status === status).map((v) => v.slug).sort();
+    },
+  };
+}
