@@ -111,3 +111,13 @@ test('footer: unconfirmed line follows venue.confirmed; OSM data is credited', (
   assert.ok(osm.includes('https://www.openstreetmap.org/copyright'));
   assert.ok(!renderVenue(f).includes('OpenStreetMap'));
 });
+
+test('footer: a page checked against Overture Maps credits it; internal facts stay off the page', () => {
+  const f = load('full');
+  const v = effectiveVenue(record({ ...f, internal: { overture: { verdict: 'both', release: '2026-11-18.0', match: { phone: '+4399' } } } }));
+  assert.equal(v.internal, undefined);
+  const html = renderVenue(v);
+  assert.ok(html.includes('Overture Maps Foundation'));
+  assert.ok(!html.includes('+4399'));
+  assert.ok(!renderVenue(effectiveVenue(record(f))).includes('Overture'));
+});

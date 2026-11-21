@@ -20,7 +20,8 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const KEYS_FILE = join(root, 'venues/.keys.tsv');
 
 /** A venue with its own working website promotes that site; a namax page would compete with it in Google. */
-export const hasWorkingSite = (v) => v.internal?.site === 'own' && v.internal?.siteCheck?.state === 'works';
+export const hasWorkingSite = (v) => (v.internal?.site === 'own' && v.internal?.siteCheck?.state === 'works')
+  || v.internal?.overture?.siteCheck?.state === 'works'; // a site only Overture knows counts too
 
 export function pickVenues(all, { district, kind, limit } = {}) {
   let out = all.filter((v) => v.ready !== false && !hasWorkingSite(v));

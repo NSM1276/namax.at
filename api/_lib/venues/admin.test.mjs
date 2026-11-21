@@ -225,3 +225,55 @@ test('list: the district menu switches districts and keeps the current one selec
   assert.match(html, /<option value="12">12\. Meidling \(2\)<\/option>/);
   assert.ok(!html.includes(ADMIN));
 });
+
+// Overture Maps second opinion: Nasim sees which pages to check and can show or hide a page himself.
+const ov = (verdict, extra = {}) => ({ overture: { verdict, release: '2026-11-18.0', ...extra } });
+async function overtureSvc() {
+  const s = await svc();
+  await s.store.upsertFacts('cafe-a', { facts: facts('cafe-a', { internal: { district: 12, ...ov('both', { match: { name: 'Café A', phone: '+4311234', website: 'https://cafe-a.at' } }) } }), keyHash: hash(OWNER), status: 'public' });
+  await s.store.upsertFacts('friseur-b', { facts: facts('friseur-b', { kind: 'friseur', name: 'Salon <B>', internal: { district: 12, ...ov('other', { other: { name: 'Mo Barbershop' } }) } }), keyHash: 'h', status: 'public' });
+  await s.store.upsertFacts('cafe-c', { facts: facts('cafe-c', { internal: { district: 12, ...ov('closed', { match: { name: 'Café C', status: 'permanently_closed' }, hidPage: true }) } }), keyHash: 'h', status: 'hidden' });
+  await s.store.upsertFacts('cafe-d', { facts: facts('cafe-d', { internal: { district: 12, ...ov('osm') } }), keyHash: 'h', status: 'public' });
+  return s;
+}
+const card = (html, slug) => html.split('<li ').find((c) => c.includes(`data-name="${slug === 'friseur-b' ? 'Salon &lt;B&gt;' : 'Café ' + slug}"`)) || '';
+
+test('list card: the Overture verdict as a badge, the Overture line, and data-check for the filter', async () => {
+  const html = await (await handleAdmin(req(ADMIN), await overtureSvc())).text();
+  assert.match(card(html, 'cafe-a'), /data-check="both"/);
+  assert.match(card(html, 'cafe-a'), /2 Quellen/);
+  assert.match(card(html, 'cafe-a'), /href="tel:\+4311234"/);
+  assert.match(card(html, 'cafe-a'), /cafe-a\.at/);
+  assert.match(card(html, 'friseur-b'), /data-check="other"/);
+  assert.match(card(html, 'friseur-b'), /anderes Geschäft: Mo Barbershop\?/);
+  assert.match(card(html, 'cafe-c'), /data-check="closed"/);
+  assert.match(card(html, 'cafe-c'), /geschlossen\?/);
+  assert.match(card(html, 'cafe-d'), /nur OSM/);
+  assert.match(html, /data-only-check/, 'a "Nur prüfen" filter');
+  assert.match(html, /Nur prüfen/);
+});
+
+test('list card: a hidden page gets "Seite zeigen", a public one "Seite verstecken"', async () => {
+  const html = await (await handleAdmin(req(ADMIN), await overtureSvc())).text();
+  assert.match(card(html, 'cafe-c'), /data-status="public"[^>]*data-slug="cafe-c"[^>]*>Seite zeigen/);
+  assert.match(card(html, 'cafe-a'), /data-status="hidden"[^>]*data-slug="cafe-a"[^>]*>Seite verstecken/);
+});
+
+test('POST {k, slug, status} shows or hides a page; only public/hidden; no key or removed → 404', async () => {
+  const s = await overtureSvc();
+  const post = (body) => handleAdminPost(rotateReq(body), s);
+  const r = await post({ k: ADMIN, slug: 'cafe-c', status: 'public' });
+  assert.equal(r.status, 200);
+  assert.deepEqual(await r.json(), { status: 'public' });
+  assert.equal((await s.store.getVenue('cafe-c')).status, 'public');
+  assert.equal((await post({ k: ADMIN, slug: 'cafe-c', status: 'hidden' })).status, 200);
+  assert.equal((await s.store.getVenue('cafe-c')).status, 'hidden');
+  assert.equal((await post({ k: ADMIN, slug: 'cafe-c', status: 'removed' })).status, 400);
+  assert.equal((await post({ k: 'x'.repeat(32), slug: 'cafe-c', status: 'public' })).status, 404);
+  await s.store.setStatus('cafe-d', 'removed');
+  assert.equal((await post({ k: ADMIN, slug: 'cafe-d', status: 'public' })).status, 404);
+  assert.equal((await s.store.getVenue('cafe-d')).status, 'removed');
+  const keyBefore = (await s.store.getVenue('cafe-a')).keyHash;
+  await post({ k: ADMIN, slug: 'cafe-a', status: 'hidden' });
+  assert.equal((await s.store.getVenue('cafe-a')).keyHash, keyBefore, 'showing or hiding never changes the owner link');
+});

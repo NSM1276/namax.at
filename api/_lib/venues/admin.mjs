@@ -76,8 +76,15 @@ document.addEventListener('click',function(e){var b=e.target.closest('[data-pick
 </body></html>`;
 }
 
+// Overture Maps second opinion on each venue (tools/places/overture-apply.mjs); everything but "both" is worth a look.
+const shortSite = (u) => String(u).replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
+const CHECK_CLASS = { both: 'ok', osm: 'wn', other: 'bad', closed: 'bad' };
+const checkLabel = (c) => ({ both: '2 Quellen ✓', osm: 'nur OSM', closed: 'geschlossen?' })[c.verdict]
+  || `anderes Geschäft: ${c.name || '?'}?`;
+
 /**
- * rows: [{ slug, name, kind, street, district, status, confirmed, ownerUrl|null, facadeUrl|null }] → HTML (German, phone first).
+ * rows: [{ slug, name, kind, street, district, status, confirmed, ownerUrl|null, facadeUrl|null, check|null }]
+ * check: { verdict: both|osm|other|closed, name, phone, website } from Overture Maps. → HTML (German, phone first).
  * options.districts: [{ d, n }] for every district (the menu switches between them); options.district: the one shown, or 'all';
  * options.chooser: render the district start page instead of cards.
  */
@@ -88,7 +95,15 @@ export function renderAdmin(rows, { districts = null, district = null, chooser =
   const inRows = [...new Set(rows.map((r) => r.district).filter(Boolean))].sort((a, b) => a - b);
   const items = rows.map((r) => {
     const page = `https://${r.slug}.namax.at/`;
-    const badges = (r.status === 'hidden' ? '<span class="b">versteckt</span>' : '') + (r.confirmed ? '<span class="b ok">bestätigt</span>' : '');
+    const c = r.check;
+    const badges = (r.status === 'hidden' ? '<span class="b">versteckt</span>' : '') + (r.confirmed ? '<span class="b ok">bestätigt</span>' : '')
+      + (c ? `<span class="b ${CHECK_CLASS[c.verdict]}">${esc(checkLabel(c))}</span>` : '');
+    const ovLine = c && c.verdict !== 'osm' && (c.name || c.phone || c.website)
+      ? `<small class="ov">Overture: ${esc(c.name || '')}${c.phone ? ` · <a href="tel:${esc(c.phone)}">${esc(c.phone)}</a>` : ''}`
+        + `${c.website ? ` · <a href="${esc(c.website)}" target="_blank" rel="noopener">${esc(shortSite(c.website))}</a>` : ''}</small>` : '';
+    const vis = r.status === 'hidden'
+      ? `<button type="button" class="rot" data-status="public" data-slug="${esc(r.slug)}">Seite zeigen</button>`
+      : `<button type="button" class="rot" data-status="hidden" data-slug="${esc(r.slug)}">Seite verstecken</button>`;
     const o = r.ownerUrl || '';
     const owner = `<div class="a o" data-orow${o ? '' : ' data-none'}><span class="lab">Für den Inhaber</span>`
       + `<span class="no">kein Link</span>`
@@ -102,9 +117,10 @@ export function renderAdmin(rows, { districts = null, district = null, chooser =
       + `<button type="button" data-facade="${esc(r.slug)}">Foto</button>`
       + `<button type="button" class="has rot" data-fdel="${esc(r.slug)}">Foto löschen</button></div>`;
     const q = `${r.name} ${r.street} ${r.slug}`.toLowerCase();
-    return `<li data-q="${esc(q)}" data-kind="${esc(r.kind)}" data-d="${esc(r.district || '')}" data-name="${esc(r.name)}"><b>${esc(r.name)}</b>${badges}
+    return `<li data-q="${esc(q)}" data-kind="${esc(r.kind)}" data-d="${esc(r.district || '')}" data-check="${esc(c ? c.verdict : '')}" data-name="${esc(r.name)}"><b>${esc(r.name)}</b>${badges}
 <small>${esc(kindDe(r.kind))} · ${esc(r.street)}${r.district ? ` · ${esc(r.district)}. Bezirk` : ''}</small>
-<div class="a"><a class="pg" href="${esc(page)}" target="_blank" rel="noopener">Seite</a><button type="button" data-qr="${esc(page)}">QR</button><button type="button" data-share="${esc(page)}">Teilen</button></div>
+<div class="a"><a class="pg" href="${esc(page)}" target="_blank" rel="noopener">Seite</a><button type="button" data-qr="${esc(page)}">QR</button><button type="button" data-share="${esc(page)}">Teilen</button>${vis}</div>
+${ovLine}
 ${owner}
 ${photo}</li>`;
   }).join('\n');
@@ -127,7 +143,8 @@ input[type=search]{width:100%;font:inherit;font-size:17px;padding:12px;border:0;
 ul{list-style:none;margin:0;padding:8px 10px 40px;max-width:760px;margin:0 auto}
 li{background:#fff;border-radius:10px;padding:12px;margin:8px 0;box-shadow:0 1px 2px rgba(0,0,0,.08)}
 li b{font-size:17px}li small{display:block;color:#555;margin-top:2px}
-.b{display:inline-block;margin-left:8px;font-size:12px;padding:2px 8px;border-radius:999px;background:#eee;vertical-align:2px}.b.ok{background:#d8f3dc}
+.b{display:inline-block;margin-left:8px;font-size:12px;padding:2px 8px;border-radius:999px;background:#eee;vertical-align:2px}.b.ok{background:#d8f3dc}.b.wn{background:#fff3c4}.b.bad{background:#ffd9d9}
+.ov{color:#333!important}.ov a{color:#0b57d0}
 .a{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .a a,.a button{font:inherit;font-size:15px;font-weight:600;min-height:42px;padding:9px 14px;border-radius:8px;border:1px solid #111;background:#fff;color:#111;text-decoration:none}
 .a a.pg{background:#111;color:#fff}.no{font-size:13px;color:#888;align-self:center}
@@ -148,7 +165,7 @@ li b{font-size:17px}li small{display:block;color:#555;margin-top:2px}
 .cb .go{background:#ffc93c;border-color:#ffc93c;color:#111}.cb button:disabled{opacity:.5}</style></head><body>
 <header><h1>namax · Liste <span data-count>${rows.length}</span></h1>
 <input type="search" placeholder="Name oder Straße" aria-label="Suche" autocomplete="off">
-<div class="f" role="group" aria-label="Art">${chips}</div>${dsel}</header>
+<div class="f" role="group" aria-label="Art">${chips}<button type="button" data-only-check>Nur prüfen</button></div>${dsel}</header>
 <ul>${items}</ul><p class="empty" hidden>Nichts gefunden</p>
 <div id="qr" hidden role="dialog" aria-label="QR-Code"></div>
 <input type="file" accept="image/*" id="fpick" hidden>
@@ -170,18 +187,27 @@ document.addEventListener('click',function(e){var li=e.target.closest('li'),name
 var x=e.target.closest('[data-qr]');if(x){showQr(x.dataset.qr,name,x.hasAttribute('data-owner'));return}
 x=e.target.closest('[data-share]');if(x){var u=x.dataset.share;if(navigator.share)navigator.share({title:name,url:u}).catch(function(){});else copy(x,u);return}
 x=e.target.closest('[data-copy]');if(x){copy(x,x.dataset.copy);return}
+x=e.target.closest('[data-status]');if(x){var st=x.dataset.status,show=st==='public';
+if(!confirm(show?'„'+name+'“ wieder zeigen (in Google und in der Übersicht)?':'„'+name+'“ verstecken? Die Seite ist dann nicht mehr in Google und in der Übersicht, öffnet sich aber noch über den direkten Link.'))return;
+var kk=new URLSearchParams(location.search).get('k'),ot=x.textContent;x.disabled=true;x.textContent='…';
+fetch(location.pathname,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({k:kk,slug:x.dataset.slug,status:st})})
+.then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(){var b=li.querySelector('b'),h=li.querySelector('.b:not(.ok):not(.wn):not(.bad)');
+if(show){if(h&&h.textContent==='versteckt')h.remove();x.dataset.status='hidden';x.textContent='Seite verstecken'}
+else{b.insertAdjacentHTML('afterend','<span class="b">versteckt</span>');x.dataset.status='public';x.textContent='Seite zeigen'}x.disabled=false},
+function(){x.textContent=ot;x.disabled=false;alert('Hat nicht geklappt. Bitte nochmal versuchen.')});return}
 x=e.target.closest('[data-rotate]');if(x){if(!confirm('Neuen Link für „'+name+'“ erstellen? Der alte Inhaber-Link funktioniert dann nicht mehr.'))return;
 var k=new URLSearchParams(location.search).get('k'),o=x.textContent;x.disabled=true;x.textContent='…';
 fetch(location.pathname,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({k:k,slug:x.dataset.rotate})})
 .then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){setOwner(x.closest('[data-orow]'),j.ownerUrl);x.textContent='Fertig ✓';setTimeout(function(){x.textContent=o;x.disabled=false},2000)},
 function(){x.textContent=o;x.disabled=false;alert('Hat nicht geklappt. Bitte nochmal versuchen.')})}});})();</script>
-<script>(function(){var q='',k='',d='',lis=[].slice.call(document.querySelectorAll('li')),cnt=document.querySelector('[data-count]'),empty=document.querySelector('.empty');
-function run(){var n=0;for(var i=0;i<lis.length;i++){var l=lis[i],ok=(!q||l.dataset.q.indexOf(q)>=0)&&(!k||l.dataset.kind===k)&&(!d||l.dataset.d===d);l.hidden=!ok;if(ok)n++}cnt.textContent=n;empty.hidden=n>0}
+<script>(function(){var q='',k='',d='',ck=false,lis=[].slice.call(document.querySelectorAll('li')),cnt=document.querySelector('[data-count]'),empty=document.querySelector('.empty');
+function run(){var n=0;for(var i=0;i<lis.length;i++){var l=lis[i],ok=(!q||l.dataset.q.indexOf(q)>=0)&&(!k||l.dataset.kind===k)&&(!d||l.dataset.d===d)&&(!ck||(l.dataset.check&&l.dataset.check!=='both'));l.hidden=!ok;if(ok)n++}cnt.textContent=n;empty.hidden=n>0}
 document.querySelector('input[type=search]').addEventListener('input',function(e){q=e.target.value.trim().toLowerCase();run()});
 var sel=document.querySelector('[data-dsel]');if(sel)sel.addEventListener('change',function(){d=sel.value;run()});
 ${NAV_JS}
 var nav=document.querySelector('[data-dnav]');if(nav){try{localStorage.setItem('namax-liste-d',nav.value)}catch(e){}nav.addEventListener('change',function(){go(nav.value)})}
-document.addEventListener('click',function(e){var c=e.target.closest('[data-k]');if(c){k=c.dataset.k;[].forEach.call(document.querySelectorAll('[data-k]'),function(b){b.className=b===c?'on':''});run()}});})();</script>
+document.addEventListener('click',function(e){var c=e.target.closest('[data-k]');if(c){k=c.dataset.k;[].forEach.call(document.querySelectorAll('[data-k]'),function(b){b.className=b===c?'on':''});run()}
+c=e.target.closest('[data-only-check]');if(c){ck=!ck;c.className=ck?'on':'';run()}});})();</script>
 <script>(function(){var pick=document.getElementById('fpick'),cr=document.getElementById('crop'),fr=cr.querySelector('[data-frame]'),im=cr.querySelector('[data-cimg]'),zm=cr.querySelector('[data-zoom]'),use=cr.querySelector('[data-cuse]');
 var slug='',li=null,url='',s0=1,s=1,x=0,y=0,pts={},last=null;
 function K(){return new URLSearchParams(location.search).get('k')}

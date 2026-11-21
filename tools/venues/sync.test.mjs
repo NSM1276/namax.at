@@ -102,3 +102,8 @@ test('with an admin key, every venue that has a link also gets its owner key sea
   await syncVenues({ store: plain, venues: [v('ccc')], keys: new Map() });
   assert.equal((await plain.listForAdmin())[0].ownerKeyEnc, null, 'without an admin key nothing is sealed');
 });
+
+test('pickVenues also leaves out venues whose website only Overture knows, when that site works', () => {
+  const v = (slug, state) => ({ slug, ready: true, internal: { district: 12, overture: { verdict: 'both', siteCheck: { state } } } });
+  assert.deepEqual(pickVenues([v('aaa', 'works'), v('bbb', 'dead')]).map((x) => x.slug), ['bbb']);
+});

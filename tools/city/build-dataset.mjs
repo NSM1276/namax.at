@@ -7,11 +7,15 @@ import { assignSlugs } from './slug.mjs';
 import { makeDistrictLocator, zipDistrict, DISTRICT_NAMES } from './district.mjs';
 import { chainReason, normName } from './chains.mjs';
 import { validateVenue } from '../../api/_lib/venues/schema.mjs';
+import { overtureIndex, secondOpinion, withOverture } from './overture.mjs';
 
 const read = (p) => JSON.parse(readFileSync(p, 'utf8'));
 const osm = read('data/raw/osm-wien.json').elements;
 const locate = makeDistrictLocator(read('data/raw/osm-districts.json').elements);
 const siteChecks = existsSync('data/city/site-checks.json') ? read('data/city/site-checks.json') : {};
+// Second source (python tools/places/overture-export.py …); without the file every venue stays osm-only.
+const overture = existsSync('data/places/overture-wien.json') ? read('data/places/overture-wien.json') : null;
+const ovIndex = overture && overtureIndex(overture.places);
 
 // Theme each kind starts with until the owner sends a photo of the sign.
 export const KIND_THEME = {
@@ -143,7 +147,7 @@ const venues = unique.map((r) => {
   const check = r.website ? siteChecks[r.website] : null;
   const uncertain = [];
   if (r.addressApprox) uncertain.push('address');
-  const v = {
+  let v = {
     slug: r.slug, status: 'hidden', kind: r.kind, name: r.name,
     area: DISTRICT_NAMES[r.district],
     address: { street: r.street, zip: r.zip, city: 'Wien' },
@@ -166,8 +170,13 @@ const venues = unique.map((r) => {
   };
   // An address taken from the nearest house counts when that house is at most 15 m away;
   // it stays marked uncertain so the owner confirms it.
+  if (ovIndex) {
+    v = withOverture(v, secondOpinion({ kind: r.kind, name: r.name, phone: r.phone, street: r.street, lat: r.lat, lon: r.lon },
+      ovIndex, overture.release, siteChecks));
+  }
   v.ready = !!(r.street && /\d/.test(r.street) && (!r.addressApprox || (r.addressDistance != null && r.addressDistance <= 15)));
   const problems = r.street ? validateVenue({ ...v, ready: undefined }, v.slug) : ['no street'];
+  if (v.internal.overture?.verdict === 'closed') problems.push('closed according to Overture');
   if (problems.length) { v.ready = false; v.internal.problems = problems; }
   return v;
 }).sort((a, b) => a.internal.district - b.internal.district || a.kind.localeCompare(b.kind) || a.slug.localeCompare(b.slug));

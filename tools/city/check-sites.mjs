@@ -60,7 +60,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const RETRY = /EAI_AGAIN|UND_ERR_SOCKET|UND_ERR_CONNECT_TIMEOUT|TimeoutError|ECONNRESET|ETIMEDOUT/;
   for (const [w, r] of Object.entries(done)) if (r.state === 'placeholder' || RETRY.test(r.detail || '')) delete done[w];
   const sites = [...new Set(JSON.parse(readFileSync('data/city/venues.json', 'utf8'))
-    .map((v) => v.internal.website).filter((w) => w && siteKind(w) === 'own'))].filter((w) => !done[w]);
+    .flatMap((v) => [v.internal.website, v.internal.overture?.match?.website]).filter((w) => w && siteKind(w) === 'own'))].filter((w) => !done[w]);
   console.log('to check', sites.length, 'already', Object.keys(done).length);
   let i = 0, n = 0;
   const save = () => writeFileSync(OUT, JSON.stringify(done, null, 1));

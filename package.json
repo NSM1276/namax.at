@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node --test \"api/_lib/**/*.test.mjs\" \"tools/venues/*.test.mjs\" \"tools/city/*.test.mjs\""
+    "test": "node --test \"api/_lib/**/*.test.mjs\" \"tools/venues/*.test.mjs\" \"tools/city/*.test.mjs\" \"tools/places/*.test.mjs\""
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.12.0",

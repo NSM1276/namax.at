@@ -25,6 +25,8 @@ export function effectiveVenue(record, photos = []) {
   const shown = photos.filter((p) => p.kind === 'show').slice(0, MAX_SHOWN_PHOTOS).map((p) => p.url);
   if (shown.length) venue.photos = shown; else delete venue.photos;
   if (record.facadeUrl) venue.facade = record.facadeUrl; else delete venue.facade;
+  // Checked against Overture Maps (CDLA-Permissive-2.0): only the credit reaches the page, never Overture's own facts.
+  if (record.facts.internal?.overture?.release) venue.overture = true; else delete venue.overture;
   return venue;
 }
 

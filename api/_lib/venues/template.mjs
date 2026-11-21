@@ -252,7 +252,9 @@ function footer(v) {
   // OpenStreetMap data is licensed under the ODbL and must be credited where it is shown.
   const osm = v.source === 'osm'
     ? `<p>${ui('osmData')} <a href="https://www.openstreetmap.org/copyright" rel="noopener">© OpenStreetMap</a></p>` : '';
-  return `<footer><p>${by}</p>${osm}<a href="${SITE}/impressum">${ui('imprint')}</a><a href="${SITE}/datenschutz">${ui('privacy')}</a></footer>`;
+  const ov = v.overture === true
+    ? `<p>${ui('ovData')} <a href="https://overturemaps.org/" rel="noopener">© Overture Maps Foundation</a></p>` : '';
+  return `<footer><p>${by}</p>${osm}${ov}<a href="${SITE}/impressum">${ui('imprint')}</a><a href="${SITE}/datenschutz">${ui('privacy')}</a></footer>`;
 }
 
 /** The part-1 owner bar (WhatsApp hook), used until the chat from owner-ui.mjs is passed instead. */

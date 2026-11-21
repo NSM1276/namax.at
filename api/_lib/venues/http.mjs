@@ -148,6 +148,13 @@ export async function handleOg(req, { store }) {
   return renderOg(effectiveVenue(record, []));
 }
 
+/** The Overture second opinion as the list card needs it (private: Overture's phone and site are never on the public page). */
+function overtureRow(o) {
+  if (!o?.verdict) return null;
+  const m = o.verdict === 'other' ? o.other : o.match;
+  return { verdict: o.verdict, name: m?.name || null, phone: m?.phone || null, website: m?.website || null };
+}
+
 /** Nasim's private list (www.namax.at/liste?k=…). A wrong or missing key gets the same 404 as any unknown path. */
 export async function handleAdmin(req, { store, adminKeyHash = ADMIN_KEY_HASH }) {
   const params = new URL(req.url).searchParams;
@@ -167,12 +174,16 @@ export async function handleAdmin(req, { store, adminKeyHash = ADMIN_KEY_HASH })
     const v = effectiveVenue(r, []);
     const ownerKey = r.ownerKeyEnc ? openOwnerKey(key, r.slug, r.ownerKeyEnc) : null;
     return { slug: r.slug, name: v.name, kind: v.kind, street: v.address?.street || '', district: r.facts.internal?.district || null,
-      status: r.status, confirmed: Boolean(r.confirmedAt), facadeUrl: r.facadeUrl || null, ownerUrl: ownerKey ? `https://${r.slug}.namax.at/?k=${ownerKey}` : null };
+      status: r.status, confirmed: Boolean(r.confirmedAt), facadeUrl: r.facadeUrl || null, ownerUrl: ownerKey ? `https://${r.slug}.namax.at/?k=${ownerKey}` : null,
+      check: overtureRow(r.facts.internal?.overture) };
   }).sort((a, b) => a.name.localeCompare(b.name, 'de'));
   return html(rows, { districts, district });
 }
 
-/** POST www.namax.at/liste {k: admin key, slug} → a new owner key for that venue; the old owner link stops working. */
+/**
+ * POST www.namax.at/liste {k: admin key, slug} → a new owner key for that venue; the old owner link stops working.
+ * {k, slug, status: 'public'|'hidden'} → shows or hides the page instead (the owner link stays).
+ */
 export async function handleAdminRotate(req, { store, adminKeyHash = ADMIN_KEY_HASH }) {
   if (req.method !== 'POST') return fail(405, 'POST only');
   const body = await readJson(req, 1024);
@@ -181,6 +192,11 @@ export async function handleAdminRotate(req, { store, adminKeyHash = ADMIN_KEY_H
   const slug = typeof body.slug === 'string' ? body.slug : '';
   const v = slug && await store.getVenue(slug);
   if (!v || v.status === 'removed') return fail(404, 'not found');
+  if (body.status !== undefined) {
+    if (body.status !== 'public' && body.status !== 'hidden') return fail(400, 'status must be public or hidden');
+    await store.setStatus(slug, body.status);
+    return json(200, { status: body.status });
+  }
   const ownerKey = newKey();
   await store.setKeyHash(slug, hashKey(ownerKey));
   await store.setOwnerKeyEnc(slug, sealOwnerKey(key, slug, ownerKey));
