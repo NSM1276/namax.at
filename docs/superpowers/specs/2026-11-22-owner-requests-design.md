@@ -41,19 +41,24 @@ No mass WhatsApp/SMS/e-mail/cold calls to venues; first touch is the page itself
 
 - Page footer: the grey line "Angaben nicht vom Inhaber bestätigt" gets a quiet link "Sind Sie der Inhaber?"
   (EN "Are you the owner?"). Only on unconfirmed pages, not in the owner's keyed view.
-  Dialog "Kostenlos verwalten": name, phone ("Ihre Telefonnummer"), "Wie dürfen wir Sie erreichen?" Anruf / WhatsApp,
-  optional message, honeypot, privacy link, the line "Mit dem Absenden sind Sie einverstanden, dass wir Sie dazu kontaktieren.",
-  button "Anfrage senden". Thanks: "Danke! Wir melden uns, meist innerhalb eines Tages."
+  Dialog in three tap steps (agreed 2026-11-22, like a quiz: big buttons, nothing to type until the last step):
+  1 of 3 "Wer sind Sie?" Inhaber/in · Familie / Mitarbeiter · Etwas anderes;
+  2 of 3 "Was möchten Sie?" Angaben korrigieren · Fotos hinzufügen · Eigene Website · Seite entfernen (removal stays as easy as the rest);
+  3 of 3 "Fast geschafft! Wie dürfen wir Sie erreichen?" Anruf / WhatsApp, name, phone, optional message, honeypot, privacy link,
+  the line "Mit dem Absenden sind Sie einverstanden, dass wir Sie dazu kontaktieren.", button "Anfrage senden".
+  A back link on steps 2–3. No "you qualify / you don't": every request gets "Danke! Wir melden uns, meist innerhalb eines Tages."
 - Public POST /api/venue/claim stores the request with the chosen channel and the time (= consent time).
   Guards: unknown or removed venue → 404; honeypot; length limits; valid-looking phone; ≤ 3 requests per venue per Vienna day.
 - Chat per venue: closed by default for every venue. Nasim opens it in the list ("Chat freischalten" / "Chat sperren")
   after talking to the owner, then sends the owner link himself. A keyed page of a venue with a closed chat shows the
   old bar with WhatsApp to Nasim; POST /api/venue/chat answers 404 for it.
 - Photos: at most 3 shown photos per free page (the facade picture is separate, as today).
-- Storage: table venue_requests (id, slug, name, phone, channel call|whatsapp, text, at, done_at);
+- Storage: table venue_requests (id, slug, role owner|staff|other, wish fix|photos|website|remove, name, phone,
+  channel call|whatsapp, text, at, done_at);
   venues get chat_open boolean default false.
-- Private list start page: "Anfragen" block above the district buttons, open first with a count, newest first.
-  Card: venue name (link), when, name, phone, chosen channel as the main button (tel: or wa.me to the typed number),
+- Private list start page: "Anfragen" block above the district buttons, open first with a count;
+  among open ones "Eigene Website" first (marked as hot), then newest first.
+  Card: venue name (link), when, the answers as one line ("Inhaber/in · Eigene Website · WhatsApp"), name, phone, chosen channel as the main button (tel: or wa.me to the typed number),
   text, "Chat freischalten" for that venue, "Erledigt" / "Wieder offen". Done ones collapsed under "Erledigt (n)".
   The venue card in the district view also gets the chat switch.
 - Login: /liste?k=KEY sets an HttpOnly, Secure, SameSite=Strict cookie and redirects to /liste without the key;
