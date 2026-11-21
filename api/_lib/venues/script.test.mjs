@@ -32,6 +32,7 @@ test('the chat starts with the language choice, then the question about the data
   assert.deepEqual(ids(first).filter((x) => x.startsWith('lang_')), LANGS.map((l) => 'lang_' + l));
   const second = run([{ start: true }, { chip: 'lang_tr' }]);
   assert.equal(second.state.lang, 'tr');
+  assert.equal(second.chips[0].label, say('tr', 'c_yes_all'), 'chips in the language just chosen');
   assert.ok(second.say.includes(say('tr', 'askCorrect')));
   assert.deepEqual(ids(second).slice(0, 2), ['yes_all', 'change']);
 });

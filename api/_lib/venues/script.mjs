@@ -43,8 +43,8 @@ export const isRemovalText = (t) => REMOVAL.test(String(t || ''));
 
 export function step(state0, input, ctx) {
   const state = { lane: 'in', ...structuredClone(state0 || {}) };
-  const lang = LANGS.includes(state.lang) ? state.lang : 'de';
-  const t = (key, vars) => phrase(lang, key, vars);
+  // read the language on every call: a lang_* chip changes it in the middle of this step
+  const t = (key, vars) => phrase(LANGS.includes(state.lang) ? state.lang : 'de', key, vars);
   const chip = (id) => (id === 'talk' ? { id, label: t('c_talk'), href: TALK_URL }
     : id.startsWith('lang_') ? { id, label: LANG_NAMES[id.slice(5)] } : { id, label: t(CHIP_LABEL[id]) });
   const out = (say, chipIds = [], extra = {}) => ({ state, say, chips: chipIds.map(chip), form: null, effect: null, ...extra });

@@ -11,6 +11,8 @@ export function slugFromHost(host) {
 }
 
 const SITE = 'https://www.namax.at';
+// A visitor view; the owner page counts its own view with the key.
+const HIT = `<script>try{navigator.sendBeacon('/api/venue/hit','{}')}catch(e){}</script>\n`;
 const small = (title, text) => `<!doctype html><html lang="de"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">
 <title>${esc(title)}</title><style>body{font:18px/1.5 system-ui,sans-serif;margin:0;padding:48px 20px;background:#f1f0ec;color:#111}
@@ -35,7 +37,7 @@ export async function renderPage({ store, slug, key, ownerPart }) {
   const venue = effectiveVenue(record, photos);
   if (!isOwner(record, key)) {
     return { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=600' },
-      body: renderVenue(venue) };
+      body: renderVenue(venue).replace('</body>', `${HIT}</body>`) };
   }
   const part = ownerPart ? await ownerPart({ store, slug, record, venue, photos }) : ownerBar();
   return { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'private, no-store', 'X-Robots-Tag': 'noindex' },

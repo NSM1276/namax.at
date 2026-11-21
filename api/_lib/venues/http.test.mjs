@@ -1,0 +1,109 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { memoryStore } from './store.mjs';
+import { hashKey } from './owner.mjs';
+import { handleChat, handlePhoto, handleHit, handlePage, MAX_PHOTO_BYTES, DAILY_PHOTOS } from './http.mjs';
+
+const KEY = 'a'.repeat(32);
+const SLUG = 'friseur-meidling';
+const facts = JSON.parse(readFileSync(new URL('./fixtures/full.json', import.meta.url)));
+async function services(status = 'public') {
+  const store = memoryStore();
+  await store.upsertFacts(SLUG, { facts, keyHash: hashKey(KEY), status });
+  const uploads = [];
+  const blob = { async put(path, body, opts) { uploads.push({ path, size: body.byteLength ?? body.size, opts }); return { url: `https://abc.public.blob.vercel-storage.com/${path}` }; } };
+  const llm = { calls: 0, async create() { this.calls++; return { stop_reason: 'tool_use', content: [{ type: 'tool_use', id: 't', name: 'answer', input: { key: 'who' } }] }; } };
+  return { store, blob, llm, uploads };
+}
+const host = `${SLUG}.namax.at`;
+const chatReq = (body, h = host) => new Request(`https://${h}/api/venue/chat`, { method: 'POST', headers: { host: h, 'content-type': 'application/json' }, body: JSON.stringify(body) });
+const jpeg = (n) => new Uint8Array([0xff, 0xd8, 0xff, 0xe0, ...new Array(Math.max(0, n - 4)).fill(1)]);
+const photoReq = (bytes, { key = KEY, type = 'image/jpeg', h = host } = {}) => {
+  const fd = new FormData();
+  fd.set('k', key);
+  fd.set('photo', new Blob([bytes], { type }), 'x.jpg');
+  return new Request(`https://${h}/api/venue/photo`, { method: 'POST', headers: { host: h }, body: fd });
+};
+
+test('chat without the right key → 403 and nothing stored', async () => {
+  const s = await services();
+  for (const k of [undefined, 'b'.repeat(32), 'local', '']) {
+    const r = await handleChat(chatReq({ k, input: { start: true } }), s);
+    assert.equal(r.status, 403);
+  }
+  assert.equal((await s.store.listMessages(SLUG, 10)).length, 0);
+});
+
+test('chat reads the slug from the host, never from the body', async () => {
+  const s = await services();
+  const r = await handleChat(chatReq({ k: KEY, slug: 'other', input: { start: true } }, 'unknown.namax.at'), s);
+  assert.equal(r.status, 404);
+});
+
+test('chat with the key answers with phrases and chips, no-store', async () => {
+  const s = await services();
+  const r = await handleChat(chatReq({ k: KEY, input: { start: true } }), s);
+  assert.equal(r.status, 200);
+  assert.equal(r.headers.get('cache-control'), 'private, no-store');
+  const j = await r.json();
+  assert.ok(j.say.length && j.chips.length);
+  assert.equal(j.keyHash, undefined);
+});
+
+test('chat refuses a body that is not JSON or too large', async () => {
+  const s = await services();
+  const bad = new Request(`https://${host}/api/venue/chat`, { method: 'POST', headers: { host }, body: 'x'.repeat(20000) });
+  assert.equal((await handleChat(bad, s)).status, 400);
+  assert.equal((await handleChat(new Request(`https://${host}/api/venue/chat`, { method: 'GET', headers: { host } }), s)).status, 405);
+});
+
+test('a client cannot inject a model result', async () => {
+  const s = await services();
+  await handleChat(chatReq({ k: KEY, input: { start: true } }), s);
+  await handleChat(chatReq({ k: KEY, input: { chip: 'lang_de' } }), s);
+  await handleChat(chatReq({ k: KEY, input: { model: { type: 'removal' } } }), s);
+  assert.equal((await s.store.getVenue(SLUG)).status, 'public');
+});
+
+test('photo: key, type, size and daily count are checked; path is random under the venue', async () => {
+  const s = await services();
+  assert.equal((await handlePhoto(photoReq(jpeg(100), { key: 'b'.repeat(32) }), s)).status, 403);
+  assert.equal((await handlePhoto(photoReq(jpeg(100), { type: 'image/svg+xml' }), s)).status, 415);
+  assert.equal((await handlePhoto(photoReq(new Uint8Array([60, 115, 118, 103, 1, 1]), { type: 'image/jpeg' }), s)).status, 415, 'bytes must really be an image');
+  assert.equal((await handlePhoto(photoReq(jpeg(MAX_PHOTO_BYTES + 1)), s)).status, 413);
+  const ok = await handlePhoto(photoReq(jpeg(1000)), s);
+  assert.equal(ok.status, 200);
+  const { id } = await ok.json();
+  assert.ok(id);
+  assert.match(s.uploads[0].path, /^venues\/friseur-meidling\/[0-9a-f]{32}\.jpg$/);
+  assert.equal((await s.store.listPhotos(SLUG))[0].kind, 'priceboard', 'uploaded photos stay off the page until the chat shows them');
+  for (let i = 1; i < DAILY_PHOTOS; i++) assert.equal((await handlePhoto(photoReq(jpeg(1000)), s)).status, 200);
+  assert.equal((await handlePhoto(photoReq(jpeg(1000)), s)).status, 429);
+});
+
+test('photo for a removed venue → 410', async () => {
+  const s = await services('removed');
+  assert.equal((await handlePhoto(photoReq(jpeg(1000)), s)).status, 410);
+});
+
+test('hit always answers 204 and counts owner and visitor apart', async () => {
+  const s = await services();
+  const hit = (body) => handleHit(new Request(`https://${host}/api/venue/hit`, { method: 'POST', headers: { host }, body: JSON.stringify(body) }), s);
+  assert.equal((await hit({})).status, 204);
+  assert.equal((await hit({ k: KEY })).status, 204);
+  assert.equal((await hit({ k: 'nonsense' })).status, 204);
+  assert.deepEqual(await s.store.getHits(SLUG), { visitors: 2, owner: 1 });
+  const unknown = await handleHit(new Request('https://nope.namax.at/api/venue/hit', { method: 'POST', headers: { host: 'nope.namax.at' }, body: '{}' }), s);
+  assert.equal(unknown.status, 204);
+});
+
+test('page handler: key from ?k, owner page private, public page cached', async () => {
+  const s = await services();
+  const pub = await handlePage(new Request(`https://${host}/`, { headers: { host } }), s);
+  assert.equal(pub.status, 200);
+  assert.match(pub.headers.get('cache-control'), /public/);
+  const own = await handlePage(new Request(`https://${host}/?k=${KEY}`, { headers: { host } }), s);
+  assert.equal(own.headers.get('cache-control'), 'private, no-store');
+  assert.ok(!(await pub.text()).includes(KEY));
+});

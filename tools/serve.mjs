@@ -1,6 +1,7 @@
 // Local preview server that mimics Vercel. Run: node tools/serve.mjs   (CITY=1 also loads data/city/venues.json)
 // www: static files with cleanUrls. <slug>.localhost: the same renderPage as on Vercel, from an in-memory store
-// filled with venues/*.json at start. Owner link in the preview: http://<slug>.localhost:4173/?k=local
+// filled with venues/*.json at start. Owner link: http://<slug>.localhost:4173/?k=00000000000000000000000000000000
+// The model is never called in the preview: free text is answered as a handoff. Photos stay in memory under /__blob/.
 import { createServer } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
@@ -8,7 +9,9 @@ import { join, extname, dirname, normalize } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { memoryStore } from '../api/_lib/venues/store.mjs';
 import { hashKey } from '../api/_lib/venues/owner.mjs';
-import { renderPage } from '../api/_lib/venues/page.mjs';
+import { Readable } from 'node:stream';
+import { handlePage, handleChat, handlePhoto, handleHit } from '../api/_lib/venues/http.mjs';
+import { ownerPanel } from '../api/_lib/venues/owner-ui.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const port = Number(process.env.PORT || 4173);
@@ -47,14 +50,29 @@ async function resolve(pathname) {
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const store = await previewStore();
+  const blobs = new Map();
+  const svc = {
+    store, ownerPart: ownerPanel,
+    llm: { async create() { return { stop_reason: 'tool_use', content: [{ type: 'tool_use', id: 'p', name: 'handoff', input: { text: '(preview)' } }] }; } },
+    blob: { async put(path, bytes, opts) { blobs.set(path, { bytes, type: opts.contentType }); return { url: `__blob/${path}` }; } }, // the template serves a non-https photo from "/" + url
+  };
   createServer(async (req, res) => {
     const url = new URL(req.url, 'http://localhost');
+    if (url.pathname.startsWith('/__blob/')) {
+      const b = blobs.get(url.pathname.slice(8));
+      res.writeHead(b ? 200 : 404, { 'content-type': b ? b.type : 'text/plain' }); res.end(b ? Buffer.from(b.bytes) : '404'); return;
+    }
     const venue = /^([a-z0-9-]+)\.localhost(:\d+)?$/.exec(req.headers.host || '');
-    if (venue && venue[1] !== 'www' && !url.pathname.startsWith('/v/_shared/') && !url.pathname.startsWith('/api/')) {
-      const k = url.searchParams.get('k');
-      const page = await renderPage({ store, slug: venue[1], key: k === 'local' ? LOCAL_KEY : k || '' });
-      res.writeHead(page.status, { ...page.headers, 'cache-control': 'no-store' });
-      res.end(page.body);
+    if (venue && venue[1] !== 'www' && !url.pathname.startsWith('/v/_shared/')) {
+      const host = venue[1] + '.namax.at';
+      const headers = { ...req.headers, host };
+      const body = ['GET', 'HEAD'].includes(req.method) ? undefined : Readable.toWeb(req);
+      const request = new Request('https://' + host + url.pathname + url.search, { method: req.method, headers, body, duplex: 'half' });
+      const handler = { '/api/venue/chat': handleChat, '/api/venue/photo': handlePhoto, '/api/venue/hit': handleHit }[url.pathname]
+        || (url.pathname.startsWith('/api/') ? null : handlePage);
+      const r = handler ? await handler(request, svc) : new Response('404', { status: 404 });
+      res.writeHead(r.status, { ...Object.fromEntries(r.headers), 'cache-control': 'no-store' });
+      res.end(Buffer.from(await r.arrayBuffer()));
       return;
     }
     const file = await resolve(url.pathname);
