@@ -5,6 +5,8 @@ import { randomBytes } from 'node:crypto';
 import { slugFromHost, renderPage } from './page.mjs';
 import { isOwner, viennaDayStart, viennaDay } from './owner.mjs';
 import { chatTurn } from './assistant.mjs';
+import { renderOg } from './og.mjs';
+import { effectiveVenue } from './merge.mjs';
 
 export const MAX_PHOTO_BYTES = 3 * 1024 * 1024;
 export const DAILY_PHOTOS = 12;
@@ -109,4 +111,12 @@ export async function handleHit(req, { store, now = () => new Date() }) {
     }
   } catch { /* never fails visibly */ }
   return new Response(null, { status: 204, headers: { 'Cache-Control': 'no-store' } });
+}
+
+/** Link preview picture for the venue on this host. Owner changes (name) are included; no photos are drawn. */
+export async function handleOg(req, { store }) {
+  const slug = hostSlug(req);
+  const record = slug ? await store.getVenue(slug) : null;
+  if (!record || record.status === 'removed') return text(404, 'Not found\n', 'public, s-maxage=300');
+  return renderOg(effectiveVenue(record, []));
 }

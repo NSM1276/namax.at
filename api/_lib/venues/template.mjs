@@ -2,6 +2,7 @@
 // A block whose data is missing is left out entirely; nothing is invented.
 import { T, OWNER_LINE, listTitle, kindLabel, languageName } from './i18n.mjs';
 import { PALETTES, LETTERINGS, DEFAULT_THEME } from './themes.mjs';
+import { ogImageUrl } from './og-url.mjs';
 import { openState, formatMinute, viennaNow } from './hours.mjs';
 
 const SITE = 'https://www.namax.at';
@@ -52,6 +53,14 @@ ${robots}
 <meta property="og:type" content="website">
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(desc)}">
+<meta property="og:url" content="https://${v.slug}.namax.at/">
+<meta property="og:site_name" content="namax.at">
+<meta property="og:locale" content="de_AT">
+<meta property="og:image" content="${esc(ogImageUrl(v))}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="${esc(title)}">
+<meta name="twitter:card" content="summary_large_image">
 <style>${let_.faces}${css(pal, let_)}</style>`;
 }
 

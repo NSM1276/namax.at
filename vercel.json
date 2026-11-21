@@ -60,5 +60,10 @@
         }
       ]
     }
-  ]
+  ],
+  "functions": {
+    "api/venue/og.js": {
+      "includeFiles": "api/_lib/venues/og-fonts/**"
+    }
+  }
 }
