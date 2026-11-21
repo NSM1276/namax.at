@@ -47,7 +47,15 @@ test('names with Turkish letters and every lettering render', async () => {
 test('the picture shows the name, area and kind in the page colors; Ş/ğ/š fall back to the -Ext font', () => {
   const v = { ...facts, theme: { palette: 'cream-green', lettering: 'serif' } };
   const s = JSON.stringify(ogTree(v));
-  for (const part of [v.name, PALETTES['cream-green'].signBg, PALETTES['cream-green'].signInk, 'namax.at', 'SerifExt', 'SmallExt']) assert.ok(s.includes(part), part);
+  for (const part of [v.name.toUpperCase(), PALETTES['cream-green'].signBg, PALETTES['cream-green'].signInk, 'namax.at', 'DisplayExt', 'TextExt']) assert.ok(s.includes(part), part);
+});
+
+test('the picture is an enamel plate in the brand faces, and its address moved on from the old look', () => {
+  const v = { ...facts, kind: 'friseur', area: 'Meidling', address: { street: 'Gasse 1', zip: '1120', city: 'Wien' }, theme: { palette: 'blue-white', lettering: 'serif' } };
+  const s = JSON.stringify(ogTree(v));
+  for (const part of ['"Display, DisplayExt"', '"Text, TextExt"', `solid ${PALETTES['blue-white'].signInk}`, PALETTES['blue-white'].pageBg, '12., MEIDLING', 'FRISEUR']) assert.ok(s.includes(part), part);
+  assert.doesNotMatch(s, /Serif|Block|Narrow|Small/, 'old faces are gone');
+  assert.notEqual(ogVersion(facts), '99e32e3b43', 'cached old pictures are not served');
 });
 
 test('image address changes when the name or look changes, so messengers fetch the new one', () => {

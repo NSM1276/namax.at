@@ -1,10 +1,11 @@
-// Link preview picture (og:image) for <slug>.namax.at: 1200×630 PNG in the colors and lettering of the
+// Link preview picture (og:image) for <slug>.namax.at: 1200×630 PNG as the same enamel plate as the
 // venue's own page, drawn on request and cached by the CDN. WhatsApp, Instagram, Telegram and Facebook show it.
 import { readFileSync } from 'node:fs';
 import satori from 'satori';
 import { Resvg } from '@resvg/resvg-js';
-import { PALETTES, LETTERINGS, DEFAULT_THEME } from './themes.mjs';
+import { PALETTES, DEFAULT_THEME } from './themes.mjs';
 import { kindLabel } from './i18n.mjs';
+import { districtLine } from './template.mjs';
 export { ogVersion, ogImageUrl } from './og-url.mjs';
 
 export const OG_WIDTH = 1200;
@@ -12,52 +13,54 @@ export const OG_HEIGHT = 630;
 
 const font = (file) => readFileSync(new URL(`./og-fonts/${file}.woff`, import.meta.url));
 let fonts; // loaded on first use, so pages that never draw a picture do not read them
-const loadFonts = () => fonts ||= [
-  ['Block', 400, 'anton', 400], ['Narrow', 700, 'archivo-narrow', 700], ['Small', 400, 'archivo-narrow', 400], ['Serif', 700, 'gelasio', 700],
-].flatMap(([name, weight, file, w]) => ['latin', 'latin-ext'].map((sub) => ({ name: sub === 'latin' ? name : name + 'Ext', weight, style: 'normal', data: font(`${file}-${sub}-${w}-normal`) })));
+const loadFonts = () => fonts ||= [['Display', 'barlow-condensed'], ['Text', 'figtree']]
+  .flatMap(([name, file]) => ['latin', 'latin-ext'].map((sub) => ({ name: sub === 'latin' ? name : name + 'Ext', weight: 700, style: 'normal', data: font(`${file}-${sub}-700-normal`) })));
 
 // Each face comes in two files; the second holds ŞğıčćžđŁ… and is listed as the fallback.
 const fam = (name) => `${name}, ${name}Ext`;
-const FACE = { block: { family: 'Block', weight: 400, width: 0.47 }, narrow: { family: 'Narrow', weight: 700, width: 0.5 }, serif: { family: 'Serif', weight: 700, width: 0.6 } };
 
-function look(v) {
-  const theme = { ...DEFAULT_THEME, ...(v.theme || {}) };
-  const pal = Object.hasOwn(PALETTES, theme.palette) ? PALETTES[theme.palette] : PALETTES[DEFAULT_THEME.palette];
-  const key = Object.hasOwn(LETTERINGS, theme.lettering) ? theme.lettering : DEFAULT_THEME.lettering;
-  return { pal, letter: LETTERINGS[key], face: FACE[key] };
+function palette(v) {
+  const name = (v.theme && v.theme.palette) || DEFAULT_THEME.palette;
+  return Object.hasOwn(PALETTES, name) ? PALETTES[name] : PALETTES[DEFAULT_THEME.palette];
 }
 
-/** Largest font size (px) at which the name fits the frame in at most 3 lines. */
-function nameSize(text, charWidth) {
-  const box = { w: 960, h: 330 };
+// Inside the rim: 1200 − 2×48 page margin − 2×18 plate padding − 2×6 rim − 2×44 rim padding.
+const NAME_BOX = { w: 968, h: 290 };
+
+/** Largest font size (px) at which the name fits the rim in at most 3 lines (Barlow Condensed capitals ≈ 0.5em wide). */
+function nameSize(text, charWidth = 0.5) {
   const words = text.split(/\s+/);
   const longest = Math.max(...words.map((w) => w.length));
   for (let size = 150; size > 40; size -= 4) {
-    const perLine = Math.floor(box.w / (size * charWidth));
+    const perLine = Math.floor(NAME_BOX.w / (size * charWidth));
     if (longest > perLine) continue;
     let lines = 1, used = 0;
     for (const w of words) { if (used && used + 1 + w.length > perLine) { lines++; used = w.length; } else used += (used ? 1 : 0) + w.length; }
-    if (lines <= 3 && lines * size * 1.08 <= box.h) return size;
+    if (lines <= 3 && lines * size * 1.0 <= NAME_BOX.h) return size;
   }
   return 40;
 }
 
 const el = (style, children) => ({ type: 'div', props: { style: { display: 'flex', ...style }, children } });
 
-/** The picture as a tree for the renderer (plain objects, no React). */
+/** The picture as a tree for the renderer (plain objects, no React): the enamel plate on the page background. */
 export function ogTree(v) {
-  const { pal, letter, face } = look(v);
-  const name = letter.upper ? v.name.toUpperCase() : v.name;
-  const kind = kindLabel(v.kind, 'de');
-  const where = [kind, v.address && v.address.street, v.address && `${v.address.zip} ${v.address.city}`].filter(Boolean).join(' · ');
-  const small = { fontFamily: fam('Small'), fontWeight: 400, color: pal.signInk };
-  return el({ width: OG_WIDTH, height: OG_HEIGHT, background: pal.signBg, padding: 36, position: 'relative' }, [
-    el({ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', border: `6px solid ${pal.signInk}`, padding: '34px 50px 30px' }, [
-      el({ ...small, fontFamily: fam('Narrow'), fontWeight: 700, fontSize: 30, letterSpacing: 6 }, (v.area || '').toUpperCase() || ' '),
-      el({ fontFamily: fam(face.family), fontWeight: face.weight, fontSize: nameSize(name, face.width), lineHeight: 1.04, color: pal.signInk, textAlign: 'center', justifyContent: 'center' }, name),
-      el({ ...small, fontSize: 30, opacity: 0.88, textAlign: 'center' }, where || ' '),
+  const pal = palette(v);
+  const name = v.name.toUpperCase();
+  const kind = kindLabel(v.kind, 'de').toUpperCase();
+  const district = districtLine(v);
+  const small = { fontFamily: fam('Text'), fontWeight: 700, color: pal.signInk, fontSize: 30 };
+  const screw = (side) => el({ position: 'absolute', top: 222, [side]: 6, width: 12, height: 12, borderRadius: 6, background: pal.signInk, opacity: 0.7 }, []);
+  return el({ width: OG_WIDTH, height: OG_HEIGHT, background: pal.pageBg, padding: '40px 48px 58px', position: 'relative' }, [
+    el({ flex: 1, position: 'relative', background: pal.signBg, borderRadius: 28, padding: 18, boxShadow: '0 18px 36px rgba(0,0,0,.28)' }, [
+      el({ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', border: `6px solid ${pal.signInk}`, borderRadius: 18, padding: '30px 44px 28px' }, [
+        el({ ...small, letterSpacing: 7 }, kind || ' '),
+        el({ fontFamily: fam('Display'), fontWeight: 700, fontSize: nameSize(name), lineHeight: 1.0, color: pal.signInk, textAlign: 'center', justifyContent: 'center' }, name),
+        el({ ...small, letterSpacing: 4, opacity: 0.9 }, district || ' '),
+      ]),
+      screw('left'), screw('right'),
     ]),
-    el({ ...small, position: 'absolute', right: 44, bottom: 4, fontSize: 22, opacity: 0.7 }, 'namax.at'),
+    el({ position: 'absolute', right: 52, bottom: 12, fontFamily: fam('Text'), fontWeight: 700, fontSize: 24, color: pal.ink, opacity: 0.7 }, 'namax.at'),
   ]);
 }
 
