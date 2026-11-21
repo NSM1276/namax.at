@@ -5,7 +5,6 @@ import { randomBytes } from 'node:crypto';
 import { slugFromHost, renderPage } from './page.mjs';
 import { isOwner, viennaDayStart, viennaDay } from './owner.mjs';
 import { chatTurn } from './assistant.mjs';
-import { renderOg } from './og.mjs';
 import { effectiveVenue } from './merge.mjs';
 
 export const MAX_PHOTO_BYTES = 3 * 1024 * 1024;
@@ -118,5 +117,7 @@ export async function handleOg(req, { store }) {
   const slug = hostSlug(req);
   const record = slug ? await store.getVenue(slug) : null;
   if (!record || record.status === 'removed') return text(404, 'Not found\n', 'public, s-maxage=300');
+  // loaded here, not at the top: the renderer has wasm files, and the pages must never depend on them
+  const { renderOg } = await import('./og.mjs');
   return renderOg(effectiveVenue(record, []));
 }
