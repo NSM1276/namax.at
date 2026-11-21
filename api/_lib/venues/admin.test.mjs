@@ -93,5 +93,7 @@ test('"new link" also gives a link to a venue that had none, and refuses without
 test('renderAdmin offers a "new link" button for every venue', () => {
   const html = renderAdmin([{ slug: 'x-y', name: 'N', kind: 'cafe', street: 'S', district: 12, status: 'public', confirmed: false, ownerUrl: null }]);
   assert.match(html, /data-rotate="x-y"/);
-  assert.match(html, /Новая ссылка/);
+  assert.match(html, /Neuer Link/);
+  assert.match(html, /<html lang="de">/);
+  assert.doesNotMatch(html, /[А-Яа-яЁё]/, "the list is in German: owners may see the screen");
 });
