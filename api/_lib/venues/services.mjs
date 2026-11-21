@@ -11,10 +11,11 @@ export function services() {
   if (cached) return cached;
   if (!process.env.DATABASE_URL) throw new Error('DATABASE_URL is not set');
   const sql = neon(process.env.DATABASE_URL);
-  const client = new Anthropic({ maxRetries: 1, timeout: 25_000 });
+  // without a key the chat still works: free text and price photos go to Nasim as a handoff
+  const client = process.env.ANTHROPIC_API_KEY ? new Anthropic({ maxRetries: 1, timeout: 25_000 }) : null;
   cached = {
     store: pgStore((text, params) => sql.query(text, params)),
-    llm: { create: (params) => client.messages.create(params) },
+    llm: client ? { create: (params) => client.messages.create(params) } : null,
     blob: { put: (path, bytes, opts) => put(path, Buffer.from(bytes), opts) },
     ownerPart: ownerPanel,
   };

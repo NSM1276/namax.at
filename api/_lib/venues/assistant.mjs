@@ -243,7 +243,7 @@ export async function chatTurn({ store, llm, now = () => new Date() }, { slug, i
     name: record.facts.name, url: `https://${slug}.namax.at/`, status: record.status,
     confirmed: Boolean(record.confirmedAt), hits: hits.visitors,
     shownPhotos: photos.filter((p) => p.kind === 'show').length, hasPending: Boolean(record.pending),
-    budgetLeft: callsToday < FREE_MODEL_CALLS.perDay && callsTotal < FREE_MODEL_CALLS.total,
+    budgetLeft: Boolean(llm) && callsToday < FREE_MODEL_CALLS.perDay && callsTotal < FREE_MODEL_CALLS.total,
     check: (changes) => checkChanges(record, changes),
   };
 

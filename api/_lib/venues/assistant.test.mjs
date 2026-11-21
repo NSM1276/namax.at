@@ -290,3 +290,12 @@ test('R3: a resent price board photo after the budget is spent makes no model ca
   await turn(store, llm, { photo: { id } });
   assert.equal(llm.calls.length, 0);
 });
+
+test('without a model (no API key yet) free text goes to Nasim and nothing breaks', async () => {
+  const store = await setup();
+  await chatTurn({ store, llm: null }, { slug: SLUG, input: { start: true } });
+  await chatTurn({ store, llm: null }, { slug: SLUG, input: { chip: 'lang_de' } });
+  const r = await chatTurn({ store, llm: null }, { slug: SLUG, input: { text: 'Samstag bis 17' } });
+  assert.ok(r.say.includes(say('de', 'forwarded')));
+  assert.equal(await store.countModelCalls(SLUG), 0);
+});
