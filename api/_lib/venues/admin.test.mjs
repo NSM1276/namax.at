@@ -32,7 +32,12 @@ async function svc() {
   await store.upsertFacts('friseur-b', { facts: facts('friseur-b', { kind: 'friseur', name: 'Salon <B>' }), keyHash: 'h', status: 'public' });
   return { store, adminKeyHash: hash(ADMIN) };
 }
-const req = (k) => new Request(`https://www.namax.at/liste${k == null ? '' : '?k=' + k}`, { headers: { host: 'www.namax.at' } });
+const req = (k, d = '12') => {
+  const q = new URLSearchParams();
+  if (k != null) q.set('k', k);
+  if (d) q.set('d', d);
+  return new Request(`https://www.namax.at/liste${q.size ? '?' + q : ''}`, { headers: { host: 'www.namax.at' } });
+};
 
 test('without the right key the list does not exist (404), and nothing about it leaks', async () => {
   for (const k of [null, '', 'x'.repeat(32)]) {
@@ -181,4 +186,42 @@ test('list passes the facade url from the store to the card', async () => {
   await s.store.setFacade('cafe-a', 'https://abc.public.blob.vercel-storage.com/venues/cafe-a/facade-9.jpg');
   const html = await (await handleAdmin(req(ADMIN), s)).text();
   assert.ok(html.includes('<img class="th" src="https://abc.public.blob.vercel-storage.com/venues/cafe-a/facade-9.jpg"'));
+});
+
+// The list opens one district at a time, so it stays light on a phone however many districts are loaded.
+async function twoDistricts() {
+  const s = await svc();
+  await s.store.upsertFacts('kebab-x', { facts: facts('kebab-x', { kind: 'imbiss', name: 'Kebab X', internal: { district: 10 } }), keyHash: 'h', status: 'public' });
+  return s;
+}
+const cards = (html) => (html.match(/<li /g) || []).length;
+
+test('list: ?d= shows only that district; d=all shows everything', async () => {
+  const s = await twoDistricts();
+  const h12 = await (await handleAdmin(req(ADMIN, '12'), s)).text();
+  assert.equal(cards(h12), 2); assert.ok(!h12.includes('Kebab X'));
+  const h10 = await (await handleAdmin(req(ADMIN, '10'), s)).text();
+  assert.equal(cards(h10), 1); assert.ok(h10.includes('Kebab X'));
+  assert.equal(cards(await (await handleAdmin(req(ADMIN, 'all'), s)).text()), 3);
+});
+
+test('list without a district: a chooser with every district and its count, no cards, no key in the page', async () => {
+  const s = await twoDistricts();
+  for (const d of ['', '99', 'x']) {
+    const res = await handleAdmin(req(ADMIN, d), s);
+    assert.equal(res.status, 200);
+    const html = await res.text();
+    assert.equal(cards(html), 0, d);
+    assert.match(html, /data-pick="10"[^>]*>10\. Favoriten <span>1<\/span>/);
+    assert.match(html, /data-pick="12"[^>]*>12\. Meidling <span>2<\/span>/);
+    assert.ok(html.includes('data-pick="all"'));
+    assert.ok(!html.includes(ADMIN), 'the admin key is never written into the page');
+  }
+});
+
+test('list: the district menu switches districts and keeps the current one selected', async () => {
+  const html = await (await handleAdmin(req(ADMIN, '10'), await twoDistricts())).text();
+  assert.match(html, /<option value="10" selected>10\. Favoriten \(1\)<\/option>/);
+  assert.match(html, /<option value="12">12\. Meidling \(2\)<\/option>/);
+  assert.ok(!html.includes(ADMIN));
 });

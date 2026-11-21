@@ -150,15 +150,26 @@ export async function handleOg(req, { store }) {
 
 /** Nasim's private list (www.namax.at/liste?k=…). A wrong or missing key gets the same 404 as any unknown path. */
 export async function handleAdmin(req, { store, adminKeyHash = ADMIN_KEY_HASH }) {
-  const key = new URL(req.url).searchParams.get('k') || '';
+  const params = new URL(req.url).searchParams;
+  const key = params.get('k') || '';
   if (!isAdmin(key, adminKeyHash)) return text(404, 'Not found\n', 'no-store');
-  const rows = (await store.listForAdmin()).map((r) => {
+  const records = await store.listForAdmin();
+  const districtOf = (r) => Number(r.facts.internal?.district) || 0;
+  const counts = new Map();
+  for (const r of records) counts.set(districtOf(r), (counts.get(districtOf(r)) || 0) + 1);
+  const districts = [...counts].filter(([d]) => d).sort((a, b) => a[0] - b[0]).map(([d, n]) => ({ d, n }));
+  const want = params.get('d') || '';
+  const district = want === 'all' ? 'all' : districts.some((x) => String(x.d) === want) ? Number(want) : null;
+  const html = (rows, opts) => new Response(renderAdmin(rows, opts), { headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'private, no-store', 'X-Robots-Tag': 'noindex, nofollow' } });
+  // No (or an unknown) district: the start page with one button per district, so the list never loads every venue at once.
+  if (district == null) return html([], { districts, chooser: true });
+  const rows = records.filter((r) => district === 'all' || districtOf(r) === district).map((r) => {
     const v = effectiveVenue(r, []);
     const ownerKey = r.ownerKeyEnc ? openOwnerKey(key, r.slug, r.ownerKeyEnc) : null;
     return { slug: r.slug, name: v.name, kind: v.kind, street: v.address?.street || '', district: r.facts.internal?.district || null,
       status: r.status, confirmed: Boolean(r.confirmedAt), facadeUrl: r.facadeUrl || null, ownerUrl: ownerKey ? `https://${r.slug}.namax.at/?k=${ownerKey}` : null };
   }).sort((a, b) => a.name.localeCompare(b.name, 'de'));
-  return new Response(renderAdmin(rows), { headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'private, no-store', 'X-Robots-Tag': 'noindex, nofollow' } });
+  return html(rows, { districts, district });
 }
 
 /** POST www.namax.at/liste {k: admin key, slug} → a new owner key for that venue; the old owner link stops working. */

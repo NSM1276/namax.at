@@ -45,10 +45,47 @@ const thumbSrc = (u) => (typeof u !== 'string' ? ''
   : /^https:\/\/[a-z0-9-]+\.public\.blob\.vercel-storage\.com\/venues\/[\w./-]+$/.test(u) ? u
   : /^__blob\/venues\/[\w./-]+$/.test(u) ? '/' + u : '');
 
-/** rows: [{ slug, name, kind, street, district, status, confirmed, ownerUrl|null, facadeUrl|null }] → HTML (German, phone first). */
-export function renderAdmin(rows) {
+export const DISTRICT_NAMES = {
+  1: 'Innere Stadt', 2: 'Leopoldstadt', 3: 'Landstraße', 4: 'Wieden', 5: 'Margareten', 6: 'Mariahilf',
+  7: 'Neubau', 8: 'Josefstadt', 9: 'Alsergrund', 10: 'Favoriten', 11: 'Simmering', 12: 'Meidling',
+  13: 'Hietzing', 14: 'Penzing', 15: 'Rudolfsheim-Fünfhaus', 16: 'Ottakring', 17: 'Hernals', 18: 'Währing',
+  19: 'Döbling', 20: 'Brigittenau', 21: 'Floridsdorf', 22: 'Donaustadt', 23: 'Liesing',
+};
+const dName = (d) => `${d}. ${DISTRICT_NAMES[d] || 'Bezirk'}`;
+
+// The admin key stays in the address bar only: links are built in the browser from location.search.
+const NAV_JS = `function go(d){try{localStorage.setItem('namax-liste-d',d)}catch(e){}var q=new URLSearchParams(location.search);q.set('d',d);location.search=q.toString()}`;
+
+/** Start page of the list: one button per district with its count; the browser reopens the last district used. */
+function renderChooser(districts, total) {
+  const btn = (d, label, n) => `<button type="button" data-pick="${d}">${esc(label)} <span>${n}</span></button>`;
+  const picks = districts.map(({ d, n }) => btn(d, dName(d), n)).join('') + btn('all', 'Alle Bezirke', total);
+  return `<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>namax · Liste</title><meta name="theme-color" content="#111">
+<style>*{box-sizing:border-box}body{margin:0;font:16px/1.4 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background:#f4f3ef;color:#111}
+header{background:#111;color:#fff;padding:14px}h1{margin:0;font-size:18px}h1 span{opacity:.7;font-weight:400}
+.pick{display:grid;gap:8px;padding:12px;max-width:760px;margin:0 auto}
+.pick button{display:flex;justify-content:space-between;align-items:center;font:inherit;font-size:17px;font-weight:600;min-height:52px;padding:10px 16px;border-radius:10px;border:1px solid #ddd;background:#fff;color:#111;text-align:left}
+.pick span{font-weight:400;color:#666}</style></head><body>
+<header><h1>namax · Liste <span>${total}</span></h1></header>
+<div class="pick" role="group" aria-label="Bezirk wählen">${picks}</div>
+<script>(function(){${NAV_JS}
+var last='';try{last=localStorage.getItem('namax-liste-d')||''}catch(e){}
+if(last&&document.querySelector('[data-pick="'+last.replace(/[^0-9a-z]/g,'')+'"]'))return go(last);
+document.addEventListener('click',function(e){var b=e.target.closest('[data-pick]');if(b)go(b.dataset.pick)})})();</script>
+</body></html>`;
+}
+
+/**
+ * rows: [{ slug, name, kind, street, district, status, confirmed, ownerUrl|null, facadeUrl|null }] → HTML (German, phone first).
+ * options.districts: [{ d, n }] for every district (the menu switches between them); options.district: the one shown, or 'all';
+ * options.chooser: render the district start page instead of cards.
+ */
+export function renderAdmin(rows, { districts = null, district = null, chooser = false } = {}) {
+  if (chooser && districts) return renderChooser(districts, districts.reduce((a, x) => a + x.n, 0));
   const kinds = [...new Set(rows.map((r) => r.kind))].sort((a, b) => kindDe(a).localeCompare(kindDe(b), 'de'));
-  const districts = [...new Set(rows.map((r) => r.district).filter(Boolean))].sort((a, b) => a - b);
+  const all = districts;
+  const inRows = [...new Set(rows.map((r) => r.district).filter(Boolean))].sort((a, b) => a - b);
   const items = rows.map((r) => {
     const page = `https://${r.slug}.namax.at/`;
     const badges = (r.status === 'hidden' ? '<span class="b">versteckt</span>' : '') + (r.confirmed ? '<span class="b ok">bestätigt</span>' : '');
@@ -72,8 +109,12 @@ ${owner}
 ${photo}</li>`;
   }).join('\n');
   const chips = ['<button type="button" class="on" data-k="">Alle</button>', ...kinds.map((k) => `<button type="button" data-k="${esc(k)}">${esc(kindDe(k))}</button>`)].join('');
-  const dsel = districts.length > 1
-    ? `<select data-dsel aria-label="Bezirk"><option value="">Alle Bezirke</option>${districts.map((d) => `<option value="${d}">${d}. Bezirk</option>`).join('')}</select>` : '';
+  const total = all ? all.reduce((a, x) => a + x.n, 0) : 0;
+  const dsel = all
+    ? `<select data-dnav aria-label="Bezirk">${all.map(({ d, n }) => `<option value="${d}"${String(d) === String(district) ? ' selected' : ''}>${esc(dName(d))} (${n})</option>`).join('')}`
+      + `<option value="all"${district === 'all' ? ' selected' : ''}>Alle Bezirke (${total})</option></select>`
+    : inRows.length > 1
+      ? `<select data-dsel aria-label="Bezirk"><option value="">Alle Bezirke</option>${inRows.map((d) => `<option value="${d}">${d}. Bezirk</option>`).join('')}</select>` : '';
   return `<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow"><title>namax · Liste</title><meta name="theme-color" content="#111">
 <style>*{box-sizing:border-box}body{margin:0;font:16px/1.4 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background:#f4f3ef;color:#111}
@@ -138,6 +179,8 @@ function(){x.textContent=o;x.disabled=false;alert('Hat nicht geklappt. Bitte noc
 function run(){var n=0;for(var i=0;i<lis.length;i++){var l=lis[i],ok=(!q||l.dataset.q.indexOf(q)>=0)&&(!k||l.dataset.kind===k)&&(!d||l.dataset.d===d);l.hidden=!ok;if(ok)n++}cnt.textContent=n;empty.hidden=n>0}
 document.querySelector('input[type=search]').addEventListener('input',function(e){q=e.target.value.trim().toLowerCase();run()});
 var sel=document.querySelector('[data-dsel]');if(sel)sel.addEventListener('change',function(){d=sel.value;run()});
+${NAV_JS}
+var nav=document.querySelector('[data-dnav]');if(nav){try{localStorage.setItem('namax-liste-d',nav.value)}catch(e){}nav.addEventListener('change',function(){go(nav.value)})}
 document.addEventListener('click',function(e){var c=e.target.closest('[data-k]');if(c){k=c.dataset.k;[].forEach.call(document.querySelectorAll('[data-k]'),function(b){b.className=b===c?'on':''});run()}});})();</script>
 <script>(function(){var pick=document.getElementById('fpick'),cr=document.getElementById('crop'),fr=cr.querySelector('[data-frame]'),im=cr.querySelector('[data-cimg]'),zm=cr.querySelector('[data-zoom]'),use=cr.querySelector('[data-cuse]');
 var slug='',li=null,url='',s0=1,s=1,x=0,y=0,pts={},last=null;
