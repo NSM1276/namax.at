@@ -1,16 +1,17 @@
-docs
-tools
-project
-README.md
-.superpowers
-.claude
-demo/*/og.html
+# Anchored with "/" so a name never matches a folder deeper down (e.g. api/_lib/venues).
+/docs
+/tools
+/project
+/README.md
+/.superpowers
+/.claude
+/demo/*/og.html
 
-venues
-venues-preview
-v-preview
-reports
-research_notes
-data
-node_modules
-.env.local
+/venues
+/venues-preview
+/v-preview
+/reports
+/research_notes
+/data
+/node_modules
+/.env.local
