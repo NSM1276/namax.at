@@ -11,3 +11,4 @@ venues/.links-*
 .vercel
 
 .vercel
+.env*.local
