@@ -212,7 +212,8 @@ export async function handleAdmin(req, { store, adminKeyHash = ADMIN_KEY_HASH, n
     const k = params.get('k') || '';
     if (!isAdmin(k, adminKeyHash)) return text(404, 'Not found\n', 'no-store');
     params.delete('k');
-    return new Response(null, { status: 303, headers: { Location: url.pathname + (params.size ? '?' + params : ''), 'Cache-Control': 'no-store',
+    // Always /liste: behind the vercel.json rewrite the function may see its own path (/api/venue/admin).
+    return new Response(null, { status: 303, headers: { Location: '/liste' + (params.size ? '?' + params : ''), 'Cache-Control': 'no-store',
       'Set-Cookie': `${ADMIN_COOKIE}=${k}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=31536000` } });
   }
   const key = adminKey(req, null, adminKeyHash);
