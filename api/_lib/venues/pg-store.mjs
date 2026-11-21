@@ -97,6 +97,7 @@ export function pgStore(query) {
     async listSlugs(status) {
       return (await query('select slug from venues where status = $1 order by slug', [status])).map((r) => r.slug);
     },
+    async setKeyHash(slug, hash) { await query('update venues set key_hash = $2 where slug = $1', [slug, hash]); },
     async setOwnerKeyEnc(slug, enc) { await query('update venues set owner_key_enc = $2 where slug = $1', [slug, enc]); },
     async listForAdmin() {
       const rows = await query(`select slug, status, facts, changes, confirmed_at, owner_key_enc

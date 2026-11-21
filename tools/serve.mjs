@@ -1,6 +1,7 @@
 // Local preview server that mimics Vercel. Run: node tools/serve.mjs   (CITY=1 also loads data/city/venues.json)
 // www: static files with cleanUrls. <slug>.localhost: the same renderPage as on Vercel, from an in-memory store
 // filled with venues/*.json at start. Owner link: http://<slug>.localhost:4173/?k=00000000000000000000000000000000
+// Private list: http://localhost:4173/liste?k=00000000000000000000000000000000 (the same key is the admin key here).
 // The model is never called in the preview: free text is answered as a handoff. Photos stay in memory under /__blob/.
 import { createServer } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
@@ -10,7 +11,8 @@ import { fileURLToPath } from 'node:url';
 import { memoryStore } from '../api/_lib/venues/store.mjs';
 import { hashKey } from '../api/_lib/venues/owner.mjs';
 import { Readable } from 'node:stream';
-import { handlePage, handleChat, handlePhoto, handleHit } from '../api/_lib/venues/http.mjs';
+import { handlePage, handleChat, handlePhoto, handleHit, handleAdmin, handleAdminRotate } from '../api/_lib/venues/http.mjs';
+import { sealOwnerKey } from '../api/_lib/venues/admin.mjs';
 import { ownerPanel } from '../api/_lib/venues/owner-ui.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -26,7 +28,10 @@ const types = {
 
 export async function previewStore() {
   const store = memoryStore();
-  const add = (f) => store.upsertFacts(f.slug, { facts: f, keyHash: hashKey(LOCAL_KEY), status: f.status === 'removed' ? 'removed' : 'public' });
+  const add = async (f) => {
+    await store.upsertFacts(f.slug, { facts: f, keyHash: hashKey(LOCAL_KEY), status: f.status === 'removed' ? 'removed' : 'public' });
+    await store.setOwnerKeyEnc(f.slug, sealOwnerKey(LOCAL_KEY, f.slug, LOCAL_KEY));
+  };
   const dir = join(root, 'venues');
   for (const name of readdirSync(dir).filter((n) => n.endsWith('.json') && !n.startsWith('_'))) {
     await add(JSON.parse(readFileSync(join(dir, name), 'utf8')));
@@ -54,7 +59,9 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const svc = {
     store, ownerPart: ownerPanel,
     llm: { async create() { return { stop_reason: 'tool_use', content: [{ type: 'tool_use', id: 'p', name: 'handoff', input: { text: '(preview)' } }] }; } },
-    blob: { async put(path, bytes, opts) { blobs.set(path, { bytes, type: opts.contentType }); return { url: `__blob/${path}` }; } }, // the template serves a non-https photo from "/" + url
+    adminKeyHash: hashKey(LOCAL_KEY),
+    blob: { async del(urls) { for (const u of [].concat(urls)) blobs.delete(String(u).replace(/^__blob\//, '')); },
+      async put(path, bytes, opts) { blobs.set(path, { bytes, type: opts.contentType }); return { url: `__blob/${path}` }; } }, // the template serves a non-https photo from "/" + url
   };
   createServer(async (req, res) => {
     const url = new URL(req.url, 'http://localhost');
@@ -74,6 +81,12 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
       res.writeHead(r.status, { ...Object.fromEntries(r.headers), 'cache-control': 'no-store' });
       res.end(Buffer.from(await r.arrayBuffer()));
       return;
+    }
+    if (url.pathname === '/liste') {
+      const body = ['GET', 'HEAD'].includes(req.method) ? undefined : Readable.toWeb(req);
+      const request = new Request('https://www.namax.at' + url.pathname + url.search, { method: req.method, headers: req.headers, body, duplex: 'half' });
+      const r = await (req.method === 'POST' ? handleAdminRotate : handleAdmin)(request, svc);
+      res.writeHead(r.status, Object.fromEntries(r.headers)); res.end(Buffer.from(await r.arrayBuffer())); return;
     }
     const file = await resolve(url.pathname);
     if (!file) { res.writeHead(404, { 'content-type': 'text/plain' }); res.end('404'); return; }

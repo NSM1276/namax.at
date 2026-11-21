@@ -3,10 +3,10 @@
 // The venue is always the one named by the Host header; a body can never pick another venue.
 import { randomBytes } from 'node:crypto';
 import { slugFromHost, renderPage } from './page.mjs';
-import { isOwner, viennaDayStart, viennaDay } from './owner.mjs';
+import { isOwner, viennaDayStart, viennaDay, newKey, hashKey } from './owner.mjs';
 import { chatTurn } from './assistant.mjs';
 import { effectiveVenue } from './merge.mjs';
-import { isAdmin, openOwnerKey, renderAdmin, ADMIN_KEY_HASH } from './admin.mjs';
+import { isAdmin, openOwnerKey, sealOwnerKey, renderAdmin, ADMIN_KEY_HASH } from './admin.mjs';
 
 export const MAX_PHOTO_BYTES = 3 * 1024 * 1024;
 export const DAILY_PHOTOS = 12;
@@ -148,4 +148,19 @@ export async function handleAdmin(req, { store, adminKeyHash = ADMIN_KEY_HASH })
       status: r.status, confirmed: Boolean(r.confirmedAt), ownerUrl: ownerKey ? `https://${r.slug}.namax.at/?k=${ownerKey}` : null };
   }).sort((a, b) => a.name.localeCompare(b.name, 'de'));
   return new Response(renderAdmin(rows), { headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'private, no-store', 'X-Robots-Tag': 'noindex, nofollow' } });
+}
+
+/** POST www.namax.at/liste {k: admin key, slug} → a new owner key for that venue; the old owner link stops working. */
+export async function handleAdminRotate(req, { store, adminKeyHash = ADMIN_KEY_HASH }) {
+  if (req.method !== 'POST') return fail(405, 'POST only');
+  const body = await readJson(req, 1024);
+  const key = typeof body?.k === 'string' ? body.k : '';
+  if (!isAdmin(key, adminKeyHash)) return fail(404, 'not found');
+  const slug = typeof body.slug === 'string' ? body.slug : '';
+  const v = slug && await store.getVenue(slug);
+  if (!v || v.status === 'removed') return fail(404, 'not found');
+  const ownerKey = newKey();
+  await store.setKeyHash(slug, hashKey(ownerKey));
+  await store.setOwnerKeyEnc(slug, sealOwnerKey(key, slug, ownerKey));
+  return json(200, { ownerUrl: `https://${slug}.namax.at/?k=${ownerKey}` });
 }

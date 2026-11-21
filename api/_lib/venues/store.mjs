@@ -12,7 +12,7 @@
 // addHit(slug, { owner, day });  getHits(slug) → { visitors, owner }
 // recordModelCall(slug);  countModelCalls(slug, sinceIso?)
 // listSlugs(status) → slugs
-// setOwnerKeyEnc(slug, enc);  listForAdmin() → [{ slug, status, facts, changes, confirmedAt, ownerKeyEnc }] (not removed)
+// setKeyHash(slug, hash);  setOwnerKeyEnc(slug, enc);  listForAdmin() → [{ slug, status, facts, changes, confirmedAt, ownerKeyEnc }] (not removed)
 
 const clone = (x) => (x == null ? x : structuredClone(x));
 
@@ -116,6 +116,7 @@ export function memoryStore() {
     async listSlugs(status) {
       return [...venues.values()].filter((v) => v.status === status).map((v) => v.slug).sort();
     },
+    async setKeyHash(slug, hash) { need(slug).keyHash = hash; },
     async setOwnerKeyEnc(slug, enc) { need(slug).ownerKeyEnc = enc; },
     async listForAdmin() {
       return [...venues.values()].filter((v) => v.status !== 'removed').sort((a, b) => a.slug.localeCompare(b.slug))

@@ -176,6 +176,12 @@ export function storeContract(makeStore, prefix = '') {
     assert.equal(rows[0].facts.name, 'X ' + A); assert.equal(rows[0].confirmedAt, null); assert.deepEqual(rows[0].changes, {});
   });
 
+  test('the owner key hash can be replaced', async () => {
+    const s = await fresh();
+    await s.setKeyHash(A, 'f'.repeat(64));
+    assert.equal((await s.getVenue(A)).keyHash, 'f'.repeat(64));
+  });
+
   test('listSlugs by status', async () => {
     const s = await fresh();
     assert.deepEqual((await s.listSlugs('public')).filter((x) => x.startsWith(prefix)), [A]);

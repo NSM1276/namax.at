@@ -13,6 +13,7 @@
     "satori": "^0.33.5"
   },
   "devDependencies": {
-    "@electric-sql/pglite": "^0.5.17"
+    "@electric-sql/pglite": "^0.5.17",
+    "qrcode-generator": "^1.4.4"
   }
 }

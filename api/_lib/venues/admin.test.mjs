@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { memoryStore } from './store.mjs';
 import { sealOwnerKey, openOwnerKey, isAdmin, renderAdmin } from './admin.mjs';
-import { handleAdmin } from './http.mjs';
+import { handleAdmin, handleAdminRotate } from './http.mjs';
 
 const ADMIN = 'b'.repeat(32), OWNER = 'c'.repeat(32);
 const hash = (k) => createHash('sha256').update(k).digest('hex');
@@ -56,4 +56,42 @@ test('with the key: every venue, its page, its owner link, search; private and n
 test('renderAdmin escapes data and groups nothing it was not given', () => {
   const html = renderAdmin([{ slug: 'x-y', name: '"><script>', kind: 'cafe', street: 'S', district: 12, status: 'public', confirmed: false, ownerUrl: null }]);
   assert.ok(!html.includes('"><script>'));
+});
+
+const rotateReq = (body) => new Request('https://www.namax.at/liste', { method: 'POST', headers: { host: 'www.namax.at', 'content-type': 'application/json' }, body: JSON.stringify(body) });
+
+test('"new link" replaces the owner key: the old link stops working, the list shows the new one', async () => {
+  const s = await svc();
+  const res = await handleAdminRotate(rotateReq({ k: ADMIN, slug: 'cafe-a' }), s);
+  assert.equal(res.status, 200);
+  assert.equal(res.headers.get('cache-control'), 'private, no-store');
+  const { ownerUrl } = await res.json();
+  const m = /^https:\/\/cafe-a\.namax\.at\/\?k=([0-9a-f]{32})$/.exec(ownerUrl);
+  assert.ok(m, ownerUrl);
+  assert.notEqual(m[1], OWNER);
+  const v = await s.store.getVenue('cafe-a');
+  assert.equal(v.keyHash, hash(m[1]), 'new key works');
+  assert.notEqual(v.keyHash, hash(OWNER), 'old key no longer works');
+  assert.ok((await (await handleAdmin(req(ADMIN), s)).text()).includes(ownerUrl));
+});
+
+test('"new link" also gives a link to a venue that had none, and refuses without the admin key or for unknown venues', async () => {
+  const s = await svc();
+  const ok = await handleAdminRotate(rotateReq({ k: ADMIN, slug: 'friseur-b' }), s);
+  assert.equal(ok.status, 200);
+  assert.match((await ok.json()).ownerUrl, /^https:\/\/friseur-b\.namax\.at\/\?k=/);
+  for (const body of [{ slug: 'cafe-a' }, { k: 'x'.repeat(32), slug: 'cafe-a' }]) {
+    const r = await handleAdminRotate(rotateReq(body), s);
+    assert.equal(r.status, 404);
+  }
+  assert.equal((await s.store.getVenue('cafe-a')).keyHash, hash(OWNER), 'unchanged after refused attempts');
+  assert.equal((await handleAdminRotate(rotateReq({ k: ADMIN, slug: 'nope' }), s)).status, 404);
+  await s.store.setStatus('cafe-a', 'removed');
+  assert.equal((await handleAdminRotate(rotateReq({ k: ADMIN, slug: 'cafe-a' }), s)).status, 404, 'removed pages get no new link');
+});
+
+test('renderAdmin offers a "new link" button for every venue', () => {
+  const html = renderAdmin([{ slug: 'x-y', name: 'N', kind: 'cafe', street: 'S', district: 12, status: 'public', confirmed: false, ownerUrl: null }]);
+  assert.match(html, /data-rotate="x-y"/);
+  assert.match(html, /Новая ссылка/);
 });
