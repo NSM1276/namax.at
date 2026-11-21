@@ -154,6 +154,16 @@ export function storeContract(makeStore, prefix = '') {
     assert.equal(await s.countModelCalls(B), 0);
   });
 
+  test('sealed owner keys are stored and listed with the facts; removed venues are not listed', async () => {
+    const s = await fresh();
+    await s.setOwnerKeyEnc(A, 'sealed-a');
+    await s.setStatus(B, 'removed');
+    const rows = (await s.listForAdmin()).filter((r) => r.slug.startsWith(prefix));
+    assert.deepEqual(rows.map((r) => r.slug), [A]);
+    assert.equal(rows[0].ownerKeyEnc, 'sealed-a'); assert.equal(rows[0].status, 'public');
+    assert.equal(rows[0].facts.name, 'X ' + A); assert.equal(rows[0].confirmedAt, null); assert.deepEqual(rows[0].changes, {});
+  });
+
   test('listSlugs by status', async () => {
     const s = await fresh();
     assert.deepEqual((await s.listSlugs('public')).filter((x) => x.startsWith(prefix)), [A]);

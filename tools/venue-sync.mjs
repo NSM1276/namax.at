@@ -14,6 +14,7 @@ import { fileURLToPath } from 'node:url';
 import { hashKey, newKey, viennaDay } from '../api/_lib/venues/owner.mjs';
 import { validateVenue } from '../api/_lib/venues/schema.mjs';
 import { memoryStore } from '../api/_lib/venues/store.mjs';
+import { sealOwnerKey } from '../api/_lib/venues/admin.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const KEYS_FILE = join(root, 'venues/.keys.tsv');
@@ -33,7 +34,7 @@ export const parseKeys = (text) => new Map(String(text).split(/\r?\n/)
 export const formatKeys = (keys) => [...keys].map(([s, k]) => `${s}\t${k}`).join('\n') + '\n';
 
 /** → { added, updated, skipped, invalid, noKey, links: [{ slug, name, url }], keys } */
-export async function syncVenues({ store, venues, keys, publish = true }) {
+export async function syncVenues({ store, venues, keys, publish = true, adminKey = null }) {
   keys = new Map(keys);
   const r = { added: [], updated: [], skipped: [], invalid: [], noKey: [], links: [], keys };
   for (const raw of venues) {
@@ -54,6 +55,7 @@ export async function syncVenues({ store, venues, keys, publish = true }) {
       const key = keys.get(slug);
       if (!key || hashKey(key) !== existing.keyHash) { r.noKey.push(slug); continue; }
     }
+    if (adminKey) await store.setOwnerKeyEnc(slug, sealOwnerKey(adminKey, slug, keys.get(slug))); // for the private list
     r.links.push({ slug, name: facts.name, url: `https://${slug}.namax.at/?k=${keys.get(slug)}` });
   }
   return r;
@@ -99,7 +101,9 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     store = pgStore((t, p) => sql.query(t, p));
   }
   const keys = existsSync(KEYS_FILE) ? parseKeys(readFileSync(KEYS_FILE, 'utf8')) : new Map();
-  const r = await syncVenues({ store, venues, keys, publish: !a.hidden });
+  const adminKey = /^[0-9a-f]{32}$/.test(process.env.NAMAX_ADMIN_KEY || '') ? process.env.NAMAX_ADMIN_KEY : null;
+  if (a.write && !adminKey) console.warn('NAMAX_ADMIN_KEY missing in .env.local: owner links will not appear in the private list');
+  const r = await syncVenues({ store, venues, keys, publish: !a.hidden, adminKey });
   console.log(`${a.write ? 'WROTE' : 'DRY RUN (nothing written)'}: ${venues.length} picked · added ${r.added.length} · updated ${r.updated.length}`
     + ` · skipped (removed/do-not-contact) ${r.skipped.length} · invalid ${r.invalid.length} · no key ${r.noKey.length}`);
   for (const x of r.invalid.slice(0, 20)) console.log('  invalid ' + x);

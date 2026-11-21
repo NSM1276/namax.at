@@ -88,3 +88,17 @@ test('pickVenues leaves out venues whose own website works; dead, parked and pla
   const all = [v('aaa', 'own', 'works'), v('bbb', 'own', 'dead'), v('ccc', 'own', 'parked'), v('ddd', 'own', 'placeholder'), v('eee'), v('fff', 'platform', 'works')];
   assert.deepEqual(pickVenues(all).map((x) => x.slug), ['bbb', 'ccc', 'ddd', 'eee', 'fff']);
 });
+test('with an admin key, every venue that has a link also gets its owner key sealed for the private list', async () => {
+  const { openOwnerKey } = await import('../../api/_lib/venues/admin.mjs');
+  const ADMIN = 'e'.repeat(32);
+  const store = memoryStore();
+  const r1 = await syncVenues({ store, venues: [v('aaa')], keys: new Map(), adminKey: ADMIN });
+  const r2 = await syncVenues({ store, venues: [v('aaa'), v('bbb')], keys: r1.keys, adminKey: ADMIN });
+  for (const slug of ['aaa', 'bbb']) {
+    const row = (await store.listForAdmin()).find((x) => x.slug === slug);
+    assert.equal(openOwnerKey(ADMIN, slug, row.ownerKeyEnc), r2.keys.get(slug), slug);
+  }
+  const plain = memoryStore();
+  await syncVenues({ store: plain, venues: [v('ccc')], keys: new Map() });
+  assert.equal((await plain.listForAdmin())[0].ownerKeyEnc, null, 'without an admin key nothing is sealed');
+});

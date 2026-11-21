@@ -56,3 +56,6 @@ create table if not exists venue_model_calls (
   at    timestamptz not null default now()
 );
 create index if not exists venue_model_calls_slug on venue_model_calls (slug, at);
+
+-- Owner key sealed with the admin key (AES-GCM), so the private list can show owner links; null for older rows.
+alter table venues add column if not exists owner_key_enc text;

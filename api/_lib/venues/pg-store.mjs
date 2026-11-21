@@ -94,5 +94,12 @@ export function pgStore(query) {
     async listSlugs(status) {
       return (await query('select slug from venues where status = $1 order by slug', [status])).map((r) => r.slug);
     },
+    async setOwnerKeyEnc(slug, enc) { await query('update venues set owner_key_enc = $2 where slug = $1', [slug, enc]); },
+    async listForAdmin() {
+      const rows = await query(`select slug, status, facts, changes, confirmed_at, owner_key_enc
+        from venues where status <> 'removed' order by slug`);
+      return rows.map((r) => ({ slug: r.slug, status: r.status, facts: r.facts, changes: r.changes || {},
+        confirmedAt: iso(r.confirmed_at), ownerKeyEnc: r.owner_key_enc || null }));
+    },
   };
 }

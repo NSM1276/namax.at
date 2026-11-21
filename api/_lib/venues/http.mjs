@@ -6,6 +6,7 @@ import { slugFromHost, renderPage } from './page.mjs';
 import { isOwner, viennaDayStart, viennaDay } from './owner.mjs';
 import { chatTurn } from './assistant.mjs';
 import { effectiveVenue } from './merge.mjs';
+import { isAdmin, openOwnerKey, renderAdmin, ADMIN_KEY_HASH } from './admin.mjs';
 
 export const MAX_PHOTO_BYTES = 3 * 1024 * 1024;
 export const DAILY_PHOTOS = 12;
@@ -120,4 +121,17 @@ export async function handleOg(req, { store }) {
   // loaded here, not at the top: the renderer has wasm files, and the pages must never depend on them
   const { renderOg } = await import('./og.mjs');
   return renderOg(effectiveVenue(record, []));
+}
+
+/** Nasim's private list (www.namax.at/liste?k=…). A wrong or missing key gets the same 404 as any unknown path. */
+export async function handleAdmin(req, { store, adminKeyHash = ADMIN_KEY_HASH }) {
+  const key = new URL(req.url).searchParams.get('k') || '';
+  if (!isAdmin(key, adminKeyHash)) return text(404, 'Not found\n', 'no-store');
+  const rows = (await store.listForAdmin()).map((r) => {
+    const v = effectiveVenue(r, []);
+    const ownerKey = r.ownerKeyEnc ? openOwnerKey(key, r.slug, r.ownerKeyEnc) : null;
+    return { slug: r.slug, name: v.name, kind: v.kind, street: v.address?.street || '', district: r.facts.internal?.district || null,
+      status: r.status, confirmed: Boolean(r.confirmedAt), ownerUrl: ownerKey ? `https://${r.slug}.namax.at/?k=${ownerKey}` : null };
+  }).sort((a, b) => a.name.localeCompare(b.name, 'de'));
+  return new Response(renderAdmin(rows), { headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'private, no-store', 'X-Robots-Tag': 'noindex, nofollow' } });
 }
