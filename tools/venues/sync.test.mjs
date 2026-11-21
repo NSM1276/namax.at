@@ -22,15 +22,15 @@ test('new venues get a key whose hash is stored; the link carries the key', asyn
   assert.equal(r.keys.size, 2);
   const rec = await store.getVenue('aaa');
   assert.ok(isOwner(rec, r.keys.get('aaa')));
-  assert.equal(rec.status, 'hidden', 'hidden unless --public');
+  assert.equal(rec.status, 'public', 'public from the start');
   assert.equal(r.links[0].url, `https://aaa.namax.at/?k=${r.keys.get('aaa')}`);
   assert.equal(rec.facts.ready, undefined, 'build flags are not stored');
 });
 
-test('--public stores new venues as public', async () => {
+test('--hidden stores new venues with noindex', async () => {
   const store = memoryStore();
-  await syncVenues({ store, venues: [v('aaa')], keys: new Map(), publish: true });
-  assert.equal((await store.getVenue('aaa')).status, 'public');
+  await syncVenues({ store, venues: [v('aaa')], keys: new Map(), publish: false });
+  assert.equal((await store.getVenue('aaa')).status, 'hidden');
 });
 
 test('a second run updates facts, keeps key and status, and gives the same link', async () => {

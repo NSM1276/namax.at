@@ -1,6 +1,7 @@
 // Loads venue facts into the store and writes the owners' secret links.
 //
-//   node tools/venue-sync.mjs --city --district 12 --kind friseur [--limit 15] [--public] [--write]
+//   node tools/venue-sync.mjs --city --district 12 --kind friseur [--limit 15] [--hidden] [--write]
+//   New venues are public (in search) from the start, as agreed; --hidden stores them with noindex.
 //   node tools/venue-sync.mjs --files                     (venues/*.json)
 //
 // Without --write nothing leaves this computer: it runs against an empty in-memory store and prints what it would do.
@@ -29,7 +30,7 @@ export const parseKeys = (text) => new Map(String(text).split(/\r?\n/)
 export const formatKeys = (keys) => [...keys].map(([s, k]) => `${s}\t${k}`).join('\n') + '\n';
 
 /** → { added, updated, skipped, invalid, noKey, links: [{ slug, name, url }], keys } */
-export async function syncVenues({ store, venues, keys, publish = false }) {
+export async function syncVenues({ store, venues, keys, publish = true }) {
   keys = new Map(keys);
   const r = { added: [], updated: [], skipped: [], invalid: [], noKey: [], links: [], keys };
   for (const raw of venues) {
@@ -95,7 +96,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     store = pgStore((t, p) => sql.query(t, p));
   }
   const keys = existsSync(KEYS_FILE) ? parseKeys(readFileSync(KEYS_FILE, 'utf8')) : new Map();
-  const r = await syncVenues({ store, venues, keys, publish: Boolean(a.public) });
+  const r = await syncVenues({ store, venues, keys, publish: !a.hidden });
   console.log(`${a.write ? 'WROTE' : 'DRY RUN (nothing written)'}: ${venues.length} picked · added ${r.added.length} · updated ${r.updated.length}`
     + ` · skipped (removed/do-not-contact) ${r.skipped.length} · invalid ${r.invalid.length} · no key ${r.noKey.length}`);
   for (const x of r.invalid.slice(0, 20)) console.log('  invalid ' + x);

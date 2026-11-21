@@ -13,7 +13,7 @@
    node tools/venue-sync.mjs --city --district 12 --kind friseur --limit 15
    node tools/venue-sync.mjs --city --district 12 --kind friseur --limit 15 --write
    ```
-   Без `--public` страницы скрыты от поиска (`noindex`), но открываются по адресу. Ключи владельцев — в `venues/.keys.tsv`, ссылки — в `venues/.links-<дата>.md`. Оба файла не попадают в git. Никому их не пересылать целиком.
+   Страницы сразу открыты и попадают в Google и sitemap. Флаг `--hidden` — только если нужно спрятать пачку от поиска. Ключи владельцев — в `venues/.keys.tsv`, ссылки — в `venues/.links-<дата>.md`. Оба файла не попадают в git. Никому их не пересылать целиком.
 6. Каждое утро: `node tools/venue-inbox.mjs` — удаления (срочно), вопросы, изменения за сутки.
 
 ## Проверки после выкладки
