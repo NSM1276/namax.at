@@ -62,3 +62,22 @@ alter table venues add column if not exists owner_key_enc text;
 
 -- Photo of the venue's front, added by Nasim from the private list (Blob url); null when there is none.
 alter table venues add column if not exists facade_url text;
+
+-- The owner chat works only for venues Nasim opened it for after talking to the owner.
+alter table venues add column if not exists chat_open boolean not null default false;
+
+-- Requests from the "Sind Sie der Inhaber?" form; deleted 90 days after done, open ones after 180 days.
+create table if not exists venue_requests (
+  id       bigserial primary key,
+  slug     text not null references venues(slug) on delete cascade,
+  role     text not null check (role in ('owner', 'staff', 'other')),
+  wish     text not null check (wish in ('fix', 'photos', 'website', 'remove')),
+  name     text not null default '',
+  phone    text not null,
+  channel  text not null check (channel in ('call', 'whatsapp')),
+  text     text not null default '',
+  at       timestamptz not null default now(),
+  done_at  timestamptz
+);
+create index if not exists venue_requests_open on venue_requests (done_at, at);
+create index if not exists venue_requests_slug on venue_requests (slug, at);

@@ -13,13 +13,21 @@
 // recordModelCall(slug);  countModelCalls(slug, sinceIso?)
 // listSlugs(status) → slugs
 // setKeyHash(slug, hash);  setOwnerKeyEnc(slug, enc);  setFacade(slug, url|null)
-// listForAdmin() → [{ slug, status, facts, changes, confirmedAt, ownerKeyEnc, facadeUrl }] (not removed)
+// listForAdmin() → [{ slug, status, facts, changes, confirmedAt, ownerKeyEnc, facadeUrl, chatOpen }] (not removed)
+// setChatOpen(slug, bool): the owner chat works only for venues Nasim opened it for (closed by default)
+// addRequest(slug, { role, wish, name, phone, channel, text }) → id;  listRequests() (open first, website wishes first, newest)
+// setRequestDone(id, bool);  countRequestsSince(slug, iso);  purgeRequests(nowIso): done > 90 days, open > 180 days
 
 const clone = (x) => (x == null ? x : structuredClone(x));
+/** Open requests first, among them "own website" wishes first, then newest first. */
+const requestOrder = (a, b) => (Boolean(a.doneAt) - Boolean(b.doneAt))
+  || (!a.doneAt && ((b.wish === 'website') - (a.wish === 'website')))
+  || b.at.localeCompare(a.at) || b.id - a.id;
 
 export function memoryStore() {
   const venues = new Map();
   const messages = [], photos = [], events = [], hits = [], modelCalls = [];
+  let requests = [];
   let seq = 0;
   const nowIso = () => new Date().toISOString();
   const need = (slug) => {
@@ -31,7 +39,7 @@ export function memoryStore() {
   return {
     async getVenue(slug) {
       const v = venues.get(slug);
-      return v ? { facadeUrl: null, ...clone(v) } : null;
+      return v ? { facadeUrl: null, chatOpen: false, ...clone(v) } : null;
     },
     async upsertFacts(slug, { facts, keyHash, status = 'hidden' }) {
       const v = venues.get(slug);
@@ -123,7 +131,30 @@ export function memoryStore() {
     async listForAdmin() {
       return [...venues.values()].filter((v) => v.status !== 'removed').sort((a, b) => a.slug.localeCompare(b.slug))
         .map((v) => ({ slug: v.slug, status: v.status, facts: clone(v.facts), changes: clone(v.changes),
-          confirmedAt: v.confirmedAt, ownerKeyEnc: v.ownerKeyEnc || null, facadeUrl: v.facadeUrl || null }));
+          confirmedAt: v.confirmedAt, ownerKeyEnc: v.ownerKeyEnc || null, facadeUrl: v.facadeUrl || null, chatOpen: Boolean(v.chatOpen) }));
+    },
+    async setChatOpen(slug, open) { need(slug).chatOpen = Boolean(open); },
+
+    async addRequest(slug, { role, wish, name = '', phone, channel, text = '' }) {
+      need(slug);
+      const id = ++seq;
+      requests.push({ id, slug, role, wish, name, phone, channel, text, at: nowIso(), doneAt: null });
+      return id;
+    },
+    async listRequests() {
+      return requests.map((r) => ({ ...r, venueName: venues.get(r.slug)?.facts?.name ?? '' }))
+        .sort(requestOrder)
+        .map(({ id, slug, venueName, role, wish, name, phone, channel, text, at, doneAt }) =>
+          ({ id, slug, venueName, role, wish, name, phone, channel, text, at, doneAt }));
+    },
+    async setRequestDone(id, done) {
+      const r = requests.find((x) => x.id === Number(id));
+      if (r) r.doneAt = done ? nowIso() : null;
+    },
+    async countRequestsSince(slug, iso) { return requests.filter((r) => r.slug === slug && r.at >= iso).length; },
+    async purgeRequests(now) {
+      const t = Date.parse(now), day = 86_400_000;
+      requests = requests.filter((r) => (r.doneAt ? Date.parse(r.doneAt) >= t - 90 * day : Date.parse(r.at) >= t - 180 * day));
     },
   };
 }

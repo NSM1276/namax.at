@@ -12,11 +12,11 @@ export function pgStore(query) {
 
   return {
     async getVenue(slug) {
-      const r = await one(`select slug, key_hash, status, facts, changes, pending, confirmed_at, do_not_contact, chat_state, facade_url
+      const r = await one(`select slug, key_hash, status, facts, changes, pending, confirmed_at, do_not_contact, chat_state, facade_url, chat_open
         from venues where slug = $1`, [slug]);
       if (!r) return null;
       return { slug: r.slug, keyHash: r.key_hash, status: r.status, facts: r.facts, changes: r.changes || {},
-        pending: r.pending || null, confirmedAt: iso(r.confirmed_at), doNotContact: Boolean(r.do_not_contact), chatState: r.chat_state || {}, facadeUrl: r.facade_url || null };
+        pending: r.pending || null, confirmedAt: iso(r.confirmed_at), doNotContact: Boolean(r.do_not_contact), chatState: r.chat_state || {}, facadeUrl: r.facade_url || null, chatOpen: Boolean(r.chat_open) };
     },
     async upsertFacts(slug, { facts, keyHash, status = 'hidden' }) {
       await query(`insert into venues (slug, key_hash, status, facts) values ($1, $2, $3, $4::jsonb)
@@ -101,10 +101,34 @@ export function pgStore(query) {
     async setOwnerKeyEnc(slug, enc) { await query('update venues set owner_key_enc = $2 where slug = $1', [slug, enc]); },
     async setFacade(slug, url) { await query('update venues set facade_url = $2 where slug = $1', [slug, url || null]); },
     async listForAdmin() {
-      const rows = await query(`select slug, status, facts, changes, confirmed_at, owner_key_enc, facade_url
+      const rows = await query(`select slug, status, facts, changes, confirmed_at, owner_key_enc, facade_url, chat_open
         from venues where status <> 'removed' order by slug`);
       return rows.map((r) => ({ slug: r.slug, status: r.status, facts: r.facts, changes: r.changes || {},
-        confirmedAt: iso(r.confirmed_at), ownerKeyEnc: r.owner_key_enc || null, facadeUrl: r.facade_url || null }));
+        confirmedAt: iso(r.confirmed_at), ownerKeyEnc: r.owner_key_enc || null, facadeUrl: r.facade_url || null, chatOpen: Boolean(r.chat_open) }));
+    },
+    async setChatOpen(slug, open) { await query('update venues set chat_open = $2 where slug = $1', [slug, Boolean(open)]); },
+
+    async addRequest(slug, { role, wish, name = '', phone, channel, text = '' }) {
+      return num((await one(`insert into venue_requests (slug, role, wish, name, phone, channel, text)
+        values ($1, $2, $3, $4, $5, $6, $7) returning id`, [slug, role, wish, String(name), String(phone), channel, String(text)])).id);
+    },
+    async listRequests() {
+      const rows = await query(`select r.id, r.slug, coalesce(v.facts ->> 'name', '') as venue_name, r.role, r.wish, r.name, r.phone,
+          r.channel, r.text, r.at, r.done_at
+        from venue_requests r left join venues v on v.slug = r.slug
+        order by (r.done_at is not null), (r.done_at is null and r.wish = 'website') desc, r.at desc, r.id desc`);
+      return rows.map((r) => ({ id: num(r.id), slug: r.slug, venueName: r.venue_name, role: r.role, wish: r.wish, name: r.name,
+        phone: r.phone, channel: r.channel, text: r.text, at: iso(r.at), doneAt: iso(r.done_at) }));
+    },
+    async setRequestDone(id, done) {
+      await query(`update venue_requests set done_at = case when $2 then now() else null end where id = $1`, [num(id), Boolean(done)]);
+    },
+    async countRequestsSince(slug, since) {
+      return count('select count(*) as n from venue_requests where slug = $1 and at >= $2::timestamptz', [slug, since]);
+    },
+    async purgeRequests(now) {
+      await query(`delete from venue_requests where (done_at is not null and done_at < $1::timestamptz - interval '90 days')
+        or (done_at is null and at < $1::timestamptz - interval '180 days')`, [now]);
     },
   };
 }

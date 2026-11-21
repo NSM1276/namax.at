@@ -196,6 +196,68 @@ export function storeContract(makeStore, prefix = '') {
     const s = await fresh();
     assert.deepEqual((await s.listSlugs('public')).filter((x) => x.startsWith(prefix)), [A]);
   });
+
+  const req = (extra = {}) => ({ role: 'owner', wish: 'fix', name: 'Ali', phone: '+43 660 1234567', channel: 'call', text: 'Hallo', ...extra });
+  const mine = async (s) => (await s.listRequests()).filter((r) => r.slug.startsWith(prefix));
+
+  test('requests: add, list open first (website wishes first) then newest, mark done and back', async () => {
+    const s = await fresh();
+    const a = await s.addRequest(A, req());
+    const b = await s.addRequest(B, req({ wish: 'remove', channel: 'whatsapp' }));
+    const c = await s.addRequest(A, req({ wish: 'website' }));
+    await s.setRequestDone(b, true);
+    let rows = await mine(s);
+    assert.deepEqual(rows.map((r) => r.id), [c, a, b]);
+    assert.deepEqual({ ...rows[1], at: undefined }, { id: a, slug: A, venueName: 'X ' + A, role: 'owner', wish: 'fix', name: 'Ali',
+      phone: '+43 660 1234567', channel: 'call', text: 'Hallo', at: undefined, doneAt: null });
+    assert.ok(!Number.isNaN(Date.parse(rows[1].at)));
+    assert.ok(!Number.isNaN(Date.parse(rows[2].doneAt)));
+    assert.equal(rows[2].channel, 'whatsapp');
+    await s.setRequestDone(b, false);
+    rows = await mine(s);
+    assert.deepEqual(rows.map((r) => r.id), [c, b, a]);
+    assert.equal(rows.find((r) => r.id === b).doneAt, null);
+  });
+
+  test('requests: count per venue since a time', async () => {
+    const s = await fresh();
+    const before = new Date(Date.now() - 60_000).toISOString();
+    await s.addRequest(A, req()); await s.addRequest(A, req()); await s.addRequest(B, req());
+    assert.equal(await s.countRequestsSince(A, before), 2);
+    assert.equal(await s.countRequestsSince(B, before), 1);
+    assert.equal(await s.countRequestsSince(A, new Date(Date.now() + 60_000).toISOString()), 0);
+  });
+
+  test('requests: purge done after 90 days, open after 180 days', async () => {
+    const s = await fresh();
+    const open = await s.addRequest(A, req());
+    const done = await s.addRequest(A, req());
+    await s.setRequestDone(done, true);
+    const day = 86_400_000;
+    await s.purgeRequests(new Date().toISOString());
+    assert.equal((await mine(s)).length, 2);
+    await s.purgeRequests(new Date(Date.now() + 100 * day).toISOString());
+    assert.deepEqual((await mine(s)).map((r) => r.id), [open]);
+    await s.purgeRequests(new Date(Date.now() + 200 * day).toISOString());
+    assert.deepEqual(await mine(s), []);
+  });
+
+  test('requests: a removed venue\'s request keeps the venue name', async () => {
+    const s = await fresh();
+    await s.addRequest(A, req({ wish: 'remove' }));
+    await s.setStatus(A, 'removed');
+    assert.equal((await mine(s))[0].venueName, 'X ' + A);
+  });
+
+  test('chat: closed by default, opened and closed again', async () => {
+    const s = await fresh();
+    assert.equal((await s.getVenue(A)).chatOpen, false);
+    await s.setChatOpen(A, true);
+    assert.equal((await s.getVenue(A)).chatOpen, true);
+    assert.equal((await s.listForAdmin()).find((r) => r.slug === A).chatOpen, true);
+    await s.setChatOpen(A, false);
+    assert.equal((await s.getVenue(A)).chatOpen, false);
+  });
 }
 
 storeContract(() => memoryStore());
