@@ -137,14 +137,16 @@ function sign(v) {
 </div></header>`;
 }
 
-function mapsUrl(v) {
-  const q = encodeURIComponent(`${v.name}, ${v.address.street}, ${v.address.zip} ${v.address.city}`);
-  return `https://www.google.com/maps/dir/?api=1&destination=${q}`;
-}
+// Google Maps links send an iPhone without the Google app through the App Store; the page script
+// swaps in the data-apple link there, so iPhones open Apple Maps, which every iPhone has.
+const placeQuery = (v) => encodeURIComponent(`${v.name}, ${v.address.street}, ${v.address.zip} ${v.address.city}`);
+const mapAttrs = (google, apple) => `href="${esc(google)}" data-apple="${esc(apple)}"`;
+const routeAttrs = (v) => mapAttrs(`https://www.google.com/maps/dir/?api=1&destination=${placeQuery(v)}`, `https://maps.apple.com/?daddr=${placeQuery(v)}`);
+const placeAttrs = (v) => mapAttrs(`https://www.google.com/maps/search/?api=1&query=${placeQuery(v)}`, `https://maps.apple.com/?q=${placeQuery(v)}`);
 
 function actions(v) {
   const call = v.phone ? `<a class="btn primary" href="tel:${esc(v.phone)}">${ui('call')}</a>` : '';
-  return `<nav class="actions">${call}<a class="btn${v.phone ? '' : ' primary'}" href="${esc(mapsUrl(v))}" rel="noopener">${ui('route')}</a></nav>`;
+  return `<nav class="actions">${call}<a class="btn${v.phone ? '' : ' primary'}" ${routeAttrs(v)} rel="noopener">${ui('route')}</a></nav>`;
 }
 
 function board(v) {
@@ -205,7 +207,7 @@ function hoursTable(v) {
 function address(v) {
   const a = v.address;
   return `<section>${ui('addressTitle', 'h2')}<address>${esc(a.street)}<br>${esc(a.zip)} ${esc(a.city)}<br>
-<a href="${esc(mapsUrl(v))}" rel="noopener">${ui('mapLink')}</a></address></section>`;
+<a ${placeAttrs(v)} rel="noopener">${ui('mapLink')}</a></address></section>`;
 }
 
 function footer(v) {
@@ -243,6 +245,7 @@ for(var i=0;i<els.length;i++)els[i].textContent=els[i].getAttribute('data-'+l);
 var bs=document.querySelectorAll('[data-lang]');
 for(var j=0;j<bs.length;j++)bs[j].setAttribute('aria-pressed',String(bs[j].getAttribute('data-lang')===l));
 for(var k=0;k<onLang.length;k++)onLang[k]()}
+if(/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)){var am=document.querySelectorAll('[data-apple]');for(var m=0;m<am.length;m++)am[m].href=am[m].getAttribute('data-apple')}
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-lang]');if(!b)return;
 setLang(b.getAttribute('data-lang'));try{localStorage.setItem('namax-venue-lang',lang)}catch(e){}});
 `;

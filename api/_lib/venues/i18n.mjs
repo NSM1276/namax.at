@@ -2,7 +2,7 @@
 export const T = {
   de: {
     call: 'Anrufen', route: 'Route', chat: 'Chat öffnen',
-    hoursTitle: 'Öffnungszeiten', addressTitle: 'Adresse', mapLink: 'In Google Maps öffnen',
+    hoursTitle: 'Öffnungszeiten', addressTitle: 'Adresse', mapLink: 'Auf der Karte zeigen',
     closedDay: 'geschlossen', asOf: 'Stand', pricesNote: 'Preise können sich geändert haben.',
     ratingOf: 'von 5', reviewsOn: 'Bewertungen auf',
     walkIn: 'Ohne Termin', byAppointment: 'Mit Termin',
@@ -19,7 +19,7 @@ export const T = {
   },
   en: {
     call: 'Call', route: 'Directions', chat: 'Open chat',
-    hoursTitle: 'Opening hours', addressTitle: 'Address', mapLink: 'Open in Google Maps',
+    hoursTitle: 'Opening hours', addressTitle: 'Address', mapLink: 'Show on map',
     closedDay: 'closed', asOf: 'As of', pricesNote: 'Prices may have changed.',
     ratingOf: 'out of 5', reviewsOn: 'reviews on',
     walkIn: 'Walk-in, no appointment', byAppointment: 'By appointment',

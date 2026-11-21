@@ -94,3 +94,14 @@ test('the sign says what kind of place it is, in both languages, even when nothi
   assert.match(plate, /data-en="Phone shop · Meidling"/);
   assert.match(html, /<title>[^<]*Handyshop[^<]*<\/title>/);
 });
+
+test('map buttons: Google by default, Apple Maps on iPhone (no App Store detour), place view for the map link', () => {
+  const html = renderVenue({ ...load('minimal'), name: 'A & B', address: { street: 'Gasse 1', zip: '1120', city: 'Wien' } });
+  const q = encodeURIComponent('A & B, Gasse 1, 1120 Wien');
+  assert.ok(html.includes(`href="https://www.google.com/maps/dir/?api=1&amp;destination=${q}"`), 'route: Google directions');
+  assert.ok(html.includes(`data-apple="https://maps.apple.com/?daddr=${q}"`), 'route: Apple directions on iPhone');
+  assert.ok(html.includes(`href="https://www.google.com/maps/search/?api=1&amp;query=${q}"`), 'map link: Google place');
+  assert.ok(html.includes(`data-apple="https://maps.apple.com/?q=${q}"`), 'map link: Apple place on iPhone');
+  assert.match(html, /iPhone\|iPad\|iPod/);
+  assert.doesNotMatch(html, /In Google Maps öffnen/);
+});
