@@ -85,3 +85,12 @@ test('desktop: actions sit in a side card, the rest in the main column, phone or
   assert.match(html, /<aside class="side">[\s\S]*data-status[\s\S]*class="actions"[\s\S]*<\/aside><div class="col">[\s\S]*id="liste"[\s\S]*<\/div>\s*<footer>/);
   assert.match(html, /@media \(min-width:900px\)\{[^@]*?\.page\{display:grid/);
 });
+
+test('the sign says what kind of place it is, in both languages, even when nothing else is known', () => {
+  const v = { ...load('minimal'), kind: 'handy', area: 'Meidling' };
+  const html = renderVenue(v);
+  const plate = /<div class="plate">([\s\S]*?)<\/div>/.exec(html)[1];
+  assert.match(plate, /data-de="Handyshop · Meidling"/);
+  assert.match(plate, /data-en="Phone shop · Meidling"/);
+  assert.match(html, /<title>[^<]*Handyshop[^<]*<\/title>/);
+});

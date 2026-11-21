@@ -36,7 +36,7 @@ const comma = (n) => String(n).replace('.', ',');
 
 const titleOf = (v, lang) => {
   const kind = kindLabel(v.kind, lang);
-  return `${v.name} — ${v.area || [kind, v.address.zip + ' ' + v.address.city].filter(Boolean).join(', ')}`;
+  return `${v.name} — ${[kind, v.area || v.address.zip + ' ' + v.address.city].filter(Boolean).join(', ')}`;
 };
 
 function head(v, pal, let_) {
@@ -128,7 +128,9 @@ footer a{display:inline-flex;align-items:center;min-height:44px;margin-right:18p
 }
 
 function sign(v) {
-  const area = v.area ? `<p class="area">${esc(v.area)}</p>` : '';
+  // The small line above the name says what the place is, so a page with nothing else on it still makes sense.
+  const line = (lang) => [kindLabel(v.kind, lang), v.area].filter(Boolean).join(' · ');
+  const area = line('de') ? tr(line('de'), line('en'), 'p', 'class="area"') : '';
   return `<header class="sign"><div class="wrap">
 <div class="lang" role="group" aria-label="Sprache / Language"><button type="button" data-lang="de" lang="de" aria-label="Deutsch" aria-pressed="true">DE</button><button type="button" data-lang="en" lang="en" aria-label="English" aria-pressed="false">EN</button></div>
 <div class="plate">${area}<h1 lang="de"${titleSize(v.name)}>${esc(v.name)}</h1></div>
