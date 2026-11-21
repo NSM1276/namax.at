@@ -1,0 +1,228 @@
+<title>namax Stilproben</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Figtree:wght@400;500;600;700&family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;700&family=Syne:wght@600;700;800&display=swap">
+<style>
+/* Layout: a short Russian intro, then three phone-sized live previews side by side (stacked on a phone). */
+:root{
+  --bg:#eef0f3; --fg:#16181d; --muted:#5b616d; --line:#d5d9e0; --chip:#ffffff; --accent:#1f3d74;
+  --ui:'Figtree',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#121419;--fg:#eceef2;--muted:#9aa1ad;--line:#2a2e37;--chip:#1b1e25;--accent:#8fb0ea;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#121419;--fg:#eceef2;--muted:#9aa1ad;--line:#2a2e37;--chip:#1b1e25;--accent:#8fb0ea;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:16px/1.5 var(--ui)}
+.wrap{max-width:1180px;margin:0 auto;padding-block:28px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.intro{max-width:62ch}
+.intro h1{font:700 clamp(26px,4vw,34px)/1.15 var(--ui);margin:0 0 10px;text-wrap:balance}
+.intro p{margin:0 0 8px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:28px;margin-top:28px;align-items:start}
+.opt{min-width:0;display:flex;flex-direction:column;gap:12px}
+.opt-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.opt-head h2{margin:0;font:700 20px/1.2 var(--ui)}
+.opt-head span{font-weight:700;color:var(--accent);font-size:15px;letter-spacing:.08em}
+.opt p{margin:0;color:var(--muted);font-size:15px}
+.replay{align-self:flex-start;font:600 15px var(--ui);padding:9px 14px;border-radius:8px;border:1px solid var(--line);background:var(--chip);color:var(--fg);cursor:pointer}
+.replay:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.phone{position:relative;width:100%;max-width:360px;height:640px;border-radius:30px;overflow:hidden;border:8px solid #0d0f13;box-shadow:0 18px 40px rgba(10,14,24,.18);isolation:isolate}
+.screen{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden}
+.note{margin-top:36px;max-width:62ch;color:var(--muted);font-size:15px}
+
+/* Shared venue page pieces (inside previews; fixed colors per style, like the real pages) */
+.v{min-height:100%;display:flex;flex-direction:column}
+.v .body{padding:0 20px 20px;display:flex;flex-direction:column;gap:22px;flex:1}
+.v .btn{display:flex;align-items:center;justify-content:center;min-height:54px;border-radius:12px;font-weight:700;font-size:17px;text-decoration:none}
+.v h3{margin:0 0 6px}
+.v address{font-style:normal;line-height:1.5}
+.v .maplink{display:inline-block;margin-top:6px;font-weight:600}
+.v footer{margin-top:auto;padding-top:18px;font-size:12px;line-height:1.5;opacity:.75}
+.v .brand{display:flex;align-items:center;gap:6px;margin-top:10px;font-weight:700;letter-spacing:.04em}
+.v .brand i{width:8px;height:8px;border-radius:2px;display:inline-block}
+
+/* A · Wiener Emaille — the blue Vienna street sign: enamel plate, white inset rim, condensed caps */
+.a{background:#e9edf2;color:#152238;font-family:'Figtree',system-ui,sans-serif;
+   background-image:radial-gradient(rgba(21,34,56,.07) 1px,transparent 1.2px);background-size:7px 7px}
+.a .top{padding:40px 18px 26px;perspective:700px}
+.a .plate{position:relative;background:linear-gradient(160deg,#24467f,#16305d);color:#fff;border-radius:16px;padding:10px;box-shadow:0 14px 26px rgba(16,32,62,.35),inset 0 1px 0 rgba(255,255,255,.25);transform-origin:50% -20px;overflow:hidden}
+.a .rim{border:3px solid #fff;border-radius:10px;padding:22px 12px 20px;text-align:center}
+.a .kind{font:600 13px/1.2 'Figtree',sans-serif;letter-spacing:.22em;text-transform:uppercase;opacity:.9}
+.a .name{font:700 58px/.95 'Barlow Condensed','Arial Narrow',sans-serif;text-transform:uppercase;letter-spacing:.01em;margin:10px 0 4px}
+.a .district{font:600 13px/1.2 'Figtree',sans-serif;letter-spacing:.14em;opacity:.85}
+.a .gleam{position:absolute;inset:-40% auto -40% -60%;width:40%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-18deg);pointer-events:none}
+.a .screw{position:absolute;top:50%;width:7px;height:7px;margin-top:-3.5px;border-radius:50%;background:#c9d2df;box-shadow:inset 0 -1px 1px rgba(0,0,0,.35)}
+.a .screw.l{left:4px}.a .screw.r{right:4px}
+.a .btn{background:#1f3d74;color:#fff;box-shadow:0 6px 14px rgba(31,61,116,.25)}
+.a h3{font:700 24px/1 'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.03em}
+.a .maplink{color:#1f3d74}
+.a .brand i{background:#1f3d74}
+.play .a .plate{animation:a-swing 1.4s cubic-bezier(.2,.8,.25,1) both}
+.play .a .gleam{animation:a-gleam 1.1s ease-in-out 1.1s both}
+.play .a .rest{animation:fade-up .7s ease-out .7s both}
+@keyframes a-swing{0%{transform:translateY(-120%) rotateX(-55deg)}55%{transform:translateY(0) rotateX(10deg)}75%{transform:rotateX(-4deg)}100%{transform:none}}
+@keyframes a-gleam{from{left:-60%}to{left:130%}}
+
+/* B · Atelier — calm and expensive: porcelain white, ink green, big serif name, slow drifting light */
+.b{background:#f3f4f1;color:#1d2a24;font-family:'Instrument Sans',system-ui,sans-serif;position:relative;overflow:hidden}
+.b .glow{position:absolute;border-radius:50%;filter:blur(40px);opacity:.55;pointer-events:none;z-index:0}
+.b .g1{width:260px;height:260px;background:#bcd3c4;top:-80px;left:-90px;animation:drift1 16s ease-in-out infinite alternate}
+.b .g2{width:220px;height:220px;background:#e4d6c3;top:120px;right:-110px;animation:drift2 19s ease-in-out infinite alternate}
+.b .top,.b .body{position:relative;z-index:1}
+.b .top{padding:64px 26px 30px}
+.b .kind{font:500 12px/1 'Instrument Sans',sans-serif;letter-spacing:.24em;text-transform:uppercase;color:#4d6358}
+.b .name{font:400 74px/.95 'Instrument Serif',Georgia,serif;margin:14px 0 0;letter-spacing:-.01em}
+.b .name em{font-style:italic}
+.b .name span{display:inline-block}
+.b .rule{height:1px;background:#1d2a24;margin:22px 0 12px;transform-origin:left}
+.b .district{font-size:14px;color:#4d6358}
+.b .btn{background:#1d2a24;color:#f3f4f1;border-radius:999px}
+.b h3{font:400 30px/1 'Instrument Serif',serif}
+.b .maplink{color:#1d2a24}
+.b .brand i{background:#1d2a24;border-radius:50%}
+.play .b .name span{animation:rise .9s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--i) * 45ms + .15s)}
+.play .b .rule{animation:draw 1s cubic-bezier(.6,0,.2,1) .8s both}
+.play .b .kind,.play .b .district{animation:fade .8s ease-out .5s both}
+.play .b .rest{animation:fade-up .8s ease-out 1.1s both}
+@keyframes rise{from{opacity:0;transform:translateY(.45em)}to{opacity:1;transform:none}}
+@keyframes draw{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes drift1{to{transform:translate(70px,60px) scale(1.15)}}
+@keyframes drift2{to{transform:translate(-60px,80px) scale(.9)}}
+
+/* C · Abend — the shop at night: deep plum, warm lamp light moving, wide modern lettering */
+.c{background:#1c1522;color:#f4ece4;font-family:'Manrope',system-ui,sans-serif;position:relative;overflow:hidden}
+.c canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+.c .top,.c .body{position:relative;z-index:1}
+.c .top{padding:70px 22px 34px}
+.c .kind{display:inline-flex;align-items:center;gap:8px;font:700 12px/1 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#f2b866}
+.c .kind::before{content:"";width:8px;height:8px;border-radius:50%;background:#f2b866;box-shadow:0 0 12px #f2b866}
+.c .name{font:800 54px/.98 'Syne',system-ui,sans-serif;margin:14px 0 10px;letter-spacing:-.01em}
+.c .district{font-size:14px;color:#cbbfc9}
+.c .btn{background:#f2b866;color:#1c1522}
+.c h3{font:700 22px/1 'Syne',sans-serif}
+.c .maplink{color:#f2b866}
+.c .brand i{background:#f2b866}
+.play .c .name{animation:focus 1.3s ease-out .2s both}
+.play .c .kind{animation:fade .8s ease-out .1s both}
+.play .c .district,.play .c .rest{animation:fade-up .8s ease-out .9s both}
+@keyframes focus{from{opacity:0;filter:blur(14px);letter-spacing:.12em}to{opacity:1;filter:none}}
+
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes fade-up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="intro">
+    <h1>Как может выглядеть страница без данных</h1>
+    <p>Три направления. Везде одно и то же выдуманное кафе и только то, что у нас бывает почти всегда: название, вид, район, адрес. Ни фото, ни часов работы.</p>
+    <p>Откроется — анимация проиграется один раз. Кнопка «Ещё раз» запускает её снова. Листается внутри «телефона».</p>
+  </header>
+
+  <section class="grid">
+    <article class="opt">
+      <div class="opt-head"><h2>Wiener Emaille</h2><span>A</span></div>
+      <p>Как синяя венская табличка с названием улицы: эмаль, белая рамка, винтики. Табличка «подвешивается» и по ней пробегает блик. Узнаваемо венское, солидное.</p>
+      <div class="phone"><div class="screen play" data-s>
+        <div class="v a">
+          <div class="top"><div class="plate"><i class="screw l"></i><i class="screw r"></i><div class="rim">
+            <div class="kind">Café</div><div class="name">Café Mira</div><div class="district">12., MEIDLING</div>
+          </div><i class="gleam"></i></div></div>
+          <div class="body rest">
+            <a class="btn" href="#a">Route</a>
+            <section><h3>Adresse</h3><address>Ratschkygasse 12<br>1120 Wien</address><a class="maplink" href="#a">Auf der Karte zeigen</a></section>
+            <footer>Website von namax.at · Angaben nicht vom Inhaber bestätigt<br>Daten teilweise von © OpenStreetMap<div class="brand"><i></i>namax</div></footer>
+          </div>
+        </div>
+      </div></div>
+      <button class="replay" type="button" data-replay>Ещё раз</button>
+    </article>
+
+    <article class="opt">
+      <div class="opt-head"><h2>Atelier</h2><span>B</span></div>
+      <p>Спокойно и дорого: фарфорово-белый, тёмно-зелёный, крупное название классическим шрифтом. Буквы поднимаются по одной, на фоне медленно плывёт мягкий свет.</p>
+      <div class="phone"><div class="screen play" data-s>
+        <div class="v b">
+          <i class="glow g1"></i><i class="glow g2"></i>
+          <div class="top">
+            <div class="kind">Café · Meidling</div>
+            <div class="name" data-letters>Café <em>Mira</em></div>
+            <div class="rule"></div>
+            <div class="district">Ratschkygasse 12, 1120 Wien</div>
+          </div>
+          <div class="body rest">
+            <a class="btn" href="#b">Route</a>
+            <section><h3>Adresse</h3><address>Ratschkygasse 12<br>1120 Wien</address><a class="maplink" href="#b">Auf der Karte zeigen</a></section>
+            <footer>Website von namax.at · Angaben nicht vom Inhaber bestätigt<br>Daten teilweise von © OpenStreetMap<div class="brand"><i></i>namax</div></footer>
+          </div>
+        </div>
+      </div></div>
+      <button class="replay" type="button" data-replay>Ещё раз</button>
+    </article>
+
+    <article class="opt">
+      <div class="opt-head"><h2>Abend</h2><span>C</span></div>
+      <p>Заведение вечером: глубокий тёмный фон, по нему медленно движется тёплый свет, как от лампы в окне. Современный широкий шрифт, название «наводится на резкость».</p>
+      <div class="phone"><div class="screen play" data-s>
+        <div class="v c">
+          <canvas data-lamp></canvas>
+          <div class="top">
+            <div class="kind">Café · Meidling</div>
+            <div class="name">Café Mira</div>
+            <div class="district">Ratschkygasse 12, 1120 Wien</div>
+          </div>
+          <div class="body rest">
+            <a class="btn" href="#c">Route</a>
+            <section><h3>Adresse</h3><address>Ratschkygasse 12<br>1120 Wien</address><a class="maplink" href="#c">Auf der Karte zeigen</a></section>
+            <footer>Website von namax.at · Angaben nicht vom Inhaber bestätigt<br>Daten teilweise von © OpenStreetMap<div class="brand"><i></i>namax</div></footer>
+          </div>
+        </div>
+      </div></div>
+      <button class="replay" type="button" data-replay>Ещё раз</button>
+    </article>
+  </section>
+
+  <p class="note">Это пробы направления, а не готовые страницы. Цвета внутри одного направления потом подбираются под вид заведения или под вывеску с твоего фото. Выбранный шрифт станет фирменным для всех страниц namax.</p>
+</div>
+
+<script>
+(function(){
+  // Split the Atelier name into letters so they can rise one by one.
+  document.querySelectorAll('[data-letters]').forEach(function(el){
+    var i=0;
+    (function walk(node){
+      [].slice.call(node.childNodes).forEach(function(n){
+        if(n.nodeType===3){
+          var frag=document.createDocumentFragment();
+          n.textContent.split('').forEach(function(ch){
+            var s=document.createElement('span');s.textContent=ch===' '?' ':ch;s.style.setProperty('--i',i++);frag.appendChild(s);
+          });
+          node.replaceChild(frag,n);
+        } else walk(n);
+      });
+    })(el);
+  });
+
+  // Replay: restart the CSS animations of one preview.
+  document.querySelectorAll('[data-replay]').forEach(function(b){
+    b.addEventListener('click',function(){
+      var s=b.parentNode.querySelector('[data-s]');s.classList.remove('play');void s.offsetWidth;s.classList.add('play');s.scrollTop=0;
+    });
+  });
+  document.querySelectorAll('.v a[href^="#"]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault()})});
+
+  // Abend: two warm lamp glows drifting slowly on the dark background.
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('[data-lamp]').forEach(function(cv){
+    var ctx=cv.getContext('2d'),w=0,h=0,t0=performance.now();
+    function size(){var r=cv.getBoundingClientRect(),d=Math.min(2,window.devicePixelRatio||1);w=r.width;h=r.height;cv.width=w*d;cv.height=h*d;ctx.setTransform(d,0,0,d,0,0)}
+    function glow(x,y,r,c){var g=ctx.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,c);g.addColorStop(1,'rgba(28,21,34,0)');ctx.fillStyle=g;ctx.fillRect(0,0,w,h)}
+    function frame(now){
+      var t=(now-t0)/1000;ctx.clearRect(0,0,w,h);
+      glow(w*(.75+.12*Math.sin(t*.25)),h*(.12+.05*Math.cos(t*.31)),w*.85,'rgba(242,184,102,.30)');
+      glow(w*(.15+.10*Math.cos(t*.2)),h*(.42+.06*Math.sin(t*.27)),w*.7,'rgba(173,92,140,.22)');
+      if(!reduce)requestAnimationFrame(frame);
+    }
+    size();window.addEventListener('resize',size);requestAnimationFrame(frame);
+  });
+})();
+</script>
