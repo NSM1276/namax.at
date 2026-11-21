@@ -1,65 +1,65 @@
 # Owner requests in the private list — design
 
-Agreed with Nasim on 2026-11-22 (trimmed the same day: "не даём ли мы очень много бесплатно").
+Agreed with Nasim on 2026-11-22 (trimmed the same day: "не даём ли мы очень много бесплатно"; then: the owner must write first).
 
 ## Intent
 
-The free page is a hook for Nasim's sales talk ("your page is already with us, Google shows it"), not a free self-service tool.
-An owner who finds their page must be able to reach Nasim quietly; every such contact is a warm sales lead that Nasim
-answers himself, by phone, a few times a day (like the orders of his online shop: nothing needs to be instant).
+The free page is a hook for Nasim's sales talk, not a free self-service tool. The owner makes the first contact
+(form on the page, after finding it on Google, a postcard or a personal visit); Nasim answers that request himself,
+a few times a day (nothing needs to be instant). This also keeps it legal: in Austria § 174 TKG 2021 forbids advertising
+calls, e-mail and SMS without prior consent, to businesses too, and a published number is not consent (WKO).
+Answering the owner's own request is not cold contact.
 
 ## Goals
 
-- An owner who found their page can leave a request quietly, without a visible "I am the owner" button
-  that makes the page look unserious to normal visitors.
-- Requests land in the private list (www.namax.at/liste), which becomes Nasim's admin: search plus requests.
-- Nasim calls the business's own public number back. That call is the ownership check and the sales talk;
-  small fixes (hours, phone) he makes himself during the call.
+- An owner who found their page can leave a request quietly, without a visible "I am the owner" button.
+- The request is the owner's consent to be contacted on the number they typed, by the way they chose (call or WhatsApp).
+- Requests land in the private list (www.namax.at/liste), Nasim's admin: search plus requests.
+- After the talk, Nasim can open the chat for that one venue and send the owner their link.
 
-## Free vs paid
+## Free forever vs paid
 
-- Free: the page from public data, the quiet "Sind Sie der Inhaber?" form, fixes Nasim makes after talking to the owner.
-- Paid (later): own website and domain, photos, menu, booking, changes any time, the owner chat / Telegram.
+- Free forever: any text information (hours, phone, address, description, services and prices as text, languages, payment),
+  up to 3 photos, changes through the chat once Nasim opened it, the address `<name>.namax.at`
+  and the footer credit "Website von namax.at" (stays on free pages).
+- Paid: own domain and design without the credit, unlimited gallery, menu/price list designed, video,
+  online booking, Google profile and reviews care, Telegram bot, Nasim updating the page regularly.
 
-## Non-goals (later steps)
+## Non-goals (later)
 
-The owner chat on pages (switched off now, code kept; comes back as a paid feature together with Telegram),
-WhatsApp links with owner keys, staff links, e-mail notices, SMS codes, postcards with codes, automatic verification.
-Mass WhatsApp/SMS/e-mail to venues is not allowed (TKG §174); outreach stays personal visits, calls, postal mail.
+Telegram, staff links, e-mail notices, SMS codes, postcards with codes, automatic ownership checks, paid features themselves.
+No mass WhatsApp/SMS/e-mail/cold calls to venues; first touch is the page itself, postal mail or a personal visit.
 
 ## Anti-goals
 
 - A visible owner button on the page for every visitor.
-- Owners fixing everything themselves for free, so they never need to talk to Nasim.
-- A bot speaking for Nasim to thousands of owners.
-- Personal data (names, phone numbers) kept forever, or readable by anyone holding a screenshot of the list's URL.
-
-## Approaches considered
-
-- A. Requests inside the private list, Nasim calls back (chosen).
-- B. A plus self-service chat for owners: gives the product away, costs per message, removes the reason to talk. Rejected for now.
-- C. Telegram notices: not needed; Nasim checks the list a few times a day.
+- Nasim contacting a venue before it asked (cold call to the business number).
+- A bot talking to thousands of owners nobody has spoken to.
+- Personal data kept forever, or readable by anyone holding a screenshot of the list's URL.
 
 ## Design
 
 - Page footer: the grey line "Angaben nicht vom Inhaber bestätigt" gets a quiet link "Sind Sie der Inhaber?"
   (EN "Are you the owner?"). Only on unconfirmed pages, not in the owner's keyed view.
-  It opens a small dialog: "Kostenlos verwalten" with name, "Ihre Telefonnummer", optional message,
-  the line "Wir rufen Sie kurz an – über die Telefonnummer des Geschäfts.", a privacy link and "Anfrage senden".
-  Thanks text: "Danke! Wir melden uns, meist innerhalb eines Tages."
-- Public POST /api/venue/claim stores the request. Guards: unknown or removed venue → 404; honeypot field;
-  length limits; valid-looking phone; at most 3 requests per venue per Vienna day.
-- Owner chat off: pages opened with the owner key show the old bar with WhatsApp to Nasim instead of the chat;
-  POST /api/venue/chat answers 404 while it is off. One switch turns it back on later.
-- Storage: table venue_requests (id, slug, name, phone, text, at, done_at).
-- Private list start page: "Anfragen" block above the district buttons, open ones first with a count, newest first.
-  Each card: venue name (link to its page), when, name, typed phone, text; the business's own number(s) as
-  "Geschäft anrufen" (tel:), marked "gleiche Nummer" when it equals the typed one; "Kein Telefon – persönlich vorbeigehen"
-  when the business has no number; "Erledigt" / "Wieder offen". Done ones collapsed below "Erledigt (n)".
+  Dialog "Kostenlos verwalten": name, phone ("Ihre Telefonnummer"), "Wie dürfen wir Sie erreichen?" Anruf / WhatsApp,
+  optional message, honeypot, privacy link, the line "Mit dem Absenden sind Sie einverstanden, dass wir Sie dazu kontaktieren.",
+  button "Anfrage senden". Thanks: "Danke! Wir melden uns, meist innerhalb eines Tages."
+- Public POST /api/venue/claim stores the request with the chosen channel and the time (= consent time).
+  Guards: unknown or removed venue → 404; honeypot; length limits; valid-looking phone; ≤ 3 requests per venue per Vienna day.
+- Chat per venue: closed by default for every venue. Nasim opens it in the list ("Chat freischalten" / "Chat sperren")
+  after talking to the owner, then sends the owner link himself. A keyed page of a venue with a closed chat shows the
+  old bar with WhatsApp to Nasim; POST /api/venue/chat answers 404 for it.
+- Photos: at most 3 shown photos per free page (the facade picture is separate, as today).
+- Storage: table venue_requests (id, slug, name, phone, channel call|whatsapp, text, at, done_at);
+  venues get chat_open boolean default false.
+- Private list start page: "Anfragen" block above the district buttons, open first with a count, newest first.
+  Card: venue name (link), when, name, phone, chosen channel as the main button (tel: or wa.me to the typed number),
+  text, "Chat freischalten" for that venue, "Erledigt" / "Wieder offen". Done ones collapsed under "Erledigt (n)".
+  The venue card in the district view also gets the chat switch.
 - Login: /liste?k=KEY sets an HttpOnly, Secure, SameSite=Strict cookie and redirects to /liste without the key;
   later GETs and POSTs read the cookie (the key in the URL still works).
 - Retention: done requests deleted 90 days after done_at; open ones after 180 days. Purged when the list loads.
-- Privacy page (datenschutz.html, DE and EN): section #inhaber on the owner form: what is stored, why, how long.
+- Privacy page (datenschutz.html, DE and EN): section #inhaber: what is stored, why (answer the request), how long.
 
 ## Left to the builder
 
