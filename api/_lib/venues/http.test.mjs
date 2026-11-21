@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { memoryStore } from './store.mjs';
 import { hashKey } from './owner.mjs';
-import { handleChat, handlePhoto, handleHit, handlePage, handleSitemap, MAX_PHOTO_BYTES, DAILY_PHOTOS, MAX_STORED_PHOTOS } from './http.mjs';
+import { handleChat, handleClaim, handlePhoto, handleHit, handlePage, handleSitemap, MAX_PHOTO_BYTES, DAILY_PHOTOS, MAX_STORED_PHOTOS } from './http.mjs';
 
 const KEY = 'a'.repeat(32);
 const SLUG = 'friseur-meidling';
@@ -180,4 +180,55 @@ test('removing the page deletes its facade photo too', async () => {
   await handleChat(chatReq({ k: KEY, input: { chip: 'delete_yes' } }), s);
   assert.equal((await s.store.getVenue(SLUG)).facadeUrl, null);
   assert.ok(s.blob.deleted.includes('https://abc.public.blob.vercel-storage.com/venues/x/facade-1.jpg'));
+});
+
+const claimReq = (body, h = host) => new Request(`https://${h}/api/venue/claim`, { method: 'POST', headers: { host: h, 'content-type': 'application/json' }, body: JSON.stringify(body) });
+const claim = { role: 'owner', wish: 'website', name: 'Ali', phone: '+43 660 1234567', channel: 'whatsapp', text: 'Bitte melden' };
+
+test('claim: stores a request with role, wish and channel; the venue comes from the host', async () => {
+  const s = await services();
+  const r = await handleClaim(claimReq({ ...claim, slug: 'other-venue' }), s);
+  assert.equal(r.status, 200);
+  assert.deepEqual(await r.json(), { ok: true });
+  assert.equal(r.headers.get('cache-control'), 'private, no-store');
+  const [q] = await s.store.listRequests();
+  assert.equal(q.slug, SLUG); assert.equal(q.role, 'owner'); assert.equal(q.wish, 'website');
+  assert.equal(q.channel, 'whatsapp'); assert.equal(q.phone, '+43 660 1234567'); assert.equal(q.name, 'Ali'); assert.equal(q.text, 'Bitte melden');
+});
+
+test('claim: honeypot filled → 200 and nothing stored', async () => {
+  const s = await services();
+  const r = await handleClaim(claimReq({ ...claim, website: 'http://spam' }), s);
+  assert.equal(r.status, 200);
+  assert.deepEqual(await s.store.listRequests(), []);
+});
+
+test('claim: bad phone, role, wish, channel or lengths → 400', async () => {
+  const s = await services();
+  for (const bad of [{ phone: 'call me' }, { phone: '12345' }, { phone: '+43 660 123456789012345678' }, { phone: '' },
+    { role: 'boss' }, { wish: 'money' }, { channel: 'mail' }, { name: 'x'.repeat(81) }, { text: 'x'.repeat(501) }]) {
+    assert.equal((await handleClaim(claimReq({ ...claim, ...bad }), s)).status, 400, JSON.stringify(bad));
+  }
+  assert.equal((await handleClaim(new Request(`https://${host}/api/venue/claim`, { method: 'POST', headers: { host }, body: 'nope' }), s)).status, 400);
+  assert.deepEqual(await s.store.listRequests(), []);
+});
+
+test('claim: without a name or message is fine', async () => {
+  const s = await services();
+  assert.equal((await handleClaim(claimReq({ role: 'staff', wish: 'fix', phone: '01 234 5678', channel: 'call' }), s)).status, 200);
+});
+
+test('claim: 4th request for a venue in a Vienna day → 429', async () => {
+  const s = await services();
+  for (let i = 0; i < 3; i++) assert.equal((await handleClaim(claimReq(claim), s)).status, 200);
+  assert.equal((await handleClaim(claimReq(claim), s)).status, 429);
+  assert.equal((await s.store.listRequests()).length, 3);
+});
+
+test('claim: unknown or removed venue → 404; GET → 405', async () => {
+  const s = await services();
+  assert.equal((await handleClaim(claimReq(claim, 'nope.namax.at'), s)).status, 404);
+  await s.store.setStatus(SLUG, 'removed');
+  assert.equal((await handleClaim(claimReq(claim), s)).status, 404);
+  assert.equal((await handleClaim(new Request(`https://${host}/api/venue/claim`, { headers: { host } }), s)).status, 405);
 });

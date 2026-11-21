@@ -81,6 +81,35 @@ export async function handleChat(req, { store, llm, blob, now }) {
   return json(200, out);
 }
 
+export const CLAIM_ROLES = ['owner', 'staff', 'other'];
+export const CLAIM_WISHES = ['fix', 'photos', 'website', 'remove'];
+export const CLAIM_CHANNELS = ['call', 'whatsapp'];
+export const DAILY_CLAIMS = 3;
+const MAX_CLAIM_BODY = 4 * 1024;
+const PHONE = /^\+?[0-9 ()/-]{6,20}$/;
+const pick = (v, list) => (typeof v === 'string' && list.includes(v) ? v : null);
+
+/** "Sind Sie der Inhaber?" form: the owner writes first and agrees to be contacted on the number they typed.
+ *  The venue is the one of the Host header. A filled honeypot ("website") gets 200 and is dropped. */
+export async function handleClaim(req, { store, now = () => new Date() }) {
+  if (req.method !== 'POST') return fail(405, 'POST only');
+  const body = await readJson(req, MAX_CLAIM_BODY);
+  if (!body) return fail(400, 'bad request');
+  const slug = hostSlug(req);
+  const record = slug ? await store.getVenue(slug) : null;
+  if (!record || record.status === 'removed') return fail(404, 'not found');
+  if (typeof body.website === 'string' && body.website.trim()) return json(200, { ok: true });
+  const role = pick(body.role, CLAIM_ROLES), wish = pick(body.wish, CLAIM_WISHES), channel = pick(body.channel, CLAIM_CHANNELS);
+  const phone = typeof body.phone === 'string' ? body.phone.trim() : '';
+  const name = typeof body.name === 'string' ? body.name.trim() : '';
+  const message = typeof body.text === 'string' ? body.text.trim() : '';
+  if (!role || !wish || !channel || !PHONE.test(phone) || phone.replace(/\D/g, '').length < 6
+    || name.length > 80 || message.length > 500) return fail(400, 'bad request');
+  if (await store.countRequestsSince(slug, viennaDayStart(now())) >= DAILY_CLAIMS) return fail(429, 'too many');
+  await store.addRequest(slug, { role, wish, name, phone, channel, text: message });
+  return json(200, { ok: true });
+}
+
 /** Image type from the first bytes, or null. The browser's claimed type is not trusted. */
 function sniff(bytes) {
   const b = bytes.subarray(0, 12);
