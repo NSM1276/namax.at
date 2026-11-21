@@ -97,3 +97,10 @@ test('renderAdmin offers a "new link" button for every venue', () => {
   assert.match(html, /<html lang="de">/);
   assert.doesNotMatch(html, /[А-Яа-яЁё]/, "the list is in German: owners may see the screen");
 });
+
+test('every script in the list is closed and parses (search, chips and QR all depend on it)', () => {
+  const html = renderAdmin([{ slug: 'x-y', name: 'N', kind: 'cafe', street: 'S', district: 12, status: 'public', confirmed: false, ownerUrl: null }]);
+  assert.equal((html.match(/<script\b/g) || []).length, (html.match(/<\/script>/g) || []).length);
+  for (const m of html.matchAll(/<script>([\s\S]*?)<\/script>/g)) assert.doesNotThrow(() => new Function(m[1]));
+  assert.match(html, /addEventListener\('input'/);
+});
