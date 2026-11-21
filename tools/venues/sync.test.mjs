@@ -83,3 +83,8 @@ test('inbox: removals first and marked urgent, then questions, then changes', ()
   assert.match(text, /URGENT|Срочно/i);
   assert.match(inboxReport([]), /nothing|ничего/i);
 });
+test('pickVenues leaves out venues whose own website works; dead, parked and placeholder sites stay in', () => {
+  const v = (slug, site, state) => ({ slug, ready: true, internal: { district: 12, site, ...(state ? { siteCheck: { state } } : {}) } });
+  const all = [v('aaa', 'own', 'works'), v('bbb', 'own', 'dead'), v('ccc', 'own', 'parked'), v('ddd', 'own', 'placeholder'), v('eee'), v('fff', 'platform', 'works')];
+  assert.deepEqual(pickVenues(all).map((x) => x.slug), ['bbb', 'ccc', 'ddd', 'eee', 'fff']);
+});

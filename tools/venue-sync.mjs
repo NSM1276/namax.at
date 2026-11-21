@@ -18,8 +18,11 @@ import { memoryStore } from '../api/_lib/venues/store.mjs';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const KEYS_FILE = join(root, 'venues/.keys.tsv');
 
+/** A venue with its own working website promotes that site; a namax page would compete with it in Google. */
+export const hasWorkingSite = (v) => v.internal?.site === 'own' && v.internal?.siteCheck?.state === 'works';
+
 export function pickVenues(all, { district, kind, limit } = {}) {
-  let out = all.filter((v) => v.ready !== false);
+  let out = all.filter((v) => v.ready !== false && !hasWorkingSite(v));
   if (district != null) out = out.filter((v) => Number(v.internal?.district) === Number(district));
   if (kind) out = out.filter((v) => v.kind === kind);
   return limit ? out.slice(0, Number(limit)) : out;
