@@ -1,0 +1,6012 @@
+[
+ {
+  "osm": "node/267263160",
+  "name": "Beethoven",
+  "reason": "closed"
+ },
+ {
+  "osm": "node/334756594",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/353701627",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/443216735",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/571651943",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/821210016",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/848000101",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/848109557",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/848109565",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/848217157",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/848217223",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/848217287",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/848217332",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/894822766",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/897647935",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/902496936",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/921348845",
+  "name": "Pronto Volante",
+  "reason": "closed"
+ },
+ {
+  "osm": "node/930757024",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/948327006",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/1056601579",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/1092840936",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/1166238418",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/1222414772",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/1363149567",
+  "name": "Park Café Mauer",
+  "reason": "closed"
+ },
+ {
+  "osm": "node/1410806492",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/1433642896",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/1438241714",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/1438264971",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/1466973218",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/1467021002",
+  "name": "Mr. Schnitzel",
+  "reason": "closed"
+ },
+ {
+  "osm": "node/1467165232",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/1467240377",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/1467898719",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/1663164889",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/1692181464",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/1723106573",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/1723342429",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/1739339787",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/1791246658",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/1857389439",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/1861667217",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/2122758094",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/2328756888",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/2372320952",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/2407817833",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/2510053090",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/2594471070",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/3259514301",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/3393254261",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/3597870582",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/3706316345",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/3732508725",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/3764150042",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/3792882677",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/3819795111",
+  "name": "Cio's",
+  "reason": "closed"
+ },
+ {
+  "osm": "node/3892972958",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/4090397038",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/4307268514",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/4327132267",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/4465559989",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/5026447761",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/5151800190",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/5297618551",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/5299907420",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/5336479378",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/5336479388",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/5564359012",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/5741176799",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/5741176800",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/5874073983",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/6119358985",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/6276938090",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/6276938091",
+  "name": "Döner am Block",
+  "reason": "closed"
+ },
+ {
+  "osm": "node/6289242872",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/6308843734",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/6344270195",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/6397265278",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/6499816885",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/6579797542",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/6780741904",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/6919417274",
+  "name": "Aangan Restaurant",
+  "reason": "closed"
+ },
+ {
+  "osm": "node/7188608839",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/7832417073",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/7838815523",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/8039570478",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/8118347858",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/8188171717",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/8188172017",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/8249747840",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/8342511659",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/8357408758",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/8640798168",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/8645914094",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/8825704736",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/8911128947",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/9020712067",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/9107158166",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/9112460842",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/9138086278",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/9176063837",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/9178426604",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/9200392096",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/9256276193",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/9320600011",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/9320682535",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/9457806435",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/9725532853",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/9829302025",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/9845936470",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/10017351722",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/10024164848",
+  "name": "Martina Wildner",
+  "reason": "closed"
+ },
+ {
+  "osm": "node/10079960217",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/10133117375",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/10171734563",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/10186143330",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/10315241340",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/10564942732",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/10701280744",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/11079936161",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/11086820005",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/11195762111",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/11203389149",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/11304911973",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/11383261912",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/11479636641",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/11488977557",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/11663014839",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/11809674617",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/11833694734",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/11983086024",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/12155981553",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/12216268483",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/12486592866",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/12620742009",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/13046328601",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/13059659460",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/13314794861",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/13320111664",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/13363305493",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/13367688603",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/13369102624",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/13369236236",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/13483464985",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/13544038844",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/13569839872",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/13569869620",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/13747509901",
+  "name": "Würstelstand",
+  "reason": "closed"
+ },
+ {
+  "osm": "node/13779321658",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/13796387635",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/13881477397",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/13909450553",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/14125514166",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/14148881313",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/14150019821",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/14174921626",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/14203888038",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/14243232270",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/14243469442",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/14248044927",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/14321787501",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/14331132585",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/14374538591",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/14399189214",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/14399214764",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/14399271006",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "way/179505979",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "way/203008522",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "way/223866106",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "way/285192506",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "way/330596995",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "way/334946769",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "way/355125513",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "way/473355377",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "way/492078424",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "way/968464836",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "way/1319232665",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "way/1339887432",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "way/1565551423",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/29801740",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 2,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/115212652",
+  "name": "Hitomi",
+  "reason": "chain",
+  "detail": "same name in 6 districts",
+  "district": 3,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/115513011",
+  "name": "Aida",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 3,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/224593914",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 21,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/249510945",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 16,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/250601788",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/251208541",
+  "name": "Nordsee",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 18,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/256423371",
+  "name": "Noodle King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 18,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/265002408",
+  "name": "Bäckerei Schwarz",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 13,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/269208773",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/269209053",
+  "name": "Akakiko",
+  "reason": "chain",
+  "detail": "same name in 8 districts",
+  "district": 1,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/269209054",
+  "name": "Aida",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/288187563",
+  "name": "Kurkonditorei Oberlaa",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 18,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/295413440",
+  "name": "Trześniewski",
+  "reason": "chain",
+  "detail": "same name in 11 districts",
+  "district": 18,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/306001362",
+  "name": "Radatz",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 18,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/323243151",
+  "name": "Der Mann",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 23,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/331467855",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 19,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/333052979",
+  "name": "Aida",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 20,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/333124186",
+  "name": "Tauber",
+  "reason": "chain",
+  "detail": "same name in 6 districts",
+  "district": 20,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/334634963",
+  "name": "Fladerei Salzgries",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/334793287",
+  "name": "Café Dommayer",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 13,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/335448900",
+  "name": "Subway",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/341255640",
+  "name": "Anker",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 9,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/342303156",
+  "name": "Hitomi",
+  "reason": "chain",
+  "detail": "same name in 6 districts",
+  "district": 3,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/342306957",
+  "name": "Starbucks",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 3,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/344481901",
+  "name": "Aida",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 9,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/344666078",
+  "name": "Kurkonditorei Oberlaa",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 3,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/344923915",
+  "name": "Eduscho / Tchibo",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 3,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/344926482",
+  "name": "Duran",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 3,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/346283731",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 9,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/347439899",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 11,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/352985087",
+  "name": "Intercoiffeur Strassl Schaider",
+  "reason": "chain",
+  "detail": "same name in 7 districts",
+  "district": 21,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/353022689",
+  "name": "Le Burger",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 22,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/353071638",
+  "name": "Tchibo",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 21,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/355123976",
+  "name": "Peter Pane",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 6,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/355686988",
+  "name": "Akakiko",
+  "reason": "chain",
+  "detail": "same name in 8 districts",
+  "district": 9,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/356300860",
+  "name": "T-Mobile",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 21,
+  "kind": "handy"
+ },
+ {
+  "osm": "node/356308812",
+  "name": "Dönermeister",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 21,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/356311263",
+  "name": "Lucky Noodles",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 21,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/358089451",
+  "name": "Vapiano",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 6,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/360187852",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 12,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/361527735",
+  "name": "Wild Bean Cafe",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 17,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/365948552",
+  "name": "mobile house",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 21,
+  "kind": "handy"
+ },
+ {
+  "osm": "node/367817578",
+  "name": "Aida",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 2,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/369003366",
+  "name": "Klipp",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 3,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/370604374",
+  "name": "KLIPP Unser Friseur",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 22,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/394941625",
+  "name": "Kurkonditorei Oberlaa",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/409188534",
+  "name": "Starbucks",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 6,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/418164969",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/421728768",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 6,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/429886695",
+  "name": "KFC",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 6,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/430385731",
+  "name": "Burger King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 20,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/440956457",
+  "name": "Burger King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 15,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/441346647",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 15,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/441878720",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 7,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/442051738",
+  "name": "Kurkonditorei Oberlaa",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 19,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/442981702",
+  "name": "Aida",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 7,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/443503613",
+  "name": "Fat Monk",
+  "reason": "chain",
+  "detail": "same name in 6 districts",
+  "district": 1,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/451731690",
+  "name": "Akakiko",
+  "reason": "chain",
+  "detail": "same name in 8 districts",
+  "district": 13,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/460606049",
+  "name": "KFC",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 22,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/467077918",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 23,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/476576751",
+  "name": "Radatz",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 4,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/476609598",
+  "name": "Fladerei Mittersteig",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 4,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/499643069",
+  "name": "Retsina",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 1,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/524581338",
+  "name": "Aida",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 4,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/540677157",
+  "name": "Vapiano",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/549357083",
+  "name": "Der Mann",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/549357084",
+  "name": "Aida",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/564153820",
+  "name": "Akakiko",
+  "reason": "chain",
+  "detail": "same name in 8 districts",
+  "district": 1,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/598634155",
+  "name": "Aida",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 10,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/598634963",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 10,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/601412758",
+  "name": "Nordsee",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/601412786",
+  "name": "Starbucks",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/611890966",
+  "name": "Aida",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 13,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/619522966",
+  "name": "Aida",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 9,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/627834757",
+  "name": "Noodle King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 4,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/631852939",
+  "name": "Segafredo",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 12,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/636138706",
+  "name": "Radatz",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 8,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/653112532",
+  "name": "Anker",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/668640708",
+  "name": "Aida",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/672462987",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 14,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/703372419",
+  "name": "Türkis",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 7,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/730754885",
+  "name": "Radatz",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 21,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/808610393",
+  "name": "Kaiser's",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 10,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/809561686",
+  "name": "Akakiko",
+  "reason": "chain",
+  "detail": "same name in 8 districts",
+  "district": 10,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/809580005",
+  "name": "Fladerei",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 10,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/822164590",
+  "name": "Alaturka",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 12,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/853253088",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 20,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/871777981",
+  "name": "Dönermeister",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 17,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/873879797",
+  "name": "Türkis (To Go)",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 22,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/892215600",
+  "name": "Burger King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 10,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/892215628",
+  "name": "Burger King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/915174257",
+  "name": "Sun Company",
+  "reason": "chain",
+  "detail": "same name in 8 districts",
+  "district": 10,
+  "kind": "kosmetik"
+ },
+ {
+  "osm": "node/941388867",
+  "name": "Aida",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 22,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/948605663",
+  "name": "Nordsee",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/956430125",
+  "name": "XO Grill",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/956430160",
+  "name": "Aida",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/957695882",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/964884519",
+  "name": "Demel",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 1,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/1123868875",
+  "name": "Sun Company",
+  "reason": "chain",
+  "detail": "same name in 8 districts",
+  "district": 2,
+  "kind": "kosmetik"
+ },
+ {
+  "osm": "node/1166288442",
+  "name": "Edo",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 19,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/1166812231",
+  "name": "Tchibo",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 18,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/1202206533",
+  "name": "Subway",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/1209065931",
+  "name": "Hühnerparadies",
+  "reason": "chain",
+  "detail": "same name in 7 districts",
+  "district": 20,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/1363127131",
+  "name": "Der Mann",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 23,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/1363142302",
+  "name": "Radatz",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 23,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/1367163748",
+  "name": "Klipp",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 12,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/1371534685",
+  "name": "Tian Bistro",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 7,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/1382825037",
+  "name": "Burger King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 22,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/1382825049",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 22,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/1382931199",
+  "name": "Aida",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 9,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/1418445193",
+  "name": "Fladerei Berggasse",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 9,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/1426806930",
+  "name": "Figlmüller",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 1,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/1438788599",
+  "name": "Nordsee",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/1438797383",
+  "name": "Radatz",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 2,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/1445235611",
+  "name": "Retsina",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 16,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/1460955453",
+  "name": "Dunkin'",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 7,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/1460958817",
+  "name": "Radatz",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 7,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/1467109667",
+  "name": "Alaturka",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 15,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/1467252785",
+  "name": "Kenny's",
+  "reason": "chain",
+  "detail": "same name in 8 districts",
+  "district": 9,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/1467290114",
+  "name": "Intercoiffeur Strassl Schaider",
+  "reason": "chain",
+  "detail": "same name in 7 districts",
+  "district": 20,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/1467928664",
+  "name": "Klipp",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 7,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/1510712286",
+  "name": "Klipp",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 8,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/1510779819",
+  "name": "Akakiko",
+  "reason": "chain",
+  "detail": "same name in 8 districts",
+  "district": 7,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/1544599580",
+  "name": "Kurkonditorei Oberlaa",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 8,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/1546345158",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 2,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/1590887952",
+  "name": "Klipp",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 3,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/1618097105",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 11,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/1630522651",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 9,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/1645554194",
+  "name": "Hackinger",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 13,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/1686473987",
+  "name": "Groissböck",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 10,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/1692181465",
+  "name": "Coffee break",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 9,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/1694921159",
+  "name": "Radatz",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 10,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/1717868163",
+  "name": "Retsina",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 17,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/1744479797",
+  "name": "Hair Fair",
+  "reason": "chain",
+  "detail": "same name in 10 districts",
+  "district": 20,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/1802230465",
+  "name": "Cigköftem",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 21,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/1802230856",
+  "name": "Segafredo",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 21,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/1896102128",
+  "name": "Café & Konditorei Groissböck",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 12,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/1921837840",
+  "name": "Honu Tiki Bowls",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 6,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/1930122955",
+  "name": "Radatz",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 3,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/1940087462",
+  "name": "Nordsee",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 3,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/1940087614",
+  "name": "Trześniewski",
+  "reason": "chain",
+  "detail": "same name in 11 districts",
+  "district": 3,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/1944670150",
+  "name": "Starbucks",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/1954556171",
+  "name": "Anker",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/1958068785",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/2010396616",
+  "name": "Ebi",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 21,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/2076221292",
+  "name": "Retsina",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 14,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/2090010629",
+  "name": "Klipp",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 9,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/2098809987",
+  "name": "l'autentico",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 9,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/2211705470",
+  "name": "Frisör Klier",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 11,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/2211705474",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 11,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/2231733068",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 14,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/2311223082",
+  "name": "T-Mobile",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 10,
+  "kind": "handy"
+ },
+ {
+  "osm": "node/2311414931",
+  "name": "Burger King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 10,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/2311414967",
+  "name": "T-Mobile",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 10,
+  "kind": "handy"
+ },
+ {
+  "osm": "node/2324636489",
+  "name": "Klipp",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 3,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/2334354199",
+  "name": "Aida",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 21,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/2334354201",
+  "name": "Akakiko",
+  "reason": "chain",
+  "detail": "same name in 8 districts",
+  "district": 21,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/2353486358",
+  "name": "Segafredo",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 12,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/2377471513",
+  "name": "Loving Hut",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 7,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/2411881268",
+  "name": "Noodle King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 20,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/2458558762",
+  "name": "Honu",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 13,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/2463089725",
+  "name": "Starbucks",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/2467188689",
+  "name": "l'autentico",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 7,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/2473490459",
+  "name": "ra'mien go",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 20,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/2500806638",
+  "name": "Interspar Restaurant",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 22,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/2500823773",
+  "name": "Nordsee Restaurant",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 22,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/2500863847",
+  "name": "Subway",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 22,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/2502503709",
+  "name": "Noodle King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 22,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/2505312397",
+  "name": "Klipp",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 2,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/2505312495",
+  "name": "T-Mobile",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 2,
+  "kind": "handy"
+ },
+ {
+  "osm": "node/2517094484",
+  "name": "Noodle King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 11,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/2531301389",
+  "name": "Aida",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 7,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/2532609143",
+  "name": "Aida",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 6,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/2617056382",
+  "name": "Akakiko",
+  "reason": "chain",
+  "detail": "same name in 8 districts",
+  "district": 1,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/2619551532",
+  "name": "bei mobile",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 17,
+  "kind": "handy"
+ },
+ {
+  "osm": "node/2619598579",
+  "name": "Tchibo",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 17,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/2631754846",
+  "name": "Trześniewski",
+  "reason": "chain",
+  "detail": "same name in 11 districts",
+  "district": 13,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/2662867534",
+  "name": "Klipp",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 20,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/2662987523",
+  "name": "Honu Tiki Bowls",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 9,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/2694396478",
+  "name": "Radatz",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 13,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/2701010146",
+  "name": "Starbucks",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 7,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/2730139238",
+  "name": "Trześniewski",
+  "reason": "chain",
+  "detail": "same name in 11 districts",
+  "district": 1,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/2785273704",
+  "name": "hair fair",
+  "reason": "chain",
+  "detail": "same name in 10 districts",
+  "district": 8,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/2833709343",
+  "name": "Aida",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 17,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/2837661101",
+  "name": "Cafe Restaurant Gerstner",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 13,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/2951940369",
+  "name": "Fat Monk",
+  "reason": "chain",
+  "detail": "same name in 6 districts",
+  "district": 2,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/2984119621",
+  "name": "Hard Rock Cafe",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/3002971607",
+  "name": "L'Osteria",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/3026894041",
+  "name": "KFC",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 20,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/3026894042",
+  "name": "Le Burger Pop Up",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 20,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/3026894043",
+  "name": "Subway",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 20,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/3027848320",
+  "name": "Noodle King",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 19,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/3157975760",
+  "name": "Radatz",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 19,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/3186700562",
+  "name": "Jonas Reindl",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 9,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/3229514447",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 2,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/3324026465",
+  "name": "Alaturka",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 23,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/3351860350",
+  "name": "Interspar Restaurant",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 17,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/3382140693",
+  "name": "Kaiser's",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 10,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/3382805455",
+  "name": "K. u. K. Hoflieferanten - Gerstner & Schlumberger",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 1,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/3387552091",
+  "name": "Brass Monkey",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 6,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/3455494412",
+  "name": "Akakiko",
+  "reason": "chain",
+  "detail": "same name in 8 districts",
+  "district": 3,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/3463194593",
+  "name": "Der Mann",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 10,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/3524330334",
+  "name": "Coffeeshop Company",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 3,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/3603561820",
+  "name": "Hair-Fair",
+  "reason": "chain",
+  "detail": "same name in 10 districts",
+  "district": 2,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/3603561833",
+  "name": "Tchibo",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 2,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/3636472606",
+  "name": "Intercoiffeur Strassl Schaider",
+  "reason": "chain",
+  "detail": "same name in 7 districts",
+  "district": 8,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/3666488092",
+  "name": "Shiso Burger",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/3666488097",
+  "name": "ra'mien go",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 1,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/3666488098",
+  "name": "Radatz",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/3697202196",
+  "name": "Apapika",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 3,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/3707663429",
+  "name": "Figlmüller",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 1,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/3709492567",
+  "name": "Julius Meinl",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/3714264301",
+  "name": "Cigköftem",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 15,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/3716880892",
+  "name": "Kenny's",
+  "reason": "chain",
+  "detail": "same name in 8 districts",
+  "district": 2,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/3728573326",
+  "name": "Leberkas-Pepi",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/3730238198",
+  "name": "Lucky Noodles",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 10,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/3730286951",
+  "name": "Hair Fair",
+  "reason": "chain",
+  "detail": "same name in 10 districts",
+  "district": 10,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/3764150041",
+  "name": "Noodle King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 15,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/3792870134",
+  "name": "Noodle King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 12,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/3806505736",
+  "name": "Radatz",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 13,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/3815188957",
+  "name": "Noodle King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 13,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/3924275100",
+  "name": "Weinschenke",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 5,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/3952194516",
+  "name": "Noodle King",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 20,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/3956803773",
+  "name": "HAIR FAIR",
+  "reason": "chain",
+  "detail": "same name in 10 districts",
+  "district": 21,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/3964339847",
+  "name": "Groissböck",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 10,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/3994209817",
+  "name": "Fat Monk",
+  "reason": "chain",
+  "detail": "same name in 6 districts",
+  "district": 4,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/4031227335",
+  "name": "Honu Tiki Bowls",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 18,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/4055216874",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 12,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/4055230501",
+  "name": "Subway",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 12,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/4090395119",
+  "name": "Ströck",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 3,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/4156396894",
+  "name": "Honu",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 1,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/4163604659",
+  "name": "Café Sacher Wien",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 1,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/4208932159",
+  "name": "Veggiezz",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/4234514091",
+  "name": "Segafredo",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/4240067776",
+  "name": "Hühnerparadies",
+  "reason": "chain",
+  "detail": "same name in 7 districts",
+  "district": 17,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/4280564309",
+  "name": "L'Osteria",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 2,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/4318578994",
+  "name": "Admiral Sportwetten",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 21,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/4327132266",
+  "name": "Hühnerparadies",
+  "reason": "chain",
+  "detail": "same name in 7 districts",
+  "district": 21,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/4335428999",
+  "name": "Türkis",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/4335429000",
+  "name": "Türkis",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 7,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/4343933715",
+  "name": "Hair-Fair",
+  "reason": "chain",
+  "detail": "same name in 10 districts",
+  "district": 15,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/4361304808",
+  "name": "Le Burger",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 7,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/4432467430",
+  "name": "Som Kitchen",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 6,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/4437947523",
+  "name": "Klipp",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 21,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/4461966576",
+  "name": "Coffeeshop Company",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 9,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/4493360724",
+  "name": "T-Mobile",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 18,
+  "kind": "handy"
+ },
+ {
+  "osm": "node/4584003378",
+  "name": "Interspar Restaurant",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 11,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/4584003381",
+  "name": "Drei",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 11,
+  "kind": "handy"
+ },
+ {
+  "osm": "node/4600634413",
+  "name": "l'autentico",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 19,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/4675478594",
+  "name": "Mochi Ramen Bar",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 2,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/4693683906",
+  "name": "Knize",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "schneider"
+ },
+ {
+  "osm": "node/4805517222",
+  "name": "o-m-k - O mochi kaeri",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 2,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/4830079993",
+  "name": "Edo",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 9,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/4832711323",
+  "name": "Burger King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 17,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/4852403788",
+  "name": "Block House",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 6,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/4867931842",
+  "name": "Admiral Sportsbar",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 21,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/4878155521",
+  "name": "Drei",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 21,
+  "kind": "handy"
+ },
+ {
+  "osm": "node/4895877657",
+  "name": "XXXL Restaurant XXXLutz",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 6,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/4921950119",
+  "name": "Starbucks",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 20,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/4958728806",
+  "name": "Haas & Haas",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 1,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/4963522036",
+  "name": "Swing Kitchen",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 8,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/4979493277",
+  "name": "Markt Küche Billa",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 11,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/5007092121",
+  "name": "Veggiezz",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/5065127625",
+  "name": "Max & Benito",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 1,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/5065127649",
+  "name": "Radatz",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/5075059275",
+  "name": "Som Kitchen",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 9,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/5075059281",
+  "name": "Noodle King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 9,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/5094968123",
+  "name": "KFC",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 15,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/5114872471",
+  "name": "T-Mobile",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 6,
+  "kind": "handy"
+ },
+ {
+  "osm": "node/5114872472",
+  "name": "Vitavien",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 6,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/5135844501",
+  "name": "A1",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 11,
+  "kind": "handy"
+ },
+ {
+  "osm": "node/5231041874",
+  "name": "Drei Shop",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 16,
+  "kind": "handy"
+ },
+ {
+  "osm": "node/5250481428",
+  "name": "Dean & David",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 12,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/5257379816",
+  "name": "Mochi",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 2,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/5306717665",
+  "name": "Honu",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 3,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/5316235769",
+  "name": "Admiral Sportwetten",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 14,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/5316611640",
+  "name": "Ebi",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 1,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/5364762597",
+  "name": "Drei Shop",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 18,
+  "kind": "handy"
+ },
+ {
+  "osm": "node/5403263169",
+  "name": "Noodle King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 15,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/5415132660",
+  "name": "drei shop",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 13,
+  "kind": "handy"
+ },
+ {
+  "osm": "node/5415132669",
+  "name": "T-Mobile",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 13,
+  "kind": "handy"
+ },
+ {
+  "osm": "node/5445872971",
+  "name": "Ha Ha Sushi",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/5508451038",
+  "name": "Klipp",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 9,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/5514490634",
+  "name": "dean&david",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 10,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/5538429836",
+  "name": "Kurkonditorei Oberlaa",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 11,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/5643682360",
+  "name": "Noodle King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 3,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/5722106966",
+  "name": "Tauber",
+  "reason": "chain",
+  "detail": "same name in 6 districts",
+  "district": 11,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/5722106979",
+  "name": "T-Mobile",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 11,
+  "kind": "handy"
+ },
+ {
+  "osm": "node/5722139837",
+  "name": "Mobile House",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 11,
+  "kind": "handy"
+ },
+ {
+  "osm": "node/5722234333",
+  "name": "Hair Fair",
+  "reason": "chain",
+  "detail": "same name in 10 districts",
+  "district": 11,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/5834801372",
+  "name": "Noodle King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 19,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/5843803208",
+  "name": "T-Mobile",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 3,
+  "kind": "handy"
+ },
+ {
+  "osm": "node/5893291185",
+  "name": "Monami",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 6,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/5914166733",
+  "name": "KFC",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 21,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/6015488142",
+  "name": "Jonas Reindl",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 7,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/6019440886",
+  "name": "Maíz",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 5,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/6093020787",
+  "name": "Honu Tiki Bowls",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 1,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/6148340770",
+  "name": "Çiğköftem",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 20,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/6167346532",
+  "name": "Haas & Haas",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 1,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/6209274799",
+  "name": "Kenny's",
+  "reason": "chain",
+  "detail": "same name in 8 districts",
+  "district": 4,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/6209276060",
+  "name": "Kenny's",
+  "reason": "chain",
+  "detail": "same name in 8 districts",
+  "district": 10,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/6235890860",
+  "name": "Noodle King",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 23,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/6262287564",
+  "name": "Fladerei",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 6,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/6306117482",
+  "name": "Apapika",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 9,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/6323495086",
+  "name": "Sacher Eck",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 1,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/6323495092",
+  "name": "Sacher Salon",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 1,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/6379024038",
+  "name": "Radatz",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 10,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/6379118341",
+  "name": "Drei",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 10,
+  "kind": "handy"
+ },
+ {
+  "osm": "node/6379164524",
+  "name": "Tchibo",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 10,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/6384372382",
+  "name": "Vitavien",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 1,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/6412519317",
+  "name": "Noodle King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 2,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/6499310267",
+  "name": "Hair Fair",
+  "reason": "chain",
+  "detail": "same name in 10 districts",
+  "district": 9,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/6501108191",
+  "name": "Max & Benito",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 1,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/6548054299",
+  "name": "BundyBundy",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 3,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/6551088335",
+  "name": "Loving Hut",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 10,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/6757390496",
+  "name": "Swing Kitchen",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/6875338649",
+  "name": "Le Burger Rotenturmstraße",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 1,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/6935343691",
+  "name": "dönermeister",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 7,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/6952756976",
+  "name": "Kenny's",
+  "reason": "chain",
+  "detail": "same name in 8 districts",
+  "district": 10,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/6964580237",
+  "name": "Kurkonditorei Oberlaa",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 18,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/6968355859",
+  "name": "ebi",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 6,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/7056724586",
+  "name": "Geier",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 2,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/7104417931",
+  "name": "Starbucks",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/7114848485",
+  "name": "Vapiano",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 15,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/7213891885",
+  "name": "Vapiano",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 10,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/7286349921",
+  "name": "Sun Company",
+  "reason": "chain",
+  "detail": "same name in 8 districts",
+  "district": 22,
+  "kind": "kosmetik"
+ },
+ {
+  "osm": "node/7551612369",
+  "name": "Noodle King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 3,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/7570274616",
+  "name": "dm",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 2,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/7671695664",
+  "name": "dean&david",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 2,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/7832417062",
+  "name": "Sun Company",
+  "reason": "chain",
+  "detail": "same name in 8 districts",
+  "district": 11,
+  "kind": "kosmetik"
+ },
+ {
+  "osm": "node/7837440246",
+  "name": "Coffeeshop Company",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 9,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/7878632807",
+  "name": "Duran",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 20,
+  "kind": "schneider"
+ },
+ {
+  "osm": "node/7925867134",
+  "name": "YGF Hotpot",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 2,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/7959280835",
+  "name": "Hair Fair",
+  "reason": "chain",
+  "detail": "same name in 10 districts",
+  "district": 12,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/7964343927",
+  "name": "Max & Benito",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 2,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/7977683888",
+  "name": "Interspar Restaurant",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 12,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/8109599933",
+  "name": "Max & Benito",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 7,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/8109662626",
+  "name": "Kaffeefabrik",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 6,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/8125082683",
+  "name": "Sun Company",
+  "reason": "chain",
+  "detail": "same name in 8 districts",
+  "district": 1,
+  "kind": "kosmetik"
+ },
+ {
+  "osm": "node/8303173194",
+  "name": "Trześniewski",
+  "reason": "chain",
+  "detail": "same name in 11 districts",
+  "district": 6,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/8336096192",
+  "name": "Çiğköftem",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 12,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/8420335275",
+  "name": "Ebi",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 3,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/8420670123",
+  "name": "XO Grill",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 5,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/8422811301",
+  "name": "Hitomi",
+  "reason": "chain",
+  "detail": "same name in 6 districts",
+  "district": 2,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/8520584599",
+  "name": "Hühnerparadies",
+  "reason": "chain",
+  "detail": "same name in 7 districts",
+  "district": 20,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/8595964805",
+  "name": "Alaturka",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 3,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/8622452311",
+  "name": "Five Guys",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/8765669047",
+  "name": "Hühnerparadies",
+  "reason": "chain",
+  "detail": "same name in 7 districts",
+  "district": 2,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/8790103154",
+  "name": "Stromayer Elektro Service GmbH",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 6,
+  "kind": "handy"
+ },
+ {
+  "osm": "node/8867479891",
+  "name": "Teeamo",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/8926181317",
+  "name": "A1",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 18,
+  "kind": "handy"
+ },
+ {
+  "osm": "node/8928801866",
+  "name": "Ichiban Tea",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 1,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/8934849418",
+  "name": "Noodle King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 2,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/8944385960",
+  "name": "Hitomi",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 5,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/9026890837",
+  "name": "Duran",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 9,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/9029773510",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 11,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/9038606259",
+  "name": "Türkis",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 22,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/9038606261",
+  "name": "Tauber",
+  "reason": "chain",
+  "detail": "same name in 6 districts",
+  "district": 22,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/9038606271",
+  "name": "Leberkas-Pepi",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 22,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/9038606277",
+  "name": "Starbucks",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 22,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/9041112317",
+  "name": "Kakinomi",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 5,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/9101637221",
+  "name": "Apapika",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 6,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/9108167717",
+  "name": "Vitavien",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 3,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/9108167729",
+  "name": "Jonas Reindl",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 3,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/9118434438",
+  "name": "Senzera",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 1,
+  "kind": "kosmetik"
+ },
+ {
+  "osm": "node/9138086279",
+  "name": "Hühnerparadies",
+  "reason": "chain",
+  "detail": "same name in 7 districts",
+  "district": 3,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/9183621929",
+  "name": "Radatz",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 22,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/9183621945",
+  "name": "Kenny's",
+  "reason": "chain",
+  "detail": "same name in 8 districts",
+  "district": 22,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/9203013507",
+  "name": "Le Burger",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 14,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/9212524149",
+  "name": "Segafredo",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 19,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/9212524150",
+  "name": "A1",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 19,
+  "kind": "handy"
+ },
+ {
+  "osm": "node/9212524151",
+  "name": "Drei",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 19,
+  "kind": "handy"
+ },
+ {
+  "osm": "node/9212524152",
+  "name": "Magenta",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 19,
+  "kind": "handy"
+ },
+ {
+  "osm": "node/9229851238",
+  "name": "Kenny's",
+  "reason": "chain",
+  "detail": "same name in 8 districts",
+  "district": 14,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/9229851251",
+  "name": "Tauber",
+  "reason": "chain",
+  "detail": "same name in 6 districts",
+  "district": 14,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/9229906594",
+  "name": "Radatz",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 14,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/9230031199",
+  "name": "Trzesniewski",
+  "reason": "chain",
+  "detail": "same name in 11 districts",
+  "district": 14,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/9230044717",
+  "name": "hair fair",
+  "reason": "chain",
+  "detail": "same name in 10 districts",
+  "district": 14,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/9230044724",
+  "name": "Intercoiffeur Strassl Schaider",
+  "reason": "chain",
+  "detail": "same name in 7 districts",
+  "district": 14,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/9230389690",
+  "name": "L'Osteria",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 14,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/9267484031",
+  "name": "Starbucks",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/9395429128",
+  "name": "mc Service",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 8,
+  "kind": "handy"
+ },
+ {
+  "osm": "node/9422122030",
+  "name": "Reserva Ibérica by PACO",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/9441791643",
+  "name": "Noodle King",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 17,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/9472429162",
+  "name": "Ichiban Tea",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 6,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/9493787331",
+  "name": "Trześniewski",
+  "reason": "chain",
+  "detail": "same name in 11 districts",
+  "district": 8,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/9493787337",
+  "name": "Hühnerparadies",
+  "reason": "chain",
+  "detail": "same name in 7 districts",
+  "district": 4,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/9626794121",
+  "name": "Fladerei huma eleven",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 11,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/9683449467",
+  "name": "Noodle King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 10,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/9702398929",
+  "name": "Kurkonditorei Oberlaa",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 6,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/9725532852",
+  "name": "Kenny's",
+  "reason": "chain",
+  "detail": "same name in 8 districts",
+  "district": 20,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/9741356539",
+  "name": "Noodle King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 21,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/9750929683",
+  "name": "Nordsee",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 7,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/9758784050",
+  "name": "Senzera",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 3,
+  "kind": "kosmetik"
+ },
+ {
+  "osm": "node/9850811436",
+  "name": "Ichiban Tea",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 3,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/9872771357",
+  "name": "Burger King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 11,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/9872771358",
+  "name": "Subway",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 11,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/9924871919",
+  "name": "Ströck",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 7,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/9951337586",
+  "name": "Noodle King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/9981859597",
+  "name": "Noodle King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 21,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/9993486804",
+  "name": "Interspar Restaurant",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 10,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/10009226955",
+  "name": "KFC",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 10,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/10013023452",
+  "name": "Dunkin'",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 22,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/10013111093",
+  "name": "Dubkin' Donuts",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 11,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/10080058722",
+  "name": "Dönermeister",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 8,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/10115191555",
+  "name": "Starbucks",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 9,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/10133117357",
+  "name": "Honu",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 7,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/10133117390",
+  "name": "Billa Marktküche",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/10151355904",
+  "name": "Kaiser‘s",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 6,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/10167658019",
+  "name": "Noodle King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 21,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/10171895462",
+  "name": "Toni & Guy",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/10186143318",
+  "name": "Tauber",
+  "reason": "chain",
+  "detail": "same name in 6 districts",
+  "district": 3,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/10186143333",
+  "name": "Hitomi",
+  "reason": "chain",
+  "detail": "same name in 6 districts",
+  "district": 3,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/10186143334",
+  "name": "Segafredo",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 3,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/10210154897",
+  "name": "Lucky Noodles",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 7,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/10219844167",
+  "name": "T-Mobile",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 21,
+  "kind": "handy"
+ },
+ {
+  "osm": "node/10219844177",
+  "name": "Trzesniewski",
+  "reason": "chain",
+  "detail": "same name in 11 districts",
+  "district": 21,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/10284716856",
+  "name": "Fat Monk",
+  "reason": "chain",
+  "detail": "same name in 6 districts",
+  "district": 10,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/10589257579",
+  "name": "Interspar Restaurant",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 21,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/10676389408",
+  "name": "dean&david",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 20,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/10683078006",
+  "name": "Interspar Restaurant",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 23,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/10699178910",
+  "name": "Intercoiffeur Strassl Schaider",
+  "reason": "chain",
+  "detail": "same name in 7 districts",
+  "district": 11,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/10725939388",
+  "name": "Noodle King Express",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 12,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/10730970439",
+  "name": "Burger King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 21,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/10737489593",
+  "name": "Apapika",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 1,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/10737489594",
+  "name": "Honu Tiki Bowls",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 1,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/10743550089",
+  "name": "T-Mobile",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 20,
+  "kind": "handy"
+ },
+ {
+  "osm": "node/10743732741",
+  "name": "Five Guys",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 20,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/10746246212",
+  "name": "Power Net",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 17,
+  "kind": "handy"
+ },
+ {
+  "osm": "node/10746513182",
+  "name": "Noodle King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 22,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/10755974725",
+  "name": "Aida",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 9,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/10772696375",
+  "name": "Coffee Junkie",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 7,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/10794560412",
+  "name": "dean&david",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 7,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/10884176184",
+  "name": "Çiğköftem",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 11,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/10893253732",
+  "name": "Kaiser's",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 1,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/10899922687",
+  "name": "T-Mobile",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 6,
+  "kind": "handy"
+ },
+ {
+  "osm": "node/10995221437",
+  "name": "Hitomi",
+  "reason": "chain",
+  "detail": "same name in 6 districts",
+  "district": 3,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/11050638583",
+  "name": "senzera",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 8,
+  "kind": "nails"
+ },
+ {
+  "osm": "node/11071781145",
+  "name": "Teeamo",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 14,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/11071781146",
+  "name": "Dunkin'",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 14,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/11123496954",
+  "name": "Duran",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 6,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/11172175416",
+  "name": "Akakiko",
+  "reason": "chain",
+  "detail": "same name in 8 districts",
+  "district": 22,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/11172175417",
+  "name": "Vapiano",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 22,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/11172175420",
+  "name": "Honu",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 22,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/11218038942",
+  "name": "Cigköftem",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 22,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/11250785851",
+  "name": "Noodle King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 22,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/11256928817",
+  "name": "Noodle King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 21,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/11267327553",
+  "name": "l'autentico",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 20,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/11267327562",
+  "name": "Kaiser's",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 20,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/11301436135",
+  "name": "Jonas Reindl",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 8,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/11307881115",
+  "name": "Bundy & Bundy",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 13,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/11326698745",
+  "name": "Lucky Noodles",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 10,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/11328998830",
+  "name": "XO Grill",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 7,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/11329290731",
+  "name": "Noodle King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 22,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/11360364051",
+  "name": "Hans im Glück",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 10,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/11377272247",
+  "name": "Duran",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 10,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/11422725019",
+  "name": "Hühnerparadies",
+  "reason": "chain",
+  "detail": "same name in 7 districts",
+  "district": 17,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/11439276502",
+  "name": "Senzera",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 6,
+  "kind": "kosmetik"
+ },
+ {
+  "osm": "node/11469000590",
+  "name": "Klipp",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 10,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/11469000597",
+  "name": "Billa Marktküche",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 10,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/11488977554",
+  "name": "Tauber",
+  "reason": "chain",
+  "detail": "same name in 6 districts",
+  "district": 12,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/11488977555",
+  "name": "Vapiano",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 12,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/11524981729",
+  "name": "Wild Bean Cafe",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 21,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/11525004682",
+  "name": "Wild Bean Cafe",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 5,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/11574037677",
+  "name": "Fat Monk",
+  "reason": "chain",
+  "detail": "same name in 6 districts",
+  "district": 12,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/11577267825",
+  "name": "Yamm am Naschmarkt",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 6,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/11598909531",
+  "name": "Noodle King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 3,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/11663095848",
+  "name": "T-Mobile",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 4,
+  "kind": "handy"
+ },
+ {
+  "osm": "node/11725294258",
+  "name": "Mobile House",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 12,
+  "kind": "handy"
+ },
+ {
+  "osm": "node/11874619939",
+  "name": "Edo",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 8,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/11915918058",
+  "name": "Coffee Junkie",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 5,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/12020342357",
+  "name": "T-Mobile",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 22,
+  "kind": "handy"
+ },
+ {
+  "osm": "node/12020342358",
+  "name": "Drei",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 22,
+  "kind": "handy"
+ },
+ {
+  "osm": "node/12020342363",
+  "name": "Mobile House",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 22,
+  "kind": "handy"
+ },
+ {
+  "osm": "node/12175011198",
+  "name": "Trzesniewski",
+  "reason": "chain",
+  "detail": "same name in 11 districts",
+  "district": 22,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/12236189140",
+  "name": "ra'mien go",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 9,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/12239265982",
+  "name": "Sun Company",
+  "reason": "chain",
+  "detail": "same name in 8 districts",
+  "district": 16,
+  "kind": "kosmetik"
+ },
+ {
+  "osm": "node/12239498602",
+  "name": "T-Mobile",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 16,
+  "kind": "handy"
+ },
+ {
+  "osm": "node/12306886015",
+  "name": "Hair Fair",
+  "reason": "chain",
+  "detail": "same name in 10 districts",
+  "district": 10,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/12373411388",
+  "name": "Sun Company",
+  "reason": "chain",
+  "detail": "same name in 8 districts",
+  "district": 5,
+  "kind": "kosmetik"
+ },
+ {
+  "osm": "node/12379148268",
+  "name": "Noodle King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 12,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/12400992181",
+  "name": "Kenny’s",
+  "reason": "chain",
+  "detail": "same name in 8 districts",
+  "district": 22,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/12531963916",
+  "name": "Subway",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 15,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/12531963923",
+  "name": "Ichiban Tea",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 15,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/12533653747",
+  "name": "spusu",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 22,
+  "kind": "handy"
+ },
+ {
+  "osm": "node/12647611852",
+  "name": "Vitavien",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 18,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/12676215853",
+  "name": "Wild Bean Cafe",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 3,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/12676233747",
+  "name": "Wild Bean Cafe",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 11,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/12757807872",
+  "name": "Dönermeister",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 14,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/13056463702",
+  "name": "Fat Monk",
+  "reason": "chain",
+  "detail": "same name in 6 districts",
+  "district": 10,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/13061790927",
+  "name": "Ebi",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 7,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/13087128501",
+  "name": "KLIPP",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 10,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/13108505301",
+  "name": "HITOMI",
+  "reason": "chain",
+  "detail": "same name in 6 districts",
+  "district": 10,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/13157217091",
+  "name": "Five Guys",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/13175335400",
+  "name": "Dunkin'",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 20,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/13205627701",
+  "name": "The Miners Coffee",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 6,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/13234930201",
+  "name": "Hitomi",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 4,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/13321551883",
+  "name": "Wildkaffee",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 5,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/13338061532",
+  "name": "Max & Benito",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 7,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/13388556165",
+  "name": "Beautystaff",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 6,
+  "kind": "kosmetik"
+ },
+ {
+  "osm": "node/13394476620",
+  "name": "IKEA Restaurant",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 15,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/13414466506",
+  "name": "The Coffee Neubaugasse",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 7,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/13513193765",
+  "name": "Hitomi",
+  "reason": "chain",
+  "detail": "same name in 6 districts",
+  "district": 21,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/13544049601",
+  "name": "Burger King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 12,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/13569899427",
+  "name": "Edo",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 5,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/13593125238",
+  "name": "The Coffee",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 2,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/13603403400",
+  "name": "Apapika",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 22,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/13700933401",
+  "name": "L'Autentico",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 9,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/13917192921",
+  "name": "Kenny's",
+  "reason": "chain",
+  "detail": "same name in 8 districts",
+  "district": 7,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/13968631659",
+  "name": "Billa Marktküche",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 2,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/14080865592",
+  "name": "XXXLutz Wien 15 - Restaurant",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 15,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/14085881701",
+  "name": "Dunkin'",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/14096618993",
+  "name": "Noodle King",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 23,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/14175847802",
+  "name": "A1",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 22,
+  "kind": "handy"
+ },
+ {
+  "osm": "node/14377656985",
+  "name": "Dunkin'",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 22,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/14377656986",
+  "name": "Kaiser's",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 22,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/14377656988",
+  "name": "Çigköftem",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 22,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/28974655",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 10,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/29775109",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 10,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/29972434",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 22,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/31114041",
+  "name": "Segafredo",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 6,
+  "kind": "cafe"
+ },
+ {
+  "osm": "way/31538555",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 21,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/32908441",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 22,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/38838826",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 23,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/50642877",
+  "name": "L'Osteria",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 8,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "way/51192914",
+  "name": "Apapika",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 6,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/51192918",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 5,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/51414694",
+  "name": "Nordsee",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 6,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/61909416",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 23,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/93990211",
+  "name": "Burger King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 10,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/100956655",
+  "name": "L'Osteria",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 19,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "way/124485854",
+  "name": "Kurkonditorei Oberlaa",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 10,
+  "kind": "cafe"
+ },
+ {
+  "osm": "way/153919618",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 13,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/163120574",
+  "name": "Aida",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 21,
+  "kind": "cafe"
+ },
+ {
+  "osm": "way/164941544",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 22,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/164946262",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 21,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/166765292",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 11,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/175515977",
+  "name": "Würstelstand LEO",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 9,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/186835329",
+  "name": "Burger King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 12,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/211278929",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 11,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/217582625",
+  "name": "Burger King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 23,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/235925490",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 22,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/245328257",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 19,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/313073255",
+  "name": "Radatz",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 23,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/322445499",
+  "name": "Sun Company",
+  "reason": "chain",
+  "detail": "same name in 8 districts",
+  "district": 23,
+  "kind": "kosmetik"
+ },
+ {
+  "osm": "way/362014244",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 5,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/368590729",
+  "name": "Türkis",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 12,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/368943365",
+  "name": "Intercoiffeur Strassl Schaider",
+  "reason": "chain",
+  "detail": "same name in 7 districts",
+  "district": 2,
+  "kind": "friseur"
+ },
+ {
+  "osm": "way/368952931",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 2,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/368952932",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 2,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/369989002",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 15,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/369989008",
+  "name": "Nordsee",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 15,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/369989022",
+  "name": "Starbucks",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 15,
+  "kind": "cafe"
+ },
+ {
+  "osm": "way/369989031",
+  "name": "Subway",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 15,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/369989034",
+  "name": "Trześniewski",
+  "reason": "chain",
+  "detail": "same name in 11 districts",
+  "district": 15,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/369989035",
+  "name": "Türkis",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 15,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/369989037",
+  "name": "Som Kitchen",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 15,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/370577058",
+  "name": "Dunkin'",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 15,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/370577067",
+  "name": "Phone Experts",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 15,
+  "kind": "handy"
+ },
+ {
+  "osm": "way/370577069",
+  "name": "Billa Plus Marktküche",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 15,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "way/370580264",
+  "name": "Burger King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 6,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/372026596",
+  "name": "Starbucks",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 10,
+  "kind": "cafe"
+ },
+ {
+  "osm": "way/372955511",
+  "name": "Dunkin'",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 10,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/395972320",
+  "name": "Burger King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 10,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/395972323",
+  "name": "Som Kitchen",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 10,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/395972324",
+  "name": "Nordsee",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 10,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/395972329",
+  "name": "Türkis",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 10,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/396018147",
+  "name": "Anker",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 10,
+  "kind": "cafe"
+ },
+ {
+  "osm": "way/396029586",
+  "name": "Kurkonditorei Oberlaa",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 10,
+  "kind": "cafe"
+ },
+ {
+  "osm": "way/396033541",
+  "name": "L'Osteria",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 10,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "way/396033542",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 10,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/396042595",
+  "name": "Akakiko",
+  "reason": "chain",
+  "detail": "same name in 8 districts",
+  "district": 10,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/396140353",
+  "name": "Leberkas Pepi",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 10,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/396140392",
+  "name": "Subway",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 10,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/396144845",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 10,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/396144847",
+  "name": "McCafé",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 10,
+  "kind": "cafe"
+ },
+ {
+  "osm": "way/407676246",
+  "name": "Lucky Noodles",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 1,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/411400850",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/411407967",
+  "name": "Starbucks",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "cafe"
+ },
+ {
+  "osm": "way/422924820",
+  "name": "Der Mann",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 10,
+  "kind": "cafe"
+ },
+ {
+  "osm": "way/461007371",
+  "name": "Aida",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 18,
+  "kind": "cafe"
+ },
+ {
+  "osm": "way/493669393",
+  "name": "Interspar Market Kitchen",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 3,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "way/493669403",
+  "name": "Max & Benito",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 3,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "way/493669404",
+  "name": "Fat Monk",
+  "reason": "chain",
+  "detail": "same name in 6 districts",
+  "district": 3,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/493680685",
+  "name": "Vapiano",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 3,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "way/495648515",
+  "name": "Nordsee",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 7,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/495648517",
+  "name": "Nordsee",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 7,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/497465169",
+  "name": "Burger King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 3,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/497465185",
+  "name": "Subway",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 3,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/500258363",
+  "name": "Klipp",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 21,
+  "kind": "friseur"
+ },
+ {
+  "osm": "way/503119136",
+  "name": "Burger King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 22,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/503208134",
+  "name": "McCafé",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 11,
+  "kind": "cafe"
+ },
+ {
+  "osm": "way/586100034",
+  "name": "Costa",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 3,
+  "kind": "cafe"
+ },
+ {
+  "osm": "way/586100038",
+  "name": "Teeamo",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 3,
+  "kind": "cafe"
+ },
+ {
+  "osm": "way/587189002",
+  "name": "Vapiano",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 3,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "way/587189005",
+  "name": "KFC",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 3,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/587189006",
+  "name": "ra'mien go",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 3,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "way/587189007",
+  "name": "ra'mien go",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 3,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/587189010",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 3,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/629564977",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 22,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/638561370",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 14,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/917836555",
+  "name": "Türkis",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/1135371099",
+  "name": "Burger King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 2,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/1165180011",
+  "name": "Intercoiffeur Strassl Schaider",
+  "reason": "chain",
+  "detail": "same name in 7 districts",
+  "district": 23,
+  "kind": "friseur"
+ },
+ {
+  "osm": "way/1165180026",
+  "name": "A1",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 23,
+  "kind": "handy"
+ },
+ {
+  "osm": "way/1165180027",
+  "name": "Magenta",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 23,
+  "kind": "handy"
+ },
+ {
+  "osm": "way/1165180028",
+  "name": "Drei Shop",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 23,
+  "kind": "handy"
+ },
+ {
+  "osm": "way/1165180057",
+  "name": "Tchibo",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 23,
+  "kind": "cafe"
+ },
+ {
+  "osm": "way/1166198461",
+  "name": "Der Mann",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 23,
+  "kind": "cafe"
+ },
+ {
+  "osm": "way/1273975716",
+  "name": "Trześniewski",
+  "reason": "chain",
+  "detail": "same name in 11 districts",
+  "district": 10,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/1275453386",
+  "name": "Türkis",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 2,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/1275453392",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 2,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/1302380540",
+  "name": "Lucky Noodles",
+  "reason": "chain",
+  "detail": "same name in 5 districts",
+  "district": 16,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/1339935018",
+  "name": "Hühnerparadies",
+  "reason": "chain",
+  "detail": "same name in 7 districts",
+  "district": 14,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/1464352679",
+  "name": "Türkis",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 12,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/1547397218",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 10,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/1555888112",
+  "name": "T-Mobile",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 15,
+  "kind": "handy"
+ },
+ {
+  "osm": "relation/8287004",
+  "name": "McCafé",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 3,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/4090485838",
+  "name": "Pizzeria il mercato",
+  "reason": "duplicate",
+  "of": "node/1197118814"
+ },
+ {
+  "osm": "node/13462172401",
+  "name": "Hemma",
+  "reason": "duplicate",
+  "of": "node/13462168501"
+ },
+ {
+  "osm": "node/10122326282",
+  "name": "Wiener Würstelstand",
+  "reason": "duplicate",
+  "of": "way/639095455"
+ },
+ {
+  "osm": "node/2538128937",
+  "name": "Eva Stria",
+  "reason": "duplicate",
+  "of": "node/2538128942"
+ },
+ {
+  "osm": "node/10929557201",
+  "name": "Franz und Gloria",
+  "reason": "duplicate",
+  "of": "node/4743223302"
+ },
+ {
+  "osm": "node/9394684066",
+  "name": "Derwisch",
+  "reason": "duplicate",
+  "of": "node/1035420072"
+ },
+ {
+  "osm": "way/396042183",
+  "name": "MobiNil",
+  "reason": "duplicate",
+  "of": "way/396042596"
+ },
+ {
+  "osm": "node/2415389873",
+  "name": "Wagnerin",
+  "reason": "duplicate",
+  "of": "node/11875888511"
+ },
+ {
+  "osm": "node/11876273735",
+  "name": "Omnom Burger",
+  "reason": "duplicate",
+  "of": "node/6334311394"
+ },
+ {
+  "osm": "node/844548236",
+  "name": "Dea Food",
+  "reason": "duplicate",
+  "of": "node/844547954"
+ },
+ {
+  "osm": "node/11498087563",
+  "name": "YiDo Poke",
+  "reason": "duplicate",
+  "of": "node/14026898936"
+ },
+ {
+  "osm": "node/13326954001",
+  "name": "Coconut Curry",
+  "reason": "duplicate",
+  "of": "node/13255098905"
+ },
+ {
+  "osm": "node/14096247801",
+  "name": "Hong Kong Cafe",
+  "reason": "duplicate",
+  "of": "node/1354675459"
+ },
+ {
+  "osm": "way/410517907",
+  "name": "Döner Point",
+  "reason": "duplicate",
+  "of": "way/410517899"
+ },
+ {
+  "osm": "node/1546312206",
+  "name": "Yume+",
+  "reason": "duplicate",
+  "of": "node/2040313938"
+ },
+ {
+  "osm": "node/11871923876",
+  "name": "OTTO Weingartshofer",
+  "reason": "duplicate",
+  "of": "way/175147553"
+ },
+ {
+  "osm": "node/12131069503",
+  "name": "Black Sea",
+  "reason": "duplicate",
+  "of": "node/9108167728"
+ },
+ {
+  "osm": "node/13235962201",
+  "name": "Gala & Mellinger",
+  "reason": "duplicate",
+  "of": "node/13131474461"
+ },
+ {
+  "osm": "node/13314743795",
+  "name": "Monopoly Barber Club",
+  "reason": "duplicate",
+  "of": "node/12670143331"
+ },
+ {
+  "osm": "node/10956931205",
+  "name": "Café Leopold",
+  "reason": "duplicate",
+  "of": "node/244497023"
+ },
+ {
+  "osm": "node/3400094462",
+  "name": "crispy chicken factory",
+  "reason": "duplicate",
+  "of": "node/11010260616"
+ },
+ {
+  "osm": "node/4837423025",
+  "name": "Pariser Döner",
+  "reason": "duplicate",
+  "of": "node/4837423026"
+ },
+ {
+  "osm": "node/5578380837",
+  "name": "Änderungsschneiderei",
+  "reason": "duplicate",
+  "of": "node/5578380843"
+ },
+ {
+  "osm": "node/10103722905",
+  "name": "Döwiener",
+  "reason": "duplicate",
+  "of": "node/2527209811"
+ },
+ {
+  "osm": "node/11329286131",
+  "name": "Blitz Mobile",
+  "reason": "duplicate",
+  "of": "node/2507088440"
+ },
+ {
+  "osm": "node/13397390878",
+  "name": "Le's Cooking",
+  "reason": "duplicate",
+  "of": "node/13163125061"
+ },
+ {
+  "osm": "node/13569907858",
+  "name": "City",
+  "reason": "duplicate",
+  "of": "node/4408686991"
+ },
+ {
+  "osm": "node/14123174289",
+  "name": "Café Tina",
+  "reason": "duplicate",
+  "of": "node/14123157274"
+ }
+]

@@ -1,6 +1,6 @@
 // Shape and rules of a venue facts file (venues/<slug>.json).
 import { PALETTES, LETTERINGS } from './themes.mjs';
-export const KINDS = ['imbiss', 'restaurant', 'cafe', 'friseur', 'nails', 'handy', 'schneider', 'other'];
+export const KINDS = ['imbiss', 'restaurant', 'cafe', 'friseur', 'nails', 'kosmetik', 'handy', 'schneider', 'other'];
 export const STATUSES = ['hidden', 'public', 'removed'];
 export const RESERVED_SLUGS = ['www', 'mail', 'mail-in', 'test', 'api', 'admin', 'finden', 'v', 'cloudpit'];
 

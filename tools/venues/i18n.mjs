@@ -53,7 +53,8 @@ export function listTitle(kind, lang) {
 const KIND_LABELS = {
   imbiss: { de: 'Imbiss', en: 'Snack bar' }, restaurant: { de: 'Restaurant', en: 'Restaurant' },
   cafe: { de: 'Café', en: 'Café' }, friseur: { de: 'Friseur', en: 'Hairdresser' },
-  nails: { de: 'Nagelstudio', en: 'Nail studio' }, handy: { de: 'Handyshop', en: 'Phone shop' },
+  nails: { de: 'Nagelstudio', en: 'Nail studio' }, kosmetik: { de: 'Kosmetikstudio', en: 'Beauty salon' },
+  handy: { de: 'Handyshop', en: 'Phone shop' },
   schneider: { de: 'Schneiderei', en: 'Tailor' },
 };
 export function kindLabel(kind, lang) {

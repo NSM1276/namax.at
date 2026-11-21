@@ -1,0 +1,4 @@
+[out:json][timeout:300];
+area(3600109166)->.wien;
+rel(area.wien)["boundary"="administrative"]["admin_level"="9"];
+out geom;
