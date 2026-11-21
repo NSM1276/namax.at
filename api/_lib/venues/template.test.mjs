@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { renderVenue, esc, ownerBar } from './template.mjs';
+import { renderVenue, esc, ownerBar, districtLine } from './template.mjs';
 const load = (n) => JSON.parse(readFileSync(new URL(`./fixtures/${n}.json`, import.meta.url)));
 const text = (html) => html.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, ' ').replace(/<[^>]+>/g, ' ');
 
@@ -70,11 +70,12 @@ test('item without price shows no euro sign for it; photos render when present',
 });
 test('a long word in the name shrinks the title so it fits a phone', () => {
   const long = renderVenue({ ...load('minimal'), name: 'Änderungsschneiderei Fa. Orhan' });
-  const m = /<h1 lang="de" style="font-size:clamp\(22px,([\d.]+)vw,72px\);font-size:min\(72px,([\d.]+)cqi\)">/.exec(long);
+  const m = /<h1 lang="de" style="font-size:clamp\(20px,([\d.]+)vw,80px\);font-size:min\(80px,([\d.]+)cqi\)">/.exec(long);
   assert.ok(m, 'long name gets an inline size');
-  assert.ok(Number(m[1]) * 20 * 0.6 * 3.75 <= 300, 'Änderungsschneiderei fits ~300px at 375px wide');
-  assert.ok(Number(m[2]) * 20 * 0.62 <= 100, 'and fits the plate at any width, whatever the hyphenation');
-  assert.match(long, /\.plate\{[^}]*container-type:inline-size/);
+  // Barlow Condensed bold capitals are about 0.5em wide; inside the rim a 375px phone leaves about 290px
+  assert.ok(Number(m[1]) * 3.75 * 20 * 0.5 <= 290, 'Änderungsschneiderei fits inside the rim at 375px wide');
+  assert.ok(Number(m[2]) * 20 * 0.5 <= 100, 'and fits the rim at any width, whatever the hyphenation');
+  assert.match(long, /\.rim\{[^}]*container-type:inline-size/);
   assert.match(renderVenue({ ...load('minimal'), name: 'Adonis' }), /<h1 lang="de">Adonis<\/h1>/);
 });
 test('the name keeps German hyphenation when the page switches to EN', () => {
@@ -89,9 +90,10 @@ test('desktop: actions sit in a side card, the rest in the main column, phone or
 test('the sign says what kind of place it is, in both languages, even when nothing else is known', () => {
   const v = { ...load('minimal'), kind: 'handy', area: 'Meidling' };
   const html = renderVenue(v);
-  const plate = /<div class="plate">([\s\S]*?)<\/div>/.exec(html)[1];
-  assert.match(plate, /data-de="Handyshop · Meidling"/);
-  assert.match(plate, /data-en="Phone shop · Meidling"/);
+  const plate = /<div class="plate">([\s\S]*?)<\/header>/.exec(html)[1];
+  assert.match(plate, /data-de="Handyshop"/);
+  assert.match(plate, /data-en="Phone shop"/);
+  assert.match(plate, /MEIDLING/);
   assert.match(html, /<title>[^<]*Handyshop[^<]*<\/title>/);
 });
 
@@ -113,4 +115,29 @@ test('brand faces are declared and used for headings and body', () => {
   assert.match(html, /--body:NamaxText/);
   assert.match(html, /--display:NamaxDisplay/);
   assert.doesNotMatch(html, /anton-latin|archivo-narrow-latin/, 'old faces are not loaded any more');
+});
+
+test('the sign is a Viennese enamel plate: rim, screws, gleam, kind, name, district', () => {
+  const html = renderVenue({ ...load('minimal'), kind: 'handy', area: 'Meidling', address: { street: 'Gasse 1', zip: '1120', city: 'Wien' } });
+  const sign = /<header class="sign">([\s\S]*?)<\/header>/.exec(html)[1];
+  for (const part of ['class="plate"', 'class="rim"', 'class="gleam"', '<h1 lang="de"', 'class="kind"', 'class="district"', '12., MEIDLING']) assert.ok(sign.includes(part), part);
+  assert.equal((sign.match(/class="screw/g) || []).length, 2);
+  assert.match(html, /\.plate\{[^}]*background:var\(--sign-bg\)/);
+  assert.match(html, /\.rim\{[^}]*border:3px solid var\(--sign-ink\)/);
+});
+
+test('district line: Vienna district number from the post code, otherwise the area', () => {
+  assert.equal(districtLine({ area: 'Meidling', address: { zip: '1120', city: 'Wien' } }), '12., MEIDLING');
+  assert.equal(districtLine({ area: 'Innere Stadt', address: { zip: '1010', city: 'Wien' } }), '1., INNERE STADT');
+  assert.equal(districtLine({ area: 'Liesing', address: { zip: '1230', city: 'Wien' } }), '23., LIESING');
+  assert.equal(districtLine({ area: 'Mödling', address: { zip: '2340', city: 'Mödling' } }), 'MÖDLING');
+  assert.equal(districtLine({ address: { zip: '1120', city: 'Wien' } }), '12. BEZIRK');
+});
+
+test('motion: plays once, nothing moves with reduced motion, and the page is readable without animation', () => {
+  const html = renderVenue(load('minimal'));
+  assert.match(html, /@keyframes swing/);
+  assert.match(html, /@media \(prefers-reduced-motion:reduce\)\{[^}]*animation:none/);
+  const css = /<style>([\s\S]*?)<\/style>/.exec(html)[1].replace(/@keyframes [a-z-]+\{(?:[^{}]*\{[^}]*\})+\}/g, '');
+  assert.doesNotMatch(css, /opacity:0[;}]/, 'no element waits invisible for an animation');
 });

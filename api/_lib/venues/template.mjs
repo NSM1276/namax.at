@@ -20,11 +20,12 @@ export function esc(text) {
 // A long single word ("Änderungsschneiderei") cannot wrap, so the title shrinks until that word fits a phone.
 function titleSize(name) {
   const longest = Math.max(...String(name).split(/\s+/).map((w) => w.length));
-  const vw = Math.round((130 / longest) * 10) / 10;
-  if (vw >= 12.5) return '';
-  // cqi = 1% of the plate's width: the word fits at every screen size, without relying on the browser's hyphenation
-  const cqi = Math.floor((100 / (longest * 0.62)) * 10) / 10;
-  return ` style="font-size:clamp(22px,${vw}vw,72px);font-size:min(72px,${cqi}cqi)"`;
+  // Barlow Condensed bold capitals are about 0.5em wide; the rim leaves about 78vw on a phone.
+  const vw = Math.floor((150 / longest) * 10) / 10;
+  if (vw >= 15) return '';
+  // cqi = 1% of the rim's width: the word fits at every screen size, without relying on the browser's hyphenation
+  const cqi = Math.floor((100 / (longest * 0.52)) * 10) / 10;
+  return ` style="font-size:clamp(20px,${vw}vw,80px);font-size:min(80px,${cqi}cqi)"`;
 }
 
 // An element whose text switches with the language toggle.
@@ -76,24 +77,36 @@ function css(p, l) {
 --display:${l.family};--body:${BRAND.text}}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.45 var(--body)}
+body{margin:0;background-color:var(--bg);background-image:radial-gradient(color-mix(in srgb,var(--ink) 9%,transparent) 1px,transparent 1.3px);background-size:7px 7px;color:var(--ink);font:17px/1.5 var(--body)}
 .wrap{max-width:560px;margin:0 auto;padding:0 16px}
 h1,h2{margin:0;font-family:var(--display);font-weight:${l.weight};letter-spacing:${l.spacing};${l.upper ? 'text-transform:uppercase;' : ''}line-height:1}
 a{color:inherit}
-.sign{background:var(--sign-bg);color:var(--sign-ink);padding:10px 12px 14px}
+.sign{padding:8px 14px 4px;color:var(--ink);perspective:800px}
 .sign .wrap{padding:0}
 .lang{display:flex;justify-content:flex-end;gap:4px;margin-bottom:8px}
 .lang button{min-width:44px;min-height:44px;border:0;background:none;color:inherit;font:700 14px var(--body);letter-spacing:.06em;opacity:.82;cursor:pointer}
 .lang button[aria-pressed="true"]{opacity:1;text-decoration:underline;text-underline-offset:5px}
-.plate{border:2px solid currentColor;padding:26px 14px 24px;text-align:center;container-type:inline-size}
-.area{margin:0 0 12px;font:700 12px/1.3 var(--body);letter-spacing:.16em;text-transform:uppercase}
-h1{font-size:clamp(38px,12.5vw,72px);overflow-wrap:anywhere;hyphens:auto}
+/* The sign: a Viennese enamel street-sign plate (enamel = --sign-bg, rim and letters = --sign-ink) */
+.plate{position:relative;margin:4px 0 0;background:var(--sign-bg);color:var(--sign-ink);border-radius:16px;padding:10px;overflow:hidden;transform-origin:50% -24px;
+box-shadow:0 14px 28px color-mix(in srgb,var(--ink) 26%,transparent),inset 0 1px 0 rgba(255,255,255,.22),inset 0 0 0 1px color-mix(in srgb,var(--ink) 14%,transparent);animation:swing 1.4s cubic-bezier(.2,.8,.25,1) both}
+.rim{border:3px solid var(--sign-ink);border-radius:10px;padding:20px 12px 18px;text-align:center;container-type:inline-size}
+.kind{margin:0 0 8px;font:700 13px/1.25 var(--body);letter-spacing:.22em;text-transform:uppercase;opacity:.92}
+.district{margin:9px 0 0;font:700 13px/1.25 var(--body);letter-spacing:.14em;opacity:.88}
+.screw{position:absolute;top:50%;width:7px;height:7px;margin-top:-3.5px;border-radius:50%;background:color-mix(in srgb,var(--sign-ink) 65%,#8d96a1);box-shadow:inset 0 -1px 1px rgba(0,0,0,.35)}
+.screw.l{left:4px}.screw.r{right:4px}
+.gleam{position:absolute;top:-40%;bottom:-40%;left:-60%;width:40%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.38),transparent);transform:skewX(-18deg);pointer-events:none;animation:gleam 1.1s ease-in-out 1.1s both}
+h1{font-size:clamp(40px,15vw,80px);line-height:.95;overflow-wrap:anywhere;hyphens:auto}
+main.page{animation:rise .7s ease-out .6s both}
+@keyframes swing{0%{transform:translateY(-115%) rotateX(-50deg)}55%{transform:translateY(0) rotateX(9deg)}75%{transform:rotateX(-3deg)}100%{transform:none}}
+@keyframes gleam{0%{left:-60%}100%{left:130%}}
+@keyframes rise{0%{opacity:0;transform:translateY(12px)}100%{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.plate,.gleam,main.page{animation:none}}
 .status{display:flex;align-items:center;gap:10px;margin:18px 0 0;font-weight:700;font-size:18px}
 .status::before{content:"";flex:none;width:12px;height:12px;border-radius:50%;background:#8a8a8a}
 .status.is-open::before{background:#1e9e4a}
 .status.is-closed::before{background:#c8372d}
 .actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:18px 0 0}
-.btn{display:flex;align-items:center;justify-content:center;min-height:54px;padding:10px 14px;border:2px solid var(--ink);border-radius:6px;font-weight:700;font-size:18px;text-decoration:none;text-align:center}
+.btn{display:flex;align-items:center;justify-content:center;min-height:54px;padding:10px 14px;border:2px solid var(--ink);border-radius:12px;font-weight:700;font-size:18px;text-decoration:none;text-align:center}
 .btn.primary{background:var(--accent);color:var(--accent-ink)}
 section{margin:30px 0 0}
 h2{font-size:28px;margin-bottom:12px}
@@ -122,21 +135,31 @@ address a{display:inline-flex;align-items:center;min-height:44px;margin-top:2px;
 footer{margin:40px 0 0;padding:20px 0 28px;border-top:1px solid color-mix(in srgb,var(--ink) 18%,transparent);font-size:13px;opacity:.8}
 footer p{margin:0 0 6px}
 footer a{display:inline-flex;align-items:center;min-height:44px;margin-right:18px}
-@media (min-width:700px){.sign{padding:16px 16px 22px}.plate{padding:40px 24px 36px}}
-@media (min-width:900px){.wrap{max-width:1080px;padding:0 32px}.sign .wrap{padding:0 32px}.plate{padding:48px 40px 44px}
+@media (min-width:700px){.sign{padding:16px 16px 8px}.rim{padding:34px 24px 30px}}
+@media (min-width:900px){.wrap{max-width:1080px;padding:0 32px}.sign .wrap{padding:0 32px}.plate{max-width:760px;margin:4px auto 0}.rim{padding:44px 40px 40px}
 .page{display:grid;grid-template-columns:minmax(0,1fr) 320px;column-gap:56px;align-items:start}
 .col{grid-column:1;grid-row:1}.side{grid-column:2;grid-row:1;position:sticky;top:24px;margin-top:30px;padding:20px;border:2px solid var(--ink);border-radius:8px}
 .side .status{margin:0 0 4px}.side .actions{grid-template-columns:1fr}footer{grid-column:1/-1}.photos{grid-template-columns:repeat(3,1fr)}}
 `;
 }
 
+/** "12., MEIDLING" for a Vienna address (district number from the post code, Vienna's own notation), else the area. */
+export function districtLine(v) {
+  const a = v.address || {};
+  const m = /^1(\d\d)0$/.exec(String(a.zip || ''));
+  const n = m ? Number(m[1]) : 0;
+  const area = String(v.area || '').toUpperCase();
+  if (/^wien$/i.test(String(a.city || '')) && n >= 1 && n <= 23) return area ? `${n}., ${area}` : `${n}. BEZIRK`;
+  return area;
+}
+
 function sign(v) {
-  // The small line above the name says what the place is, so a page with nothing else on it still makes sense.
-  const line = (lang) => [kindLabel(v.kind, lang), v.area].filter(Boolean).join(' · ');
-  const area = line('de') ? tr(line('de'), line('en'), 'p', 'class="area"') : '';
+  // The kind above the name says what the place is, so a page with nothing else on it still makes sense.
+  const kind = kindLabel(v.kind, 'de') ? tr(kindLabel(v.kind, 'de'), kindLabel(v.kind, 'en'), 'p', 'class="kind"') : '';
+  const district = districtLine(v) ? `<p class="district">${esc(districtLine(v))}</p>` : '';
   return `<header class="sign"><div class="wrap">
 <div class="lang" role="group" aria-label="Sprache / Language"><button type="button" data-lang="de" lang="de" aria-label="Deutsch" aria-pressed="true">DE</button><button type="button" data-lang="en" lang="en" aria-label="English" aria-pressed="false">EN</button></div>
-<div class="plate">${area}<h1 lang="de"${titleSize(v.name)}>${esc(v.name)}</h1></div>
+<div class="plate"><i class="screw l" aria-hidden="true"></i><i class="screw r" aria-hidden="true"></i><div class="rim">${kind}<h1 lang="de"${titleSize(v.name)}>${esc(v.name)}</h1>${district}</div><i class="gleam" aria-hidden="true"></i></div>
 </div></header>`;
 }
 
