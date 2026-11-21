@@ -1,6 +1,9 @@
 {
   "framework": null,
   "buildCommand": null,
+  "regions": [
+    "fra1"
+  ],
   "cleanUrls": true,
   "trailingSlash": false,
   "redirects": [
