@@ -40,7 +40,12 @@ const KIND_DE = { friseur: 'Friseur', cafe: 'Café', restaurant: 'Restaurant', i
   kosmetik: 'Kosmetik', nails: 'Nagelstudio', schneider: 'Schneiderei' };
 const kindDe = (k) => KIND_DE[k] || k;
 
-/** rows: [{ slug, name, kind, street, district, status, confirmed, ownerUrl|null }] → HTML (German, phone first). */
+/** Facade thumbnail address: our Blob store, or the local preview's in-memory store. */
+const thumbSrc = (u) => (typeof u !== 'string' ? ''
+  : /^https:\/\/[a-z0-9-]+\.public\.blob\.vercel-storage\.com\/venues\/[\w./-]+$/.test(u) ? u
+  : /^__blob\/venues\/[\w./-]+$/.test(u) ? '/' + u : '');
+
+/** rows: [{ slug, name, kind, street, district, status, confirmed, ownerUrl|null, facadeUrl|null }] → HTML (German, phone first). */
 export function renderAdmin(rows) {
   const kinds = [...new Set(rows.map((r) => r.kind))].sort((a, b) => kindDe(a).localeCompare(kindDe(b), 'de'));
   const districts = [...new Set(rows.map((r) => r.district).filter(Boolean))].sort((a, b) => a - b);
@@ -54,11 +59,17 @@ export function renderAdmin(rows) {
       + `<button type="button" class="has" data-qr="${esc(o)}" data-owner>QR</button>`
       + `<a class="has" href="${o ? 'https://wa.me/?text=' + encodeURIComponent(o) : '#'}" data-wa rel="noopener">WhatsApp</a>`
       + `<button type="button" class="rot" data-rotate="${esc(r.slug)}">Neuer Link</button></div>`;
+    const th = thumbSrc(r.facadeUrl);
+    const photo = `<div class="a fr" data-frow${th ? '' : ' data-none'}><span class="lab">Foto vom Lokal</span>`
+      + (th ? `<img class="th" src="${esc(th)}" alt="">` : '')
+      + `<button type="button" data-facade="${esc(r.slug)}">Foto</button>`
+      + `<button type="button" class="has rot" data-fdel="${esc(r.slug)}">Foto löschen</button></div>`;
     const q = `${r.name} ${r.street} ${r.slug}`.toLowerCase();
     return `<li data-q="${esc(q)}" data-kind="${esc(r.kind)}" data-d="${esc(r.district || '')}" data-name="${esc(r.name)}"><b>${esc(r.name)}</b>${badges}
 <small>${esc(kindDe(r.kind))} · ${esc(r.street)}${r.district ? ` · ${esc(r.district)}. Bezirk` : ''}</small>
 <div class="a"><a class="pg" href="${esc(page)}" target="_blank" rel="noopener">Seite</a><button type="button" data-qr="${esc(page)}">QR</button><button type="button" data-share="${esc(page)}">Teilen</button></div>
-${owner}</li>`;
+${owner}
+${photo}</li>`;
   }).join('\n');
   const chips = ['<button type="button" class="on" data-k="">Alle</button>', ...kinds.map((k) => `<button type="button" data-k="${esc(k)}">${esc(kindDe(k))}</button>`)].join('');
   const dsel = districts.length > 1
@@ -84,12 +95,26 @@ li b{font-size:17px}li small{display:block;color:#555;margin-top:2px}
 .empty{text-align:center;color:#666;padding:30px}
 #qr{position:fixed;inset:0;z-index:9;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
 #qr[hidden]{display:none}#qr svg{width:min(86vw,62vh);height:auto}#qr b{font-size:20px;margin:14px 0 4px}#qr p{margin:2px 0;color:#555}
-#qr .warn{color:#b00020;font-weight:700}#qr small{margin-top:18px;color:#888}</style></head><body>
+#qr .warn{color:#b00020;font-weight:700}#qr small{margin-top:18px;color:#888}
+.fr{margin-top:8px;padding-top:8px;border-top:1px dashed #ccc;align-items:center}.fr[data-none] .has{display:none}
+.th{width:64px;height:48px;object-fit:cover;border-radius:6px;border:1px solid #ccc}
+#crop{position:fixed;inset:0;z-index:10;background:#111;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:16px;touch-action:none}
+#crop[hidden]{display:none}#crop b{font-size:17px}#crop p{margin:0;font-size:14px;opacity:.8;text-align:center}
+.frame{position:relative;width:min(94vw,calc(62vh*4/3));aspect-ratio:4/3;overflow:hidden;border-radius:10px;background:#000;box-shadow:0 0 0 2px #fff;cursor:grab}
+.frame img{position:absolute;left:0;top:0;transform-origin:0 0;max-width:none;user-select:none;-webkit-user-drag:none;pointer-events:none}
+#crop input[type=range]{width:min(94vw,520px)}
+.cb{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}.cb button{font:inherit;font-size:16px;font-weight:700;min-height:48px;padding:10px 18px;border-radius:10px;border:1px solid #fff;background:transparent;color:#fff}
+.cb .go{background:#ffc93c;border-color:#ffc93c;color:#111}.cb button:disabled{opacity:.5}</style></head><body>
 <header><h1>namax · Liste <span data-count>${rows.length}</span></h1>
 <input type="search" placeholder="Name oder Straße" aria-label="Suche" autocomplete="off">
 <div class="f" role="group" aria-label="Art">${chips}</div>${dsel}</header>
 <ul>${items}</ul><p class="empty" hidden>Nichts gefunden</p>
 <div id="qr" hidden role="dialog" aria-label="QR-Code"></div>
+<input type="file" accept="image/*" id="fpick" hidden>
+<div id="crop" hidden role="dialog" aria-label="Foto zuschneiden"><b data-cname></b><p>Ziehen zum Verschieben, mit zwei Fingern oder dem Regler zoomen</p>
+<div class="frame" data-frame><img alt="" data-cimg></div>
+<input type="range" min="1" max="4" step="0.01" value="1" aria-label="Zoom" data-zoom>
+<div class="cb"><button type="button" class="go" data-cuse>Verwenden</button><button type="button" data-cagain>Neu wählen</button><button type="button" data-cno>Abbrechen</button></div></div>
 <script src="/js/qrcode.js"></script>
 <script>(function(){var ov=document.getElementById('qr');
 function svg(t){var q=qrcode(0,'M');q.addData(t);q.make();var n=q.getModuleCount(),m=4,p='';for(var r=0;r<n;r++)for(var c=0;c<n;c++)if(q.isDark(r,c))p+='M'+(c+m)+' '+(r+m)+'h1v1h-1z';
@@ -114,5 +139,45 @@ function run(){var n=0;for(var i=0;i<lis.length;i++){var l=lis[i],ok=(!q||l.data
 document.querySelector('input[type=search]').addEventListener('input',function(e){q=e.target.value.trim().toLowerCase();run()});
 var sel=document.querySelector('[data-dsel]');if(sel)sel.addEventListener('change',function(){d=sel.value;run()});
 document.addEventListener('click',function(e){var c=e.target.closest('[data-k]');if(c){k=c.dataset.k;[].forEach.call(document.querySelectorAll('[data-k]'),function(b){b.className=b===c?'on':''});run()}});})();</script>
+<script>(function(){var pick=document.getElementById('fpick'),cr=document.getElementById('crop'),fr=cr.querySelector('[data-frame]'),im=cr.querySelector('[data-cimg]'),zm=cr.querySelector('[data-zoom]'),use=cr.querySelector('[data-cuse]');
+var slug='',li=null,url='',s0=1,s=1,x=0,y=0,pts={},last=null;
+function K(){return new URLSearchParams(location.search).get('k')}
+function W(){return fr.clientWidth}function H(){return fr.clientHeight}
+function draw(){var w=im.naturalWidth*s,h=im.naturalHeight*s;x=Math.min(0,Math.max(W()-w,x));y=Math.min(0,Math.max(H()-h,y));im.style.transform='translate('+x+'px,'+y+'px) scale('+s+')'}
+function zoomTo(ns,cx,cy){ns=Math.max(s0,Math.min(s0*4,ns));x=cx-(cx-x)*ns/s;y=cy-(cy-y)*ns/s;s=ns;zm.value=s/s0;draw()}
+function open(file){if(!file)return;if(url)URL.revokeObjectURL(url);url=URL.createObjectURL(file);
+im.onload=function(){cr.hidden=false;s0=s=Math.max(W()/im.naturalWidth,H()/im.naturalHeight);x=(W()-im.naturalWidth*s)/2;y=(H()-im.naturalHeight*s)/2;zm.value=1;draw()};
+im.onerror=function(){alert('Dieses Bild kann der Browser nicht öffnen.')};im.src=url}
+function close(){cr.hidden=true;im.removeAttribute('src');if(url){URL.revokeObjectURL(url);url=''}pick.value=''}
+function src(u){return /^https:/.test(u)?u:'/'+u}
+function setPhoto(l,u){var row=l.querySelector('[data-frow]'),th=row.querySelector('.th');
+if(u){if(!th){th=document.createElement('img');th.className='th';th.alt='';row.insertBefore(th,row.querySelector('[data-facade]'))}th.src=src(u);row.removeAttribute('data-none')}
+else{if(th)th.remove();row.setAttribute('data-none','')}
+var pg=l.querySelector('a.pg');pg.href=pg.href.split('?')[0]+'?f='+Date.now()}
+fr.addEventListener('pointerdown',function(e){fr.setPointerCapture(e.pointerId);pts[e.pointerId]={x:e.clientX,y:e.clientY};last=null});
+fr.addEventListener('pointermove',function(e){var p=pts[e.pointerId];if(!p)return;var ids=Object.keys(pts);
+if(ids.length===1){x+=e.clientX-p.x;y+=e.clientY-p.y;p.x=e.clientX;p.y=e.clientY;draw();return}
+p.x=e.clientX;p.y=e.clientY;var a=pts[ids[0]],b=pts[ids[1]],d=Math.hypot(a.x-b.x,a.y-b.y),r=fr.getBoundingClientRect(),cx=(a.x+b.x)/2-r.left,cy=(a.y+b.y)/2-r.top;
+if(last){x+=cx-last.cx;y+=cy-last.cy;zoomTo(s*d/last.d,cx,cy)}last={d:d,cx:cx,cy:cy}});
+function up(e){delete pts[e.pointerId];last=null}
+fr.addEventListener('pointerup',up);fr.addEventListener('pointercancel',up);
+fr.addEventListener('wheel',function(e){e.preventDefault();var r=fr.getBoundingClientRect();zoomTo(s*(e.deltaY<0?1.1:1/1.1),e.clientX-r.left,e.clientY-r.top)},{passive:false});
+zm.addEventListener('input',function(){zoomTo(s0*Number(zm.value),W()/2,H()/2)});
+pick.addEventListener('change',function(){open(pick.files[0])});
+cr.querySelector('[data-cno]').addEventListener('click',close);
+cr.querySelector('[data-cagain]').addEventListener('click',function(){pick.value='';pick.click()});
+use.addEventListener('click',function(){var c=document.createElement('canvas');c.width=1600;c.height=1200;
+c.getContext('2d').drawImage(im,-x/s,-y/s,W()/s,H()/s,0,0,1600,1200);
+function done(){use.disabled=false;use.textContent='Verwenden'}
+use.disabled=true;use.textContent='Lädt…';
+c.toBlob(function(blob){if(!blob){alert('Das Bild ist zu groß für dieses Handy.');done();return}
+var f=new FormData();f.append('k',K());f.append('slug',slug);f.append('photo',blob,'facade.jpg');
+fetch(location.pathname,{method:'POST',body:f}).then(function(r){if(!r.ok)throw 0;return r.json()})
+.then(function(j){setPhoto(li,j.url);close();done()},function(){alert('Hochladen hat nicht geklappt. Bitte nochmal versuchen.');done()})},'image/jpeg',0.82)});
+document.addEventListener('click',function(e){var b=e.target.closest('[data-facade]');
+if(b){li=b.closest('li');slug=b.dataset.facade;cr.querySelector('[data-cname]').textContent=li.dataset.name;pick.value='';pick.click();return}
+b=e.target.closest('[data-fdel]');if(!b)return;var l=b.closest('li');if(!confirm('Foto von „'+l.dataset.name+'“ löschen?'))return;
+var f=new FormData();f.append('k',K());f.append('slug',b.dataset.fdel);f.append('delete','1');
+fetch(location.pathname,{method:'POST',body:f}).then(function(r){if(!r.ok)throw 0;setPhoto(l,null)},function(){alert('Löschen hat nicht geklappt.')})});})();</script>
 </body></html>`;
 }

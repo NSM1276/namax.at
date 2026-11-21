@@ -159,3 +159,26 @@ test('facade: a JSON post still rotates the owner link', async () => {
   assert.equal(res.status, 200);
   assert.match((await res.json()).ownerUrl, /^https:\/\/cafe-a\.namax\.at\/\?k=[0-9a-f]{32}$/);
 });
+
+test('list card: "Foto" button; with a facade a thumbnail and "Foto löschen"; the picker is the plain chooser (camera or gallery)', () => {
+  const row = (slug, facadeUrl) => ({ slug, name: 'N ' + slug, kind: 'cafe', street: 'S', district: 12, status: 'public', confirmed: false, ownerUrl: null, facadeUrl });
+  const url = 'https://abc.public.blob.vercel-storage.com/venues/with-f/facade-1.jpg';
+  const html = renderAdmin([row('with-f', url), row('no-f', null)]);
+  const card = (slug) => html.split('<li ').find((c) => c.includes(`data-name="N ${slug}"`)).split('</li>')[0];
+  assert.match(card('with-f'), /data-facade="with-f"[^>]*>Foto</);
+  assert.ok(card('with-f').includes(`<img class="th" src="${url}"`), 'thumbnail');
+  assert.match(card('with-f'), /data-fdel="with-f"[^>]*>Foto löschen</);
+  assert.match(card('no-f'), /data-facade="no-f"[^>]*>Foto</);
+  assert.ok(!card('no-f').includes('<img'), 'no thumbnail without a photo');
+  assert.match(card('no-f'), /data-frow[^>]* data-none/);
+  assert.match(html, /<input type="file" accept="image\/\*"/);
+  assert.doesNotMatch(html, /capture/);
+  for (const s of ['1600', '1200', '0.82', 'Verwenden', 'Neu wählen', 'Abbrechen', 'type="range"']) assert.ok(html.includes(s), s);
+});
+
+test('list passes the facade url from the store to the card', async () => {
+  const s = await svc();
+  await s.store.setFacade('cafe-a', 'https://abc.public.blob.vercel-storage.com/venues/cafe-a/facade-9.jpg');
+  const html = await (await handleAdmin(req(ADMIN), s)).text();
+  assert.ok(html.includes('<img class="th" src="https://abc.public.blob.vercel-storage.com/venues/cafe-a/facade-9.jpg"'));
+});
