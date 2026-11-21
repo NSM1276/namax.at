@@ -111,8 +111,9 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   if (a.write) {
     writeFileSync(KEYS_FILE, formatKeys(r.keys));
     const file = join(root, `venues/.links-${viennaDay()}.md`);
-    writeFileSync(file, `# Owner links ${viennaDay()} — secret, do not share or commit\n\n`
-      + r.links.map((l) => `- ${l.name}: ${l.url}`).join('\n') + '\n');
+    // Several runs a day (one per district) add to the same file instead of replacing it.
+    const head = existsSync(file) ? readFileSync(file, 'utf8') : `# Owner links ${viennaDay()} — secret, do not share or commit\n\n`;
+    writeFileSync(file, head + r.links.map((l) => `- ${l.name}: ${l.url}`).join('\n') + '\n');
     console.log(`keys: venues/.keys.tsv · links: ${file.slice(root.length + 1)}`);
   }
 }
