@@ -4,3 +4,4 @@ Disallow: /tools/
 Disallow: /docs/
 
 Sitemap: https://www.namax.at/sitemap.xml
+Sitemap: https://www.namax.at/api/venue/sitemap

@@ -30,8 +30,18 @@ async function ownerRecord(req, store, key) {
   return { slug, record };
 }
 
+const text = (status, body, cache = 'public, s-maxage=3600') =>
+  new Response(body, { status, headers: { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': cache } });
+
 export async function handlePage(req, { store, ownerPart }) {
   const url = new URL(req.url);
+  if (url.pathname === '/robots.txt') {
+    const slug = hostSlug(req);
+    const record = slug ? await store.getVenue(slug) : null;
+    if (!record || record.status !== 'public') return text(200, 'User-agent: *\nDisallow: /\n');
+    return text(200, 'User-agent: *\nAllow: /\n\nSitemap: https://www.namax.at/api/venue/sitemap\n');
+  }
+  if (url.pathname !== '/') return text(404, 'Not found\n', 'public, s-maxage=600');
   const page = await renderPage({ store, slug: hostSlug(req), key: url.searchParams.get('k') || '', ownerPart });
   return new Response(page.body, { status: page.status, headers: page.headers });
 }
@@ -77,6 +87,14 @@ export async function handlePhoto(req, { store, blob, now = () => new Date() }) 
   const { url } = await blob.put(path, bytes, { access: 'public', contentType: kind.type, addRandomSuffix: false });
   const id = await store.addPhoto(slug, { url, kind: 'priceboard' });
   return json(200, { id });
+}
+
+/** XML sitemap of the public venue pages, served on www.namax.at. */
+export async function handleSitemap(req, { store }) {
+  const slugs = await store.listSlugs('public');
+  const xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+    + slugs.map((s) => `<url><loc>https://${s}.namax.at/</loc></url>`).join('\n') + '\n</urlset>\n';
+  return new Response(xml, { headers: { 'Content-Type': 'application/xml; charset=utf-8', 'Cache-Control': 'public, s-maxage=3600' } });
 }
 
 /** Counts a page view. Always 204, whatever happens, so it tells nobody anything. */

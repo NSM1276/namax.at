@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { memoryStore } from './store.mjs';
 import { hashKey } from './owner.mjs';
-import { handleChat, handlePhoto, handleHit, handlePage, MAX_PHOTO_BYTES, DAILY_PHOTOS } from './http.mjs';
+import { handleChat, handlePhoto, handleHit, handlePage, handleSitemap, MAX_PHOTO_BYTES, DAILY_PHOTOS } from './http.mjs';
 
 const KEY = 'a'.repeat(32);
 const SLUG = 'friseur-meidling';
@@ -106,4 +106,28 @@ test('page handler: key from ?k, owner page private, public page cached', async 
   const own = await handlePage(new Request(`https://${host}/?k=${KEY}`, { headers: { host } }), s);
   assert.equal(own.headers.get('cache-control'), 'private, no-store');
   assert.ok(!(await pub.text()).includes(KEY));
+});
+
+test('venue host: robots.txt per status, other paths 404, only "/" renders the page', async () => {
+  const s = await services();
+  const get = (path, st = s) => handlePage(new Request(`https://${host}${path}`, { headers: { host } }), st);
+  const robots = await get('/robots.txt');
+  assert.equal(robots.status, 200);
+  assert.match(robots.headers.get('content-type'), /text\/plain/);
+  assert.match(await robots.text(), /Allow: \/[\s\S]*Sitemap: https:\/\/www\.namax\.at\/api\/venue\/sitemap/);
+  assert.equal((await get('/favicon.ico')).status, 404);
+  assert.equal((await get('/wp-login.php')).status, 404);
+  const hidden = await services('hidden');
+  assert.match(await (await get('/robots.txt', hidden)).text(), /Disallow: \//);
+});
+
+test('sitemap lists public venues only', async () => {
+  const s = await services();
+  await s.store.upsertFacts('hidden-one', { facts: { ...facts, slug: 'hidden-one' }, keyHash: 'x', status: 'hidden' });
+  const r = await handleSitemap(new Request('https://www.namax.at/api/venue/sitemap'), s);
+  assert.equal(r.status, 200);
+  assert.match(r.headers.get('content-type'), /xml/);
+  const xml = await r.text();
+  assert.ok(xml.includes('<loc>https://friseur-meidling.namax.at/</loc>'));
+  assert.ok(!xml.includes('hidden-one'));
 });
