@@ -8,7 +8,7 @@
 // setStatus, setConfirmed, setDoNotContact, setChatState
 // addMessage(slug, { role, content }) → id;  listMessages(slug, limit);  countOwnerMessagesSince(slug, iso)
 // addPhoto(slug, { url, kind }) → id;  listPhotos;  setPhotoKind(slug, id, kind);  removePhoto;  countPhotosSince
-// addEvent(slug, { type, text });  listEvents(sinceIso)
+// addEvent(slug, { type, text });  listEvents(sinceIso);  countEventsSince(slug, type, sinceIso)
 // addHit(slug, { owner, day });  getHits(slug) → { visitors, owner }
 // recordModelCall(slug);  countModelCalls(slug, sinceIso?)
 // listSlugs(status) → slugs
@@ -96,6 +96,7 @@ export function memoryStore() {
 
     async addEvent(slug, { type, text = '' }) { events.push({ slug, type, text, at: nowIso() }); },
     async listEvents(sinceIso) { return events.filter((e) => e.at >= sinceIso).map((e) => ({ ...e })); },
+    async countEventsSince(slug, type, sinceIso) { return events.filter((e) => e.slug === slug && e.type === type && e.at >= sinceIso).length; },
 
     async addHit(slug, { owner, day }) {
       let h = hits.find((x) => x.slug === slug && x.day === day);

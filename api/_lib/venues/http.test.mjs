@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { memoryStore } from './store.mjs';
 import { hashKey } from './owner.mjs';
-import { handleChat, handlePhoto, handleHit, handlePage, handleSitemap, MAX_PHOTO_BYTES, DAILY_PHOTOS } from './http.mjs';
+import { handleChat, handlePhoto, handleHit, handlePage, handleSitemap, MAX_PHOTO_BYTES, DAILY_PHOTOS, MAX_STORED_PHOTOS } from './http.mjs';
 
 const KEY = 'a'.repeat(32);
 const SLUG = 'friseur-meidling';
@@ -12,7 +12,9 @@ async function services(status = 'public') {
   const store = memoryStore();
   await store.upsertFacts(SLUG, { facts, keyHash: hashKey(KEY), status });
   const uploads = [];
-  const blob = { async put(path, body, opts) { uploads.push({ path, size: body.byteLength ?? body.size, opts }); return { url: `https://abc.public.blob.vercel-storage.com/${path}` }; } };
+  const deleted = [];
+  const blob = { deleted, async put(path, body, opts) { uploads.push({ path, size: body.byteLength ?? body.size, opts }); return { url: `https://abc.public.blob.vercel-storage.com/${path}` }; },
+    async del(urls) { deleted.push(...[].concat(urls)); } };
   const llm = { calls: 0, async create() { this.calls++; return { stop_reason: 'tool_use', content: [{ type: 'tool_use', id: 't', name: 'answer', input: { key: 'who' } }] }; } };
   return { store, blob, llm, uploads };
 }
@@ -138,4 +140,33 @@ test('R4: public page has no stale-while-revalidate; the rewritten path also ren
   assert.doesNotMatch(pub.headers.get('cache-control'), /stale/);
   const rewritten = await handlePage(new Request(`https://${host}/api/venue/page`, { headers: { host } }), s);
   assert.equal(rewritten.status, 200);
+});
+
+test('photo: at most 4 are kept; the 5th replaces the oldest and its file is deleted', async () => {
+  const s = await services();
+  assert.equal(MAX_STORED_PHOTOS, 4);
+  for (let i = 0; i < 5; i++) assert.equal((await handlePhoto(photoReq(jpeg(1000)), s)).status, 200);
+  const kept = await s.store.listPhotos(SLUG);
+  assert.equal(kept.length, 4);
+  const first = 'https://abc.public.blob.vercel-storage.com/' + s.uploads[0].path;
+  assert.deepEqual(s.blob.deleted, [first]);
+  assert.ok(!kept.some((p) => p.url === first));
+});
+
+test('daily upload limit still holds when old photos are replaced', async () => {
+  const s = await services();
+  for (let i = 0; i < DAILY_PHOTOS; i++) assert.equal((await handlePhoto(photoReq(jpeg(1000)), s)).status, 200);
+  assert.equal((await handlePhoto(photoReq(jpeg(1000)), s)).status, 429);
+});
+
+test('removing the page deletes all its photos and their files', async () => {
+  const s = await services();
+  for (let i = 0; i < 3; i++) await handlePhoto(photoReq(jpeg(1000)), s);
+  await handleChat(chatReq({ k: KEY, input: { start: true } }), s);
+  await handleChat(chatReq({ k: KEY, input: { chip: 'lang_de' } }), s);
+  await handleChat(chatReq({ k: KEY, input: { chip: 'delete' } }), s);
+  await handleChat(chatReq({ k: KEY, input: { chip: 'delete_yes' } }), s);
+  assert.equal((await s.store.getVenue(SLUG)).status, 'removed');
+  assert.equal((await s.store.listPhotos(SLUG)).length, 0);
+  assert.equal(s.blob.deleted.length, 3);
 });

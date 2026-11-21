@@ -73,6 +73,9 @@ export function pgStore(query) {
       const rows = await query('select slug, type, text, at from venue_events where at >= $1::timestamptz order by id', [since]);
       return rows.map((e) => ({ slug: e.slug, type: e.type, text: e.text, at: iso(e.at) }));
     },
+    async countEventsSince(slug, type, since) {
+      return count('select count(*) as n from venue_events where slug = $1 and type = $2 and at >= $3::timestamptz', [slug, type, since]);
+    },
 
     async addHit(slug, { owner, day }) {
       await query(`insert into venue_hits (slug, day, visitors, owner) values ($1, $2::date, $3, $4)

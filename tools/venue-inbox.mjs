@@ -9,6 +9,7 @@ const ORDER = [
   ['handoff', 'Вопросы к тебе'],
   ['changed', 'Изменения'],
   ['confirmed', 'Подтвердили данные'],
+  ['photo', 'Новые фото'],
 ];
 
 export function inboxReport(events) {

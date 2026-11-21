@@ -1,5 +1,5 @@
 // Web Request → Response handlers for the venue functions. Services are passed in, so tests use fakes:
-//   { store, llm, blob: { put(path, bytes, opts) → { url } }, ownerPart?, now? }
+//   { store, llm, blob: { put(path, bytes, opts) → { url }, del(urls) }, ownerPart?, now? }
 // The venue is always the one named by the Host header; a body can never pick another venue.
 import { randomBytes } from 'node:crypto';
 import { slugFromHost, renderPage } from './page.mjs';
@@ -10,6 +10,8 @@ import { isAdmin, openOwnerKey, renderAdmin, ADMIN_KEY_HASH } from './admin.mjs'
 
 export const MAX_PHOTO_BYTES = 3 * 1024 * 1024;
 export const DAILY_PHOTOS = 12;
+/** Free pages keep at most this many photos: the next upload replaces the oldest, so storage never grows. */
+export const MAX_STORED_PHOTOS = 4;
 const MAX_CHAT_BODY = 8 * 1024;
 
 const json = (status, data) => new Response(JSON.stringify(data), {
@@ -49,7 +51,14 @@ export async function handlePage(req, { store, ownerPart }) {
   return new Response(page.body, { status: page.status, headers: page.headers });
 }
 
-export async function handleChat(req, { store, llm, now }) {
+/** Deletes the given photos from the store and their files from Blob. A failed file delete never blocks the owner. */
+async function dropPhotos(store, blob, slug, photos) {
+  if (!photos.length) return;
+  for (const p of photos) await store.removePhoto(slug, p.id);
+  try { await blob.del(photos.map((p) => p.url)); } catch (e) { console.error('blob del failed', slug, e?.message); }
+}
+
+export async function handleChat(req, { store, llm, blob, now }) {
   if (req.method !== 'POST') return fail(405, 'POST only');
   const body = await readJson(req, MAX_CHAT_BODY);
   if (!body || typeof body.input !== 'object' || body.input === null) return fail(400, 'bad request');
@@ -57,6 +66,7 @@ export async function handleChat(req, { store, llm, now }) {
   if (res) return res;
   const out = await chatTurn({ store, llm, now }, { slug, input: body.input });
   if (!out) return fail(404, 'not found');
+  if (blob && (await store.getVenue(slug))?.status === 'removed') await dropPhotos(store, blob, slug, await store.listPhotos(slug));
   return json(200, out);
 }
 
@@ -85,10 +95,14 @@ export async function handlePhoto(req, { store, blob, now = () => new Date() }) 
   const bytes = new Uint8Array(await file.arrayBuffer());
   const kind = sniff(bytes);
   if (!kind) return fail(415, 'jpeg, png or webp only');
-  if (await store.countPhotosSince(slug, viennaDayStart(now())) >= DAILY_PHOTOS) return fail(429, 'enough photos for today');
+  // Uploads are counted as events, because replaced photos leave the photo table.
+  if (await store.countEventsSince(slug, 'photo', viennaDayStart(now())) >= DAILY_PHOTOS) return fail(429, 'enough photos for today');
   const path = `venues/${slug}/${randomBytes(16).toString('hex')}.${kind.ext}`;
   const { url } = await blob.put(path, bytes, { access: 'public', contentType: kind.type, addRandomSuffix: false });
   const id = await store.addPhoto(slug, { url, kind: 'priceboard' });
+  await store.addEvent(slug, { type: 'photo', text: url });
+  const all = await store.listPhotos(slug);
+  await dropPhotos(store, blob, slug, all.slice(0, Math.max(0, all.length - MAX_STORED_PHOTOS)));
   return json(200, { id });
 }
 

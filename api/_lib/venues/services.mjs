@@ -2,7 +2,7 @@
 //   DATABASE_URL (Neon), ANTHROPIC_API_KEY, BLOB_READ_WRITE_TOKEN. Nothing here is used by tests.
 import { neon } from '@neondatabase/serverless';
 import Anthropic from '@anthropic-ai/sdk';
-import { put } from '@vercel/blob';
+import { put, del } from '@vercel/blob';
 import { pgStore } from './pg-store.mjs';
 import { ownerPanel } from './owner-ui.mjs';
 
@@ -16,7 +16,7 @@ export function services() {
   cached = {
     store: pgStore((text, params) => sql.query(text, params)),
     llm: client ? { create: (params) => client.messages.create(params) } : null,
-    blob: { put: (path, bytes, opts) => put(path, Buffer.from(bytes), opts) },
+    blob: { put: (path, bytes, opts) => put(path, Buffer.from(bytes), opts), del: (urls) => del(urls) },
     ownerPart: ownerPanel,
   };
   return cached;

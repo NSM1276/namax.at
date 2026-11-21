@@ -135,6 +135,18 @@ export function storeContract(makeStore, prefix = '') {
     assert.deepEqual(ev.filter((e) => e.slug.startsWith(prefix)).map((e) => [e.slug, e.type]).sort(), [[A, 'confirmed'], [B, 'removal']]);
   });
 
+  test('events are counted per venue and type', async () => {
+    const s = await fresh();
+    const since = new Date(Date.now() - 60_000).toISOString();
+    await s.addEvent(A, { type: 'photo', text: 'u1' });
+    await s.addEvent(A, { type: 'photo', text: 'u2' });
+    await s.addEvent(A, { type: 'confirmed' });
+    await s.addEvent(B, { type: 'photo', text: 'u3' });
+    assert.equal(await s.countEventsSince(A, 'photo', since), 2);
+    assert.equal(await s.countEventsSince(B, 'photo', since), 1);
+    assert.equal(await s.countEventsSince(A, 'photo', new Date(Date.now() + 60_000).toISOString()), 0);
+  });
+
   test('hits count visitors and owner separately', async () => {
     const s = await fresh();
     await s.addHit(A, { owner: false, day: '2026-11-21' });
