@@ -172,7 +172,7 @@ export function describeChanges(changes, lang) {
 function modelInput(msg, now) {
   if (!msg || msg.stop_reason === 'refusal') return { type: 'error' };
   const use = (msg.content || []).find((b) => b.type === 'tool_use');
-  if (!use) return { type: 'none' };
+  if (!use) return { type: msg.stop_reason === 'max_tokens' ? 'error' : 'none' };
   const x = use.input || {};
   switch (use.name) {
     case 'propose_changes': {
@@ -207,11 +207,12 @@ function history(messages) {
 }
 
 /** Apply the pending change only when it was proposed before the owner's message of this request. */
-export async function applyPendingIfEarlier(store, slug, ownerMessageId) {
+export async function applyPendingIfEarlier(store, slug, ownerMessageId, pendingId) {
   const v = await store.getVenue(slug);
   if (!v?.pending || !(v.pending.createdAfterMessageId < ownerMessageId)) return null;
+  if (pendingId !== undefined && Number(v.pending.id) !== Number(pendingId)) return null; // not the proposal the owner saw
   if (!checkChanges(v, v.pending.changes).ok) return null;
-  return store.applyPending(slug);
+  return store.applyPending(slug, v.pending.id);
 }
 
 const ownerText = (input) => (input.start ? '[open]' : input.chip ? `[${String(input.chip).slice(0, 40)}]`
@@ -252,12 +253,13 @@ export async function chatTurn({ store, llm, now = () => new Date() }, { slug, i
     let m;
     const photo = need.kind === 'priceboard' ? photos.find((p) => p.id === Number(need.photoId)) : null;
     if (need.kind === 'priceboard' && !photo) m = { type: 'priceList', list: null };
+    else if (!ctx.budgetLeft) m = { type: 'handoff', text: need.text || '[Foto der Preisliste]' }; // never a call past the budget
     else {
       await store.recordModelCall(slug);
       const params = need.kind === 'priceboard'
-        ? { model: MODEL, max_tokens: 1024, output_config: { effort: 'low' }, system: systemPrompt(venue, PRICE_RULES), tools: [PRICE_TOOL],
+        ? { model: MODEL, max_tokens: 3000, output_config: { effort: 'low' }, system: systemPrompt(venue, PRICE_RULES), tools: [PRICE_TOOL],
           messages: [{ role: 'user', content: [{ type: 'image', source: { type: 'url', url: photo.url } }, { type: 'text', text: 'Price board photo.' }] }] }
-        : { model: MODEL, max_tokens: 500, output_config: { effort: 'low' }, system: systemPrompt(venue), tools: TOOLS,
+        : { model: MODEL, max_tokens: 2000, output_config: { effort: 'low' }, system: systemPrompt(venue), tools: TOOLS,
           messages: buildMessages(await store.listMessages(slug, HISTORY + 1), ownerMessageId, need.text) };
       try { m = modelInput(await llm.create(params), at); } catch { m = { type: 'error' }; }
     }
@@ -267,7 +269,7 @@ export async function chatTurn({ store, llm, now = () => new Date() }, { slug, i
     }
   }
 
-  const changed = await runEffect(store, slug, out.effect, { record, at, ownerMessageId, photos });
+  const changed = await runEffect(store, slug, out.effect, { record, at, ownerMessageId, photos, state: out.state });
   if (out.effect?.type === 'applyPending' && !changed) out = step(out.state, { chip: '__none' }, { ...ctx, hasPending: false });
 
   await store.setChatState(slug, out.state);
@@ -284,7 +286,7 @@ function buildMessages(recent, ownerMessageId, text) {
   return turns;
 }
 
-async function runEffect(store, slug, effect, { record, at, ownerMessageId, photos }) {
+async function runEffect(store, slug, effect, { record, at, ownerMessageId, photos, state }) {
   if (!effect) return false;
   const iso = at.toISOString();
   switch (effect.type) {
@@ -294,20 +296,22 @@ async function runEffect(store, slug, effect, { record, at, ownerMessageId, phot
       return true;
     case 'apply': {
       if (!checkChanges(record, effect.changes).ok) return false;
-      await store.setPending(slug, effect.changes);
-      await store.applyPending(slug);
+      const id = await store.setPending(slug, effect.changes);
+      await store.applyPending(slug, id);
       await store.addEvent(slug, { type: 'changed', text: Object.keys(effect.changes).join(',') });
       return true;
     }
     case 'setPending':
-      await store.setPending(slug, effect.changes);
+      state.pendingId = await store.setPending(slug, effect.changes); // the yes must name this proposal
       return false;
     case 'applyPending': {
-      const applied = await applyPendingIfEarlier(store, slug, ownerMessageId);
+      const applied = await applyPendingIfEarlier(store, slug, ownerMessageId, record.chatState?.pendingId ?? null);
+      delete state.pendingId;
       if (applied) await store.addEvent(slug, { type: 'changed', text: Object.keys(applied).join(',') });
       return Boolean(applied);
     }
     case 'clearPending': {
+      delete state.pendingId;
       await store.clearPending(slug);
       return false;
     }

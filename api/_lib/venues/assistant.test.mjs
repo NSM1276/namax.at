@@ -165,10 +165,13 @@ test('a price board photo of another venue is refused without a model call', asy
   assert.equal(llm.calls.length, 0);
 });
 
-test('removal by free text happens at once, sets doNotContact, no model call', async () => {
+test('removal by free text: one confirmation, then removed with doNotContact, no model call', async () => {
   const store = await setup(); const llm = fakeLlm();
   await inGerman(store, llm);
-  const r = await turn(store, llm, { text: 'Löschen Sie das, ich mache Anzeige!' });
+  const ask = await turn(store, llm, { text: 'Löschen Sie das, ich mache Anzeige!' });
+  assert.equal((await store.getVenue(SLUG)).status, 'public');
+  assert.deepEqual(ask.chips.map((c) => c.id).slice(0, 2), ['delete_yes', 'delete_no']);
+  const r = await turn(store, llm, { chip: 'delete_yes' });
   const v = await store.getVenue(SLUG);
   assert.equal(v.status, 'removed');
   assert.equal(v.doNotContact, true);
@@ -186,6 +189,8 @@ test('removal by free text happens at once, sets doNotContact, no model call', a
 test('the model may also ask for removal, handoff or a saved answer', async () => {
   const s1 = await setup(); const l1 = fakeLlm(toolUse('request_removal', {}));
   await inGerman(s1, l1); await turn(s1, l1, { text: 'Ich will das nicht' });
+  assert.equal((await s1.getVenue(SLUG)).status, 'public', 'the model only leads to the confirmation');
+  await turn(s1, l1, { chip: 'delete_yes' });
   assert.equal((await s1.getVenue(SLUG)).status, 'removed');
 
   const s2 = await setup(); const l2 = fakeLlm(toolUse('handoff', { text: 'Will Online-Buchung' }));
@@ -236,7 +241,7 @@ test('the model gets the rules, the venue, at most 6 earlier messages and a smal
   await turn(store, llm, { text: 'Wer seid ihr?' });
   const p = llm.calls[0];
   assert.equal(p.model, 'claude-haiku-5-5');
-  assert.ok(p.max_tokens <= 1024);
+  assert.ok(p.max_tokens <= 3000);
   assert.ok(p.messages.length <= 7);
   assert.equal(p.messages[0].role, 'user');
   assert.ok(JSON.stringify(p.messages.at(-1)).includes('Wer seid ihr?'));
@@ -252,4 +257,36 @@ test('photos: shown at once, never a fifth', async () => {
     await turn(store, llm, { photo: { id } });
   }
   assert.equal((await store.listPhotos(SLUG)).filter((p) => p.kind === 'show').length, 4);
+});
+
+test('R5: the yes applies only the proposal the owner saw', async () => {
+  const store = await setup(); const llm = fakeLlm();
+  await inGerman(store, llm);
+  await store.setPending(SLUG, { phone: '+4312345678' });
+  const seen = (await store.getVenue(SLUG)).pending.id;
+  await store.addMessage(SLUG, { role: 'owner', content: 'x' });
+  await store.setPending(SLUG, { phone: '+4399999999' }); // another tab, just before this yes
+  const v = await store.getVenue(SLUG);
+  await store.setChatState(SLUG, { ...v.chatState, step: 'pending', pendingId: seen });
+  await turn(store, llm, { chip: 'apply_yes' });
+  assert.equal((await store.getVenue(SLUG)).changes.phone, undefined);
+});
+
+test('R6: a reply cut off at max_tokens is an error, and max_tokens leaves room for thinking', async () => {
+  const store = await setup(); const llm = fakeLlm({ stop_reason: 'max_tokens', content: [{ type: 'thinking', thinking: '...' }] });
+  await inGerman(store, llm);
+  const r = await turn(store, llm, { text: 'Samstag bis 17' });
+  assert.ok(r.say.includes(say('de', 'error')));
+  assert.ok(llm.calls[0].max_tokens >= 2000);
+});
+
+test('R3: a resent price board photo after the budget is spent makes no model call', async () => {
+  const store = await setup();
+  const id = await store.addPhoto(SLUG, { url: 'https://abc.public.blob.vercel-storage.com/venues/friseur-meidling/p.jpg', kind: 'priceboard' });
+  for (let i = 0; i < 40; i++) await store.recordModelCall(SLUG);
+  const llm = fakeLlm();
+  await inGerman(store, llm);
+  await turn(store, llm, { chip: 'change' }); await turn(store, llm, { chip: 'prices' }); await turn(store, llm, { chip: 'price_photo' });
+  await turn(store, llm, { photo: { id } });
+  assert.equal(llm.calls.length, 0);
 });

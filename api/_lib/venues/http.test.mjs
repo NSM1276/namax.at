@@ -131,3 +131,11 @@ test('sitemap lists public venues only', async () => {
   assert.ok(xml.includes('<loc>https://friseur-meidling.namax.at/</loc>'));
   assert.ok(!xml.includes('hidden-one'));
 });
+
+test('R4: public page has no stale-while-revalidate; the rewritten path also renders the page', async () => {
+  const s = await services();
+  const pub = await handlePage(new Request(`https://${host}/`, { headers: { host } }), s);
+  assert.doesNotMatch(pub.headers.get('cache-control'), /stale/);
+  const rewritten = await handlePage(new Request(`https://${host}/api/venue/page`, { headers: { host } }), s);
+  assert.equal(rewritten.status, 200);
+});

@@ -59,7 +59,7 @@ test('no key or a wrong key → public page, cached, nothing of the owner', asyn
   for (const key of ['', OTHER, hashKey(KEY), 'x']) {
     const r = await renderPage({ store, slug, key });
     assert.equal(r.status, 200);
-    assert.match(r.headers['Cache-Control'], /public, s-maxage=60, stale-while-revalidate=600/);
+    assert.match(r.headers['Cache-Control'], /^public, s-maxage=60$/);
     assert.ok(r.body.includes('Friseur Meidling'));
     for (const s of ['data-chat', 'data-owner', 'wa.me', KEY, hashKey(KEY), 'SECRET-OWNER', 'SECRET-NOTE']) assert.ok(!r.body.includes(s), s);
   }

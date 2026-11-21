@@ -27,17 +27,21 @@ const STEP_CHIPS = {
   photos: ['photos_yes', 'photos_no'],
   photo: ['photos_done'],
   closing: ['more', 'questions'],
+  confirmDelete: ['delete_yes', 'delete_no'],
 };
 const CHIP_LABEL = { more: 'c_more', done: 'c_done', apply_yes: 'c_apply_yes', apply_no: 'c_apply_no', correct: 'c_correct',
   not_quite: 'c_not_quite', price_photo: 'c_price_photo', price_write: 'c_price_write', hours: 'c_hours', prices: 'c_prices',
   phone: 'c_phone', other: 'c_other', yes_all: 'c_yes_all', change: 'c_change', photos_yes: 'c_photos_yes', photos_no: 'c_photos_no',
   photos_done: 'c_photos_done', questions: 'c_questions', q_who: 'c_q_who', q_data: 'c_q_data', q_cost: 'c_q_cost',
-  q_sees: 'c_q_sees', q_work: 'c_q_work', talk: 'c_talk' };
+  q_sees: 'c_q_sees', q_work: 'c_q_work', talk: 'c_talk', delete_yes: 'c_delete_yes', delete_no: 'c_delete_no' };
 const ANSWERS = { who: 'a_who', data: 'a_data', cost: 'a_cost', sees: 'a_sees', work: 'a_work', human: 'humanQ' };
 
-const REMOVAL = /lösch|losch|entfern|anzeige|anwalt|polizei|klage|verboten|nicht erlaubt|delete|remove|take (it )?down|lawyer|police|\bsil\b|silin|silmek|kaldır|avukat|şikayet|polis|احذف|حذف|امسح|إزالة|ازالة|محامي|شرطة|پاک|وکیل|پلیس|obriš|izbriš|ukloni|advokat|policij|tužb/i;
-const YES = /^(ja|jaa|jo|yes|yep|ok|okay|passt|stimmt|genau|richtig|evet|tamam|doğru|نعم|اي|أيوه|صحيح|بله|آره|درسته|da|tačno|tako je)\b/i;
-const NO = /^(nein|nee|no|nope|falsch|hayır|yok|yanlış|لا|نه|خیر|ne|nije)\b/i;
+const REMOVAL = /lösch|losch|anwalt|polizei|klage|verboten|nicht erlaubt|\bdelete\b|take (it|this|the page) down|lawyer|police|\bsil\b|silin|silmek|avukat|şikayet|polis|احذف|حذف|امسح|محامي|شرطة|پاک|وکیل|پلیس|obriš|izbriš|advokat|policij|tužb/i;
+const YES = /^(ja|jaa|jo|yes|yep|ok|okay|passt|stimmt|genau|richtig|evet|tamam|doğru|نعم|اي|أيوه|صحيح|بله|آره|درسته|da|tačno|tako je)(?=$|[\s.,!?؟،])/i;
+const NO = /^(nein|nee|no|nope|falsch|hayır|yok|yanlış|لا|نه|خیر|ne|nije)(?=$|[\s.,!?؟،])/i;
+// a negation anywhere means it is not a plain yes: "Stimmt nicht", "doğru değil", "Da fehlt Montag"
+const NEGATION = /\b(nicht|kein|keine|fehlt|falsch|aber|not|wrong|but|missing|değil|yanlış|ama|eksik|nije|ali|fali)\b|لا|ليس|غير|نه|نیست|ولی|اما/i;
+const isYes = (t) => YES.test(t) && !NEGATION.test(t) && t.split(/\s+/).length <= 3;
 
 export const isRemovalText = (t) => REMOVAL.test(String(t || ''));
 
@@ -68,6 +72,10 @@ export function step(state0, input, ctx) {
     const say = [t('closing', { url: ctx.url })];
     if (ctx.confirmed) say.push(t('views', { n: ctx.hits }));
     return at('closing', say);
+  };
+  const askDelete = () => {
+    if (state.step !== 'confirmDelete') state.beforeDelete = state.step || 'ask';
+    return at('confirmDelete', [t('confirmDelete')]);
   };
   const removal = () => {
     state.lane = 'out';
@@ -100,7 +108,9 @@ export function step(state0, input, ctx) {
       if (first) return at('ask', [phrase(state.lang, 'intro', { name: ctx.name }), phrase(state.lang, 'askCorrect')]);
       return step(state, { start: true }, ctx);
     }
-    if (id === 'delete') return removal();
+    if (id === 'delete') return askDelete();
+    if (id === 'delete_yes') return removal();
+    if (id === 'delete_no') { state.step = state.beforeDelete || 'ask'; delete state.beforeDelete; return resume(); }
     if (id === 'questions') return out([t('questionsWhich')], [...Q_CHIPS, ...(STEP_CHIPS[state.step] || []).filter((c) => c !== 'questions')]);
     if (Q_CHIPS.includes(id)) {
       if (state.lane !== 'in' || !ctx.confirmed) state.lane = ctx.confirmed ? state.lane : 'questions';
@@ -142,7 +152,10 @@ export function step(state0, input, ctx) {
 
   if (input.photo) {
     const photoId = input.photo.id;
-    if (state.step === 'priceboard') return out([], [], { effect: { type: 'needModel', kind: 'priceboard', photoId } });
+    if (state.step === 'priceboard') {
+      if (!ctx.budgetLeft) return { ...resume([t('forwarded')]), effect: { type: 'handoff', text: '[Foto der Preisliste, Budget aufgebraucht]' } };
+      return out([], [], { effect: { type: 'needModel', kind: 'priceboard', photoId } });
+    }
     if (ctx.shownPhotos >= 4) return closing();
     const n = ctx.shownPhotos + 1;
     if (n >= 4) {
@@ -155,10 +168,11 @@ export function step(state0, input, ctx) {
   if (typeof input.text === 'string') {
     const text = input.text.trim().slice(0, 2000);
     if (!text) return resume([t('notUnderstood')]);
-    if (isRemovalText(text)) return removal();
+    if (isRemovalText(text)) return askDelete();
     if (ctx.hasPending && (state.step === 'pending' || state.step === 'pricePending')) {
-      if (YES.test(text)) { state.lane = 'in'; return at('else', [t('saved'), t('anythingElse')], { effect: { type: 'applyPending' } }); }
+      // no first; a yes with a "but"/"not" in it goes to the model, which reads it as a correction
       if (NO.test(text)) return at('else', [t('notApplied'), t('anythingElse')], { effect: { type: 'clearPending' } });
+      if (isYes(text)) { state.lane = 'in'; return at('else', [t('saved'), t('anythingElse')], { effect: { type: 'applyPending' } }); }
     }
     if (!ctx.budgetLeft) return { ...resume([t('forwarded')]), effect: { type: 'handoff', text } };
     return out([], [], { effect: { type: 'needModel', kind: 'text', text } });
@@ -179,7 +193,7 @@ export function step(state0, input, ctx) {
       return resume([t(ANSWERS[m.key], { n: ctx.hits })]);
     }
     if (m.type === 'handoff') return { ...resume([t('forwarded')]), effect: { type: 'handoff', text: String(m.text || '').slice(0, 2000) } };
-    if (m.type === 'removal') return removal();
+    if (m.type === 'removal') return askDelete();
     if (m.type === 'proposal' || m.type === 'priceList') return at('change', [t('invalid'), t('whatChange')]);
     if (m.type === 'error') return resume([t('error')]);
     return resume([t('notUnderstood')]);

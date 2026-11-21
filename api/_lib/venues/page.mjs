@@ -36,7 +36,7 @@ export async function renderPage({ store, slug, key, ownerPart }) {
   const photos = await store.listPhotos(slug);
   const venue = effectiveVenue(record, photos);
   if (!isOwner(record, key)) {
-    return { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=600' },
+    return { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, s-maxage=60' },
       body: renderVenue(venue).replace('</body>', `${HIT}</body>`) };
   }
   const part = ownerPart ? await ownerPart({ store, slug, record, venue, photos }) : ownerBar();

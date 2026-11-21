@@ -4,7 +4,7 @@
 // getVenue(slug) → { slug, keyHash, status, facts, changes, pending, confirmedAt, doNotContact, chatState } | null
 // upsertFacts(slug, { facts, keyHash, status })  insert; on an existing slug replace facts only
 // setPending(slug, changes) → id                  pending.createdAfterMessageId = last message id at that moment
-// applyPending(slug) → changes | null;  clearPending(slug)
+// applyPending(slug, pendingId?) → changes | null (only that proposal, when an id is given);  clearPending(slug)
 // setStatus, setConfirmed, setDoNotContact, setChatState
 // addMessage(slug, { role, content }) → id;  listMessages(slug, limit);  countOwnerMessagesSince(slug, iso)
 // addPhoto(slug, { url, kind }) → id;  listPhotos;  setPhotoKind(slug, id, kind);  removePhoto;  countPhotosSince
@@ -44,9 +44,10 @@ export function memoryStore() {
       v.pending = { id, changes: clone(changes), createdAfterMessageId: mine.length ? mine[mine.length - 1].id : 0 };
       return id;
     },
-    async applyPending(slug) {
+    async applyPending(slug, pendingId) {
       const v = need(slug);
       if (!v.pending) return null;
+      if (pendingId !== undefined && v.pending.id !== Number(pendingId)) return null;
       const c = v.pending.changes;
       v.changes = { ...v.changes, ...clone(c) };
       v.pending = null;

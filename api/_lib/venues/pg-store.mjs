@@ -29,10 +29,11 @@ export function pgStore(query) {
         where slug = $1`, [slug, id, j(changes)]);
       return id;
     },
-    async applyPending(slug) {
-      const r = await one(`with old as (select pending from venues where slug = $1 and pending is not null for update)
+    async applyPending(slug, pendingId) {
+      const r = await one(`with old as (select pending from venues where slug = $1 and pending is not null
+          and ($2::bigint is null or (pending ->> 'id')::bigint = $2::bigint) for update)
         update venues v set changes = v.changes || (old.pending -> 'changes'), pending = null
-        from old where v.slug = $1 returning old.pending -> 'changes' as c`, [slug]);
+        from old where v.slug = $1 returning old.pending -> 'changes' as c`, [slug, pendingId ?? null]);
       return r ? r.c : null;
     },
     async clearPending(slug) { await query('update venues set pending = null where slug = $1', [slug]); },

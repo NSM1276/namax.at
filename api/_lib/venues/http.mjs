@@ -41,7 +41,8 @@ export async function handlePage(req, { store, ownerPart }) {
     if (!record || record.status !== 'public') return text(200, 'User-agent: *\nDisallow: /\n');
     return text(200, 'User-agent: *\nAllow: /\n\nSitemap: https://www.namax.at/api/venue/sitemap\n');
   }
-  if (url.pathname !== '/') return text(404, 'Not found\n', 'public, s-maxage=600');
+  // '/' as the visitor asked; '/api/venue/page' if the platform passes the rewritten path
+  if (url.pathname !== '/' && url.pathname !== '/api/venue/page') return text(404, 'Not found\n', 'public, s-maxage=600');
   const page = await renderPage({ store, slug: hostSlug(req), key: url.searchParams.get('k') || '', ownerPart });
   return new Response(page.body, { status: page.status, headers: page.headers });
 }

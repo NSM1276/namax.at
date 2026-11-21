@@ -99,12 +99,12 @@ test('a proposal is applied only by a yes in a later input', () => {
   assert.equal(noPending.effect, null);
 });
 
-test('removal: by chip or by angry text, at once, no contact details, two follow-ups then the fixed phrase', () => {
+test('removal: by chip or by angry text, one confirmation, no contact details, two follow-ups then the fixed phrase', () => {
   for (const input of [{ chip: 'delete' }, { text: 'Löschen Sie das sofort, ich mache Anzeige!' }, { text: 'sayfamı silin' }, { text: 'احذف الصفحة' }]) {
-    const o = step({ lang: 'de', step: 'ask' }, input, ctx());
-    assert.deepEqual(o.effect, { type: 'removal' }, JSON.stringify(input));
+    const ask = step({ lang: 'de', step: 'ask' }, input, ctx());
+    assert.deepEqual(step(ask.state, { chip: 'delete_yes' }, ctx()).effect, { type: 'removal' }, JSON.stringify(input));
   }
-  let o = step({ lang: 'de', step: 'ask' }, { chip: 'delete' }, ctx());
+  let o = step(step({ lang: 'de', step: 'ask' }, { chip: 'delete' }, ctx()).state, { chip: 'delete_yes' }, ctx());
   assert.ok(o.say.includes(say('de', 'removed')));
   const replies = [o];
   for (const input of [{ chip: 'q_who' }, { chip: 'q_sees' }, { chip: 'q_data' }, { text: 'Ich will Ihre Nummer!' }]) {
@@ -176,6 +176,37 @@ test('switching language mid-flow keeps the step', () => {
 });
 
 test('isRemovalText', () => {
-  for (const t of ['bitte löschen', 'Ich mache Anzeige', 'delete this', 'sil bunu', 'kaldırın', 'احذف', 'حذفش کن', 'obrišite stranicu']) assert.ok(isRemovalText(t), t);
-  for (const t of ['Samstag bis 17 Uhr', 'Haarschnitt 15 Euro', 'merhaba']) assert.ok(!isRemovalText(t), t);
+  for (const t of ['bitte löschen', 'Ich gehe zum Anwalt', 'delete this', 'sil bunu', 'احذف', 'حذفش کن', 'obrišite stranicu']) assert.ok(isRemovalText(t), t);
+  for (const t of ['Samstag bis 17 Uhr', 'Haarschnitt 15 Euro', 'merhaba', 'Die Anzeige ist falsch', 'fiyatı kaldır', 'remove the old number']) assert.ok(!isRemovalText(t), t);
+});
+
+// ---- review fixes
+test('R1: removal words only ask for confirmation; ordinary edits never remove', () => {
+  for (const text of ['Bitte die alte Nummer löschen', 'please remove the old phone number', 'Die Anzeige der Preise ist falsch', 'Entfernung zur U6', 'fiyatı kaldır']) {
+    const o = step({ lang: 'de', step: 'ask' }, { text }, ctx());
+    assert.notEqual(o.effect?.type, 'removal', text);
+  }
+  const ask = step({ lang: 'de', step: 'ask' }, { text: 'Löschen Sie meine Seite, ich gehe zum Anwalt!' }, ctx());
+  assert.equal(ask.effect, null);
+  assert.deepEqual(ids(ask).slice(0, 2), ['delete_yes', 'delete_no']);
+  assert.deepEqual(step(ask.state, { chip: 'delete_yes' }, ctx()).effect, { type: 'removal' });
+  assert.equal(step(ask.state, { chip: 'delete_no' }, ctx()).effect, null);
+  const chip = step({ lang: 'de', step: 'ask' }, { chip: 'delete' }, ctx());
+  assert.equal(chip.effect, null, 'the delete link asks once');
+  assert.deepEqual(ids(chip).slice(0, 2), ['delete_yes', 'delete_no']);
+});
+
+test('R2: a typed no or a negation never applies; yes works in Arabic and Persian', () => {
+  const pend = { lang: 'de', step: 'pending' };
+  for (const text of ['Stimmt nicht', 'Passt nicht, Montag zu', 'Da fehlt Montag', 'doğru değil', 'nein']) {
+    assert.notEqual(step(pend, { text }, ctx({ hasPending: true })).effect?.type, 'applyPending', text);
+  }
+  for (const text of ['نعم', 'بله', 'Ja', 'ja passt', 'evet']) {
+    assert.deepEqual(step(pend, { text }, ctx({ hasPending: true })).effect, { type: 'applyPending' }, text);
+  }
+});
+
+test('R3: a price board photo without budget goes to Nasim, no model', () => {
+  const o = step({ lang: 'de', step: 'priceboard' }, { photo: { id: 3 } }, ctx({ budgetLeft: false }));
+  assert.equal(o.effect.type, 'handoff');
 });

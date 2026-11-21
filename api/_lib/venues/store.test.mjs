@@ -71,6 +71,16 @@ export function storeContract(makeStore, prefix = '') {
     assert.deepEqual(v.changes.hours[6], [540, 1020]);
   });
 
+  test('applyPending with an id applies only that proposal', async () => {
+    const s = await fresh();
+    const old = await s.setPending(A, { phone: '+4312345678' });
+    await s.setPending(A, { phone: '+4399999999' });
+    assert.equal(await s.applyPending(A, old), null);
+    assert.deepEqual((await s.getVenue(A)).changes, {});
+    const cur = (await s.getVenue(A)).pending.id;
+    assert.deepEqual(await s.applyPending(A, cur), { phone: '+4399999999' });
+  });
+
   test('clearPending drops the proposal and keeps the changes', async () => {
     const s = await fresh();
     await s.setPending(A, { phone: '+4312345678' });
