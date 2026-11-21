@@ -185,11 +185,39 @@ function overtureRow(o) {
   return { verdict: o.verdict, name: m?.name || null, phone: m?.phone || null, website: m?.website || null };
 }
 
-/** Nasim's private list (www.namax.at/liste?k=…). A wrong or missing key gets the same 404 as any unknown path. */
-export async function handleAdmin(req, { store, adminKeyHash = ADMIN_KEY_HASH }) {
-  const params = new URL(req.url).searchParams;
-  const key = params.get('k') || '';
-  if (!isAdmin(key, adminKeyHash)) return text(404, 'Not found\n', 'no-store');
+// The list remembers Nasim with a cookie that only www.namax.at receives (no Domain attribute, so venue pages never see it).
+const ADMIN_COOKIE = 'namax_admin';
+const cookieKey = (req) => {
+  for (const part of (req.headers.get('cookie') || '').split(';')) {
+    const [name, ...rest] = part.trim().split('=');
+    if (name === ADMIN_COOKIE) return rest.join('=');
+  }
+  return '';
+};
+/** The admin key of a request: the one sent along (body or URL), else the cookie; null when neither is right. */
+function adminKey(req, sent, adminKeyHash) {
+  if (typeof sent === 'string' && isAdmin(sent, adminKeyHash)) return sent;
+  const c = cookieKey(req);
+  return isAdmin(c, adminKeyHash) ? c : null;
+}
+
+/**
+ * Nasim's private list (www.namax.at/liste). /liste?k=KEY logs in: cookie + redirect to the same address without the key.
+ * A wrong or missing key gets the same 404 as any unknown path.
+ */
+export async function handleAdmin(req, { store, adminKeyHash = ADMIN_KEY_HASH, now = () => new Date() }) {
+  const url = new URL(req.url);
+  const params = url.searchParams;
+  if (params.has('k')) {
+    const k = params.get('k') || '';
+    if (!isAdmin(k, adminKeyHash)) return text(404, 'Not found\n', 'no-store');
+    params.delete('k');
+    return new Response(null, { status: 303, headers: { Location: url.pathname + (params.size ? '?' + params : ''), 'Cache-Control': 'no-store',
+      'Set-Cookie': `${ADMIN_COOKIE}=${k}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=31536000` } });
+  }
+  const key = adminKey(req, null, adminKeyHash);
+  if (!key) return text(404, 'Not found\n', 'no-store');
+  await store.purgeRequests(now().toISOString());
   const records = await store.listForAdmin();
   const districtOf = (r) => Number(r.facts.internal?.district) || 0;
   const counts = new Map();
@@ -199,13 +227,17 @@ export async function handleAdmin(req, { store, adminKeyHash = ADMIN_KEY_HASH })
   const district = want === 'all' ? 'all' : districts.some((x) => String(x.d) === want) ? Number(want) : null;
   const html = (rows, opts) => new Response(renderAdmin(rows, opts), { headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'private, no-store', 'X-Robots-Tag': 'noindex, nofollow' } });
   // No (or an unknown) district: the start page with one button per district, so the list never loads every venue at once.
-  if (district == null) return html([], { districts, chooser: true });
+  if (district == null) {
+    const chatOpen = new Map(records.map((r) => [r.slug, r.chatOpen]));
+    const requests = (await store.listRequests()).map((q) => ({ ...q, chatOpen: chatOpen.get(q.slug) ?? null }));
+    return html([], { districts, chooser: true, requests });
+  }
   const rows = records.filter((r) => district === 'all' || districtOf(r) === district).map((r) => {
     const v = effectiveVenue(r, []);
     const ownerKey = r.ownerKeyEnc ? openOwnerKey(key, r.slug, r.ownerKeyEnc) : null;
     return { slug: r.slug, name: v.name, kind: v.kind, street: v.address?.street || '', district: r.facts.internal?.district || null,
       status: r.status, confirmed: Boolean(r.confirmedAt), facadeUrl: r.facadeUrl || null, ownerUrl: ownerKey ? `https://${r.slug}.namax.at/?k=${ownerKey}` : null,
-      check: overtureRow(r.facts.internal?.overture) };
+      check: overtureRow(r.facts.internal?.overture), chatOpen: Boolean(r.chatOpen) };
   }).sort((a, b) => a.name.localeCompare(b.name, 'de'));
   return html(rows, { districts, district });
 }
@@ -213,15 +245,27 @@ export async function handleAdmin(req, { store, adminKeyHash = ADMIN_KEY_HASH })
 /**
  * POST www.namax.at/liste {k: admin key, slug} → a new owner key for that venue; the old owner link stops working.
  * {k, slug, status: 'public'|'hidden'} → shows or hides the page instead (the owner link stays).
+ * {k, slug, chatOpen: bool} → opens or closes the owner chat for that venue.  {k, requestId, done: bool} → request done / open again.
+ * The key may come from the cookie instead of the body.
  */
 export async function handleAdminRotate(req, { store, adminKeyHash = ADMIN_KEY_HASH }) {
   if (req.method !== 'POST') return fail(405, 'POST only');
   const body = await readJson(req, 1024);
-  const key = typeof body?.k === 'string' ? body.k : '';
-  if (!isAdmin(key, adminKeyHash)) return fail(404, 'not found');
+  const key = adminKey(req, body?.k, adminKeyHash);
+  if (!key) return fail(404, 'not found');
+  if (body.requestId !== undefined) {
+    if (!Number.isInteger(body.requestId) || typeof body.done !== 'boolean') return fail(400, 'bad request');
+    await store.setRequestDone(body.requestId, body.done);
+    return json(200, { done: body.done });
+  }
   const slug = typeof body.slug === 'string' ? body.slug : '';
   const v = slug && await store.getVenue(slug);
   if (!v || v.status === 'removed') return fail(404, 'not found');
+  if (body.chatOpen !== undefined) {
+    if (typeof body.chatOpen !== 'boolean') return fail(400, 'bad request');
+    await store.setChatOpen(slug, body.chatOpen);
+    return json(200, { chatOpen: body.chatOpen });
+  }
   if (body.status !== undefined) {
     if (body.status !== 'public' && body.status !== 'hidden') return fail(400, 'status must be public or hidden');
     await store.setStatus(slug, body.status);
@@ -239,8 +283,8 @@ export async function handleAdminFacade(req, { store, blob, adminKeyHash = ADMIN
   if (Number(req.headers.get('content-length') || 0) > MAX_FACADE_BYTES + 64 * 1024) return fail(413, 'too large');
   let form;
   try { form = await req.formData(); } catch { return fail(400, 'bad request'); }
-  const key = typeof form.get('k') === 'string' ? form.get('k') : '';
-  if (!isAdmin(key, adminKeyHash)) return fail(404, 'not found');
+  const key = adminKey(req, form.get('k'), adminKeyHash);
+  if (!key) return fail(404, 'not found');
   const slug = typeof form.get('slug') === 'string' ? form.get('slug') : '';
   const v = slug && await store.getVenue(slug);
   if (!v || v.status === 'removed') return fail(404, 'not found');

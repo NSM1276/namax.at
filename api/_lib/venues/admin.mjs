@@ -4,6 +4,8 @@
 // so the database alone does not reveal any owner link.
 import { createHash, createCipheriv, createDecipheriv, randomBytes, timingSafeEqual } from 'node:crypto';
 import { esc } from './template.mjs';
+import { T } from './i18n.mjs';
+import { normalizePhone } from './phone.mjs';
 
 export const ADMIN_KEY_HASH = 'a28eb7d5cdee0e94cd6f950753cbd6614a7ef3425cd1e825708706bc072cc6e9';
 
@@ -53,25 +55,83 @@ export const DISTRICT_NAMES = {
 };
 const dName = (d) => `${d}. ${DISTRICT_NAMES[d] || 'Bezirk'}`;
 
-// The admin key stays in the address bar only: links are built in the browser from location.search.
+// The admin key travels in an HttpOnly cookie (set by /liste?k=…); nothing in the page knows it.
 const NAV_JS = `function go(d){try{localStorage.setItem('namax-liste-d',d)}catch(e){}var q=new URLSearchParams(location.search);q.set('d',d);location.search=q.toString()}`;
 
-/** Start page of the list: one button per district with its count; the browser reopens the last district used. */
-function renderChooser(districts, total) {
+const CL = T.claim.de;
+const CHANNEL_DE = { call: 'Anruf', whatsapp: 'WhatsApp' };
+const viennaTime = (iso) => new Intl.DateTimeFormat('de-AT', { timeZone: 'Europe/Vienna', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
+  .format(new Date(iso)).replace(',', '');
+/** Digits for tel:/wa.me: the number the owner typed, as +43…; null when it cannot be read. */
+const dialable = (raw) => normalizePhone(String(raw || ''));
+function chatButton(slug, open) {
+  return open
+    ? `<button type="button" data-chat="${esc(slug)}" data-to="0" class="rot">Chat sperren</button>`
+    : `<button type="button" data-chat="${esc(slug)}" data-to="1">Chat freischalten</button>`;
+}
+
+/** One request card: what the owner chose, and the way back to them that they chose, on the number they typed. */
+function requestCard(q) {
+  const tel = dialable(q.phone);
+  const main = !tel ? '<span class="no">Nummer unlesbar</span>'
+    : q.channel === 'whatsapp' ? `<a class="pg" href="https://wa.me/${tel.slice(1)}" target="_blank" rel="noopener">WhatsApp</a>`
+    : `<a class="pg" href="tel:${tel}">Anrufen</a>`;
+  const line = [CL.role[q.role], CL.wish[q.wish], CHANNEL_DE[q.channel]].filter(Boolean).join(' · ');
+  const done = q.doneAt
+    ? `<button type="button" data-done="${q.id}" data-to="0" class="rot">Wieder offen</button>`
+    : `<button type="button" data-done="${q.id}" data-to="1">Erledigt</button>`;
+  return `<li class="rq"><b><a href="https://${esc(q.slug)}.namax.at/" target="_blank" rel="noopener">${esc(q.venueName || q.slug)}</a></b>`
+    + (q.wish === 'website' && !q.doneAt ? '<span class="b hot">Website!</span>' : '')
+    + `<small>${esc(viennaTime(q.at))} · ${esc(line)}</small>`
+    + `<p class="who"><span class="nm">${esc(q.name || '–')}</span> · ${esc(q.phone)}</p>`
+    + (q.text ? `<p class="tx">${esc(q.text)}</p>` : '')
+    + `<div class="a">${main}${q.chatOpen == null ? '' : chatButton(q.slug, q.chatOpen)}${done}</div></li>`;
+}
+
+// Chat switch and "Erledigt" on both pages of the list.
+const SWITCH_JS = `function post(b,body,ok){var o=b.textContent;b.disabled=true;b.textContent='…';
+fetch(location.pathname,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
+.then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){b.disabled=false;ok(j)},function(){b.textContent=o;b.disabled=false;alert('Hat nicht geklappt. Bitte nochmal versuchen.')})}
+document.addEventListener('click',function(e){var b=e.target.closest('[data-chat]');
+if(b){var on=b.dataset.to==='1',slug=b.dataset.chat;
+if(on&&!confirm('Chat freischalten? Schicken Sie dem Inhaber danach seinen Link.'))return;
+post(b,{slug:slug,chatOpen:on},function(){[].forEach.call(document.querySelectorAll('[data-chat="'+slug+'"]'),function(x){x.dataset.to=on?'0':'1';x.textContent=on?'Chat sperren':'Chat freischalten';x.className=on?'rot':''})});return}
+b=e.target.closest('[data-done]');if(b){post(b,{requestId:Number(b.dataset.done),done:b.dataset.to==='1'},function(){location.reload()})}});`;
+
+/**
+ * Start page of the list: open requests first ("Anfragen"), then one button per district with its count.
+ * Without open requests the browser reopens the last district used.
+ */
+function renderChooser(districts, total, requests = []) {
   const btn = (d, label, n) => `<button type="button" data-pick="${d}">${esc(label)} <span>${n}</span></button>`;
   const picks = districts.map(({ d, n }) => btn(d, dName(d), n)).join('') + btn('all', 'Alle Bezirke', total);
+  const open = requests.filter((q) => !q.doneAt), done = requests.filter((q) => q.doneAt);
+  const reqs = !requests.length ? '' : `<section class="req"><h2>Anfragen <span>${open.length}</span></h2>`
+    + (open.length ? `<ul>${open.map(requestCard).join('')}</ul>` : '<p class="none">Keine offenen Anfragen</p>')
+    + (done.length ? `<details><summary>Erledigt (${done.length})</summary><ul>${done.map(requestCard).join('')}</ul></details>` : '')
+    + '</section>';
   return `<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow"><title>namax · Liste</title><meta name="theme-color" content="#111">
 <style>*{box-sizing:border-box}body{margin:0;font:16px/1.4 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background:#f4f3ef;color:#111}
 header{background:#111;color:#fff;padding:14px}h1{margin:0;font-size:18px}h1 span{opacity:.7;font-weight:400}
 .pick{display:grid;gap:8px;padding:12px;max-width:760px;margin:0 auto}
 .pick button{display:flex;justify-content:space-between;align-items:center;font:inherit;font-size:17px;font-weight:600;min-height:52px;padding:10px 16px;border-radius:10px;border:1px solid #ddd;background:#fff;color:#111;text-align:left}
-.pick span{font-weight:400;color:#666}</style></head><body>
+.pick span{font-weight:400;color:#666}
+.req{max-width:760px;margin:0 auto;padding:12px 12px 0}.req h2{margin:4px 2px 6px;font-size:18px}.req h2 span{display:inline-block;min-width:26px;padding:1px 8px;border-radius:999px;background:#ffc93c;text-align:center}
+.req ul{list-style:none;margin:0;padding:0}.rq{background:#fff;border-radius:10px;padding:12px;margin:8px 0;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.rq b{font-size:17px}.rq b a{color:#111}.rq small{display:block;color:#555;margin-top:2px}.rq p{margin:6px 0 0}.rq .tx{white-space:pre-wrap;background:#f4f3ef;border-radius:6px;padding:6px 8px}
+.b{display:inline-block;margin-left:8px;font-size:12px;padding:2px 8px;border-radius:999px;background:#eee;vertical-align:2px}.b.hot{background:#ffc93c;font-weight:700}
+.a{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.a a,.a button{font:inherit;font-size:15px;font-weight:600;min-height:42px;padding:9px 14px;border-radius:8px;border:1px solid #111;background:#fff;color:#111;text-decoration:none}
+.a a.pg{background:#111;color:#fff}.a .rot{border-color:#bbb;color:#555;font-weight:500}.no{font-size:13px;color:#888;align-self:center}
+details{margin:6px 2px 4px}summary{min-height:44px;display:flex;align-items:center;color:#555;cursor:pointer}.none{color:#666;margin:4px 2px}</style></head><body data-open="${open.length}">
 <header><h1>namax · Liste <span>${total}</span></h1></header>
+${reqs}
 <div class="pick" role="group" aria-label="Bezirk wählen">${picks}</div>
+<script>(function(){${SWITCH_JS}})();</script>
 <script>(function(){${NAV_JS}
 var last='';try{last=localStorage.getItem('namax-liste-d')||''}catch(e){}
-if(last&&document.querySelector('[data-pick="'+last.replace(/[^0-9a-z]/g,'')+'"]'))return go(last);
+if(document.body.dataset.open==='0'&&last&&document.querySelector('[data-pick="'+last.replace(/[^0-9a-z]/g,'')+'"]'))return go(last);
 document.addEventListener('click',function(e){var b=e.target.closest('[data-pick]');if(b)go(b.dataset.pick)})})();</script>
 </body></html>`;
 }
@@ -88,8 +148,8 @@ const checkLabel = (c) => ({ both: '2 Quellen ✓', osm: 'nur OSM', closed: 'ges
  * options.districts: [{ d, n }] for every district (the menu switches between them); options.district: the one shown, or 'all';
  * options.chooser: render the district start page instead of cards.
  */
-export function renderAdmin(rows, { districts = null, district = null, chooser = false } = {}) {
-  if (chooser && districts) return renderChooser(districts, districts.reduce((a, x) => a + x.n, 0));
+export function renderAdmin(rows, { districts = null, district = null, chooser = false, requests = [] } = {}) {
+  if (chooser && districts) return renderChooser(districts, districts.reduce((a, x) => a + x.n, 0), requests);
   const kinds = [...new Set(rows.map((r) => r.kind))].sort((a, b) => kindDe(a).localeCompare(kindDe(b), 'de'));
   const all = districts;
   const inRows = [...new Set(rows.map((r) => r.district).filter(Boolean))].sort((a, b) => a - b);
@@ -97,10 +157,12 @@ export function renderAdmin(rows, { districts = null, district = null, chooser =
     const page = `https://${r.slug}.namax.at/`;
     const c = r.check;
     const badges = (r.status === 'hidden' ? '<span class="b">versteckt</span>' : '') + (r.confirmed ? '<span class="b ok">bestätigt</span>' : '')
-      + (c ? `<span class="b ${CHECK_CLASS[c.verdict]}">${esc(checkLabel(c))}</span>` : '');
+      + (c ? `<span class="b ${CHECK_CLASS[c.verdict]}">${esc(checkLabel(c))}</span>` : '')
+      + (r.chatOpen ? '<span class="b chat">Chat offen</span>' : '');
     const ovLine = c && c.verdict !== 'osm' && (c.name || c.phone || c.website)
       ? `<small class="ov">Overture: ${esc(c.name || '')}${c.phone ? ` · <a href="tel:${esc(c.phone)}">${esc(c.phone)}</a>` : ''}`
         + `${c.website ? ` · <a href="${esc(c.website)}" target="_blank" rel="noopener">${esc(shortSite(c.website))}</a>` : ''}</small>` : '';
+    const chat = chatButton(r.slug, r.chatOpen);
     const vis = r.status === 'hidden'
       ? `<button type="button" class="rot" data-status="public" data-slug="${esc(r.slug)}">Seite zeigen</button>`
       : `<button type="button" class="rot" data-status="hidden" data-slug="${esc(r.slug)}">Seite verstecken</button>`;
@@ -119,7 +181,7 @@ export function renderAdmin(rows, { districts = null, district = null, chooser =
     const q = `${r.name} ${r.street} ${r.slug}`.toLowerCase();
     return `<li data-q="${esc(q)}" data-kind="${esc(r.kind)}" data-d="${esc(r.district || '')}" data-check="${esc(c ? c.verdict : '')}" data-name="${esc(r.name)}"><b>${esc(r.name)}</b>${badges}
 <small>${esc(kindDe(r.kind))} · ${esc(r.street)}${r.district ? ` · ${esc(r.district)}. Bezirk` : ''}</small>
-<div class="a"><a class="pg" href="${esc(page)}" target="_blank" rel="noopener">Seite</a><button type="button" data-qr="${esc(page)}">QR</button><button type="button" data-share="${esc(page)}">Teilen</button>${vis}</div>
+<div class="a"><a class="pg" href="${esc(page)}" target="_blank" rel="noopener">Seite</a><button type="button" data-qr="${esc(page)}">QR</button><button type="button" data-share="${esc(page)}">Teilen</button>${vis}${chat}</div>
 ${ovLine}
 ${owner}
 ${photo}</li>`;
@@ -143,7 +205,7 @@ input[type=search]{width:100%;font:inherit;font-size:17px;padding:12px;border:0;
 ul{list-style:none;margin:0;padding:8px 10px 40px;max-width:760px;margin:0 auto}
 li{background:#fff;border-radius:10px;padding:12px;margin:8px 0;box-shadow:0 1px 2px rgba(0,0,0,.08)}
 li b{font-size:17px}li small{display:block;color:#555;margin-top:2px}
-.b{display:inline-block;margin-left:8px;font-size:12px;padding:2px 8px;border-radius:999px;background:#eee;vertical-align:2px}.b.ok{background:#d8f3dc}.b.wn{background:#fff3c4}.b.bad{background:#ffd9d9}
+.b{display:inline-block;margin-left:8px;font-size:12px;padding:2px 8px;border-radius:999px;background:#eee;vertical-align:2px}.b.ok{background:#d8f3dc}.b.wn{background:#fff3c4}.b.bad{background:#ffd9d9}.b.chat{background:#dbe8ff}
 .ov{color:#333!important}.ov a{color:#0b57d0}
 .a{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .a a,.a button{font:inherit;font-size:15px;font-weight:600;min-height:42px;padding:9px 14px;border-radius:8px;border:1px solid #111;background:#fff;color:#111;text-decoration:none}
@@ -174,6 +236,7 @@ li b{font-size:17px}li small{display:block;color:#555;margin-top:2px}
 <input type="range" min="1" max="4" step="0.01" value="1" aria-label="Zoom" data-zoom>
 <div class="cb"><button type="button" class="go" data-cuse>Verwenden</button><button type="button" data-cagain>Neu wählen</button><button type="button" data-cno>Abbrechen</button></div></div>
 <script src="/js/qrcode.js"></script>
+<script>(function(){${SWITCH_JS}})();</script>
 <script>(function(){var ov=document.getElementById('qr');
 function svg(t){var q=qrcode(0,'M');q.addData(t);q.make();var n=q.getModuleCount(),m=4,p='';for(var r=0;r<n;r++)for(var c=0;c<n;c++)if(q.isDark(r,c))p+='M'+(c+m)+' '+(r+m)+'h1v1h-1z';
 return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+(n+2*m)+' '+(n+2*m)+'" shape-rendering="crispEdges"><rect width="100%" height="100%" fill="#fff"/><path d="'+p+'" fill="#000"/></svg>'}
@@ -189,15 +252,15 @@ x=e.target.closest('[data-share]');if(x){var u=x.dataset.share;if(navigator.shar
 x=e.target.closest('[data-copy]');if(x){copy(x,x.dataset.copy);return}
 x=e.target.closest('[data-status]');if(x){var st=x.dataset.status,show=st==='public';
 if(!confirm(show?'„'+name+'“ wieder zeigen (in Google und in der Übersicht)?':'„'+name+'“ verstecken? Die Seite ist dann nicht mehr in Google und in der Übersicht, öffnet sich aber noch über den direkten Link.'))return;
-var kk=new URLSearchParams(location.search).get('k'),ot=x.textContent;x.disabled=true;x.textContent='…';
-fetch(location.pathname,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({k:kk,slug:x.dataset.slug,status:st})})
+var ot=x.textContent;x.disabled=true;x.textContent='…';
+fetch(location.pathname,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slug:x.dataset.slug,status:st})})
 .then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(){var b=li.querySelector('b'),h=li.querySelector('.b:not(.ok):not(.wn):not(.bad)');
 if(show){if(h&&h.textContent==='versteckt')h.remove();x.dataset.status='hidden';x.textContent='Seite verstecken'}
 else{b.insertAdjacentHTML('afterend','<span class="b">versteckt</span>');x.dataset.status='public';x.textContent='Seite zeigen'}x.disabled=false},
 function(){x.textContent=ot;x.disabled=false;alert('Hat nicht geklappt. Bitte nochmal versuchen.')});return}
 x=e.target.closest('[data-rotate]');if(x){if(!confirm('Neuen Link für „'+name+'“ erstellen? Der alte Inhaber-Link funktioniert dann nicht mehr.'))return;
-var k=new URLSearchParams(location.search).get('k'),o=x.textContent;x.disabled=true;x.textContent='…';
-fetch(location.pathname,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({k:k,slug:x.dataset.rotate})})
+var o=x.textContent;x.disabled=true;x.textContent='…';
+fetch(location.pathname,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slug:x.dataset.rotate})})
 .then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){setOwner(x.closest('[data-orow]'),j.ownerUrl);x.textContent='Fertig ✓';setTimeout(function(){x.textContent=o;x.disabled=false},2000)},
 function(){x.textContent=o;x.disabled=false;alert('Hat nicht geklappt. Bitte nochmal versuchen.')})}});})();</script>
 <script>(function(){var q='',k='',d='',ck=false,lis=[].slice.call(document.querySelectorAll('li')),cnt=document.querySelector('[data-count]'),empty=document.querySelector('.empty');
@@ -210,7 +273,6 @@ document.addEventListener('click',function(e){var c=e.target.closest('[data-k]')
 c=e.target.closest('[data-only-check]');if(c){ck=!ck;c.className=ck?'on':'';run()}});})();</script>
 <script>(function(){var pick=document.getElementById('fpick'),cr=document.getElementById('crop'),fr=cr.querySelector('[data-frame]'),im=cr.querySelector('[data-cimg]'),zm=cr.querySelector('[data-zoom]'),use=cr.querySelector('[data-cuse]');
 var slug='',li=null,url='',s0=1,s=1,x=0,y=0,pts={},last=null;
-function K(){return new URLSearchParams(location.search).get('k')}
 function W(){return fr.clientWidth}function H(){return fr.clientHeight}
 function draw(){var w=im.naturalWidth*s,h=im.naturalHeight*s;x=Math.min(0,Math.max(W()-w,x));y=Math.min(0,Math.max(H()-h,y));im.style.transform='translate('+x+'px,'+y+'px) scale('+s+')'}
 function zoomTo(ns,cx,cy){ns=Math.max(s0,Math.min(s0*4,ns));x=cx-(cx-x)*ns/s;y=cy-(cy-y)*ns/s;s=ns;zm.value=s/s0;draw()}
@@ -240,13 +302,13 @@ c.getContext('2d').drawImage(im,-x/s,-y/s,W()/s,H()/s,0,0,1600,1200);
 function done(){use.disabled=false;use.textContent='Verwenden'}
 use.disabled=true;use.textContent='Lädt…';
 c.toBlob(function(blob){if(!blob){alert('Das Bild ist zu groß für dieses Handy.');done();return}
-var f=new FormData();f.append('k',K());f.append('slug',slug);f.append('photo',blob,'facade.jpg');
+var f=new FormData();f.append('slug',slug);f.append('photo',blob,'facade.jpg');
 fetch(location.pathname,{method:'POST',body:f}).then(function(r){if(!r.ok)throw 0;return r.json()})
 .then(function(j){setPhoto(li,j.url);close();done()},function(){alert('Hochladen hat nicht geklappt. Bitte nochmal versuchen.');done()})},'image/jpeg',0.82)});
 document.addEventListener('click',function(e){var b=e.target.closest('[data-facade]');
 if(b){li=b.closest('li');slug=b.dataset.facade;cr.querySelector('[data-cname]').textContent=li.dataset.name;pick.value='';pick.click();return}
 b=e.target.closest('[data-fdel]');if(!b)return;var l=b.closest('li');if(!confirm('Foto von „'+l.dataset.name+'“ löschen?'))return;
-var f=new FormData();f.append('k',K());f.append('slug',b.dataset.fdel);f.append('delete','1');
+var f=new FormData();f.append('slug',b.dataset.fdel);f.append('delete','1');
 fetch(location.pathname,{method:'POST',body:f}).then(function(r){if(!r.ok)throw 0;setPhoto(l,null)},function(){alert('Löschen hat nicht geklappt.')})});})();</script>
 </body></html>`;
 }

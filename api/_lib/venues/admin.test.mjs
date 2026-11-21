@@ -32,11 +32,13 @@ async function svc() {
   await store.upsertFacts('friseur-b', { facts: facts('friseur-b', { kind: 'friseur', name: 'Salon <B>' }), keyHash: 'h', status: 'public' });
   return { store, adminKeyHash: hash(ADMIN) };
 }
+// The list remembers Nasim with a cookie; ?k= only logs in and redirects (tested below).
 const req = (k, d = '12') => {
   const q = new URLSearchParams();
-  if (k != null) q.set('k', k);
   if (d) q.set('d', d);
-  return new Request(`https://www.namax.at/liste${q.size ? '?' + q : ''}`, { headers: { host: 'www.namax.at' } });
+  const headers = { host: 'www.namax.at' };
+  if (k != null) headers.cookie = `other=1; namax_admin=${k}`;
+  return new Request(`https://www.namax.at/liste${q.size ? '?' + q : ''}`, { headers });
 };
 
 test('without the right key the list does not exist (404), and nothing about it leaks', async () => {
@@ -63,7 +65,8 @@ test('renderAdmin escapes data and groups nothing it was not given', () => {
   assert.ok(!html.includes('"><script>'));
 });
 
-const rotateReq = (body) => new Request('https://www.namax.at/liste', { method: 'POST', headers: { host: 'www.namax.at', 'content-type': 'application/json' }, body: JSON.stringify(body) });
+const rotateReq = (body, cookie) => new Request('https://www.namax.at/liste', { method: 'POST',
+  headers: { host: 'www.namax.at', 'content-type': 'application/json', ...(cookie ? { cookie: `namax_admin=${cookie}` } : {}) }, body: JSON.stringify(body) });
 
 test('"new link" replaces the owner key: the old link stops working, the list shows the new one', async () => {
   const s = await svc();
@@ -276,4 +279,98 @@ test('POST {k, slug, status} shows or hides a page; only public/hidden; no key o
   const keyBefore = (await s.store.getVenue('cafe-a')).keyHash;
   await post({ k: ADMIN, slug: 'cafe-a', status: 'hidden' });
   assert.equal((await s.store.getVenue('cafe-a')).keyHash, keyBefore, 'showing or hiding never changes the owner link');
+});
+
+// Owner requests and the remembered login.
+test('login: ?k= sets the cookie and redirects to the same address without the key', async () => {
+  const s = await svc();
+  const res = await handleAdmin(new Request(`https://www.namax.at/liste?k=${ADMIN}&d=12`, { headers: { host: 'www.namax.at' } }), s);
+  assert.equal(res.status, 303);
+  assert.equal(res.headers.get('location'), '/liste?d=12');
+  assert.equal(res.headers.get('set-cookie'), `namax_admin=${ADMIN}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=31536000`);
+  assert.equal(res.headers.get('cache-control'), 'no-store');
+  const bad = await handleAdmin(new Request(`https://www.namax.at/liste?k=${'x'.repeat(32)}`, { headers: { host: 'www.namax.at' } }), s);
+  assert.equal(bad.status, 404);
+  assert.equal(bad.headers.get('set-cookie'), null);
+});
+
+test('cookie alone opens the list; the client code never reads the key from the address', async () => {
+  const res = await handleAdmin(req(ADMIN), await svc());
+  assert.equal(res.status, 200);
+  const html = await res.text();
+  assert.ok(!html.includes("get('k')"));
+  assert.ok(!html.includes(ADMIN));
+});
+
+async function reqSvc() {
+  const s = await svc();
+  const a = await s.store.addRequest('cafe-a', { role: 'staff', wish: 'fix', name: 'Ali <i>', phone: '+43 660 1234567', channel: 'call', text: 'Zeiten <script>' });
+  const b = await s.store.addRequest('friseur-b', { role: 'owner', wish: 'website', name: 'Mo', phone: '0664 765 43 21', channel: 'whatsapp', text: '' });
+  const c = await s.store.addRequest('cafe-a', { role: 'other', wish: 'remove', name: '', phone: '01 234 5678', channel: 'call', text: '' });
+  await s.store.setRequestDone(c, true);
+  return { ...s, ids: { a, b, c } };
+}
+const chooser = async (s) => (await handleAdmin(req(ADMIN, ''), s)).text();
+
+test('start page: "Anfragen" with the open count above the districts, website wishes first, escaped, done ones folded', async () => {
+  const html = await chooser(await reqSvc());
+  assert.ok(html.indexOf('Anfragen') < html.indexOf('data-pick="12"'));
+  assert.match(html, /Anfragen <span>2<\/span>/);
+  assert.ok(html.indexOf('>Mo<') < html.indexOf('Ali &lt;i&gt;'), 'own-website wish first');
+  assert.ok(html.includes('Familie / Mitarbeiter · Angaben korrigieren · Anruf'));
+  assert.ok(html.includes('Inhaber/in · Eigene Website · WhatsApp'));
+  assert.ok(html.includes('Website!'));
+  assert.ok(html.includes('Ali &lt;i&gt;') && html.includes('Zeiten &lt;script&gt;'));
+  assert.ok(!html.includes('Zeiten <script>'));
+  assert.match(html, /<details[^>]*><summary>Erledigt \(1\)<\/summary>[\s\S]*Seite entfernen/);
+  assert.ok(html.includes('href="https://cafe-a.namax.at/"'));
+  assert.match(html, /<body data-open="2">/, 'the start page stays put while requests are open');
+});
+
+test('request card: the main button answers the way the owner chose, on the number they typed', async () => {
+  const html = await chooser(await reqSvc());
+  assert.ok(html.includes('href="tel:+436601234567"'));
+  assert.ok(html.includes('href="https://wa.me/436647654321"'), 'Austrian 0664… becomes 43664…');
+});
+
+test('POST requestId done → marked done and back; without admin → 404', async () => {
+  const s = await reqSvc();
+  const r = await handleAdminPost(rotateReq({ requestId: s.ids.a, done: true }, ADMIN), s);
+  assert.equal(r.status, 200);
+  assert.deepEqual(await r.json(), { done: true });
+  assert.ok((await s.store.listRequests()).find((x) => x.id === s.ids.a).doneAt);
+  await handleAdminPost(rotateReq({ requestId: s.ids.a, done: false }, ADMIN), s);
+  assert.equal((await s.store.listRequests()).find((x) => x.id === s.ids.a).doneAt, null);
+  assert.equal((await handleAdminPost(rotateReq({ requestId: s.ids.a, done: true }), s)).status, 404);
+  assert.equal((await handleAdminPost(rotateReq({ requestId: s.ids.a, done: true }, 'x'.repeat(32)), s)).status, 404);
+  assert.equal((await s.store.listRequests()).find((x) => x.id === s.ids.a).doneAt, null);
+});
+
+test('chat switch: POST {slug, chatOpen} opens and closes the chat; cards and requests show it', async () => {
+  const s = await reqSvc();
+  let html = await chooser(s);
+  assert.match(html, /data-chat="cafe-a" data-to="1"[^>]*>Chat freischalten/);
+  const r = await handleAdminPost(rotateReq({ slug: 'cafe-a', chatOpen: true }, ADMIN), s);
+  assert.deepEqual(await r.json(), { chatOpen: true });
+  assert.equal((await s.store.getVenue('cafe-a')).chatOpen, true);
+  html = await chooser(s);
+  assert.match(html, /data-chat="cafe-a" data-to="0"[^>]*>Chat sperren/);
+  const cardsHtml = await (await handleAdmin(req(ADMIN), s)).text();
+  assert.match(card(cardsHtml, 'cafe-a'), /Chat offen/);
+  assert.match(card(cardsHtml, 'cafe-a'), /data-chat="cafe-a" data-to="0"/);
+  assert.match(card(cardsHtml, 'friseur-b'), /data-chat="friseur-b" data-to="1"[^>]*>Chat freischalten/);
+  assert.equal((await handleAdminPost(rotateReq({ slug: 'cafe-a', chatOpen: false }), s)).status, 404);
+  assert.equal((await s.store.getVenue('cafe-a')).chatOpen, true);
+});
+
+test('rotate, show/hide and facade work with the cookie alone', async () => {
+  const s = await overtureSvc();
+  s.blob = fakeBlob();
+  const r = await handleAdminPost(rotateReq({ slug: 'cafe-a' }, ADMIN), s);
+  assert.equal(r.status, 200);
+  assert.match((await r.json()).ownerUrl, /^https:\/\/cafe-a\.namax\.at\/\?k=/);
+  assert.equal((await handleAdminPost(rotateReq({ slug: 'cafe-c', status: 'public' }, ADMIN), s)).status, 200);
+  const form = new FormData(); form.append('slug', 'cafe-a'); form.append('photo', new Blob([jpegBytes()], { type: 'image/jpeg' }), 'f.jpg');
+  const f = await handleAdminPost(new Request('https://www.namax.at/liste', { method: 'POST', headers: { host: 'www.namax.at', cookie: `namax_admin=${ADMIN}` }, body: form }), s);
+  assert.equal(f.status, 200);
 });
