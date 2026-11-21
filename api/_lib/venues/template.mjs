@@ -245,16 +245,74 @@ function address(v) {
 <a ${placeAttrs(v)} rel="noopener">${ui('mapLink')}</a></address></section>`;
 }
 
-function footer(v) {
+/** The quiet "Sind Sie der Inhaber?" form: the owner writes first, in three tap steps, and agrees to be contacted. */
+const offersClaim = (v, owner) => v.confirmed !== true && !owner;
+const C = T.claim;
+const pick = (k, value) => `<button type="button" class="pick" data-pick="${k}" data-value="${value}">${tr(C.de[k][value], C.en[k][value])}</button>`;
+const stepHead = (n, key) => `<p class="stepno">${tr(`Schritt ${n} von 3`, `Step ${n} of 3`)}</p>${tr(C.de[key], C.en[key], 'h2')}`;
+const back = (to) => `<button type="button" class="back" data-back="${to}">${tr(C.de.back, C.en.back)}</button>`;
+function claimDialog() {
+  return `<dialog class="claim" data-claim aria-labelledby="claim-title">
+<button type="button" class="x" data-claim-close aria-label="Schließen">×</button>
+<p class="ttl" id="claim-title">${tr(C.de.title, C.en.title, 'strong')}<br>${tr(C.de.sub, C.en.sub)}</p>
+<div data-step="1">${stepHead(1, 'who')}${['owner', 'staff', 'other'].map((x) => pick('role', x)).join('')}</div>
+<div data-step="2" hidden>${stepHead(2, 'want')}${['fix', 'photos', 'website', 'remove'].map((x) => pick('wish', x)).join('')}${back(1)}</div>
+<form data-step="3" hidden>${stepHead(3, 'reach')}
+<div class="ch"><label><input type="radio" name="channel" value="call" required>${tr(C.de.call, C.en.call)}</label><label><input type="radio" name="channel" value="whatsapp" required>WhatsApp</label></div>
+<label>${tr(C.de.name, C.en.name)}<input name="who" autocomplete="name" maxlength="80"></label>
+<label>${tr(C.de.phone, C.en.phone)}<input name="phone" type="tel" autocomplete="tel" inputmode="tel" required maxlength="20"></label>
+<label>${tr(C.de.msg, C.en.msg)}<textarea name="text" rows="2" maxlength="500"></textarea></label>
+<label class="hp" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>
+<p class="ok">${tr(C.de.consent, C.en.consent)} <a href="${SITE}/datenschutz#inhaber">${ui('privacy')}</a></p>
+<p class="err" data-claim-err hidden>${tr(C.de.err, C.en.err)}</p>
+<button type="submit" class="btn primary">${tr(C.de.send, C.en.send)}</button>${back(2)}</form>
+<div data-step="4" hidden>${tr(C.de.thanks, C.en.thanks, 'h2')}</div>
+</dialog>`;
+}
+const CLAIM_CSS = `.claimlink{font:inherit;color:inherit;background:none;border:0;padding:0;text-decoration:underline;cursor:pointer;min-height:44px}
+dialog.claim{width:min(420px,calc(100vw - 32px));max-height:calc(100dvh - 32px);overflow:auto;border:2px solid var(--ink);border-radius:14px;padding:20px 18px;background:var(--bg);color:var(--ink);font:17px/1.45 var(--body)}
+dialog.claim::backdrop{background:rgba(0,0,0,.5)}
+dialog.claim .x{position:absolute;top:6px;right:8px;width:44px;height:44px;border:0;background:none;font-size:28px;color:inherit;cursor:pointer}
+dialog.claim .ttl{margin:0 40px 14px 0;font-size:15px;opacity:.85}dialog.claim .ttl strong{font-size:19px;opacity:1}
+dialog.claim .stepno{margin:0;font-size:13px;opacity:.7}dialog.claim h2{font-size:24px;margin:2px 0 14px}
+dialog.claim .pick{display:block;width:100%;min-height:54px;margin:0 0 10px;border:2px solid var(--ink);border-radius:12px;background:none;color:inherit;font:700 18px var(--body);cursor:pointer}
+dialog.claim .back{margin-top:6px;min-height:44px;border:0;background:none;color:inherit;text-decoration:underline;font:inherit;cursor:pointer}
+dialog.claim label{display:block;margin:0 0 12px;font-weight:700;font-size:15px}
+dialog.claim input:not([type=radio]),dialog.claim textarea{display:block;width:100%;box-sizing:border-box;margin-top:4px;min-height:48px;padding:10px;border:2px solid var(--ink);border-radius:10px;background:#fff;color:#111;font:17px var(--body)}
+dialog.claim .ch{display:flex;gap:10px;margin:0 0 12px}dialog.claim .ch label{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;min-height:54px;margin:0;border:2px solid var(--ink);border-radius:12px;font-size:17px}
+dialog.claim .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+dialog.claim .ok{font-size:13px;opacity:.8}dialog.claim .ok a{color:inherit}dialog.claim .err{color:#c8372d;font-weight:700}
+dialog.claim .btn{width:100%;font-family:var(--body)}`;
+const CLAIM_SCRIPT = `
+var cd=document.querySelector('[data-claim]');
+if(cd){var A={};
+function step(n){var ss=cd.querySelectorAll('[data-step]');for(var i=0;i<ss.length;i++)ss[i].hidden=ss[i].getAttribute('data-step')!==String(n)}
+document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('[data-claim-open],[data-claim-close],[data-pick],[data-back]');if(!t)return;
+if(t.hasAttribute('data-claim-open')){step(1);if(cd.showModal)cd.showModal();else cd.setAttribute('open','');return}
+if(t.hasAttribute('data-claim-close')){if(cd.close)cd.close();else cd.removeAttribute('open');return}
+if(t.hasAttribute('data-back')){step(t.getAttribute('data-back'));return}
+var k=t.getAttribute('data-pick');A[k]=t.getAttribute('data-value');step(k==='role'?2:3)});
+var f=cd.querySelector('form');
+f.addEventListener('submit',function(e){e.preventDefault();var b=f.querySelector('[type=submit]'),err=cd.querySelector('[data-claim-err]');b.disabled=true;err.hidden=true;
+var q=function(n){return f.querySelector('[name='+n+']').value},ch=f.querySelector('[name=channel]:checked');
+var body={role:A.role,wish:A.wish,channel:ch?ch.value:'',name:q('who'),phone:q('phone'),text:q('text'),website:q('website')};
+fetch('/api/venue/claim',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)})
+.then(function(r){if(!r.ok)throw new Error(String(r.status));step(4)})
+.catch(function(){b.disabled=false;err.hidden=false})})}
+`;
+
+function footer(v, owner) {
+  const claim = offersClaim(v, owner) ? ` · <button type="button" class="claimlink" data-claim-open>${tr(C.de.link, C.en.link)}</button>` : '';
   const by = v.confirmed === true
     ? ui('by')
-    : tr(`${T.de.by} · ${T.de.unconfirmed}`, `${T.en.by} · ${T.en.unconfirmed}`);
+    : tr(`${T.de.by} · ${T.de.unconfirmed}`, `${T.en.by} · ${T.en.unconfirmed}`) + claim;
   // OpenStreetMap data is licensed under the ODbL and must be credited where it is shown.
   const osm = v.source === 'osm'
     ? `<p>${ui('osmData')} <a href="https://www.openstreetmap.org/copyright" rel="noopener">© OpenStreetMap</a></p>` : '';
   const ov = v.overture === true
     ? `<p>${ui('ovData')} <a href="https://overturemaps.org/" rel="noopener">© Overture Maps Foundation</a></p>` : '';
-  return `<footer><p>${by}</p>${osm}${ov}<a href="${SITE}/impressum">${ui('imprint')}</a><a href="${SITE}/datenschutz">${ui('privacy')}</a></footer>`;
+  return `<footer><p>${by}</p>${osm}${ov}<a href="${SITE}/impressum">${ui('imprint')}</a><a href="${SITE}/datenschutz">${ui('privacy')}</a></footer>`
+    + (offersClaim(v, owner) ? `\n<style>${CLAIM_CSS}</style>\n${claimDialog()}` : '');
 }
 
 /** The part-1 owner bar (WhatsApp hook), used until the chat from owner-ui.mjs is passed instead. */
@@ -271,7 +329,7 @@ ${ui('ownerHead', 'strong')}<p dir="auto">${esc(OWNER_LINE)}</p>
 </div></section>` };
 }
 
-function script(v) {
+function script(v, claim = false) {
   const base = `
 var lang='de';
 try{var s=localStorage.getItem('namax-venue-lang');if(s==='en'||s==='de')lang=s}catch(e){}
@@ -305,7 +363,7 @@ var rows=document.querySelectorAll('[data-day]');
 for(var i=0;i<rows.length;i++)rows[i].className=Number(rows[i].getAttribute('data-day'))===now.day?'today':''}
 onLang.push(renderStatus);setInterval(renderStatus,60000);
 `;
-  return `<script>(function(){${base}${status}setLang(lang)})();</script>`;
+  return `<script>(function(){${base}${status}${claim ? CLAIM_SCRIPT : ''}setLang(lang)})();</script>`;
 }
 
 /** venue → HTML. options.owner = { html, css, script } is added for the venue's owner only. */
@@ -334,10 +392,10 @@ ${photos(v)}
 ${hoursTable(v)}
 ${address(v)}
 </div>
-${footer(v)}
+${footer(v, owner)}
 </main>
 ${owner ? (owner.css ? `<style>${owner.css}</style>` : '') + owner.html : ''}
-${script(v)}${owner && owner.script ? `\n<script>${owner.script}</script>` : ''}
+${script(v, offersClaim(v, owner))}${owner && owner.script ? `\n<script>${owner.script}</script>` : ''}
 </body>
 </html>
 `;

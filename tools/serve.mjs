@@ -11,7 +11,7 @@ import { fileURLToPath } from 'node:url';
 import { memoryStore } from '../api/_lib/venues/store.mjs';
 import { hashKey } from '../api/_lib/venues/owner.mjs';
 import { Readable } from 'node:stream';
-import { handlePage, handleChat, handlePhoto, handleHit, handleAdmin, handleAdminPost } from '../api/_lib/venues/http.mjs';
+import { handlePage, handleChat, handleClaim, handlePhoto, handleHit, handleAdmin, handleAdminPost } from '../api/_lib/venues/http.mjs';
 import { sealOwnerKey } from '../api/_lib/venues/admin.mjs';
 import { ownerPanel } from '../api/_lib/venues/owner-ui.mjs';
 
@@ -75,7 +75,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
       const headers = { ...req.headers, host };
       const body = ['GET', 'HEAD'].includes(req.method) ? undefined : Readable.toWeb(req);
       const request = new Request('https://' + host + url.pathname + url.search, { method: req.method, headers, body, duplex: 'half' });
-      const handler = { '/api/venue/chat': handleChat, '/api/venue/photo': handlePhoto, '/api/venue/hit': handleHit }[url.pathname]
+      const handler = { '/api/venue/chat': handleChat, '/api/venue/photo': handlePhoto, '/api/venue/hit': handleHit, '/api/venue/claim': handleClaim }[url.pathname]
         || (url.pathname.startsWith('/api/') ? null : handlePage);
       const r = handler ? await handler(request, svc) : new Response('404', { status: 404 });
       res.writeHead(r.status, { ...Object.fromEntries(r.headers), 'cache-control': 'no-store' });

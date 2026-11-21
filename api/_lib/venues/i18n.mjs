@@ -36,6 +36,30 @@ export const T = {
   },
 };
 
+// The "Sind Sie der Inhaber?" form in the page footer (three tap steps, then contact).
+T.claim = {
+  de: {
+    link: 'Sind Sie der Inhaber?', title: 'Kostenlos verwalten', sub: 'Öffnungszeiten, Telefon, Fotos – wir helfen Ihnen.',
+    who: 'Wer sind Sie?', want: 'Was möchten Sie?', reach: 'Fast geschafft! Wie dürfen wir Sie erreichen?',
+    role: { owner: 'Inhaber/in', staff: 'Familie / Mitarbeiter', other: 'Etwas anderes' },
+    wish: { fix: 'Angaben korrigieren', photos: 'Fotos hinzufügen', website: 'Eigene Website', remove: 'Seite entfernen' },
+    call: 'Anruf', name: 'Ihr Name', phone: 'Ihre Telefonnummer', msg: 'Nachricht (optional)',
+    consent: 'Mit dem Absenden sind Sie einverstanden, dass wir Sie dazu kontaktieren.',
+    send: 'Anfrage senden', back: 'Zurück', err: 'Das hat nicht geklappt. Bitte prüfen Sie die Nummer oder versuchen Sie es später.',
+    thanks: 'Danke! Wir melden uns, meist innerhalb eines Tages.',
+  },
+  en: {
+    link: 'Are you the owner?', title: 'Manage for free', sub: 'Opening hours, phone, photos – we help you.',
+    who: 'Who are you?', want: 'What would you like?', reach: 'Almost done! How may we reach you?',
+    role: { owner: 'Owner', staff: 'Family / staff', other: 'Something else' },
+    wish: { fix: 'Correct details', photos: 'Add photos', website: 'Own website', remove: 'Remove page' },
+    call: 'Call', name: 'Your name', phone: 'Your phone number', msg: 'Message (optional)',
+    consent: 'By sending you agree that we contact you about it.',
+    send: 'Send request', back: 'Back', err: 'That did not work. Please check the number or try again later.',
+    thanks: 'Thank you! We get back to you, usually within a day.',
+  },
+};
+
 // The same line in every language: it tells the owner they may write in their own.
 export const OWNER_LINE = 'Schreiben Sie in Ihrer Sprache — Deutsch, Türkçe, العربية, فارسی, English …';
 

@@ -121,3 +121,35 @@ test('footer: a page checked against Overture Maps credits it; internal facts st
   assert.ok(!html.includes('+4399'));
   assert.ok(!renderVenue(effectiveVenue(record(f))).includes('Overture'));
 });
+
+test('footer: unconfirmed page offers "Sind Sie der Inhaber?" and a form posting to /api/venue/claim', () => {
+  const html = renderVenue({ ...load('full'), status: 'public' });
+  assert.ok(html.includes('Sind Sie der Inhaber?'));
+  assert.ok(html.includes('data-en="Are you the owner?"'));
+  assert.ok(html.includes('<dialog'));
+  assert.ok(html.includes("'/api/venue/claim'"));
+  assert.ok(html.includes('Website von namax.at'));
+});
+
+test('footer: confirmed page and the owner view have no owner link', () => {
+  const f = load('full');
+  assert.ok(!renderVenue({ ...f, confirmed: true }).includes('Sind Sie der Inhaber?'));
+  assert.ok(!renderVenue({ ...f, confirmed: true }).includes('<dialog'));
+  const own = renderVenue(f, { owner: { css: '', script: '', html: '<section data-owner></section>' } });
+  assert.ok(!own.includes('Sind Sie der Inhaber?'));
+  assert.ok(!own.includes('<dialog'));
+});
+
+test('claim dialog has three steps with all answers, channel choice, consent, honeypot and privacy link', () => {
+  const html = renderVenue(load('full'));
+  for (const s of ['data-step="1"', 'data-step="2"', 'data-step="3"', 'data-step="4"', 'Schritt 1 von 3', 'Wer sind Sie?', 'Was möchten Sie?',
+    'Fast geschafft! Wie dürfen wir Sie erreichen?', 'Seite entfernen', 'Eigene Website',
+    'Mit dem Absenden sind Sie einverstanden, dass wir Sie dazu kontaktieren.', 'Danke! Wir melden uns, meist innerhalb eines Tages.',
+    'https://www.namax.at/datenschutz#inhaber', 'type="tel"']) assert.ok(html.includes(s), s);
+  for (const v of ['owner', 'staff', 'other']) assert.ok(html.includes(`data-pick="role" data-value="${v}"`), v);
+  for (const v of ['fix', 'photos', 'website', 'remove']) assert.ok(html.includes(`data-pick="wish" data-value="${v}"`), v);
+  for (const v of ['call', 'whatsapp']) assert.ok(html.includes(`name="channel" value="${v}"`), v);
+  assert.match(html, /<input[^>]*name="website"[^>]*tabindex="-1"/);
+  assert.match(html, /class="hp"/);
+  for (const m of html.matchAll(/<script>([\s\S]*?)<\/script>/g)) assert.doesNotThrow(() => new Function(m[1]));
+});
