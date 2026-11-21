@@ -18,7 +18,10 @@ export function esc(text) {
 function titleSize(name) {
   const longest = Math.max(...String(name).split(/\s+/).map((w) => w.length));
   const vw = Math.round((130 / longest) * 10) / 10;
-  return vw < 12.5 ? ` style="font-size:clamp(22px,${vw}vw,72px)"` : '';
+  if (vw >= 12.5) return '';
+  // cqi = 1% of the plate's width: the word fits at every screen size, without relying on the browser's hyphenation
+  const cqi = Math.floor((100 / (longest * 0.62)) * 10) / 10;
+  return ` style="font-size:clamp(22px,${vw}vw,72px);font-size:min(72px,${cqi}cqi)"`;
 }
 
 // An element whose text switches with the language toggle.
@@ -79,7 +82,7 @@ a{color:inherit}
 .lang{display:flex;justify-content:flex-end;gap:4px;margin-bottom:8px}
 .lang button{min-width:44px;min-height:44px;border:0;background:none;color:inherit;font:700 14px var(--body);letter-spacing:.06em;opacity:.82;cursor:pointer}
 .lang button[aria-pressed="true"]{opacity:1;text-decoration:underline;text-underline-offset:5px}
-.plate{border:2px solid currentColor;padding:26px 14px 24px;text-align:center}
+.plate{border:2px solid currentColor;padding:26px 14px 24px;text-align:center;container-type:inline-size}
 .area{margin:0 0 12px;font:700 12px/1.3 var(--body);letter-spacing:.16em;text-transform:uppercase}
 h1{font-size:clamp(38px,12.5vw,72px);overflow-wrap:anywhere;hyphens:auto}
 .status{display:flex;align-items:center;gap:10px;margin:18px 0 0;font-weight:700;font-size:18px}
@@ -117,6 +120,10 @@ footer{margin:40px 0 0;padding:20px 0 28px;border-top:1px solid color-mix(in srg
 footer p{margin:0 0 6px}
 footer a{display:inline-flex;align-items:center;min-height:44px;margin-right:18px}
 @media (min-width:700px){.sign{padding:16px 16px 22px}.plate{padding:40px 24px 36px}}
+@media (min-width:900px){.wrap{max-width:1080px;padding:0 32px}.sign .wrap{padding:0 32px}.plate{padding:48px 40px 44px}
+.page{display:grid;grid-template-columns:minmax(0,1fr) 320px;column-gap:56px;align-items:start}
+.col{grid-column:1;grid-row:1}.side{grid-column:2;grid-row:1;position:sticky;top:24px;margin-top:30px;padding:20px;border:2px solid var(--ink);border-radius:8px}
+.side .status{margin:0 0 4px}.side .actions{grid-template-columns:1fr}footer{grid-column:1/-1}.photos{grid-template-columns:repeat(3,1fr)}}
 `;
 }
 
@@ -124,7 +131,7 @@ function sign(v) {
   const area = v.area ? `<p class="area">${esc(v.area)}</p>` : '';
   return `<header class="sign"><div class="wrap">
 <div class="lang" role="group" aria-label="Sprache / Language"><button type="button" data-lang="de" lang="de" aria-label="Deutsch" aria-pressed="true">DE</button><button type="button" data-lang="en" lang="en" aria-label="English" aria-pressed="false">EN</button></div>
-<div class="plate">${area}<h1${titleSize(v.name)}>${esc(v.name)}</h1></div>
+<div class="plate">${area}<h1 lang="de"${titleSize(v.name)}>${esc(v.name)}</h1></div>
 </div></header>`;
 }
 
@@ -275,15 +282,16 @@ ${head(v, pal, let_)}
 </head>
 <body${owner ? ' class="has-owner"' : ''}>
 ${sign(v)}
-<main class="wrap">
-${status}
-${actions(v)}
+<main class="wrap page">
+<aside class="side">${status}
+${actions(v)}</aside><div class="col">
 ${board(v)}
 ${facts(v)}
 ${rating(v)}
 ${photos(v)}
 ${hoursTable(v)}
 ${address(v)}
+</div>
 ${footer(v)}
 </main>
 ${owner ? (owner.css ? `<style>${owner.css}</style>` : '') + owner.html : ''}

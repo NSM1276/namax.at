@@ -70,8 +70,18 @@ test('item without price shows no euro sign for it; photos render when present',
 });
 test('a long word in the name shrinks the title so it fits a phone', () => {
   const long = renderVenue({ ...load('minimal'), name: 'Änderungsschneiderei Fa. Orhan' });
-  const m = /<h1 style="font-size:clamp\(22px,([\d.]+)vw,72px\)">/.exec(long);
+  const m = /<h1 lang="de" style="font-size:clamp\(22px,([\d.]+)vw,72px\);font-size:min\(72px,([\d.]+)cqi\)">/.exec(long);
   assert.ok(m, 'long name gets an inline size');
   assert.ok(Number(m[1]) * 20 * 0.6 * 3.75 <= 300, 'Änderungsschneiderei fits ~300px at 375px wide');
-  assert.match(renderVenue({ ...load('minimal'), name: 'Adonis' }), /<h1>Adonis<\/h1>/);
+  assert.ok(Number(m[2]) * 20 * 0.62 <= 100, 'and fits the plate at any width, whatever the hyphenation');
+  assert.match(long, /\.plate\{[^}]*container-type:inline-size/);
+  assert.match(renderVenue({ ...load('minimal'), name: 'Adonis' }), /<h1 lang="de">Adonis<\/h1>/);
+});
+test('the name keeps German hyphenation when the page switches to EN', () => {
+  assert.match(renderVenue(load('full')), /<h1 lang="de"[ >]/);
+});
+test('desktop: actions sit in a side card, the rest in the main column, phone order unchanged', () => {
+  const html = renderVenue(load('full'));
+  assert.match(html, /<aside class="side">[\s\S]*data-status[\s\S]*class="actions"[\s\S]*<\/aside><div class="col">[\s\S]*id="liste"[\s\S]*<\/div>\s*<footer>/);
+  assert.match(html, /@media \(min-width:900px\)\{[^@]*?\.page\{display:grid/);
 });
