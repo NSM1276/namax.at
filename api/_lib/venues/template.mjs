@@ -1,7 +1,10 @@
 // Turns one venue facts object into a complete, self-contained HTML page.
 // A block whose data is missing is left out entirely; nothing is invented.
 import { T, OWNER_LINE, listTitle, kindLabel, languageName } from './i18n.mjs';
-import { PALETTES, LETTERINGS, DEFAULT_THEME } from './themes.mjs';
+import { PALETTES, LETTERINGS, DEFAULT_THEME, BRAND } from './themes.mjs';
+
+// One sign face for every page (the namax brand); the venue's lettering field no longer changes it.
+const LOOK = { family: BRAND.display, weight: 700, upper: true, spacing: '.01em', faces: BRAND.faces };
 import { ogImageUrl } from './og-url.mjs';
 import { openState, formatMinute, viennaNow } from './hours.mjs';
 
@@ -70,7 +73,7 @@ ${robots}
 function css(p, l) {
   return `
 :root{--sign-bg:${p.signBg};--sign-ink:${p.signInk};--bg:${p.pageBg};--ink:${p.ink};--accent:${p.accent};--accent-ink:${p.accentInk};--board-bg:${p.boardBg};--board-ink:${p.boardInk};
---display:${l.family};--body:system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif}
+--display:${l.family};--body:${BRAND.text}}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.45 var(--body)}
@@ -275,9 +278,9 @@ onLang.push(renderStatus);setInterval(renderStatus,60000);
 export function renderVenue(venue, { owner } = {}) {
   const theme = { ...DEFAULT_THEME, ...(venue.theme || {}) };
   const pal = Object.hasOwn(PALETTES, theme.palette) ? PALETTES[theme.palette] : null;
-  const let_ = Object.hasOwn(LETTERINGS, theme.lettering) ? LETTERINGS[theme.lettering] : null;
   if (!pal) throw new Error(`unknown palette "${theme.palette}"`);
-  if (!let_) throw new Error(`unknown lettering "${theme.lettering}"`);
+  if (!Object.hasOwn(LETTERINGS, theme.lettering)) throw new Error(`unknown lettering "${theme.lettering}"`);
+  const let_ = LOOK;
   const v = venue;
   const status = v.hours ? `<p class="status" data-status>${esc(T.de.statusFallback)}</p>` : '';
   return `<!doctype html>

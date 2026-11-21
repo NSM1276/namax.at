@@ -6,6 +6,7 @@ import { hashKey } from './owner.mjs';
 import { handleOg } from './http.mjs';
 import { ogImageUrl, ogVersion, ogTree } from './og.mjs';
 import { renderVenue } from './template.mjs';
+import { PALETTES } from './themes.mjs';
 
 const facts = JSON.parse(readFileSync(new URL('./fixtures/full.json', import.meta.url)));
 const SLUG = facts.slug;
@@ -46,7 +47,7 @@ test('names with Turkish letters and every lettering render', async () => {
 test('the picture shows the name, area and kind in the page colors; Ş/ğ/š fall back to the -Ext font', () => {
   const v = { ...facts, theme: { palette: 'cream-green', lettering: 'serif' } };
   const s = JSON.stringify(ogTree(v));
-  for (const part of [v.name, '#1f4d3a', '#f3ead7', 'namax.at', 'SerifExt', 'SmallExt']) assert.ok(s.includes(part), part);
+  for (const part of [v.name, PALETTES['cream-green'].signBg, PALETTES['cream-green'].signInk, 'namax.at', 'SerifExt', 'SmallExt']) assert.ok(s.includes(part), part);
 });
 
 test('image address changes when the name or look changes, so messengers fetch the new one', () => {

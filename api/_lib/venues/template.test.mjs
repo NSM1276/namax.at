@@ -105,3 +105,12 @@ test('map buttons: Google by default, Apple Maps on iPhone (no App Store detour)
   assert.match(html, /iPhone\|iPad\|iPod/);
   assert.doesNotMatch(html, /In Google Maps öffnen/);
 });
+
+test('brand faces are declared and used for headings and body', () => {
+  const html = renderVenue(load('minimal'));
+  for (const s of ['font-family:NamaxDisplay', 'font-family:NamaxText', 'barlow-condensed-latin-700.woff2', 'barlow-condensed-latin-ext-700.woff2', 'figtree-latin-400.woff2', 'figtree-latin-700.woff2'])
+    assert.ok(html.includes(s), s);
+  assert.match(html, /--body:NamaxText/);
+  assert.match(html, /--display:NamaxDisplay/);
+  assert.doesNotMatch(html, /anton-latin|archivo-narrow-latin/, 'old faces are not loaded any more');
+});
