@@ -22,6 +22,7 @@ export function classifySite(r) {
   const title = (/<title[^>]*>([^<]*)<\/title>/i.exec(html) || [])[1] || '';
   const text = html.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/gi, ' ').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
   if (PARKED_TEXT.test(title) || PARKED_TEXT.test(text.slice(0, 2000))) return { ok: false, state: 'parked' };
+  if (/<meta[^>]+http-equiv=["']?refresh|<i?frame[\s>]|<frameset/i.test(html)) return { ok: true, state: 'works', detail: 'redirect or frame' };
   if (PLACEHOLDER_TEXT.test(title) || (text.length < 400 && PLACEHOLDER_TEXT.test(text))) return { ok: false, state: 'placeholder' };
   if (text.length < 60 && !/<script/i.test(html)) return { ok: false, state: 'placeholder' };
   return { ok: true, state: 'works' };
@@ -55,6 +56,9 @@ async function probe(raw) {
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const OUT = 'data/city/site-checks.json';
   const done = existsSync(OUT) ? JSON.parse(readFileSync(OUT, 'utf8')) : {};
+  // Network hiccups and placeholders are checked again on every run.
+  const RETRY = /EAI_AGAIN|UND_ERR_SOCKET|UND_ERR_CONNECT_TIMEOUT|TimeoutError|ECONNRESET|ETIMEDOUT/;
+  for (const [w, r] of Object.entries(done)) if (r.state === 'placeholder' || RETRY.test(r.detail || '')) delete done[w];
   const sites = [...new Set(JSON.parse(readFileSync('data/city/venues.json', 'utf8'))
     .map((v) => v.internal.website).filter((w) => w && siteKind(w) === 'own'))].filter((w) => !done[w]);
   console.log('to check', sites.length, 'already', Object.keys(done).length);

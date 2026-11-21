@@ -27,3 +27,8 @@ test('classifySite: dead, parked and placeholder sites do not count', () => {
 test('classifySite: a redirect to social media is no own site', () => {
   assert.equal(classifySite({ status: 200, url: 'https://www.facebook.com/abc', html: page('Facebook') }).state, 'social');
 });
+
+test('classifySite: a meta refresh or a framed site is a working site', () => {
+  assert.equal(classifySite({ status: 200, url: 'https://x.at/', html: '<meta http-equiv="refresh" content="0; URL=https://x.com/">' }).state, 'works');
+  assert.equal(classifySite({ status: 200, url: 'https://x.at/', html: '<html><head><title>X</title></head><body><iframe src="https://x.wixsite.com/website"></iframe></body></html>' }).state, 'works');
+});
