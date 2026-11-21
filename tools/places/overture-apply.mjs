@@ -9,6 +9,7 @@
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { isDeepStrictEqual } from 'node:util';
 import { overtureIndex, secondOpinion, withOverture, statusAfter } from '../city/overture.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '../..');
@@ -25,7 +26,7 @@ export function planOverture(records, { index, release, siteChecks = {}, coords 
     const next = statusAfter({ status: r.status, confirmed: Boolean(r.confirmedAt), verdict: opinion.verdict, hidPage: f.internal?.overture?.hidPage });
     facts.internal.overture = { ...facts.internal.overture };
     if (next.hidPage) facts.internal.overture.hidPage = true; else delete facts.internal.overture.hidPage;
-    const changed = JSON.stringify(facts) !== JSON.stringify(f) || next.status !== r.status;
+    const changed = !isDeepStrictEqual(facts, f) || next.status !== r.status;
     return { slug: r.slug, name: f.name, before: r.status, status: next.status, opinion, facts, changed };
   });
 }
