@@ -61,6 +61,23 @@ test('medallion: first known cuisine wins, else the kind; a kebab stand shows th
   assert.equal(medalIcon({ kind: 'imbiss', context: { cuisine: [] } }), 'restaurant');
   assert.equal(medalIcon({ kind: 'friseur', context: {} }), 'scissors');
   assert.equal(medalIcon({ kind: 'other', context: {} }), '');
+  assert.equal(medalIcon({ kind: 'restaurant', context: { cuisine: ['mexican'] } }), 'taco');
+  assert.equal(medalIcon({ kind: 'restaurant', context: { cuisine: ['indian'] } }), 'curry');
+  assert.equal(medalIcon({ kind: 'restaurant', context: { cuisine: ['steak_house'] } }), 'steak');
+  assert.equal(medalIcon({ kind: 'imbiss', context: { cuisine: ['falafel'] } }), 'falafel');
+  assert.equal(medalIcon({ kind: 'schneider', context: {} }), 'sewing-machine');
+});
+
+test('every icon the pages can ask for exists in the pictogram set', async () => {
+  const { iconNames } = await import('../../api/_lib/venues/around.mjs');
+  const P = (await import('../../api/_lib/venues/pictograms.mjs')).default;
+  assert.deepEqual(iconNames().filter((n) => !P[n]), []);
+});
+
+test('osmFacts: dogs, air conditioning, high chairs and reservations only on a clear yes', () => {
+  assert.deepEqual(osmFacts({ dog: 'yes', air_conditioning: 'yes', highchair: 'yes', reservation: 'recommended' }), ['dog', 'aircon', 'highchair', 'reservation']);
+  assert.deepEqual(osmFacts({ dog: 'leashed', air_conditioning: 'no', highchair: 'no', reservation: 'no' }), ['dog']);
+  assert.deepEqual(osmFacts({ dog: 'no', reservation: 'only' }), ['reservation']);
 });
 
 test('other trades come first: a kebab stand shows hairdresser and tailor before a café; a phone shop shows food and beauty first', () => {

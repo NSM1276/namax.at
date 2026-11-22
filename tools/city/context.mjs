@@ -33,6 +33,10 @@ export function osmFacts(tags = {}) {
   else if (tags['diet:vegetarian'] === 'yes' || tags['diet:vegetarian'] === 'only') f.push('vegetarian');
   if (['payment:cards', 'payment:debit_cards', 'payment:credit_cards'].some((k) => tags[k] === 'yes')) f.push('cards');
   if (tags.internet_access === 'wlan' || tags.internet_access === 'yes') f.push('wifi');
+  if (tags.dog === 'yes' || tags.dog === 'leashed') f.push('dog');
+  if (tags.air_conditioning === 'yes') f.push('aircon');
+  if (tags.highchair === 'yes') f.push('highchair');
+  if (['yes', 'recommended', 'only', 'required'].includes(tags.reservation)) f.push('reservation');
   return f;
 }
 

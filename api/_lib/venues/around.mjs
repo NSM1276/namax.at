@@ -21,6 +21,10 @@ export const FACT_LABELS = {
   vegetarian: ['Vegetarische Auswahl', 'Vegetarian options'],
   cards: ['Kartenzahlung', 'Cards accepted'],
   wifi: ['WLAN', 'Wi-Fi'],
+  dog: ['Hunde willkommen', 'Dogs welcome'],
+  aircon: ['Klimatisiert', 'Air-conditioned'],
+  highchair: ['Kinderhochstuhl', 'High chairs'],
+  reservation: ['Reservierung möglich', 'Reservations'],
 };
 // OSM cuisine values we name on the page; anything else is left out rather than shown raw.
 export const CUISINE = {
@@ -37,20 +41,27 @@ export const CUISINE = {
   toast: ['Toast', 'Toast'], salad: ['Salate', 'Salads'], breakfast: ['Frühstück', 'Breakfast'], cake: ['Kuchen', 'Cakes'],
   ice_cream: ['Eis', 'Ice cream'], coffee_shop: ['Kaffee', 'Coffee'], bubble_tea: ['Bubble Tea', 'Bubble tea'], heuriger: ['Heuriger', 'Heuriger'],
   buschenschank: ['Buschenschank', 'Buschenschank'], falafel: ['Falafel', 'Falafel'], pide: ['Pide', 'Pide'], durum: ['Dürüm', 'Dürüm'], dürüm: ['Dürüm', 'Dürüm'], doner: ['Döner', 'Döner'],
+  dumpling: ['Dumplings', 'Dumplings'], donut: ['Donuts', 'Donuts'], waffle: ['Waffeln', 'Waffles'], bagel: ['Bagels', 'Bagels'],
+  soup: ['Suppen', 'Soups'], tea: ['Tee', 'Tea'], juice: ['Säfte', 'Juices'], seafood: ['Meeresfrüchte', 'Seafood'],
 };
 
-// The medallion on the sign: one pictogram (our generated enamel-sign set, api/_lib/venues/pictograms.json)
+// The medallion on the sign: one pictogram (our generated enamel-sign set, api/_lib/venues/pictograms.mjs)
 // chosen by the venue's first known cuisine, else by its kind.
-const KIND_ICON = { friseur: 'scissors', cafe: 'cafe', restaurant: 'restaurant', imbiss: 'restaurant', handy: 'handy', nails: 'nails', kosmetik: 'kosmetik', schneider: 'spool' };
+const KIND_ICON = { friseur: 'scissors', cafe: 'cafe', restaurant: 'restaurant', imbiss: 'restaurant', handy: 'handy', nails: 'nails', kosmetik: 'kosmetik', schneider: 'sewing-machine' };
 const CUISINE_ICON = {
-  kebab: 'kebab', doner: 'kebab', pide: 'kebab', turkish: 'kebab', durum: 'wrap', 'dürüm': 'wrap', wrap: 'wrap', falafel: 'wrap',
+  kebab: 'kebab', doner: 'kebab', pide: 'kebab', turkish: 'kebab', durum: 'wrap', 'dürüm': 'wrap', wrap: 'wrap', falafel: 'falafel',
   pizza: 'pizza', italian_pizza: 'pizza', italian: 'pizza', burger: 'burger', sausage: 'sausage', hot_dog: 'sausage',
-  asian: 'asian', chinese: 'asian', thai: 'asian', vietnamese: 'asian', korean: 'asian', ramen: 'asian', noodle: 'asian',
+  asian: 'asian', thai: 'asian', vietnamese: 'asian', korean: 'asian', ramen: 'asian', noodle: 'asian', chinese: 'dumplings', dumpling: 'dumplings',
   japanese: 'sushi', sushi: 'sushi', coffee_shop: 'cafe', ice_cream: 'ice-cream', breakfast: 'breakfast', chicken: 'chicken',
-  schnitzel: 'schnitzel', salad: 'salad', bubble_tea: 'bubble-tea', heuriger: 'wine', buschenschank: 'wine', cake: 'croissant',
+  schnitzel: 'schnitzel', salad: 'salad', bubble_tea: 'bubble-tea', heuriger: 'wine', buschenschank: 'wine', cake: 'cake',
+  indian: 'curry', mexican: 'taco', steak_house: 'steak', fish: 'fish', seafood: 'fish', sandwich: 'sandwich', toast: 'sandwich',
+  donut: 'donut', waffle: 'waffle', bagel: 'bagel', soup: 'soup', tea: 'tea', juice: 'juice',
 };
-const FACT_ICON = { terrace: 'terrace', wheelchair: 'wheelchair', wheelchairLimited: 'wheelchair', takeaway: 'takeaway', delivery: 'delivery', vegan: 'vegan', vegetarian: 'vegan', cards: 'card', wifi: 'wifi' };
+const FACT_ICON = { terrace: 'terrace', wheelchair: 'wheelchair', wheelchairLimited: 'wheelchair', takeaway: 'takeaway', delivery: 'delivery', vegan: 'vegan', vegetarian: 'vegan', cards: 'card', wifi: 'wifi',
+  dog: 'dog-friendly', aircon: 'snowflake', highchair: 'high-chair', reservation: 'reservation' };
 const STOP_ICON = { u: 'subway', s: 'train', tram: 'tram', bus: 'bus' };
+/** Every pictogram name the pages can ask for (kept honest by a test against pictograms.mjs). */
+export const iconNames = () => [...new Set([...Object.values(KIND_ICON), ...Object.values(CUISINE_ICON), ...Object.values(FACT_ICON), ...Object.values(STOP_ICON)])];
 /** The pictogram name for a venue's medallion (cuisine first, then kind), or '' when none fits. */
 export function medalIcon(v) {
   const c = ((v.context && v.context.cuisine) || []).find((x) => CUISINE_ICON[x]);
