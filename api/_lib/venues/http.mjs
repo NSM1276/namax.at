@@ -234,11 +234,14 @@ export async function handleAdmin(req, { store, adminKeyHash = ADMIN_KEY_HASH, n
   const want = params.get('d') || '';
   const district = want === 'all' ? 'all' : districts.some((x) => String(x.d) === want) ? Number(want) : null;
   const html = (rows, opts) => new Response(renderAdmin(rows, opts), { headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'private, no-store', 'X-Robots-Tag': 'noindex, nofollow' } });
-  // No (or an unknown) district: the start page with one button per district, so the list never loads every venue at once.
+  const live = new Map(records.map((r) => [r.slug, { chatOpen: r.chatOpen, name: effectiveVenue(r, []).name }]));
+  const requests = (await store.listRequests()).map((q) => ({ ...q, venueName: live.get(q.slug)?.name || q.venueName, chatOpen: live.get(q.slug)?.chatOpen ?? null }));
+  const openRequests = requests.filter((q) => !q.doneAt).length;
+  // No district: plain /liste is the "Anfragen" start page; ?v=lokale (or an unknown district) the district chooser,
+  // so the list never loads every venue at once.
   if (district == null) {
-    const live = new Map(records.map((r) => [r.slug, { chatOpen: r.chatOpen, name: effectiveVenue(r, []).name }]));
-    const requests = (await store.listRequests()).map((q) => ({ ...q, venueName: live.get(q.slug)?.name || q.venueName, chatOpen: live.get(q.slug)?.chatOpen ?? null }));
-    return html([], { districts, chooser: true, requests });
+    const view = want || params.get('v') === 'lokale' ? 'lokale' : 'anfragen';
+    return html([], { districts, chooser: true, requests, view });
   }
   const rows = records.filter((r) => district === 'all' || districtOf(r) === district).map((r) => {
     const v = effectiveVenue(r, []);
@@ -247,7 +250,7 @@ export async function handleAdmin(req, { store, adminKeyHash = ADMIN_KEY_HASH, n
       status: r.status, confirmed: Boolean(r.confirmedAt), facadeUrl: r.facadeUrl || null, ownerUrl: ownerKey ? `https://${r.slug}.namax.at/?k=${ownerKey}` : null,
       check: overtureRow(r.facts.internal?.overture), chatOpen: Boolean(r.chatOpen) };
   }).sort((a, b) => a.name.localeCompare(b.name, 'de'));
-  return html(rows, { districts, district });
+  return html(rows, { districts, district, openRequests });
 }
 
 /**

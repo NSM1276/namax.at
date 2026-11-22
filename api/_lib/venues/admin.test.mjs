@@ -208,10 +208,13 @@ test('list: ?d= shows only that district; d=all shows everything', async () => {
   assert.equal(cards(await (await handleAdmin(req(ADMIN, 'all'), s)).text()), 3);
 });
 
-test('list without a district: a chooser with every district and its count, no cards, no key in the page', async () => {
+const lokale = (k, extra = '') => new Request(`https://www.namax.at/liste?v=lokale${extra}`, { headers: { host: 'www.namax.at', cookie: `namax_admin=${k}` } });
+
+test('"Lokale" tab without a district: a chooser with every district and its count, no cards, no key in the page', async () => {
   const s = await twoDistricts();
-  for (const d of ['', '99', 'x']) {
-    const res = await handleAdmin(req(ADMIN, d), s);
+  for (const r of [lokale(ADMIN), req(ADMIN, '99'), req(ADMIN, 'x')]) {
+    const res = await handleAdmin(r, s);
+    const d = r.url;
     assert.equal(res.status, 200);
     const html = await res.text();
     assert.equal(cards(html), 0, d);
@@ -312,9 +315,9 @@ async function reqSvc() {
 }
 const chooser = async (s) => (await handleAdmin(req(ADMIN, ''), s)).text();
 
-test('start page: "Anfragen" with the open count above the districts, website wishes first, escaped, done ones folded', async () => {
+test('start page: "Anfragen" with the open count, website wishes first, escaped, done ones folded', async () => {
   const html = await chooser(await reqSvc());
-  assert.ok(html.indexOf('Anfragen') < html.indexOf('data-pick="12"'));
+  assert.ok(!html.includes('data-pick="'), 'districts live in the "Lokale" tab');
   assert.match(html, /Anfragen <span>2<\/span>/);
   assert.ok(html.indexOf('>Mo<') < html.indexOf('Ali &lt;i&gt;'), 'own-website wish first');
   assert.ok(html.includes('Familie / Mitarbeiter · Angaben korrigieren · Anruf'));
@@ -324,7 +327,6 @@ test('start page: "Anfragen" with the open count above the districts, website wi
   assert.ok(!html.includes('Zeiten <script>'));
   assert.match(html, /<details[^>]*><summary>Erledigt \(1\)<\/summary>[\s\S]*Seite entfernen/);
   assert.ok(html.includes('href="https://cafe-a.namax.at/"'));
-  assert.match(html, /<body data-open="2">/, 'the start page stays put while requests are open');
 });
 
 test('request card: the main button answers the way the owner chose, on the number they typed', async () => {
@@ -412,4 +414,33 @@ test('a request shows the venue name as the page shows it (owner changes include
   await s.store.addRequest('cafe-a', { role: 'owner', wish: 'fix', name: 'N', phone: '0660 1234567', channel: 'call', text: '' });
   const html = await chooser(s);
   assert.ok(html.includes('>Café cafe-a</a>'));
+});
+
+// Two tabs: "Anfragen" is always the start page, "Lokale" holds districts and cards.
+const tabs = (html) => (html.match(/<nav class="tabs"[\s\S]*?<\/nav>/) || [''])[0];
+
+test('start page without any request: the "Anfragen" tab, an empty note, no jump to a district', async () => {
+  const html = await chooser(await svc());
+  assert.match(tabs(html), /<a href="\/liste" aria-current="page">Anfragen <span>0<\/span><\/a>/);
+  assert.match(tabs(html), /<a href="\/liste\?v=lokale" data-lokale>Lokale<\/a>/);
+  assert.ok(html.includes('Noch keine Anfragen'));
+  assert.ok(!html.includes('data-pick="'));
+  assert.ok(!/return go\(/.test(html), 'the start page never jumps away');
+});
+
+test('"Lokale" tab is marked on the district chooser and on the cards; every page shows the open count', async () => {
+  const s = await reqSvc();
+  const ch = await (await handleAdmin(lokale(ADMIN), s)).text();
+  assert.match(tabs(ch), /<a href="\/liste\?v=lokale" data-lokale aria-current="page">Lokale<\/a>/);
+  assert.match(tabs(ch), /Anfragen <span>2<\/span>/);
+  const cardsPage = await (await handleAdmin(req(ADMIN, '12'), s)).text();
+  assert.match(tabs(cardsPage), /aria-current="page">Lokale</);
+  assert.match(tabs(cardsPage), /<a href="\/liste">Anfragen <span>2<\/span><\/a>/);
+  assert.ok(!cardsPage.includes(ADMIN) && !ch.includes(ADMIN));
+});
+
+test('the "Lokale" tab link reopens the last district used (stored in the browser only)', () => {
+  const html = renderAdmin([], { districts: [{ d: 12, n: 2 }], chooser: true });
+  assert.ok(html.includes("namax-liste-d"));
+  assert.ok(html.includes('data-lokale'));
 });

@@ -58,6 +58,17 @@ const dName = (d) => `${d}. ${DISTRICT_NAMES[d] || 'Bezirk'}`;
 // The admin key travels in an HttpOnly cookie (set by /liste?k=…); nothing in the page knows it.
 const NAV_JS = `function go(d){try{localStorage.setItem('namax-liste-d',d)}catch(e){}var q=new URLSearchParams(location.search);q.set('d',d);location.search=q.toString()}`;
 
+// Two tabs on every page: "Anfragen" (start page) and "Lokale" (districts and cards).
+const TABS_CSS = `.tabs{display:flex;gap:6px;margin-top:10px}.tabs a{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:8px;border-radius:8px;background:#2a2a2a;color:#fff;text-decoration:none;font-weight:600}
+.tabs a[aria-current]{background:#ffc93c;color:#111}.tabs span{display:inline-block;min-width:24px;padding:0 7px;border-radius:999px;background:#fff;color:#111;text-align:center;font-size:14px}`;
+function tabsNav(active, openCount) {
+  const cur = (t) => (t === active ? ' aria-current="page"' : '');
+  return `<nav class="tabs" aria-label="Bereich"><a href="/liste"${cur('anfragen')}>Anfragen <span>${Number(openCount) || 0}</span></a>`
+    + `<a href="/liste?v=lokale" data-lokale${cur('lokale')}>Lokale</a></nav>`;
+}
+// The "Lokale" tab reopens the last district used on this device.
+const TABS_JS = `var t=document.querySelector('[data-lokale]'),l='';try{l=(localStorage.getItem('namax-liste-d')||'').replace(/[^0-9a-z]/g,'')}catch(e){}if(t&&l)t.href='/liste?d='+l;`;
+
 const CL = T.claim.de;
 const MAX_SHOWN_REQUESTS = 50; // a flood never makes the start page unusable
 const CHANNEL_DE = { call: 'Anruf', whatsapp: 'WhatsApp' };
@@ -100,22 +111,25 @@ post(b,{slug:slug,chatOpen:on},function(){[].forEach.call(document.querySelector
 b=e.target.closest('[data-done]');if(b){post(b,{requestId:Number(b.dataset.done),done:b.dataset.to==='1'},function(){location.reload()})}});`;
 
 /**
- * Start page of the list: open requests first ("Anfragen"), then one button per district with its count.
- * Without open requests the browser reopens the last district used.
+ * view 'anfragen' (start page): the owner requests, also when there are none yet.
+ * view 'lokale': one button per district with its count.
  */
-function renderChooser(districts, total, requests = []) {
+function renderChooser(districts, total, requests = [], view = 'anfragen') {
   const btn = (d, label, n) => `<button type="button" data-pick="${d}">${esc(label)} <span>${n}</span></button>`;
   const picks = districts.map(({ d, n }) => btn(d, dName(d), n)).join('') + btn('all', 'Alle Bezirke', total);
   const open = requests.filter((q) => !q.doneAt), done = requests.filter((q) => q.doneAt);
-  const reqs = !requests.length ? '' : `<section class="req"><h2>Anfragen <span>${open.length}</span></h2>`
-    + (open.length ? `<ul>${open.slice(0, MAX_SHOWN_REQUESTS).map(requestCard).join('')}</ul>` : '<p class="none">Keine offenen Anfragen</p>')
+  const reqs = `<section class="req"><h2>Anfragen <span>${open.length}</span></h2>`
+    + (open.length ? `<ul>${open.slice(0, MAX_SHOWN_REQUESTS).map(requestCard).join('')}</ul>`
+      : requests.length ? '<p class="none">Keine offenen Anfragen</p>'
+      : '<p class="none">Noch keine Anfragen. Neue erscheinen hier, sobald ein Inhaber auf seiner Seite das Formular „Sind Sie der Inhaber?“ ausfüllt.</p>')
     + (open.length > MAX_SHOWN_REQUESTS ? `<p class="none">${open.length - MAX_SHOWN_REQUESTS} ältere Anfragen nicht angezeigt</p>` : '')
     + (done.length ? `<details><summary>Erledigt (${done.length})</summary><ul>${done.slice(0, MAX_SHOWN_REQUESTS).map(requestCard).join('')}</ul></details>` : '')
     + '</section>';
   return `<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex,nofollow"><title>namax · Liste</title><meta name="theme-color" content="#111">
+<meta name="robots" content="noindex,nofollow"><title>namax · Admin</title><meta name="theme-color" content="#111">
 <style>*{box-sizing:border-box}body{margin:0;font:16px/1.4 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background:#f4f3ef;color:#111}
 header{background:#111;color:#fff;padding:14px}h1{margin:0;font-size:18px}h1 span{opacity:.7;font-weight:400}
+${TABS_CSS}
 .pick{display:grid;gap:8px;padding:12px;max-width:760px;margin:0 auto}
 .pick button{display:flex;justify-content:space-between;align-items:center;font:inherit;font-size:17px;font-weight:600;min-height:52px;padding:10px 16px;border-radius:10px;border:1px solid #ddd;background:#fff;color:#111;text-align:left}
 .pick span{font-weight:400;color:#666}
@@ -126,14 +140,11 @@ header{background:#111;color:#fff;padding:14px}h1{margin:0;font-size:18px}h1 spa
 .a{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .a a,.a button{font:inherit;font-size:15px;font-weight:600;min-height:42px;padding:9px 14px;border-radius:8px;border:1px solid #111;background:#fff;color:#111;text-decoration:none}
 .a a.pg{background:#111;color:#fff}.a .rot{border-color:#bbb;color:#555;font-weight:500}.no{font-size:13px;color:#888;align-self:center}
-details{margin:6px 2px 4px}summary{min-height:44px;display:flex;align-items:center;color:#555;cursor:pointer}.none{color:#666;margin:4px 2px}</style></head><body data-open="${open.length}">
-<header><h1>namax · Liste <span>${total}</span></h1></header>
-${reqs}
-<div class="pick" role="group" aria-label="Bezirk wählen">${picks}</div>
+details{margin:6px 2px 4px}summary{min-height:44px;display:flex;align-items:center;color:#555;cursor:pointer}.none{color:#666;margin:4px 2px}</style></head><body>
+<header><h1>namax · Admin${view === 'lokale' ? ` <span>${total} Lokale</span>` : ''}</h1>${tabsNav(view, open.length)}</header>
+${view === 'lokale' ? `<div class="pick" role="group" aria-label="Bezirk wählen">${picks}</div>` : reqs}
 <script>(function(){${SWITCH_JS}})();</script>
-<script>(function(){${NAV_JS}
-var last='';try{last=localStorage.getItem('namax-liste-d')||''}catch(e){}
-if(document.body.dataset.open==='0'&&last&&document.querySelector('[data-pick="'+last.replace(/[^0-9a-z]/g,'')+'"]'))return go(last);
+<script>(function(){${TABS_JS}${NAV_JS}
 document.addEventListener('click',function(e){var b=e.target.closest('[data-pick]');if(b)go(b.dataset.pick)})})();</script>
 </body></html>`;
 }
@@ -150,8 +161,8 @@ const checkLabel = (c) => ({ both: '2 Quellen ✓', osm: 'nur OSM', closed: 'ges
  * options.districts: [{ d, n }] for every district (the menu switches between them); options.district: the one shown, or 'all';
  * options.chooser: render the district start page instead of cards.
  */
-export function renderAdmin(rows, { districts = null, district = null, chooser = false, requests = [] } = {}) {
-  if (chooser && districts) return renderChooser(districts, districts.reduce((a, x) => a + x.n, 0), requests);
+export function renderAdmin(rows, { districts = null, district = null, chooser = false, requests = [], view = 'anfragen', openRequests = 0 } = {}) {
+  if (chooser && districts) return renderChooser(districts, districts.reduce((a, x) => a + x.n, 0), requests, view);
   const kinds = [...new Set(rows.map((r) => r.kind))].sort((a, b) => kindDe(a).localeCompare(kindDe(b), 'de'));
   const all = districts;
   const inRows = [...new Set(rows.map((r) => r.district).filter(Boolean))].sort((a, b) => a - b);
@@ -196,8 +207,9 @@ ${photo}</li>`;
     : inRows.length > 1
       ? `<select data-dsel aria-label="Bezirk"><option value="">Alle Bezirke</option>${inRows.map((d) => `<option value="${d}">${d}. Bezirk</option>`).join('')}</select>` : '';
   return `<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex,nofollow"><title>namax · Liste</title><meta name="theme-color" content="#111">
+<meta name="robots" content="noindex,nofollow"><title>namax · Lokale</title><meta name="theme-color" content="#111">
 <style>*{box-sizing:border-box}body{margin:0;font:16px/1.4 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background:#f4f3ef;color:#111}
+${TABS_CSS}
 header{position:sticky;top:0;z-index:2;background:#111;color:#fff;padding:12px 14px 10px}
 h1{margin:0 0 8px;font-size:18px}h1 span{opacity:.7;font-weight:400}
 input[type=search]{width:100%;font:inherit;font-size:17px;padding:12px;border:0;border-radius:8px}
@@ -227,7 +239,7 @@ li b{font-size:17px}li small{display:block;color:#555;margin-top:2px}
 #crop input[type=range]{width:min(94vw,520px)}
 .cb{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}.cb button{font:inherit;font-size:16px;font-weight:700;min-height:48px;padding:10px 18px;border-radius:10px;border:1px solid #fff;background:transparent;color:#fff}
 .cb .go{background:#ffc93c;border-color:#ffc93c;color:#111}.cb button:disabled{opacity:.5}</style></head><body>
-<header><h1>namax · Liste <span data-count>${rows.length}</span></h1>
+<header><h1>namax · Lokale <span data-count>${rows.length}</span></h1>${tabsNav('lokale', openRequests)}
 <input type="search" placeholder="Name oder Straße" aria-label="Suche" autocomplete="off">
 <div class="f" role="group" aria-label="Art">${chips}<button type="button" data-only-check>Nur prüfen</button></div>${dsel}</header>
 <ul>${items}</ul><p class="empty" hidden>Nichts gefunden</p>
@@ -270,7 +282,8 @@ function run(){var n=0;for(var i=0;i<lis.length;i++){var l=lis[i],ok=(!q||l.data
 document.querySelector('input[type=search]').addEventListener('input',function(e){q=e.target.value.trim().toLowerCase();run()});
 var sel=document.querySelector('[data-dsel]');if(sel)sel.addEventListener('change',function(){d=sel.value;run()});
 ${NAV_JS}
-var nav=document.querySelector('[data-dnav]');if(nav){try{localStorage.setItem('namax-liste-d',nav.value)}catch(e){}nav.addEventListener('change',function(){go(nav.value)})}
+var nav=document.querySelector('[data-dnav]');if(nav){try{localStorage.setItem('namax-liste-d',nav.value)}catch(e){}}${TABS_JS}
+if(nav){nav.addEventListener('change',function(){go(nav.value)})}
 document.addEventListener('click',function(e){var c=e.target.closest('[data-k]');if(c){k=c.dataset.k;[].forEach.call(document.querySelectorAll('[data-k]'),function(b){b.className=b===c?'on':''});run()}
 c=e.target.closest('[data-only-check]');if(c){ck=!ck;c.className=ck?'on':'';run()}});})();</script>
 <script>(function(){var pick=document.getElementById('fpick'),cr=document.getElementById('crop'),fr=cr.querySelector('[data-frame]'),im=cr.querySelector('[data-cimg]'),zm=cr.querySelector('[data-zoom]'),use=cr.querySelector('[data-cuse]');
