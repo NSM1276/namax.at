@@ -3,6 +3,7 @@
 // Everything comes from v.context, built offline by tools/city/context.mjs. A paying owner's page sets v.context.near = [].
 import { kindLabel } from './i18n.mjs';
 import { PALETTES } from './themes.mjs';
+import { CITIES, districtLabel } from './cities.mjs';
 
 import PICTOGRAMS from './pictograms.mjs';
 
@@ -53,7 +54,7 @@ const CUISINE_ICON = {
   pizza: 'pizza', italian_pizza: 'pizza', italian: 'pizza', burger: 'burger', sausage: 'sausage', hot_dog: 'sausage',
   asian: 'asian', thai: 'asian', vietnamese: 'asian', korean: 'asian', ramen: 'asian', noodle: 'asian', chinese: 'dumplings', dumpling: 'dumplings',
   japanese: 'sushi', sushi: 'sushi', coffee_shop: 'cafe', ice_cream: 'ice-cream', breakfast: 'breakfast', chicken: 'chicken',
-  schnitzel: 'schnitzel', salad: 'salad', bubble_tea: 'bubble-tea', heuriger: 'wine', buschenschank: 'wine', cake: 'cake',
+  schnitzel: 'schnitzel', escalope: 'schnitzel', salad: 'salad', bubble_tea: 'bubble-tea', heuriger: 'wine', buschenschank: 'wine', cake: 'cake',
   indian: 'curry', mexican: 'taco', steak_house: 'steak', fish: 'fish', seafood: 'fish', sandwich: 'sandwich', toast: 'sandwich',
   donut: 'donut', waffle: 'waffle', bagel: 'bagel', soup: 'soup', tea: 'tea', juice: 'juice',
 };
@@ -62,8 +63,26 @@ const FACT_ICON = { terrace: 'terrace', wheelchair: 'wheelchair', wheelchairLimi
 const STOP_ICON = { u: 'subway', s: 'train', tram: 'tram', bus: 'bus' };
 /** Every pictogram name the pages can ask for (kept honest by a test against pictograms.mjs). */
 export const iconNames = () => [...new Set([...Object.values(KIND_ICON), ...Object.values(CUISINE_ICON), ...Object.values(FACT_ICON), ...Object.values(STOP_ICON)])];
-/** The pictogram name for a venue's medallion (cuisine first, then kind), or '' when none fits. */
+// Dish words in a food venue's own name (what its sign says) beat the OSM cuisine, which is often off:
+// "Baki's Schnitzelparadies" is tagged chicken. The earliest word in the name wins.
+const FOOD_KINDS = new Set(['imbiss', 'restaurant', 'cafe']);
+const NAME_ICON = [
+  [/schnitzel/, 'schnitzel'], [/keba[bp]|d[oö]ner/, 'kebab'], [/d[uü]r[uü]m|\bwraps?\b/, 'wrap'], [/pizz/, 'pizza'], [/burger/, 'burger'],
+  [/sushi/, 'sushi'], [/falafel/, 'falafel'], [/bagel/, 'bagel'], [/donut|doughnut/, 'donut'], [/waffel|waffle/, 'waffle'],
+  [/\bwok\b|asia|ramen|\bpho\b/, 'asian'], [/taco|burrito|mexi/, 'taco'], [/curry|indian|india\b/, 'curry'], [/steak/, 'steak'],
+  [/fisch|\bfish/, 'fish'], [/hendl|chicken|gefl[uü]gel/, 'chicken'], [/w[uü]rstel|wurst|hot ?dog/, 'sausage'], [/\beis\b|gelato|eissalon/, 'ice-cream'],
+  [/heurig|buschenschank/, 'wine'], [/bubble ?tea/, 'bubble-tea'], [/fr[uü]hst[uü]ck|breakfast/, 'breakfast'], [/suppe|\bsoup/, 'soup'], [/sandwich/, 'sandwich'],
+];
+function nameIcon(name) {
+  const s = String(name || '').toLowerCase();
+  let best = null;
+  for (const [re, icon] of NAME_ICON) { const m = re.exec(s); if (m && (!best || m.index < best.at)) best = { at: m.index, icon }; }
+  return best ? best.icon : '';
+}
+/** The pictogram name for a venue's medallion (dish word in the name, then cuisine, then kind), or '' when none fits. */
 export function medalIcon(v) {
+  const n = FOOD_KINDS.has(v.kind) ? nameIcon(v.name) : '';
+  if (n) return n;
   const c = ((v.context && v.context.cuisine) || []).find((x) => CUISINE_ICON[x]);
   return c ? CUISINE_ICON[c] : KIND_ICON[v.kind] || '';
 }
@@ -76,11 +95,12 @@ export function medal(v) {
 
 export const AROUND_CSS = `
 .vista{margin:0 0 14px}.vista i{display:block;aspect-ratio:16/8;background:var(--accent);-webkit-mask:center/contain no-repeat;mask:center/contain no-repeat}
+.vista figcaption{margin-top:6px;text-align:center;font:600 13px/1.3 var(--body);letter-spacing:.04em;opacity:.7}
 .medal{display:grid;place-items:center;width:66px;height:66px;margin:-4px auto 10px;color:var(--sign-ink);border:2px solid var(--sign-ink);border-radius:50%;box-shadow:0 0 0 3px var(--sign-bg),0 0 0 4.5px var(--sign-ink)}
 @media (min-width:700px){.medal{width:78px;height:78px}.medal svg{width:52px;height:52px}}
 .facts li.food{background:var(--ink);color:var(--bg)}
 .facts li{display:inline-flex;align-items:center;gap:7px}.facts li svg{flex:none}
-.map{margin:0;border:2px solid var(--ink);border-radius:12px;overflow:hidden;background:color-mix(in srgb,var(--sign-bg) 7%,var(--bg))}
+.map{margin:0;border:2px solid var(--accent);border-radius:12px;overflow:hidden;background:color-mix(in srgb,var(--sign-bg) 7%,var(--bg))}
 .map svg{display:block;width:100%;height:auto}
 .map .st{fill:none;stroke:color-mix(in srgb,var(--ink) 22%,transparent);stroke-width:11;stroke-linecap:round;stroke-linejoin:round}
 .map .st.big{stroke-width:18;stroke:color-mix(in srgb,var(--ink) 30%,transparent)}
@@ -88,15 +108,15 @@ export const AROUND_CSS = `
 .map .dot{fill:color-mix(in srgb,var(--ink) 38%,transparent)}
 .map .me{fill:var(--accent);stroke:var(--ink);stroke-width:2}
 .map .ring{fill:none;stroke:var(--accent);stroke-width:2;transform-origin:center;transform-box:fill-box;animation:ping 2.4s ease-out 1.4s 3}
-.map .stop rect{fill:var(--ink)}.map .stop path{fill:var(--bg)}
+.map .stop rect{fill:var(--accent)}.map .stop path{fill:var(--accent-ink)}
 .map figcaption{display:flex;align-items:center;gap:10px;padding:10px 14px;border-top:1px solid color-mix(in srgb,var(--ink) 18%,transparent);font-size:15px}
-.badge{flex:none;display:grid;place-items:center;width:34px;height:34px;border-radius:8px;background:var(--ink);color:var(--bg)}
+.badge{flex:none;display:grid;place-items:center;width:34px;height:34px;border-radius:8px;background:var(--accent);color:var(--accent-ink)}
 .near{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.near a{display:flex;flex-direction:column;justify-content:space-between;gap:6px;min-height:118px;padding:12px;border:2px solid color-mix(in srgb,var(--ink) 70%,transparent);border-radius:10px;text-decoration:none;background:var(--bg)}
+.near a{display:flex;flex-direction:column;justify-content:space-between;gap:6px;min-height:118px;padding:12px;border:2px solid color-mix(in srgb,var(--accent) 75%,transparent);border-radius:10px;text-decoration:none;background:var(--bg)}
 .near .mini{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;box-shadow:0 0 0 2px var(--bg),0 0 0 3.5px color-mix(in srgb,var(--ink) 55%,transparent)}
 .near b{font-size:16px;line-height:1.2;overflow-wrap:anywhere}
 .near small{font-size:13px;opacity:.75}
-.near a:hover{border-color:var(--ink)}
+.near a:hover{border-color:var(--accent)}
 @keyframes ping{0%{opacity:.9;transform:scale(1)}100%{opacity:0;transform:scale(3.2)}}
 @media (prefers-reduced-motion:reduce){.map .ring{animation:none;opacity:0}}
 @media (min-width:900px){.near{grid-template-columns:repeat(3,1fr)}}
@@ -157,7 +177,9 @@ export function districtArt(v) {
   const k = artKey(v.address);
   if (!k) return '';
   const u = `/v/_shared/districts/${k}.webp`;
-  return `<figure class="vista" role="img" aria-label="${esc(LANDMARKS[k])}"><i style="-webkit-mask-image:url(${u});mask-image:url(${u})"></i></figure>`;
+  // The caption names the district first, so the landmark reads as the district's emblem, not as something next door.
+  const where = k.startsWith('wien-') ? districtLabel('wien', Number(k.slice(5))) : CITIES[k].name;
+  return `<figure class="vista"><i role="img" aria-label="${esc(LANDMARKS[k])}" style="-webkit-mask-image:url(${u});mask-image:url(${u})"></i><figcaption>${esc(where)} · ${esc(LANDMARKS[k])}</figcaption></figure>`;
 }
 
 export function aroundSections(v) {

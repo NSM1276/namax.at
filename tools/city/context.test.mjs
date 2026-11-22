@@ -68,6 +68,22 @@ test('medallion: first known cuisine wins, else the kind; a kebab stand shows th
   assert.equal(medalIcon({ kind: 'schneider', context: {} }), 'sewing-machine');
 });
 
+test('the name on the sign beats the OSM cuisine; the earliest dish word in the name wins', async () => {
+  const { medalIcon } = await import('../../api/_lib/venues/around.mjs');
+  assert.equal(medalIcon({ kind: 'imbiss', name: "Baki's Schnitzelparadies", context: { cuisine: ['chicken', 'fish'] } }), 'schnitzel');
+  assert.equal(medalIcon({ kind: 'imbiss', name: 'Kebap Schnitzel Hot Dog Nudeln', context: { cuisine: ['hot_dog'] } }), 'kebab');
+  assert.equal(medalIcon({ kind: 'imbiss', name: 'Burger & Schnitzel Haus', context: { cuisine: [] } }), 'burger');
+  assert.equal(medalIcon({ kind: 'restaurant', name: 'Pizzeria Roma', context: { cuisine: ['italian'] } }), 'pizza');
+  assert.equal(medalIcon({ kind: 'restaurant', name: 'Zum Goldenen Hirschen', context: { cuisine: ['escalope'] } }), 'schnitzel');
+  assert.equal(medalIcon({ kind: 'friseur', name: 'Kebab Cuts', context: {} }), 'scissors');
+});
+
+test('neighbours get the same name-first icon', () => {
+  const venues = [me, { ...at('schnitzel-x', 'restaurant', 0.0005), name: 'Schnitzel X' }];
+  const c = buildContext(me, { venues, streets: [], stops: [], osmById: new Map() });
+  assert.equal(c.near.find((x) => x.slug === 'schnitzel-x')?.icon, 'schnitzel');
+});
+
 test('every icon the pages can ask for exists in the pictogram set', async () => {
   const { iconNames } = await import('../../api/_lib/venues/around.mjs');
   const P = (await import('../../api/_lib/venues/pictograms.mjs')).default;
@@ -94,6 +110,8 @@ test('district illustration: Vienna by post code, other cities by name, nothing 
   assert.match(districtArt({ address: { zip: '1030', city: 'Wien' } }), /\/v\/_shared\/districts\/wien-03\.webp/);
   assert.match(districtArt({ address: { zip: '1030', city: 'Wien' } }), /aria-label="Belvedere"/);
   assert.match(districtArt({ address: { zip: '8010', city: 'Graz' } }), /districts\/graz\.webp/);
+  assert.match(districtArt({ address: { zip: '1110', city: 'Wien' } }), /<figcaption>11\. Simmering · Gasometer<\/figcaption>/);
+  assert.match(districtArt({ address: { zip: '8010', city: 'Graz' } }), /<figcaption>Graz · Uhrturm am Schlossberg<\/figcaption>/);
   assert.equal(districtArt({ address: { zip: '1300', city: 'Wien' } }), '');
   assert.equal(districtArt({ address: { zip: '2340', city: 'Mödling' } }), '');
   const page = renderVenue({ slug: 'x', kind: 'cafe', name: 'X', address: { street: 'A 1', zip: '1040', city: 'Wien' }, theme: {}, context: { near: [], facts: [], map: { w: 600, h: 340, streets: [], dots: [] } } });

@@ -114,7 +114,7 @@ export function buildContext(v, { venues, streets, stops, osmById }) {
   };
   // each named neighbour carries its own pictogram and sign colours, and its spot on the map when it is on it
   const near = nearX.map((x) => ({ slug: x.o.slug, name: x.o.name, kind: x.o.kind, m: Math.max(10, Math.round(x.m / 10) * 10),
-    icon: medalIcon({ kind: x.o.kind, context: { cuisine: food(x.o) } }) || undefined,
+    icon: medalIcon({ kind: x.o.kind, name: x.o.name, context: { cuisine: food(x.o) } }) || undefined,
     palette: (x.o.theme && x.o.theme.palette) || undefined, xy: onMap(x.p) ? clear(toXY(x.p)) : undefined }));
   const named = new Set(nearX.map((x) => x.o.slug));
   const dots = others.filter((x) => onMap(x.p) && !named.has(x.o.slug)).map((x) => toXY(x.p));
