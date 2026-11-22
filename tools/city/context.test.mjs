@@ -88,3 +88,15 @@ test('other trades come first: a kebab stand shows hairdresser and tailor before
   const d = buildContext(shop, { venues: [shop, ...venues.slice(1)], streets: [], stops: [], osmById: new Map() });
   assert.deepEqual(d.near.map((x) => x.slug), ['cafe-near', 'salon', 'tailor'], 'no other phone shop, the tailor (same trade group) last');
 });
+
+test('district illustration: Vienna by post code, other cities by name, nothing without a context or for an unknown area', async () => {
+  const { districtArt } = await import('../../api/_lib/venues/around.mjs');
+  assert.match(districtArt({ address: { zip: '1030', city: 'Wien' } }), /\/v\/_shared\/districts\/wien-03\.webp/);
+  assert.match(districtArt({ address: { zip: '1030', city: 'Wien' } }), /aria-label="Belvedere"/);
+  assert.match(districtArt({ address: { zip: '8010', city: 'Graz' } }), /districts\/graz\.webp/);
+  assert.equal(districtArt({ address: { zip: '1300', city: 'Wien' } }), '');
+  assert.equal(districtArt({ address: { zip: '2340', city: 'Mödling' } }), '');
+  const page = renderVenue({ slug: 'x', kind: 'cafe', name: 'X', address: { street: 'A 1', zip: '1040', city: 'Wien' }, theme: {}, context: { near: [], facts: [], map: { w: 600, h: 340, streets: [], dots: [] } } });
+  assert.ok(page.includes('districts/wien-04.webp'));
+  assert.ok(!renderVenue({ slug: 'x', kind: 'cafe', name: 'X', address: { street: 'A 1', zip: '1040', city: 'Wien' }, theme: {} }).includes('districts/'));
+});

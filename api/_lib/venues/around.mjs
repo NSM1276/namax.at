@@ -75,6 +75,7 @@ export function medal(v) {
 }
 
 export const AROUND_CSS = `
+.vista{margin:0 0 14px}.vista i{display:block;aspect-ratio:16/8;background:var(--accent);-webkit-mask:center/contain no-repeat;mask:center/contain no-repeat}
 .medal{display:grid;place-items:center;width:66px;height:66px;margin:-4px auto 10px;color:var(--sign-ink);border:2px solid var(--sign-ink);border-radius:50%;box-shadow:0 0 0 3px var(--sign-bg),0 0 0 4.5px var(--sign-ink)}
 @media (min-width:700px){.medal{width:78px;height:78px}.medal svg{width:52px;height:52px}}
 .facts li.food{background:var(--ink);color:var(--bg)}
@@ -135,6 +136,30 @@ function mapSvg(c, v) {
   return `<svg viewBox="0 0 ${m.w} ${m.h}" role="img" aria-label="${esc(`Lageplan: ${v.name}, ${v.address.street}`)}"><defs>${defs}</defs>${streets}${labels}${dots}${named}${stop}<circle class="ring" cx="${cx}" cy="${cy}" r="12"/><circle class="me" cx="${cx}" cy="${cy}" r="12"/></svg>`;
 }
 
+// One linocut landmark per Vienna district and per other city (v/_shared/districts/<key>.webp, a transparent mask
+// tinted with the page's accent colour). The label is the landmark, for screen readers.
+const LANDMARKS = {
+  'wien-01': 'Stephansdom', 'wien-02': 'Riesenrad im Prater', 'wien-03': 'Belvedere', 'wien-04': 'Karlskirche', 'wien-05': 'Gemeindebau in Margareten',
+  'wien-06': 'Flakturm im Esterházypark', 'wien-07': 'Spittelberg', 'wien-08': 'Piaristenkirche Maria Treu', 'wien-09': 'Votivkirche',
+  'wien-10': 'Wasserturm Favoriten', 'wien-11': 'Gasometer', 'wien-12': 'Markt in Meidling', 'wien-13': 'Gloriette', 'wien-14': 'Kirche am Steinhof',
+  'wien-15': 'Westbahnhof', 'wien-16': 'Schloss Wilhelminenberg', 'wien-17': 'Wienerwald', 'wien-18': 'Türkenschanzpark', 'wien-19': 'Weingärten am Kahlenberg',
+  'wien-20': 'Millennium Tower', 'wien-21': 'Floridsdorfer Brücke', 'wien-22': 'Donauturm', 'wien-23': 'Wotrubakirche',
+  graz: 'Uhrturm am Schlossberg', linz: 'Pöstlingberg', salzburg: 'Festung Hohensalzburg', innsbruck: 'Goldenes Dachl',
+};
+function artKey(a = {}) {
+  const city = String(a.city || '').toLowerCase();
+  const m = /^1(\d\d)0$/.exec(String(a.zip || ''));
+  if (city === 'wien') return m && +m[1] >= 1 && +m[1] <= 23 ? `wien-${m[1]}` : '';
+  return LANDMARKS[city] ? city : '';
+}
+/** The district illustration block, or '' when the venue's area has none. */
+export function districtArt(v) {
+  const k = artKey(v.address);
+  if (!k) return '';
+  const u = `/v/_shared/districts/${k}.webp`;
+  return `<figure class="vista" role="img" aria-label="${esc(LANDMARKS[k])}"><i style="-webkit-mask-image:url(${u});mask-image:url(${u})"></i></figure>`;
+}
+
 export function aroundSections(v) {
   const c = v.context;
   if (!c || !c.map) return '';
@@ -142,7 +167,7 @@ export function aroundSections(v) {
   if (c.stop) {
     cap = `<figcaption><span class="badge">${pictogram(STOP_ICON[c.stop.type], 24)}</span>${tr(`${c.stop.name} · ${c.stop.min} Min. zu Fuß`, `${c.stop.name} · ${c.stop.min} min walk`)}</figcaption>`;
   }
-  const map = `<section>${tr('Rundherum', 'Around', 'h2')}<figure class="map">${mapSvg(c, v)}${cap}</figure></section>`;
+  const map = `<section>${tr('Rundherum', 'Around', 'h2')}${districtArt(v)}<figure class="map">${mapSvg(c, v)}${cap}</figure></section>`;
   const near = (c.near || []).length ? `<section>${tr('In der Nähe', 'Nearby', 'h2')}<ul class="near">${c.near.map((x) =>
     `<li><a href="https://${esc(x.slug)}.namax.at/">${x.icon && PICTOGRAMS[x.icon] ? `<i class="mini" style="background:${(PALETTES[x.palette] || PALETTES['black-white']).signBg};color:${(PALETTES[x.palette] || PALETTES['black-white']).signInk}">${pictogram(x.icon, 24)}</i>` : ''}<b>${esc(x.name)}</b>${tr(`${kindLabel(x.kind, 'de')} · ${x.m} m`, `${kindLabel(x.kind, 'en')} · ${x.m} m`, 'small')}</a></li>`).join('')}</ul></section>` : '';
   return map + near;
