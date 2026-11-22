@@ -1,6 +1,7 @@
 // Opens every website listed in the city dataset and records whether it really works.
-// Usage: node tools/city/check-sites.mjs   (resumes from data/city/site-checks.json)
+// Usage: node tools/city/check-sites.mjs [city=wien]   (resumes from the city's site-checks.json, tools/city/paths.mjs)
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { cityPaths } from './paths.mjs';
 import { fileURLToPath } from 'node:url';
 import { siteKind } from './normalize.mjs';
 
@@ -54,12 +55,13 @@ async function probe(raw) {
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  const OUT = 'data/city/site-checks.json';
+  const P = cityPaths(process.argv[2] || 'wien');
+  const OUT = P.siteChecks;
   const done = existsSync(OUT) ? JSON.parse(readFileSync(OUT, 'utf8')) : {};
   // Network hiccups and placeholders are checked again on every run.
   const RETRY = /EAI_AGAIN|UND_ERR_SOCKET|UND_ERR_CONNECT_TIMEOUT|TimeoutError|ECONNRESET|ETIMEDOUT/;
   for (const [w, r] of Object.entries(done)) if (r.state === 'placeholder' || RETRY.test(r.detail || '')) delete done[w];
-  const sites = [...new Set(JSON.parse(readFileSync('data/city/venues.json', 'utf8'))
+  const sites = [...new Set(JSON.parse(readFileSync(P.venues, 'utf8'))
     .flatMap((v) => [v.internal.website, v.internal.overture?.match?.website]).filter((w) => w && siteKind(w) === 'own'))].filter((w) => !done[w]);
   console.log('to check', sites.length, 'already', Object.keys(done).length);
   let i = 0, n = 0;

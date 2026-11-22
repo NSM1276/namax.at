@@ -1,8 +1,8 @@
 [out:json][timeout:300];
-area(3600109166)->.wien;
+area({{AREA}})->.city;
 (
-  nwr(area.wien)["shop"~"^(hairdresser|beauty|mobile_phone|tailor)$"];
-  nwr(area.wien)["craft"~"^(tailor|dressmaker|electronics_repair)$"];
-  nwr(area.wien)["amenity"~"^(restaurant|fast_food|cafe)$"];
+  nwr(area.city)["shop"~"^(hairdresser|beauty|mobile_phone|tailor)$"];
+  nwr(area.city)["craft"~"^(tailor|dressmaker|electronics_repair)$"];
+  nwr(area.city)["amenity"~"^(restaurant|fast_food|cafe)$"];
 );
 out center tags;

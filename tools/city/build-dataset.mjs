@@ -1,20 +1,31 @@
-// Builds the city dataset from the OpenStreetMap downloads in data/raw/.
-// Usage: node tools/city/build-dataset.mjs
-// Writes data/city/venues.json, data/city/excluded.json and docs/leads/city-table.md.
+// Builds one city's dataset from its OpenStreetMap downloads in data/raw/ (tools/city/fetch-osm.mjs <city>).
+// Usage: node tools/city/build-dataset.mjs [city=wien]
+// Writes the city's venues.json, excluded.json and district table (paths in tools/city/paths.mjs):
+// Vienna data/city/venues.json and docs/leads/city-table.md as before, Graz data/cities/graz/… and docs/leads/city-table-graz.md.
+// Slugs already in use anywhere are left alone: venues/*.json, the Vienna dataset and, when present,
+// data/raw/taken-slugs.txt (every slug in the database, one per line: node tools/city/taken-slugs.mjs).
 import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync } from 'node:fs';
 import { kindOf, normalizePhone, parseOpeningHours, siteKind } from './normalize.mjs';
 import { assignSlugs } from './slug.mjs';
-import { makeDistrictLocator, zipDistrict, DISTRICT_NAMES } from './district.mjs';
+import { makeDistrictLocator, zipDistrict } from './district.mjs';
+import { CITIES, districtLabel } from '../../api/_lib/venues/cities.mjs';
+import { cityPaths } from './paths.mjs';
 import { chainReason, normName } from './chains.mjs';
 import { validateVenue } from '../../api/_lib/venues/schema.mjs';
 import { overtureIndex, secondOpinion, withOverture } from './overture.mjs';
 
 const read = (p) => JSON.parse(readFileSync(p, 'utf8'));
-const osm = read('data/raw/osm-wien.json').elements;
-const locate = makeDistrictLocator(read('data/raw/osm-districts.json').elements);
-const siteChecks = existsSync('data/city/site-checks.json') ? read('data/city/site-checks.json') : {};
+const city = process.argv[2] || 'wien';
+const C = CITIES[city];
+const P = cityPaths(city);
+if (!C.districts) throw new Error(`${C.name} has no district table yet (api/_lib/venues/cities.mjs)`);
+const DISTRICT_NAMES = C.districts;
+const vienna = city === 'wien';
+const osm = read(P.osm).elements;
+const locate = makeDistrictLocator(read(P.districts).elements, city);
+const siteChecks = existsSync(P.siteChecks) ? read(P.siteChecks) : {};
 // Second source (python tools/places/overture-export.py …); without the file every venue stays osm-only.
-const overture = existsSync('data/places/overture-wien.json') ? read('data/places/overture-wien.json') : null;
+const overture = existsSync(P.overture) ? read(P.overture) : null;
 const ovIndex = overture && overtureIndex(overture.places);
 
 // Theme each kind starts with until the owner sends a photo of the sign.
@@ -32,7 +43,7 @@ export const KIND_THEME = {
 // ---- house addresses, in a grid for nearest-address lookups
 const CELL = 500; // 1/500 degree ≈ 220 m north–south, 150 m east–west
 const grid = new Map();
-for (const a of read('data/raw/osm-addresses.json').elements) {
+for (const a of read(P.addresses).elements) {
   const lat = a.lat ?? a.center?.lat, lon = a.lon ?? a.center?.lon;
   if (lat == null) continue;
   const key = `${Math.round(lat * CELL)}|${Math.round(lon * CELL)}`;
@@ -54,6 +65,22 @@ function nearestAddress(lat, lon, max = 30) {
   }
   return best;
 }
+/** Post code of the nearest house on the same street (up to ~200 m), else of any house within 60 m; null when none. */
+function nearestZip(lat, lon, street, ok) {
+  const name = (s) => String(s || '').replace(/\s+\d.*$/, '').trim().toLowerCase();
+  const want = name(street);
+  let same = null, sameD = 200, any = null, anyD = 60;
+  const y = Math.round(lat * CELL), x = Math.round(lon * CELL);
+  for (let i = -1; i <= 1; i++) for (let j = -1; j <= 1; j++) {
+    for (const a of grid.get(`${y + i}|${x + j}`) || []) {
+      if (!ok(a.zip)) continue;
+      const d = meters(lat, lon, a.lat, a.lon);
+      if (want && name(a.street) === want && d < sameD) { sameD = d; same = a.zip; }
+      if (d < anyD) { anyD = d; any = a.zip; }
+    }
+  }
+  return same || any;
+}
 
 // ---- first pass: facts per element
 const excluded = [];
@@ -67,18 +94,32 @@ for (const e of osm) {
   if (!name) { drop(e, 'no name'); continue; }
   if (t.disused || t['disused:shop'] || t['disused:amenity'] || /^(yes|closed)$/.test(t.abandoned || '')) { drop(e, 'closed'); continue; }
   const lat = e.lat ?? e.center?.lat, lon = e.lon ?? e.center?.lon;
-  const district = locate(lon, lat) ?? zipDistrict(t['addr:postcode']);
+  const district = locate(lon, lat) ?? zipDistrict(t['addr:postcode'], city);
   if (!district) { drop(e, 'outside the districts'); continue; }
 
   let street = null, zip = null, addressApprox = false, addressDistance = null;
   if (t['addr:street'] && t['addr:housenumber']) street = `${t['addr:street']} ${t['addr:housenumber']}`;
-  zip = zipDistrict(t['addr:postcode']) ? t['addr:postcode'] : null;
-  if (!street) {
-    const near = nearestAddress(lat, lon);
-    if (near) { street = near.street; addressApprox = true; addressDistance = near.distance; zip = zip || (zipDistrict(near.zip) ? near.zip : null); }
-    else if (t['addr:street']) { street = t['addr:street']; addressApprox = true; }
+  if (vienna) {
+    // exactly as before there were other cities
+    zip = zipDistrict(t['addr:postcode']) ? t['addr:postcode'] : null;
+    if (!street) {
+      const near = nearestAddress(lat, lon);
+      if (near) { street = near.street; addressApprox = true; addressDistance = near.distance; zip = zip || (zipDistrict(near.zip) ? near.zip : null); }
+      else if (t['addr:street']) { street = t['addr:street']; addressApprox = true; }
+    }
+    zip = zip || `1${String(district).padStart(2, '0')}0`;
+  } else {
+    // The post code does not follow from the district here: from the tag, else the nearest house; without one the venue waits.
+    const zipOk = (z) => C.zip.test(String(z || '').trim());
+    zip = zipOk(t['addr:postcode']) ? t['addr:postcode'].trim() : null;
+    const near = !street || !zip ? nearestAddress(lat, lon) : null;
+    if (!street) {
+      if (near) { street = near.street; addressApprox = true; addressDistance = near.distance; }
+      else if (t['addr:street']) { street = t['addr:street']; addressApprox = true; }
+    }
+    if (!zip && near && zipOk(near.zip)) zip = near.zip;
+    if (!zip) zip = nearestZip(lat, lon, street, zipOk);
   }
-  zip = zip || `1${String(district).padStart(2, '0')}0`;
 
   const websiteRaw = t.website || t['contact:website'] || t.url || null;
   const socials = [t['contact:instagram'], t['contact:facebook'], t['contact:tiktok']].filter(Boolean);
@@ -101,7 +142,7 @@ for (const r of rows) {
 const repeats = new Map([...districtsByName].map(([n, s]) => [n, s.size]));
 const kept = [];
 for (const r of rows) {
-  const why = chainReason(r.tags, repeats);
+  const why = chainReason(r.tags, repeats, vienna ? 4 : 3);
   if (why) excluded.push({ osm: r.id, name: r.name, reason: 'chain', detail: why, district: r.district, kind: r.kind });
   else kept.push(r);
 }
@@ -120,9 +161,14 @@ for (const r of kept) {
 }
 
 // ---- venues we already have facts files for
-const existing = existsSync('venues') ? readdirSync('venues').filter((f) => f.endsWith('.json') && !f.startsWith('_'))
+const factsFiles = existsSync('venues') ? readdirSync('venues').filter((f) => f.endsWith('.json') && !f.startsWith('_'))
   .map((f) => read(`venues/${f}`)) : [];
-const existingSlugs = new Set(existing.map((v) => v.slug));
+const existing = factsFiles.filter((v) => (v.address?.city || 'Wien') === C.name);
+const existingSlugs = new Set(factsFiles.map((v) => v.slug));
+if (!vienna && existsSync('data/city/venues.json')) for (const v of read('data/city/venues.json')) existingSlugs.add(v.slug);
+if (existsSync('data/raw/taken-slugs.txt')) {
+  for (const s of readFileSync('data/raw/taken-slugs.txt', 'utf8').split(/\r?\n/)) if (s.trim()) existingSlugs.add(s.trim());
+} else if (!vienna) console.warn('data/raw/taken-slugs.txt missing: slugs are checked against files only, not the database');
 const claimed = new Set(); // each facts file matches one element at most
 for (const r of unique) {
   const n = normName(r.name);
@@ -138,7 +184,7 @@ for (const r of unique) {
 }
 
 // ---- slugs (venues with a facts file keep theirs)
-const slugs = assignSlugs(unique.filter((r) => !r.existing), existingSlugs);
+const slugs = assignSlugs(unique.filter((r) => !r.existing), existingSlugs, { city });
 for (const r of unique) r.slug = r.existing || slugs.get(r.id);
 if (new Set(unique.map((r) => r.slug)).size !== unique.length) throw new Error('two venues got the same slug');
 
@@ -150,14 +196,14 @@ const venues = unique.map((r) => {
   let v = {
     slug: r.slug, status: 'hidden', kind: r.kind, name: r.name,
     area: DISTRICT_NAMES[r.district],
-    address: { street: r.street, zip: r.zip, city: 'Wien' },
+    address: { street: r.street, zip: r.zip || '', city: C.name },
     ...(r.phone && { phone: r.phone }),
     ...(r.hours && { hours: r.hours }),
     theme: KIND_THEME[r.kind],
     source: 'osm',
     ...(uncertain.length && { uncertain }),
     internal: {
-      osm: r.id, district: r.district, lat: r.lat, lon: r.lon,
+      osm: r.id, city, district: r.district, lat: r.lat, lon: r.lon,
       ...(r.existing && { existingFactsFile: true }),
       ...(r.addressApprox && { addressApprox: true, addressDistance: r.addressDistance }),
       ...(r.hoursRaw && { hoursRaw: r.hoursRaw }),
@@ -175,15 +221,15 @@ const venues = unique.map((r) => {
       ovIndex, overture.release, siteChecks));
   }
   v.ready = !!(r.street && /\d/.test(r.street) && (!r.addressApprox || (r.addressDistance != null && r.addressDistance <= 15)));
-  const problems = r.street ? validateVenue({ ...v, ready: undefined }, v.slug) : ['no street'];
+  const problems = !r.street ? ['no street'] : !r.zip ? ['no post code'] : validateVenue({ ...v, ready: undefined }, v.slug);
   if (v.internal.overture?.verdict === 'closed') problems.push('closed according to Overture');
   if (problems.length) { v.ready = false; v.internal.problems = problems; }
   return v;
 }).sort((a, b) => a.internal.district - b.internal.district || a.kind.localeCompare(b.kind) || a.slug.localeCompare(b.slug));
 
-mkdirSync('data/city', { recursive: true });
-writeFileSync('data/city/venues.json', JSON.stringify(venues, null, 1));
-writeFileSync('data/city/excluded.json', JSON.stringify(excluded, null, 1));
+mkdirSync(P.dir, { recursive: true });
+writeFileSync(P.venues, JSON.stringify(venues, null, 1));
+writeFileSync(P.excluded, JSON.stringify(excluded, null, 1));
 
 // ---- district × kind table
 const KINDS = ['friseur', 'imbiss', 'restaurant', 'cafe', 'nails', 'kosmetik', 'handy', 'schneider'];
@@ -195,18 +241,19 @@ const cnt = (list, f) => list.filter(f).length;
 const pct = (a, b) => (b ? Math.round((a / b) * 100) + '%' : '—');
 const checked = venues.some((v) => v.internal.siteCheck);
 
-let md = `# Вена: точки по районам и нишам\n\nИсточник: OpenStreetMap, выгрузка ${new Date().toISOString().slice(0, 10)}. Сети, дубликаты и закрытые убраны.\n` +
-  `Пересчитать: \`node tools/city/build-dataset.mjs\`.\n\n`;
+const CITY_RU = { wien: 'Вена', graz: 'Грац', linz: 'Линц', salzburg: 'Зальцбург', innsbruck: 'Инсбрук' };
+let md = `# ${CITY_RU[city] || C.name}: точки по районам и нишам\n\nИсточник: OpenStreetMap, выгрузка ${new Date().toISOString().slice(0, 10)}. Сети, дубликаты и закрытые убраны.\n` +
+  `Пересчитать: \`node tools/city/build-dataset.mjs${vienna ? '' : ' ' + city}\`.\n\n`;
 md += `**Всего точек:** ${venues.length} · с точным адресом: ${cnt(venues, (v) => v.ready)} · с телефоном: ${cnt(venues, (v) => v.phone)} · с часами: ${cnt(venues, (v) => v.hours)} · ` +
   `свой сайт указан: ${cnt(venues, ownSite)}${checked ? ` (открывается: ${cnt(venues, siteWorks)})` : ''} · **без своего сайта: ${cnt(venues, noSite)}**\n\n`;
 md += `Исключено: сети ${cnt(excluded, (x) => x.reason === 'chain')}, дубликаты ${cnt(excluded, (x) => x.reason === 'duplicate')}, без названия ${cnt(excluded, (x) => x.reason === 'no name')}, закрытые ${cnt(excluded, (x) => x.reason === 'closed')}, другой вид ${cnt(excluded, (x) => x.reason === 'kind not served')}.\n\n`;
 
 md += `## Сколько точек (в скобках — без своего сайта)\n\n| Район | ${KINDS.map((k) => KIND_RU[k]).join(' | ')} | Всего |\n|---|${KINDS.map(() => '---:').join('|')}|---:|\n`;
-for (let d = 1; d <= 23; d++) {
+for (const d of Object.keys(DISTRICT_NAMES).map(Number)) {
   const inD = venues.filter((v) => v.internal.district === d);
-  md += `| ${d}. ${DISTRICT_NAMES[d]} | ${KINDS.map((k) => { const l = inD.filter((v) => v.kind === k); return l.length ? `${l.length} (${cnt(l, noSite)})` : '—'; }).join(' | ')} | **${inD.length}** (${cnt(inD, noSite)}) |\n`;
+  md += `| ${districtLabel(city, d)} | ${KINDS.map((k) => { const l = inD.filter((v) => v.kind === k); return l.length ? `${l.length} (${cnt(l, noSite)})` : '—'; }).join(' | ')} | **${inD.length}** (${cnt(inD, noSite)}) |\n`;
 }
-md += `| **Вена** | ${KINDS.map((k) => { const l = venues.filter((v) => v.kind === k); return `**${l.length}** (${cnt(l, noSite)})`; }).join(' | ')} | **${venues.length}** (${cnt(venues, noSite)}) |\n\n`;
+md += `| **${CITY_RU[city] || C.name}** | ${KINDS.map((k) => { const l = venues.filter((v) => v.kind === k); return `**${l.length}** (${cnt(l, noSite)})`; }).join(' | ')} | **${venues.length}** (${cnt(venues, noSite)}) |\n\n`;
 
 md += `## Насколько полные данные, по нишам\n\n| Ниша | Точек | Точный адрес | Телефон | Часы | Свой сайт${checked ? ' | Сайт открывается' : ''} | Instagram/Facebook |\n|---|---:|---:|---:|---:|---:|${checked ? '---:|' : ''}---:|\n`;
 for (const k of KINDS) {
@@ -217,6 +264,6 @@ for (const k of KINDS) {
 const chainNames = new Map();
 for (const x of excluded.filter((x) => x.reason === 'chain')) chainNames.set(x.name, (chainNames.get(x.name) || 0) + 1);
 md += `\n## Убраны как сети (проверить список)\n\n` + [...chainNames].sort((a, b) => b[1] - a[1]).map(([n, c]) => `${n} (${c})`).join(' · ') + '\n';
-writeFileSync('docs/leads/city-table.md', md);
+writeFileSync(P.table, md);
 
-console.log(`venues ${venues.length}, ready ${cnt(venues, (v) => v.ready)}, excluded ${excluded.length}, existing matched ${cnt(unique, (r) => r.existing)}`);
+console.log(`${C.name}: venues ${venues.length}, ready ${cnt(venues, (v) => v.ready)}, excluded ${excluded.length}, existing matched ${cnt(unique, (r) => r.existing)}`);

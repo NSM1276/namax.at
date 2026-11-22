@@ -7,6 +7,7 @@ import { isOwner, viennaDayStart, viennaDay, visitWindow, newKey, hashKey } from
 import { chatTurn } from './assistant.mjs';
 import { effectiveVenue } from './merge.mjs';
 import { isAdmin, openOwnerKey, sealOwnerKey, renderAdmin, ADMIN_KEY_HASH } from './admin.mjs';
+import { CITIES, CITY_ORDER, cityOf } from './cities.mjs';
 
 export const MAX_PHOTO_BYTES = 3 * 1024 * 1024;
 export const DAILY_PHOTOS = 12;
@@ -230,7 +231,13 @@ export async function handleAdmin(req, { store, adminKeyHash = ADMIN_KEY_HASH, n
   const key = adminKey(req, null, adminKeyHash);
   if (!key) return text(404, 'Not found\n', 'no-store');
   await store.purgeRequests(now().toISOString());
-  const records = await store.listForAdmin();
+  const all = await store.listForAdmin();
+  // One city at a time (?c=graz; none = Wien, so ?d= alone is a Vienna district as before), then one district of it.
+  const perCity = new Map();
+  for (const r of all) perCity.set(cityOf(r.facts), (perCity.get(cityOf(r.facts)) || 0) + 1);
+  const cities = CITY_ORDER.filter((c) => c === 'wien' || perCity.has(c)).map((c) => ({ c, name: CITIES[c].name, n: perCity.get(c) || 0 }));
+  const city = cities.some((x) => x.c === params.get('c')) ? params.get('c') : 'wien';
+  const records = all.filter((r) => cityOf(r.facts) === city);
   const districtOf = (r) => Number(r.facts.internal?.district) || 0;
   const counts = new Map();
   for (const r of records) counts.set(districtOf(r), (counts.get(districtOf(r)) || 0) + 1);
@@ -238,7 +245,7 @@ export async function handleAdmin(req, { store, adminKeyHash = ADMIN_KEY_HASH, n
   const want = params.get('d') || '';
   const district = want === 'all' ? 'all' : districts.some((x) => String(x.d) === want) ? Number(want) : null;
   const html = (rows, opts) => new Response(renderAdmin(rows, opts), { headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'private, no-store', 'X-Robots-Tag': 'noindex, nofollow' } });
-  const live = new Map(records.map((r) => [r.slug, { chatOpen: r.chatOpen, name: effectiveVenue(r, []).name }]));
+  const live = new Map(all.map((r) => [r.slug, { chatOpen: r.chatOpen, name: effectiveVenue(r, []).name }]));
   const requests = (await store.listRequests()).map((q) => ({ ...q, venueName: live.get(q.slug)?.name || q.venueName, chatOpen: live.get(q.slug)?.chatOpen ?? null }));
   const openRequests = requests.filter((q) => !q.doneAt).length;
   const hitRows = await store.hitSummary(visitWindow(now()));
@@ -249,7 +256,7 @@ export async function handleAdmin(req, { store, adminKeyHash = ADMIN_KEY_HASH, n
   if (district == null) {
     const view = want || params.get('v') === 'lokale' ? 'lokale' : 'anfragen';
     const top = view === 'lokale' ? hitRows.slice(0, 10).map((h) => ({ ...h, name: live.get(h.slug)?.name })) : [];
-    return html([], { districts, chooser: true, requests, view, visits, top });
+    return html([], { districts, chooser: true, requests, view, visits, top, cities, city });
   }
   const rows = records.filter((r) => district === 'all' || districtOf(r) === district).map((r) => {
     const v = effectiveVenue(r, []);
@@ -258,7 +265,7 @@ export async function handleAdmin(req, { store, adminKeyHash = ADMIN_KEY_HASH, n
       status: r.status, confirmed: Boolean(r.confirmedAt), facadeUrl: r.facadeUrl || null, ownerUrl: ownerKey ? `https://${r.slug}.namax.at/?k=${ownerKey}` : null,
       check: overtureRow(r.facts.internal?.overture), chatOpen: Boolean(r.chatOpen), visits: hitBy.get(r.slug) || null };
   }).sort((a, b) => a.name.localeCompare(b.name, 'de'));
-  return html(rows, { districts, district, openRequests, visits });
+  return html(rows, { districts, district, openRequests, visits, cities, city });
 }
 
 /**

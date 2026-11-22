@@ -6,6 +6,7 @@ import { createHash, createCipheriv, createDecipheriv, randomBytes, timingSafeEq
 import { esc } from './template.mjs';
 import { T } from './i18n.mjs';
 import { normalizePhone } from './phone.mjs';
+import { CITIES, districtLabel } from './cities.mjs';
 
 export const ADMIN_KEY_HASH = 'a28eb7d5cdee0e94cd6f950753cbd6614a7ef3425cd1e825708706bc072cc6e9';
 
@@ -47,16 +48,21 @@ const thumbSrc = (u) => (typeof u !== 'string' ? ''
   : /^https:\/\/[a-z0-9-]+\.public\.blob\.vercel-storage\.com\/venues\/[\w./-]+$/.test(u) ? u
   : /^__blob\/venues\/[\w./-]+$/.test(u) ? '/' + u : '');
 
-export const DISTRICT_NAMES = {
-  1: 'Innere Stadt', 2: 'Leopoldstadt', 3: 'Landstraße', 4: 'Wieden', 5: 'Margareten', 6: 'Mariahilf',
-  7: 'Neubau', 8: 'Josefstadt', 9: 'Alsergrund', 10: 'Favoriten', 11: 'Simmering', 12: 'Meidling',
-  13: 'Hietzing', 14: 'Penzing', 15: 'Rudolfsheim-Fünfhaus', 16: 'Ottakring', 17: 'Hernals', 18: 'Währing',
-  19: 'Döbling', 20: 'Brigittenau', 21: 'Floridsdorf', 22: 'Donaustadt', 23: 'Liesing',
-};
-const dName = (d) => `${d}. ${DISTRICT_NAMES[d] || 'Bezirk'}`;
+export const DISTRICT_NAMES = CITIES.wien.districts;
 
 // The admin key travels in an HttpOnly cookie (set by /liste?k=…); nothing in the page knows it.
-const NAV_JS = `function go(d){try{localStorage.setItem('namax-liste-d',d)}catch(e){}var q=new URLSearchParams(location.search);q.set('d',d);location.search=q.toString()}`;
+// The city stays in the address (?c=graz); Vienna has none, so old ?d= bookmarks keep working.
+const NAV_JS = `function keep(d){try{localStorage.setItem('namax-liste-d',d);localStorage.setItem('namax-liste-c',new URLSearchParams(location.search).get('c')||'')}catch(e){}}
+function go(d){keep(d);var q=new URLSearchParams(location.search);q.set('d',d);location.search=q.toString()}`;
+const cityQuery = (city) => (city && city !== 'wien' ? `&c=${city}` : '');
+// City row above the districts, only once there is more than one city.
+const CITIES_CSS = `.cities{display:flex;gap:6px;flex-wrap:wrap;max-width:760px;margin:0 auto;padding:12px 12px 0}
+.cities a{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;min-height:48px;padding:8px 12px;border-radius:10px;border:1px solid #ddd;background:#fff;color:#111;text-decoration:none;font-weight:600}
+.cities a[aria-current]{background:#111;color:#fff;border-color:#111}.cities span{font-weight:400;opacity:.7}`;
+function cityNav(cities, city) {
+  if (!cities || cities.length < 2) return '';
+  return '<nav class="cities" aria-label="Stadt">' + cities.map((c) => `<a href="/liste?v=lokale${esc(cityQuery(c.c))}"${c.c === city ? ' aria-current="page"' : ''}>${esc(c.name)} <span>${c.n}</span></a>`).join('') + '</nav>';
+}
 
 // Two tabs on every page: "Anfragen" (start page) and "Lokale" (districts and cards).
 const TABS_CSS = `.tabs{display:flex;gap:6px;margin-top:10px}.tabs a{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:8px;border-radius:8px;background:#2a2a2a;color:#fff;text-decoration:none;font-weight:600}
@@ -70,7 +76,7 @@ function tabsNav(active, openCount) {
 const VIS_CSS = '.vis{margin:6px 0 0;font-size:14px;color:#ddd}.vis b{color:#fff}';
 const visLine = (v) => (v ? `<p class="vis">Besuche · heute <b>${v.today}</b> · 7 Tage <b>${v.week}</b> · gesamt <b>${v.total}</b></p>` : '');
 // The "Lokale" tab reopens the last district used on this device.
-const TABS_JS = `var t=document.querySelector('[data-lokale]'),l='';try{l=(localStorage.getItem('namax-liste-d')||'').replace(/[^0-9a-z]/g,'')}catch(e){}if(t&&l)t.href='/liste?d='+l;`;
+const TABS_JS = `var t=document.querySelector('[data-lokale]'),l='',lc='';try{l=(localStorage.getItem('namax-liste-d')||'').replace(/[^0-9a-z]/g,'');lc=(localStorage.getItem('namax-liste-c')||'').replace(/[^a-z]/g,'')}catch(e){}if(t&&l)t.href='/liste?'+(lc&&lc!=='wien'?'c='+lc+'&':'')+'d='+l;`;
 
 const CL = T.claim.de;
 const MAX_SHOWN_REQUESTS = 50; // a flood never makes the start page unusable
@@ -117,9 +123,9 @@ b=e.target.closest('[data-done]');if(b){post(b,{requestId:Number(b.dataset.done)
  * view 'anfragen' (start page): the owner requests, also when there are none yet.
  * view 'lokale': one button per district with its count.
  */
-function renderChooser(districts, total, requests = [], view = 'anfragen', visits = null, top = []) {
+function renderChooser(districts, total, requests = [], view = 'anfragen', visits = null, top = [], cities = null, city = 'wien') {
   const btn = (d, label, n) => `<button type="button" data-pick="${d}">${esc(label)} <span>${n}</span></button>`;
-  const picks = districts.map(({ d, n }) => btn(d, dName(d), n)).join('') + btn('all', 'Alle Bezirke', total);
+  const picks = districts.map(({ d, n }) => btn(d, districtLabel(city, d), n)).join('') + btn('all', 'Alle Bezirke', total);
   const open = requests.filter((q) => !q.doneAt), done = requests.filter((q) => q.doneAt);
   const reqs = `<section class="req"><h2>Anfragen <span>${open.length}</span></h2>`
     + (open.length ? `<ul>${open.slice(0, MAX_SHOWN_REQUESTS).map(requestCard).join('')}</ul>`
@@ -138,6 +144,7 @@ function renderChooser(districts, total, requests = [], view = 'anfragen', visit
 header{background:#111;color:#fff;padding:14px}h1{margin:0;font-size:18px}h1 span{opacity:.7;font-weight:400}
 ${TABS_CSS}
 ${VIS_CSS}
+${CITIES_CSS}
 .top{margin:0;padding:0 0 0 28px}.top li{background:#fff;border-radius:8px;padding:10px 12px;margin:6px 0;display:flex;justify-content:space-between;gap:10px}.top a{color:#111;font-weight:600}.top span{color:#555}
 .pick{display:grid;gap:8px;padding:12px;max-width:760px;margin:0 auto}
 .pick button{display:flex;justify-content:space-between;align-items:center;font:inherit;font-size:17px;font-weight:600;min-height:52px;padding:10px 16px;border-radius:10px;border:1px solid #ddd;background:#fff;color:#111;text-align:left}
@@ -151,7 +158,7 @@ ${VIS_CSS}
 .a a.pg{background:#111;color:#fff}.a .rot{border-color:#bbb;color:#555;font-weight:500}.no{font-size:13px;color:#888;align-self:center}
 details{margin:6px 2px 4px}summary{min-height:44px;display:flex;align-items:center;color:#555;cursor:pointer}.none{color:#666;margin:4px 2px}</style></head><body>
 <header><h1>namax · Admin${view === 'lokale' ? ` <span>${total} Lokale</span>` : ''}</h1>${visLine(visits)}${tabsNav(view, open.length)}</header>
-${view === 'lokale' ? `${topList}<div class="pick" role="group" aria-label="Bezirk wählen">${picks}</div>` : reqs}
+${view === 'lokale' ? `${topList}${cityNav(cities, city)}<div class="pick" role="group" aria-label="Bezirk wählen">${picks}</div>` : reqs}
 <script>(function(){${SWITCH_JS}})();</script>
 <script>(function(){${TABS_JS}${NAV_JS}
 document.addEventListener('click',function(e){var b=e.target.closest('[data-pick]');if(b)go(b.dataset.pick)})})();</script>
@@ -170,8 +177,8 @@ const checkLabel = (c) => ({ both: '2 Quellen ✓', osm: 'nur OSM', closed: 'ges
  * options.districts: [{ d, n }] for every district (the menu switches between them); options.district: the one shown, or 'all';
  * options.chooser: render the district start page instead of cards.
  */
-export function renderAdmin(rows, { districts = null, district = null, chooser = false, requests = [], view = 'anfragen', openRequests = 0, visits = null, top = [] } = {}) {
-  if (chooser && districts) return renderChooser(districts, districts.reduce((a, x) => a + x.n, 0), requests, view, visits, top);
+export function renderAdmin(rows, { districts = null, district = null, chooser = false, requests = [], view = 'anfragen', openRequests = 0, visits = null, top = [], cities = null, city = 'wien' } = {}) {
+  if (chooser && districts) return renderChooser(districts, districts.reduce((a, x) => a + x.n, 0), requests, view, visits, top, cities, city);
   const kinds = [...new Set(rows.map((r) => r.kind))].sort((a, b) => kindDe(a).localeCompare(kindDe(b), 'de'));
   const all = districts;
   const inRows = [...new Set(rows.map((r) => r.district).filter(Boolean))].sort((a, b) => a - b);
@@ -202,7 +209,7 @@ export function renderAdmin(rows, { districts = null, district = null, chooser =
       + `<button type="button" class="has rot" data-fdel="${esc(r.slug)}">Foto löschen</button></div>`;
     const q = `${r.name} ${r.street} ${r.slug}`.toLowerCase();
     return `<li data-q="${esc(q)}" data-kind="${esc(r.kind)}" data-d="${esc(r.district || '')}" data-check="${esc(c ? c.verdict : '')}" data-name="${esc(r.name)}"><b>${esc(r.name)}</b>${badges}
-<small>${esc(kindDe(r.kind))} · ${esc(r.street)}${r.district ? ` · ${esc(r.district)}. Bezirk` : ''}</small>
+<small>${esc(kindDe(r.kind))} · ${esc(r.street)}${r.district ? ` · ${esc(city === 'wien' ? `${r.district}. Bezirk` : districtLabel(city, r.district))}` : ''}</small>
 ${r.visits ? `<small class="seen">Besuche: heute ${r.visits.today} · 7 Tage ${r.visits.week} · gesamt ${r.visits.total}</small>\n` : ''}<div class="a"><a class="pg" href="${esc(page)}" target="_blank" rel="noopener">Seite</a><button type="button" data-qr="${esc(page)}">QR</button><button type="button" data-share="${esc(page)}">Teilen</button>${vis}${chat}</div>
 ${ovLine}
 ${owner}
@@ -211,10 +218,13 @@ ${photo}</li>`;
   const chips = ['<button type="button" class="on" data-k="">Alle</button>', ...kinds.map((k) => `<button type="button" data-k="${esc(k)}">${esc(kindDe(k))}</button>`)].join('');
   const total = all ? all.reduce((a, x) => a + x.n, 0) : 0;
   const dsel = all
-    ? `<select data-dnav aria-label="Bezirk">${all.map(({ d, n }) => `<option value="${d}"${String(d) === String(district) ? ' selected' : ''}>${esc(dName(d))} (${n})</option>`).join('')}`
+    ? `<select data-dnav aria-label="Bezirk">${all.map(({ d, n }) => `<option value="${d}"${String(d) === String(district) ? ' selected' : ''}>${esc(districtLabel(city, d))} (${n})</option>`).join('')}`
       + `<option value="all"${district === 'all' ? ' selected' : ''}>Alle Bezirke (${total})</option></select>`
     : inRows.length > 1
-      ? `<select data-dsel aria-label="Bezirk"><option value="">Alle Bezirke</option>${inRows.map((d) => `<option value="${d}">${d}. Bezirk</option>`).join('')}</select>` : '';
+      ? `<select data-dsel aria-label="Bezirk"><option value="">Alle Bezirke</option>${inRows.map((d) => `<option value="${d}">${esc(city === 'wien' ? `${d}. Bezirk` : districtLabel(city, d))}</option>`).join('')}</select>` : '';
+  // Another city: back to the city row on the "Lokale" chooser.
+  const csel = cities && cities.length > 1
+    ? `<select data-cnav aria-label="Stadt">${cities.map((c) => `<option value="${esc(c.c)}"${c.c === city ? ' selected' : ''}>${esc(c.name)} (${c.n})</option>`).join('')}</select>` : '';
   return `<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow"><title>namax · Lokale</title><meta name="theme-color" content="#111">
 <style>*{box-sizing:border-box}body{margin:0;font:16px/1.4 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background:#f4f3ef;color:#111}
@@ -252,7 +262,7 @@ li b{font-size:17px}li small{display:block;color:#555;margin-top:2px}
 .cb .go{background:#ffc93c;border-color:#ffc93c;color:#111}.cb button:disabled{opacity:.5}</style></head><body>
 <header><h1>namax · Lokale <span data-count>${rows.length}</span></h1>${visLine(visits)}${tabsNav('lokale', openRequests)}
 <input type="search" placeholder="Name oder Straße" aria-label="Suche" autocomplete="off">
-<div class="f" role="group" aria-label="Art">${chips}<button type="button" data-only-check>Nur prüfen</button></div>${dsel}</header>
+<div class="f" role="group" aria-label="Art">${chips}<button type="button" data-only-check>Nur prüfen</button></div>${csel}${dsel}</header>
 <ul>${items}</ul><p class="empty" hidden>Nichts gefunden</p>
 <div id="qr" hidden role="dialog" aria-label="QR-Code"></div>
 <input type="file" accept="image/*" id="fpick" hidden>
@@ -293,8 +303,9 @@ function run(){var n=0;for(var i=0;i<lis.length;i++){var l=lis[i],ok=(!q||l.data
 document.querySelector('input[type=search]').addEventListener('input',function(e){q=e.target.value.trim().toLowerCase();run()});
 var sel=document.querySelector('[data-dsel]');if(sel)sel.addEventListener('change',function(){d=sel.value;run()});
 ${NAV_JS}
-var nav=document.querySelector('[data-dnav]');if(nav){try{localStorage.setItem('namax-liste-d',nav.value)}catch(e){}}${TABS_JS}
+var nav=document.querySelector('[data-dnav]');if(nav)keep(nav.value);${TABS_JS}
 if(nav){nav.addEventListener('change',function(){go(nav.value)})}
+var cn=document.querySelector('[data-cnav]');if(cn)cn.addEventListener('change',function(){location.href='/liste?v=lokale'+(cn.value==='wien'?'':'&c='+cn.value)});
 document.addEventListener('click',function(e){var c=e.target.closest('[data-k]');if(c){k=c.dataset.k;[].forEach.call(document.querySelectorAll('[data-k]'),function(b){b.className=b===c?'on':''});run()}
 c=e.target.closest('[data-only-check]');if(c){ck=!ck;c.className=ck?'on':'';run()}});})();</script>
 <script>(function(){var pick=document.getElementById('fpick'),cr=document.getElementById('crop'),fr=cr.querySelector('[data-frame]'),im=cr.querySelector('[data-cimg]'),zm=cr.querySelector('[data-zoom]'),use=cr.querySelector('[data-cuse]');

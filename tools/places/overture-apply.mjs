@@ -1,16 +1,19 @@
 // Gives every venue already in the store a second opinion from Overture Maps and applies it.
 //
-//   node tools/places/overture-apply.mjs            dry run: reads the database, prints what would change, writes nothing
+//   node tools/places/overture-apply.mjs [--city graz]   dry run: reads the database, prints what would change, writes nothing
+//                                                   only the venues of that city (default wien; records without a city are Vienna's)
 //   node tools/places/overture-apply.mjs --write    writes facts.internal.overture, hides hours where the sources disagree,
 //                                                   hides pages Overture calls closed (see statusAfter)
 //
 // Only facts.internal.overture, facts.uncertain and the status change; names, hours, phones and hand-researched facts stay.
-// Needs DATABASE_URL in .env.local and data/places/overture-wien.json (python tools/places/overture-export.py …).
+// Needs DATABASE_URL in .env.local and data/places/overture-<city>.json (python tools/places/overture-export.py …).
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { isDeepStrictEqual } from 'node:util';
 import { overtureIndex, secondOpinion, withOverture, statusAfter } from '../city/overture.mjs';
+import { cityOf } from '../../api/_lib/venues/cities.mjs';
+import { cityPaths } from '../city/paths.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '../..');
 const read = (p) => JSON.parse(readFileSync(join(root, p), 'utf8'));
@@ -49,11 +52,15 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const sql = neon(process.env.DATABASE_URL);
   const store = pgStore((t, p) => sql.query(t, p));
 
-  const ov = read('data/places/overture-wien.json');
-  const siteChecks = existsSync(join(root, 'data/city/site-checks.json')) ? read('data/city/site-checks.json') : {};
-  const coords = new Map(existsSync(join(root, 'data/city/venues.json'))
-    ? read('data/city/venues.json').map((v) => [v.slug, { lat: v.internal.lat, lon: v.internal.lon }]) : []);
-  const records = await store.listForAdmin();
+  const ci = process.argv.indexOf('--city');
+  const city = ci > 0 ? process.argv[ci + 1] : 'wien';
+  const P = cityPaths(city);
+  const ov = read(P.overture);
+  const siteChecks = existsSync(join(root, P.siteChecks)) ? read(P.siteChecks) : {};
+  const coords = new Map(existsSync(join(root, P.venues))
+    ? read(P.venues).map((v) => [v.slug, { lat: v.internal.lat, lon: v.internal.lon }]) : []);
+  // One city's places are no opinion on another city's venues.
+  const records = (await store.listForAdmin()).filter((r) => cityOf(r.facts) === city);
   const plan = planOverture(records, { index: overtureIndex(ov.places), release: ov.release, siteChecks, coords });
 
   const count = (f) => plan.filter(f).length;
@@ -65,7 +72,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const phones = count((p) => !p.facts.phone && p.opinion.match?.phone);
   const ownSite = count((p) => p.opinion.siteCheck?.state === 'works');
   const lines = [
-    `${write ? 'WRITING' : 'DRY RUN (nothing written)'} · Overture ${ov.release} · ${plan.length} venues`,
+    `${write ? 'WRITING' : 'DRY RUN (nothing written)'} · ${city} · Overture ${ov.release} · ${plan.length} venues`,
     `  both ${by.both || 0} · osm only ${by.osm || 0} · other business at the address ${by.other || 0} · closed ${by.closed || 0}`,
     `  pages to hide ${hide.length} · to show again ${show.length} · hours hidden ${hoursOff} · Overture phone where we have none ${phones} · own working site per Overture ${ownSite}`,
     `  facts changed ${count((p) => p.changed)}`,

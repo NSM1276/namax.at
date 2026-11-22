@@ -1,4 +1,4 @@
-// Local preview server that mimics Vercel. Run: node tools/serve.mjs   (CITY=1 also loads data/city/venues.json)
+// Local preview server that mimics Vercel. Run: node tools/serve.mjs   (CITY=1 also loads data/city/venues.json; CITY=graz that city's dataset)
 // www: static files with cleanUrls. <slug>.localhost: the same renderPage as on Vercel, from an in-memory store
 // filled with venues/*.json at start. Owner link: http://<slug>.localhost:4173/?k=00000000000000000000000000000000
 // Private list: http://localhost:4173/liste?k=00000000000000000000000000000000 (the same key is the admin key here).
@@ -14,6 +14,7 @@ import { Readable } from 'node:stream';
 import { handlePage, handleChat, handleClaim, handlePhoto, handleHit, handleAdmin, handleAdminPost } from '../api/_lib/venues/http.mjs';
 import { sealOwnerKey } from '../api/_lib/venues/admin.mjs';
 import { ownerPanel } from '../api/_lib/venues/owner-ui.mjs';
+import { cityPaths } from './city/paths.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const port = Number(process.env.PORT || 4173);
@@ -36,8 +37,9 @@ export async function previewStore() {
   for (const name of readdirSync(dir).filter((n) => n.endsWith('.json') && !n.startsWith('_'))) {
     await add(JSON.parse(readFileSync(join(dir, name), 'utf8')));
   }
-  const city = join(root, 'data/city/venues.json');
-  if (process.env.CITY && existsSync(city)) {
+  const c = process.env.CITY;
+  const city = join(root, c && c !== '1' ? cityPaths(c).venues : 'data/city/venues.json');
+  if (c && existsSync(city)) {
     for (const v of JSON.parse(readFileSync(city, 'utf8'))) if (v.ready && !(await store.getVenue(v.slug))) await add(v);
   }
   return store;

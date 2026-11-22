@@ -134,6 +134,18 @@ test('district line: Vienna district number from the post code, otherwise the ar
   assert.equal(districtLine({ address: { zip: '1120', city: 'Wien' } }), '12. BEZIRK');
 });
 
+test('district line and title in Graz: Roman district number, district name and the city', () => {
+  assert.equal(districtLine({ area: 'Geidorf', address: { zip: '8010', city: 'Graz' } }), 'III. GEIDORF, GRAZ');
+  assert.equal(districtLine({ area: 'St. Leonhard', address: { zip: '8010', city: 'Graz' } }), 'II. ST. LEONHARD, GRAZ');
+  assert.equal(districtLine({ area: 'Puntigam', address: { zip: '8055', city: 'Graz' } }), 'XVII. PUNTIGAM, GRAZ');
+  const html = renderVenue({ ...load('minimal'), kind: 'cafe', area: 'Lend', address: { street: 'Mariahilferstraße 1', zip: '8020', city: 'Graz' } });
+  assert.match(html, /<title>[^<]*, Lend, Graz<\/title>/);
+  assert.match(html, /IV\. LEND, GRAZ/);
+  assert.doesNotMatch(html, /Wien/, 'nothing on a Graz page says Vienna');
+  const wien = renderVenue({ ...load('minimal'), kind: 'cafe', area: 'Meidling', address: { street: 'Gasse 1', zip: '1120', city: 'Wien' } });
+  assert.match(wien, /<title>[^<]*, Meidling<\/title>/, 'Vienna titles stay as they were');
+});
+
 test('motion: plays once, nothing moves with reduced motion, and the page is readable without animation', () => {
   const html = renderVenue(load('minimal'));
   assert.match(html, /@keyframes swing/);

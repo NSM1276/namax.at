@@ -479,3 +479,57 @@ test('visits: each card shows its own numbers; a page without visits shows none'
   assert.equal((html.match(/class="seen"/g) || []).length, 2);
   assert.ok(html.includes('<small class="seen">Besuche: heute 3 · 7 Tage 3 · gesamt 4</small>'));
 });
+
+// More than one city: "Lokale" first asks for the city (Wien first), then its districts; ?d= alone stays Vienna.
+async function twoCities() {
+  const s = await twoDistricts();
+  const graz = (slug, d, area, extra = {}) => facts(slug, { name: 'Graz ' + slug, area, address: { street: 'Lendplatz 1', zip: '8020', city: 'Graz' },
+    internal: { city: 'graz', district: d }, ...extra });
+  await s.store.upsertFacts('lend-cafe', { facts: graz('lend-cafe', 4, 'Lend'), keyHash: 'h', status: 'public' });
+  await s.store.upsertFacts('andritz-cafe', { facts: graz('andritz-cafe', 12, 'Andritz'), keyHash: 'h', status: 'public' });
+  await s.store.upsertFacts('andritz-two', { facts: graz('andritz-two', 12, 'Andritz'), keyHash: 'h', status: 'public' });
+  return s;
+}
+const cityNav = (html) => (html.match(/<nav class="cities"[\s\S]*?<\/nav>/) || [''])[0];
+
+test('cities: the "Lokale" chooser offers every city with its count, Wien first and chosen by default', async () => {
+  const html = await (await handleAdmin(lokale(ADMIN), await twoCities())).text();
+  const nav = cityNav(html);
+  assert.match(nav, /<a href="\/liste\?v=lokale" aria-current="page">Wien <span>3<\/span><\/a>/);
+  assert.match(nav, /<a href="\/liste\?v=lokale&amp;c=graz">Graz <span>3<\/span><\/a>/);
+  assert.ok(nav.indexOf('Wien') < nav.indexOf('Graz'));
+  assert.match(html, /data-pick="12"[^>]*>12\. Meidling <span>2<\/span>/, 'Vienna districts, Graz records not counted in them');
+  assert.ok(!html.includes('Andritz'));
+});
+
+test('cities: Graz districts in Roman numerals with their names; ?c=graz&d= shows only that Graz district', async () => {
+  const s = await twoCities();
+  const ch = await (await handleAdmin(lokale(ADMIN, '&c=graz'), s)).text();
+  assert.match(cityNav(ch), /c=graz" aria-current="page">Graz/);
+  assert.match(ch, /data-pick="4"[^>]*>IV\. Lend <span>1<\/span>/);
+  assert.match(ch, /data-pick="12"[^>]*>XII\. Andritz <span>2<\/span>/);
+  assert.match(ch, /data-pick="all"[^>]*>Alle Bezirke <span>3<\/span>/);
+  assert.ok(!ch.includes('Meidling'));
+  const g12 = await (await handleAdmin(new Request('https://www.namax.at/liste?c=graz&d=12', { headers: { host: 'www.namax.at', cookie: `namax_admin=${ADMIN}` } }), s)).text();
+  assert.equal(cards(g12), 2);
+  assert.ok(g12.includes('Graz andritz-cafe') && !g12.includes('Café cafe-a'));
+  assert.match(g12, /XII\. Andritz/);
+  assert.match(g12, /<option value="12" selected>XII\. Andritz \(2\)<\/option>/);
+  const gAll = await (await handleAdmin(new Request('https://www.namax.at/liste?c=graz&d=all', { headers: { host: 'www.namax.at', cookie: `namax_admin=${ADMIN}` } }), s)).text();
+  assert.equal(cards(gAll), 3, '"all" means all of Graz');
+});
+
+test('cities: ?d=12 without a city is still Vienna\'s 12th district, old bookmarks keep working', async () => {
+  const html = await (await handleAdmin(req(ADMIN, '12'), await twoCities())).text();
+  assert.equal(cards(html), 2);
+  assert.ok(!html.includes('Graz andritz'));
+  assert.match(html, /12\. Meidling/);
+  assert.equal(cards(await (await handleAdmin(req(ADMIN, 'all'), await twoCities())).text()), 3, '"all" without a city is all of Vienna');
+});
+
+test('cities: an unknown city falls back to Wien; with one city only there is no city row', async () => {
+  const html = await (await handleAdmin(lokale(ADMIN, '&c=atlantis'), await twoCities())).text();
+  assert.match(cityNav(html), /href="\/liste\?v=lokale" aria-current="page">Wien/);
+  const one = await (await handleAdmin(lokale(ADMIN), await twoDistricts())).text();
+  assert.equal(cityNav(one), '');
+});

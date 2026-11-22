@@ -2,6 +2,8 @@
 //
 //   node tools/venue-sync.mjs --city --district 12 --kind friseur [--limit 15] [--hidden] [--write]
 //   New venues are public (in search) from the start, as agreed; --hidden stores them with noindex.
+//   node tools/venue-sync.mjs --city graz --new-only [--write]   another city's dataset (tools/city/paths.mjs);
+//   --new-only adds venues whose slug is not in the store yet and never touches one that is (the way a new city is opened).
 //   node tools/venue-sync.mjs --files                     (venues/*.json)
 //
 // Without --write nothing leaves this computer: it runs against an empty in-memory store and prints what it would do.
@@ -15,6 +17,7 @@ import { hashKey, newKey, viennaDay } from '../api/_lib/venues/owner.mjs';
 import { validateVenue } from '../api/_lib/venues/schema.mjs';
 import { memoryStore } from '../api/_lib/venues/store.mjs';
 import { sealOwnerKey } from '../api/_lib/venues/admin.mjs';
+import { cityPaths } from './city/paths.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const KEYS_FILE = join(root, 'venues/.keys.tsv');
@@ -35,15 +38,16 @@ export const parseKeys = (text) => new Map(String(text).split(/\r?\n/)
 export const formatKeys = (keys) => [...keys].map(([s, k]) => `${s}\t${k}`).join('\n') + '\n';
 
 /** → { added, updated, skipped, invalid, noKey, links: [{ slug, name, url }], keys } */
-export async function syncVenues({ store, venues, keys, publish = true, adminKey = null }) {
+export async function syncVenues({ store, venues, keys, publish = true, adminKey = null, onlyNew = false }) {
   keys = new Map(keys);
-  const r = { added: [], updated: [], skipped: [], invalid: [], noKey: [], links: [], keys };
+  const r = { added: [], updated: [], skipped: [], invalid: [], noKey: [], exists: [], links: [], keys };
   for (const raw of venues) {
     const { ready, ...facts } = raw;
     const problems = validateVenue(facts, facts.slug);
     if (problems.length) { r.invalid.push(`${facts.slug}: ${problems[0]}`); continue; }
     const slug = facts.slug;
     const existing = await store.getVenue(slug);
+    if (existing && onlyNew) { r.exists.push(slug); continue; }
     if (existing && (existing.status === 'removed' || existing.doNotContact)) { r.skipped.push(slug); continue; }
     if (!existing) {
       const key = newKey();
@@ -89,7 +93,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
       all.push(JSON.parse(readFileSync(join(root, 'venues', n), 'utf8')));
     }
   }
-  if (a.city) all.push(...JSON.parse(readFileSync(join(root, 'data/city/venues.json'), 'utf8')));
+  if (a.city) all.push(...JSON.parse(readFileSync(join(root, a.city === true ? 'data/city/venues.json' : cityPaths(a.city).venues), 'utf8')));
   if (!all.length) { console.error('Nothing to sync: pass --city and/or --files'); process.exit(1); }
   const venues = pickVenues(all, { district: a.district, kind: a.kind, limit: a.limit });
   let store = memoryStore();
@@ -104,9 +108,11 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const keys = existsSync(KEYS_FILE) ? parseKeys(readFileSync(KEYS_FILE, 'utf8')) : new Map();
   const adminKey = /^[0-9a-f]{32}$/.test(process.env.NAMAX_ADMIN_KEY || '') ? process.env.NAMAX_ADMIN_KEY : null;
   if (a.write && !adminKey) console.warn('NAMAX_ADMIN_KEY missing in .env.local: owner links will not appear in the private list');
-  const r = await syncVenues({ store, venues, keys, publish: !a.hidden, adminKey });
+  const r = await syncVenues({ store, venues, keys, publish: !a.hidden, adminKey, onlyNew: Boolean(a['new-only']) });
   console.log(`${a.write ? 'WROTE' : 'DRY RUN (nothing written)'}: ${venues.length} picked · added ${r.added.length} · updated ${r.updated.length}`
-    + ` · skipped (removed/do-not-contact) ${r.skipped.length} · invalid ${r.invalid.length} · no key ${r.noKey.length}`);
+    + ` · skipped (removed/do-not-contact) ${r.skipped.length} · invalid ${r.invalid.length} · no key ${r.noKey.length}`
+    + (a['new-only'] ? ` · already in the store, left alone ${r.exists.length}` : ''));
+  for (const x of r.exists.slice(0, 20)) console.log('  exists ' + x);
   for (const x of r.invalid.slice(0, 20)) console.log('  invalid ' + x);
   if (a.write) {
     writeFileSync(KEYS_FILE, formatKeys(r.keys));

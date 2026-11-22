@@ -7,6 +7,7 @@ import { PALETTES, LETTERINGS, DEFAULT_THEME, BRAND } from './themes.mjs';
 const LOOK = { family: BRAND.display, weight: 700, upper: true, spacing: '.01em', faces: BRAND.faces };
 import { ogImageUrl } from './og-url.mjs';
 import { openState, formatMinute, viennaNow } from './hours.mjs';
+import { CITIES, cityByName, districtNo } from './cities.mjs';
 
 const SITE = 'https://www.namax.at';
 const OWNER_CHAT_FALLBACK = 'https://wa.me/4367764292055'; // replaced by the real chat in part 2
@@ -40,7 +41,10 @@ const comma = (n) => String(n).replace('.', ',');
 
 const titleOf = (v, lang) => {
   const kind = kindLabel(v.kind, lang);
-  return `${v.name} — ${[kind, v.area || v.address.zip + ' ' + v.address.city].filter(Boolean).join(', ')}`;
+  // Vienna titles name the district alone, as before; in other cities the city follows it: "…, Geidorf, Graz".
+  const city = v.address.city;
+  const where = !v.area ? v.address.zip + ' ' + city : /^wien$/i.test(String(city || '')) || !city ? v.area : `${v.area}, ${city}`;
+  return `${v.name} — ${[kind, where].filter(Boolean).join(', ')}`;
 };
 
 function head(v, pal, let_) {
@@ -145,13 +149,23 @@ footer a{display:inline-flex;align-items:center;min-height:44px;margin-right:18p
 `;
 }
 
-/** "12., MEIDLING" for a Vienna address (district number from the post code, Vienna's own notation), else the area. */
+/**
+ * "12., MEIDLING" for a Vienna address (district number from the post code, Vienna's own notation);
+ * "III. GEIDORF, GRAZ" in another city with numbered districts (number from the district name); else the area.
+ */
 export function districtLine(v) {
   const a = v.address || {};
-  const m = /^1(\d\d)0$/.exec(String(a.zip || ''));
-  const n = m ? Number(m[1]) : 0;
   const area = String(v.area || '').toUpperCase();
-  if (/^wien$/i.test(String(a.city || '')) && n >= 1 && n <= 23) return area ? `${n}., ${area}` : `${n}. BEZIRK`;
+  const city = cityByName(a.city);
+  if (city === 'wien') {
+    const m = /^1(\d\d)0$/.exec(String(a.zip || ''));
+    const n = m ? Number(m[1]) : 0;
+    if (n >= 1 && n <= 23) return area ? `${n}., ${area}` : `${n}. BEZIRK`;
+    return area;
+  }
+  const table = city && CITIES[city].districts;
+  const hit = table && v.area && Object.entries(table).find(([, name]) => name.toLowerCase() === String(v.area).toLowerCase());
+  if (hit) return `${districtNo(city, hit[0])}. ${area}, ${CITIES[city].name.toUpperCase()}`;
   return area;
 }
 

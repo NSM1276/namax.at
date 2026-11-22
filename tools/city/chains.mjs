@@ -16,6 +16,11 @@ const KNOWN = [
   'marionnaud', 'douglas', 'magenta', 't mobile', 'yesss', 'mediamarkt',
   'hartlauer', 'telering', 'spusu', 'red zac', 'cig koftem', 'cigkoftem', 'teeamo', 'fladerei', 'dean and david',
   'mochi', 'figlmuller', 'figlmueller', 'eis greissler', 'veganista',
+  // Graz
+  'martin auer', 'sorger', 'purkarthofer', 'dm frisor', 'dm friseur', 'zu den 3 goldenen kugeln', '3 goldenen kugeln', 'rosamunde',
+  'fandl hendl', 'barista s', 'baristas', 'tribeka',
+  // canteens of universities and companies: nobody there to ask for a page
+  'mensa', 'betriebskantine',
 ];
 const KNOWN_RE = new RegExp(`(^| )(${KNOWN.map((k) => k.replace(/ /g, ' ?')).join('|')})( |$)`);
 // Chain names that are also common words inside other venues' names: only the bare name counts.
@@ -27,12 +32,15 @@ const GENERIC = new Set(['kebab', 'kebap', 'doner', 'pizza', 'pizzeria', 'imbiss
   'anderungs schneiderei', 'wurstelstand', 'wiener wurstelstand', 'wurstel stand', 'eissalon', 'konditorei', 'pizzeria kebap',
   'handy', 'handyshop', 'china restaurant', 'sushi', 'asia', 'heuriger', 'bistro', 'gasthaus', 'beisl', 'bar', 'snack']);
 
-/** Why the venue counts as a chain, or null. `repeats` maps normName → number of districts the name appears in. */
-export function chainReason(tags, repeats = new Map()) {
+/**
+ * Why the venue counts as a chain, or null. `repeats` maps normName → number of districts the name appears in;
+ * minDistricts is how many make a chain (4 of Vienna's 23 districts; 3 in a city with fewer, smaller ones).
+ */
+export function chainReason(tags, repeats = new Map(), minDistricts = 4) {
   if (tags.brand || tags['brand:wikidata'] || tags['operator:wikidata']) return 'brand tag';
   const n = normName(tags.name);
   if (KNOWN_RE.test(n) || KNOWN_EXACT.has(n)) return 'known chain';
   const d = repeats.get(n) || 0;
-  if (d >= 4 && !GENERIC.has(n)) return `same name in ${d} districts`;
+  if (d >= minDistricts && !GENERIC.has(n)) return `same name in ${d} districts`;
   return null;
 }

@@ -1,7 +1,9 @@
-// Which of the 23 Vienna districts a venue lies in.
+// Which district of its city a venue lies in.
+import { CITIES, districtNumber } from '../../api/_lib/venues/cities.mjs';
 
-/** District number from a Vienna postcode 1XX0, or null. */
-export function zipDistrict(zip) {
+/** District number from a Vienna postcode 1XX0, or null; other cities' post codes do not follow their districts. */
+export function zipDistrict(zip, city = 'wien') {
+  if (city !== 'wien') return null;
   const m = /^1(\d\d)0$/.exec(String(zip || '').trim());
   if (!m) return null;
   const d = Number(m[1]);
@@ -9,10 +11,11 @@ export function zipDistrict(zip) {
 }
 
 /**
- * Builds locate(lon, lat) → district number from Overpass boundary relations (out geom).
+ * Builds locate(lon, lat) → district number from Overpass boundary relations (out geom) of one city.
+ * The number is the relation's ref (Vienna) or its name in the city's table (Graz); other boundaries are ignored.
  * Uses the even-odd rule over every member segment, so outer and inner rings both count.
  */
-export function makeDistrictLocator(relations) {
+export function makeDistrictLocator(relations, city = 'wien') {
   const polys = relations.map((r) => {
     const segs = [];
     let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
@@ -24,8 +27,8 @@ export function makeDistrictLocator(relations) {
         minY = Math.min(minY, g[i].lat); maxY = Math.max(maxY, g[i].lat);
       }
     }
-    return { ref: Number(r.tags.ref), segs, box: [minX, minY, maxX, maxY] };
-  });
+    return { ref: districtNumber(city, r.tags), segs, box: [minX, minY, maxX, maxY] };
+  }).filter((p) => p.ref != null);
   return function locate(x, y) {
     for (const p of polys) {
       const [a, b, c, d] = p.box;
@@ -40,9 +43,4 @@ export function makeDistrictLocator(relations) {
   };
 }
 
-export const DISTRICT_NAMES = {
-  1: 'Innere Stadt', 2: 'Leopoldstadt', 3: 'Landstraße', 4: 'Wieden', 5: 'Margareten', 6: 'Mariahilf',
-  7: 'Neubau', 8: 'Josefstadt', 9: 'Alsergrund', 10: 'Favoriten', 11: 'Simmering', 12: 'Meidling',
-  13: 'Hietzing', 14: 'Penzing', 15: 'Rudolfsheim-Fünfhaus', 16: 'Ottakring', 17: 'Hernals', 18: 'Währing',
-  19: 'Döbling', 20: 'Brigittenau', 21: 'Floridsdorf', 22: 'Donaustadt', 23: 'Liesing',
-};
+export const DISTRICT_NAMES = CITIES.wien.districts;

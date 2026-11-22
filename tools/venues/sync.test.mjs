@@ -107,3 +107,19 @@ test('pickVenues also leaves out venues whose website only Overture knows, when 
   const v = (slug, state) => ({ slug, ready: true, internal: { district: 12, overture: { verdict: 'both', siteCheck: { state } } } });
   assert.deepEqual(pickVenues([v('aaa', 'works'), v('bbb', 'dead')]).map((x) => x.slug), ['bbb']);
 });
+
+test('--new-only: a new city adds only slugs the store does not have, and never touches an existing page', async () => {
+  const store = memoryStore();
+  const first = await syncVenues({ store, venues: [v('pizza-roma')], keys: new Map() });
+  await store.setStatus('pizza-roma', 'hidden');
+  const graz = (slug) => v(slug, { name: 'Graz ' + slug, area: 'Lend', address: { street: 'Lendplatz 1', zip: '8020', city: 'Graz' }, internal: { city: 'graz', district: 4 } });
+  const r = await syncVenues({ store, venues: [graz('pizza-roma'), graz('pizza-roma-graz')], keys: first.keys, onlyNew: true });
+  assert.deepEqual(r.added, ['pizza-roma-graz']);
+  assert.deepEqual(r.exists, ['pizza-roma']);
+  assert.deepEqual(r.updated, []);
+  const old = await store.getVenue('pizza-roma');
+  assert.equal(old.facts.name, 'Salon pizza-roma', 'the Vienna page keeps its facts');
+  assert.equal(old.status, 'hidden', 'and its status');
+  assert.equal((await store.getVenue('pizza-roma-graz')).facts.internal.city, 'graz');
+  assert.deepEqual(r.links.map((l) => l.slug), ['pizza-roma-graz']);
+});

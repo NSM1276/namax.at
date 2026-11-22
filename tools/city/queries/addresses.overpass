@@ -1,4 +1,4 @@
 [out:json][timeout:600];
-area(3600109166)->.wien;
-nwr(area.wien)["addr:housenumber"]["addr:street"];
+area({{AREA}})->.city;
+nwr(area.city)["addr:housenumber"]["addr:street"];
 out center tags;
