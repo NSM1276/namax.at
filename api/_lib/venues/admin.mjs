@@ -59,6 +59,7 @@ const dName = (d) => `${d}. ${DISTRICT_NAMES[d] || 'Bezirk'}`;
 const NAV_JS = `function go(d){try{localStorage.setItem('namax-liste-d',d)}catch(e){}var q=new URLSearchParams(location.search);q.set('d',d);location.search=q.toString()}`;
 
 const CL = T.claim.de;
+const MAX_SHOWN_REQUESTS = 50; // a flood never makes the start page unusable
 const CHANNEL_DE = { call: 'Anruf', whatsapp: 'WhatsApp' };
 const viennaTime = (iso) => new Intl.DateTimeFormat('de-AT', { timeZone: 'Europe/Vienna', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
   .format(new Date(iso)).replace(',', '');
@@ -107,8 +108,9 @@ function renderChooser(districts, total, requests = []) {
   const picks = districts.map(({ d, n }) => btn(d, dName(d), n)).join('') + btn('all', 'Alle Bezirke', total);
   const open = requests.filter((q) => !q.doneAt), done = requests.filter((q) => q.doneAt);
   const reqs = !requests.length ? '' : `<section class="req"><h2>Anfragen <span>${open.length}</span></h2>`
-    + (open.length ? `<ul>${open.map(requestCard).join('')}</ul>` : '<p class="none">Keine offenen Anfragen</p>')
-    + (done.length ? `<details><summary>Erledigt (${done.length})</summary><ul>${done.map(requestCard).join('')}</ul></details>` : '')
+    + (open.length ? `<ul>${open.slice(0, MAX_SHOWN_REQUESTS).map(requestCard).join('')}</ul>` : '<p class="none">Keine offenen Anfragen</p>')
+    + (open.length > MAX_SHOWN_REQUESTS ? `<p class="none">${open.length - MAX_SHOWN_REQUESTS} ältere Anfragen nicht angezeigt</p>` : '')
+    + (done.length ? `<details><summary>Erledigt (${done.length})</summary><ul>${done.slice(0, MAX_SHOWN_REQUESTS).map(requestCard).join('')}</ul></details>` : '')
     + '</section>';
   return `<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow"><title>namax · Liste</title><meta name="theme-color" content="#111">

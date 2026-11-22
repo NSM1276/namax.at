@@ -1,7 +1,7 @@
 // Web Request → Response handlers for the venue functions. Services are passed in, so tests use fakes:
 //   { store, llm, blob: { put(path, bytes, opts) → { url }, del(urls) }, ownerPart?, now? }
 // The venue is always the one named by the Host header; a body can never pick another venue.
-import { randomBytes } from 'node:crypto';
+import { randomBytes, createHash } from 'node:crypto';
 import { slugFromHost, renderPage } from './page.mjs';
 import { isOwner, viennaDayStart, viennaDay, newKey, hashKey } from './owner.mjs';
 import { chatTurn } from './assistant.mjs';
@@ -85,7 +85,9 @@ export async function handleChat(req, { store, llm, blob, now }) {
 export const CLAIM_ROLES = ['owner', 'staff', 'other'];
 export const CLAIM_WISHES = ['fix', 'photos', 'website', 'remove'];
 export const CLAIM_CHANNELS = ['call', 'whatsapp'];
-export const DAILY_CLAIMS = 3;
+export const DAILY_CLAIMS = 3; // per venue
+export const DAILY_CLAIMS_PER_SENDER = 5;
+export const DAILY_CLAIMS_TOTAL = 200;
 const MAX_CLAIM_BODY = 4 * 1024;
 const PHONE = /^\+?[0-9 ()/-]{6,20}$/;
 const pick = (v, list) => (typeof v === 'string' && list.includes(v) ? v : null);
@@ -106,8 +108,13 @@ export async function handleClaim(req, { store, now = () => new Date() }) {
   const message = typeof body.text === 'string' ? body.text.trim() : '';
   if (!role || !wish || !channel || !PHONE.test(phone) || phone.replace(/\D/g, '').length < 6
     || name.length > 80 || message.length > 500) return fail(400, 'bad request');
-  if (await store.countRequestsSince(slug, viennaDayStart(now())) >= DAILY_CLAIMS) return fail(429, 'too many');
-  await store.addRequest(slug, { role, wish, name, phone, channel, text: message });
+  const day = viennaDayStart(now());
+  const ip = (req.headers.get('x-forwarded-for') || '').split(',')[0].trim();
+  const ipHash = ip ? createHash('sha256').update('namax claim v1:' + ip).digest('hex').slice(0, 16) : '';
+  if (await store.countRequestsSince(slug, day) >= DAILY_CLAIMS
+    || (ipHash && await store.countRequestsByIpSince(ipHash, day) >= DAILY_CLAIMS_PER_SENDER)
+    || await store.countAllRequestsSince(day) >= DAILY_CLAIMS_TOTAL) return fail(429, 'too many');
+  await store.addRequest(slug, { role, wish, name, phone, channel, text: message, ipHash });
   return json(200, { ok: true });
 }
 
@@ -214,7 +221,7 @@ export async function handleAdmin(req, { store, adminKeyHash = ADMIN_KEY_HASH, n
     params.delete('k');
     // Always /liste: behind the vercel.json rewrite the function may see its own path (/api/venue/admin).
     return new Response(null, { status: 303, headers: { Location: '/liste' + (params.size ? '?' + params : ''), 'Cache-Control': 'no-store',
-      'Set-Cookie': `${ADMIN_COOKIE}=${k}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=31536000` } });
+      'Set-Cookie': `${ADMIN_COOKIE}=${k}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=31536000` } });
   }
   const key = adminKey(req, null, adminKeyHash);
   if (!key) return text(404, 'Not found\n', 'no-store');
@@ -229,8 +236,8 @@ export async function handleAdmin(req, { store, adminKeyHash = ADMIN_KEY_HASH, n
   const html = (rows, opts) => new Response(renderAdmin(rows, opts), { headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'private, no-store', 'X-Robots-Tag': 'noindex, nofollow' } });
   // No (or an unknown) district: the start page with one button per district, so the list never loads every venue at once.
   if (district == null) {
-    const chatOpen = new Map(records.map((r) => [r.slug, r.chatOpen]));
-    const requests = (await store.listRequests()).map((q) => ({ ...q, chatOpen: chatOpen.get(q.slug) ?? null }));
+    const live = new Map(records.map((r) => [r.slug, { chatOpen: r.chatOpen, name: effectiveVenue(r, []).name }]));
+    const requests = (await store.listRequests()).map((q) => ({ ...q, venueName: live.get(q.slug)?.name || q.venueName, chatOpen: live.get(q.slug)?.chatOpen ?? null }));
     return html([], { districts, chooser: true, requests });
   }
   const rows = records.filter((r) => district === 'all' || districtOf(r) === district).map((r) => {
@@ -254,6 +261,7 @@ export async function handleAdminRotate(req, { store, adminKeyHash = ADMIN_KEY_H
   const body = await readJson(req, 1024);
   const key = adminKey(req, body?.k, adminKeyHash);
   if (!key) return fail(404, 'not found');
+  if (!body) return fail(400, 'bad request');
   if (body.requestId !== undefined) {
     if (!Number.isInteger(body.requestId) || typeof body.done !== 'boolean') return fail(400, 'bad request');
     await store.setRequestDone(body.requestId, body.done);
@@ -308,5 +316,10 @@ export async function handleAdminFacade(req, { store, blob, adminKeyHash = ADMIN
 
 /** Every POST to the private list: a photo upload comes as multipart, a new owner link as JSON. */
 export function handleAdminPost(req, services) {
+  // The cookie alone authorizes, so a page on another origin (any <slug>.namax.at is same-site) must not post here.
+  const origin = req.headers.get('origin');
+  let originHost = null;
+  try { originHost = origin ? new URL(origin).host : null; } catch { originHost = '?'; }
+  if (originHost && originHost !== (req.headers.get('host') || new URL(req.url).host)) return Promise.resolve(fail(403, 'forbidden'));
   return /multipart\/form-data/i.test(req.headers.get('content-type') || '') ? handleAdminFacade(req, services) : handleAdminRotate(req, services);
 }

@@ -287,7 +287,7 @@ test('login: ?k= sets the cookie and redirects to the same address without the k
   const res = await handleAdmin(new Request(`https://www.namax.at/liste?k=${ADMIN}&d=12`, { headers: { host: 'www.namax.at' } }), s);
   assert.equal(res.status, 303);
   assert.equal(res.headers.get('location'), '/liste?d=12');
-  assert.equal(res.headers.get('set-cookie'), `namax_admin=${ADMIN}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=31536000`);
+  assert.equal(res.headers.get('set-cookie'), `namax_admin=${ADMIN}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=31536000`);
   assert.equal(res.headers.get('cache-control'), 'no-store');
   const bad = await handleAdmin(new Request(`https://www.namax.at/liste?k=${'x'.repeat(32)}`, { headers: { host: 'www.namax.at' } }), s);
   assert.equal(bad.status, 404);
@@ -373,4 +373,43 @@ test('rotate, show/hide and facade work with the cookie alone', async () => {
   const form = new FormData(); form.append('slug', 'cafe-a'); form.append('photo', new Blob([jpegBytes()], { type: 'image/jpeg' }), 'f.jpg');
   const f = await handleAdminPost(new Request('https://www.namax.at/liste', { method: 'POST', headers: { host: 'www.namax.at', cookie: `namax_admin=${ADMIN}` }, body: form }), s);
   assert.equal(f.status, 200);
+});
+
+// Review fixes.
+test('login cookie is SameSite=Lax, so a link opened from a chat or mail still logs in', async () => {
+  const res = await handleAdmin(new Request(`https://www.namax.at/liste?k=${ADMIN}`, { headers: { host: 'www.namax.at' } }), await svc());
+  assert.match(res.headers.get('set-cookie'), /; SameSite=Lax;/);
+});
+
+test('list POSTs from another origin (a venue subdomain) → 403 and nothing changes', async () => {
+  const s = await svc();
+  const evil = new Request('https://www.namax.at/liste', { method: 'POST',
+    headers: { host: 'www.namax.at', origin: 'https://evil.namax.at', 'content-type': 'text/plain', cookie: `namax_admin=${ADMIN}` }, body: JSON.stringify({ slug: 'cafe-a' }) });
+  assert.equal((await handleAdminPost(evil, s)).status, 403);
+  assert.equal((await s.store.getVenue('cafe-a')).keyHash, hash(OWNER));
+  const same = new Request('https://www.namax.at/liste', { method: 'POST',
+    headers: { host: 'www.namax.at', origin: 'https://www.namax.at', 'content-type': 'application/json', cookie: `namax_admin=${ADMIN}` }, body: JSON.stringify({ slug: 'cafe-a', chatOpen: true }) });
+  assert.equal((await handleAdminPost(same, s)).status, 200);
+});
+
+test('an empty body with a valid cookie → 400, not a crash', async () => {
+  const r = await handleAdminPost(new Request('https://www.namax.at/liste', { method: 'POST',
+    headers: { host: 'www.namax.at', 'content-type': 'application/json', cookie: `namax_admin=${ADMIN}` }, body: '' }), await svc());
+  assert.equal(r.status, 400);
+});
+
+test('start page: at most 50 open requests are shown; the count says how many there are', async () => {
+  const s = await svc();
+  for (let i = 0; i < 53; i++) await s.store.addRequest('cafe-a', { role: 'owner', wish: 'fix', name: 'N' + i, phone: '0660 1234567', channel: 'call', text: '' });
+  const html = await chooser(s);
+  assert.equal((html.match(/<li class="rq">/g) || []).length, 50);
+  assert.match(html, /Anfragen <span>53<\/span>/);
+  assert.ok(html.includes('3 ältere Anfragen nicht angezeigt'));
+});
+
+test('a request shows the venue name as the page shows it (owner changes included)', async () => {
+  const s = await svc();
+  await s.store.addRequest('cafe-a', { role: 'owner', wish: 'fix', name: 'N', phone: '0660 1234567', channel: 'call', text: '' });
+  const html = await chooser(s);
+  assert.ok(html.includes('>Café cafe-a</a>'));
 });

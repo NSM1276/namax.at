@@ -258,6 +258,17 @@ export function storeContract(makeStore, prefix = '') {
     await s.setChatOpen(A, false);
     assert.equal((await s.getVenue(A)).chatOpen, false);
   });
+
+  test('requests: counted per sender and in total since a time', async () => {
+    const s = await fresh();
+    const before = new Date(Date.now() - 60_000).toISOString();
+    const base = await s.countAllRequestsSince(before);
+    await s.addRequest(A, req({ ipHash: prefix + 'ip1' })); await s.addRequest(B, req({ ipHash: prefix + 'ip1' })); await s.addRequest(B, req({ ipHash: prefix + 'ip2' }));
+    assert.equal(await s.countRequestsByIpSince(prefix + 'ip1', before), 2);
+    assert.equal(await s.countRequestsByIpSince(prefix + 'ip2', before), 1);
+    assert.equal(await s.countAllRequestsSince(before), base + 3);
+    assert.equal((await mine(s))[0].ipHash, undefined, 'the sender hash never leaves the store');
+  });
 }
 
 storeContract(() => memoryStore());

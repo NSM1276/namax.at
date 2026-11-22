@@ -108,9 +108,9 @@ export function pgStore(query) {
     },
     async setChatOpen(slug, open) { await query('update venues set chat_open = $2 where slug = $1', [slug, Boolean(open)]); },
 
-    async addRequest(slug, { role, wish, name = '', phone, channel, text = '' }) {
-      return num((await one(`insert into venue_requests (slug, role, wish, name, phone, channel, text)
-        values ($1, $2, $3, $4, $5, $6, $7) returning id`, [slug, role, wish, String(name), String(phone), channel, String(text)])).id);
+    async addRequest(slug, { role, wish, name = '', phone, channel, text = '', ipHash = '' }) {
+      return num((await one(`insert into venue_requests (slug, role, wish, name, phone, channel, text, ip_hash)
+        values ($1, $2, $3, $4, $5, $6, $7, $8) returning id`, [slug, role, wish, String(name), String(phone), channel, String(text), String(ipHash)])).id);
     },
     async listRequests() {
       const rows = await query(`select r.id, r.slug, coalesce(v.facts ->> 'name', '') as venue_name, r.role, r.wish, r.name, r.phone,
@@ -125,6 +125,12 @@ export function pgStore(query) {
     },
     async countRequestsSince(slug, since) {
       return count('select count(*) as n from venue_requests where slug = $1 and at >= $2::timestamptz', [slug, since]);
+    },
+    async countRequestsByIpSince(ipHash, since) {
+      return count('select count(*) as n from venue_requests where ip_hash = $1 and at >= $2::timestamptz', [ipHash, since]);
+    },
+    async countAllRequestsSince(since) {
+      return count('select count(*) as n from venue_requests where at >= $1::timestamptz', [since]);
     },
     async purgeRequests(now) {
       await query(`delete from venue_requests where (done_at is not null and done_at < $1::timestamptz - interval '90 days')

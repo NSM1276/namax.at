@@ -226,6 +226,20 @@ test('claim: 4th request for a venue in a Vienna day → 429', async () => {
   assert.equal((await s.store.listRequests()).length, 3);
 });
 
+test('claim: one sender gets at most 5 requests a day across venues; 200 a day in total', async () => {
+  const s = await services();
+  for (const n of ['b', 'c']) await s.store.upsertFacts(`v-${n}`, { facts: { ...facts, slug: `v-${n}` }, keyHash: 'h', status: 'public' });
+  const from = (ip, h = host) => new Request(`https://${h}/api/venue/claim`, { method: 'POST',
+    headers: { host: h, 'content-type': 'application/json', 'x-forwarded-for': `${ip}, 10.0.0.1` }, body: JSON.stringify(claim) });
+  const codes = [];
+  for (const h of [host, host, host, 'v-b.namax.at', 'v-b.namax.at', 'v-b.namax.at']) codes.push((await handleClaim(from('1.2.3.4', h), s)).status);
+  assert.deepEqual(codes, [200, 200, 200, 200, 200, 429]);
+  assert.equal((await handleClaim(from('5.6.7.8', 'v-c.namax.at'), s)).status, 200, 'another sender still gets through');
+  assert.ok(!JSON.stringify(await s.store.listRequests()).includes('1.2.3.4'), 'the address itself is never stored');
+  const busy = { ...s, store: { ...s.store, getVenue: s.store.getVenue, countRequestsSince: async () => 0, countRequestsByIpSince: async () => 0, countAllRequestsSince: async () => 200 } };
+  assert.equal((await handleClaim(from('9.9.9.9', 'v-c.namax.at'), busy)).status, 429);
+});
+
 test('claim: unknown or removed venue → 404; GET → 405', async () => {
   const s = await services();
   assert.equal((await handleClaim(claimReq(claim, 'nope.namax.at'), s)).status, 404);

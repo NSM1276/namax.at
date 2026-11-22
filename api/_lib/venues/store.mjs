@@ -16,7 +16,7 @@
 // listForAdmin() → [{ slug, status, facts, changes, confirmedAt, ownerKeyEnc, facadeUrl, chatOpen }] (not removed)
 // setChatOpen(slug, bool): the owner chat works only for venues Nasim opened it for (closed by default)
 // addRequest(slug, { role, wish, name, phone, channel, text }) → id;  listRequests() (open first, website wishes first, newest)
-// setRequestDone(id, bool);  countRequestsSince(slug, iso);  purgeRequests(nowIso): done > 90 days, open > 180 days
+// setRequestDone(id, bool);  countRequestsSince(slug, iso);  countRequestsByIpSince(ipHash, iso);  countAllRequestsSince(iso);  purgeRequests(nowIso): done > 90 days, open > 180 days
 
 const clone = (x) => (x == null ? x : structuredClone(x));
 /** Open requests first, among them "own website" wishes first, then newest first. */
@@ -135,10 +135,10 @@ export function memoryStore() {
     },
     async setChatOpen(slug, open) { need(slug).chatOpen = Boolean(open); },
 
-    async addRequest(slug, { role, wish, name = '', phone, channel, text = '' }) {
+    async addRequest(slug, { role, wish, name = '', phone, channel, text = '', ipHash = '' }) {
       need(slug);
       const id = ++seq;
-      requests.push({ id, slug, role, wish, name, phone, channel, text, at: nowIso(), doneAt: null });
+      requests.push({ id, slug, role, wish, name, phone, channel, text, ipHash, at: nowIso(), doneAt: null });
       return id;
     },
     async listRequests() {
@@ -152,6 +152,8 @@ export function memoryStore() {
       if (r) r.doneAt = done ? nowIso() : null;
     },
     async countRequestsSince(slug, iso) { return requests.filter((r) => r.slug === slug && r.at >= iso).length; },
+    async countRequestsByIpSince(ipHash, iso) { return requests.filter((r) => r.ipHash === ipHash && r.at >= iso).length; },
+    async countAllRequestsSince(iso) { return requests.filter((r) => r.at >= iso).length; },
     async purgeRequests(now) {
       const t = Date.parse(now), day = 86_400_000;
       requests = requests.filter((r) => (r.doneAt ? Date.parse(r.doneAt) >= t - 90 * day : Date.parse(r.at) >= t - 180 * day));

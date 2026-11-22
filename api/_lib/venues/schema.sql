@@ -81,3 +81,7 @@ create table if not exists venue_requests (
 );
 create index if not exists venue_requests_open on venue_requests (done_at, at);
 create index if not exists venue_requests_slug on venue_requests (slug, at);
+
+-- Anonymous sender tag (hash of the address, never the address) so one sender cannot flood every venue.
+alter table venue_requests add column if not exists ip_hash text not null default '';
+create index if not exists venue_requests_ip on venue_requests (ip_hash, at);
