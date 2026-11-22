@@ -156,6 +156,18 @@ export function storeContract(makeStore, prefix = '') {
     assert.deepEqual(await s.getHits(B), { visitors: 0, owner: 0 });
   });
 
+  test('hits by window: today, the last 7 days and in total; owner views never count as visits', async () => {
+    const s = await fresh();
+    for (const day of ['2026-11-01', '2026-11-16', '2026-11-22', '2026-11-22']) await s.addHit(A, { owner: false, day });
+    await s.addHit(A, { owner: true, day: '2026-11-22' });
+    await s.addHit(B, { owner: false, day: '2026-11-20' });
+    const w = { today: '2026-11-22', weekStart: '2026-11-16' };
+    assert.deepEqual(await s.getHits(A, w), { visitors: 4, owner: 1, today: 2, week: 3 });
+    assert.deepEqual(await s.getHits(B, w), { visitors: 1, owner: 0, today: 0, week: 1 });
+    const sum = await s.hitSummary(w);
+    assert.deepEqual(sum, [{ slug: A, today: 2, week: 3, total: 4 }, { slug: B, today: 0, week: 1, total: 1 }]);
+  });
+
   test('model calls are counted per venue', async () => {
     const s = await fresh();
     await s.recordModelCall(A);

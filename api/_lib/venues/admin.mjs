@@ -66,6 +66,9 @@ function tabsNav(active, openCount) {
   return `<nav class="tabs" aria-label="Bereich"><a href="/liste"${cur('anfragen')}>Anfragen <span>${Number(openCount) || 0}</span></a>`
     + `<a href="/liste?v=lokale" data-lokale${cur('lokale')}>Lokale</a></nav>`;
 }
+// Visit counter line, on every page under the title: visitor views of all venue pages (owner views excluded).
+const VIS_CSS = '.vis{margin:6px 0 0;font-size:14px;color:#ddd}.vis b{color:#fff}';
+const visLine = (v) => (v ? `<p class="vis">Besuche · heute <b>${v.today}</b> · 7 Tage <b>${v.week}</b> · gesamt <b>${v.total}</b></p>` : '');
 // The "Lokale" tab reopens the last district used on this device.
 const TABS_JS = `var t=document.querySelector('[data-lokale]'),l='';try{l=(localStorage.getItem('namax-liste-d')||'').replace(/[^0-9a-z]/g,'')}catch(e){}if(t&&l)t.href='/liste?d='+l;`;
 
@@ -114,7 +117,7 @@ b=e.target.closest('[data-done]');if(b){post(b,{requestId:Number(b.dataset.done)
  * view 'anfragen' (start page): the owner requests, also when there are none yet.
  * view 'lokale': one button per district with its count.
  */
-function renderChooser(districts, total, requests = [], view = 'anfragen') {
+function renderChooser(districts, total, requests = [], view = 'anfragen', visits = null, top = []) {
   const btn = (d, label, n) => `<button type="button" data-pick="${d}">${esc(label)} <span>${n}</span></button>`;
   const picks = districts.map(({ d, n }) => btn(d, dName(d), n)).join('') + btn('all', 'Alle Bezirke', total);
   const open = requests.filter((q) => !q.doneAt), done = requests.filter((q) => q.doneAt);
@@ -125,11 +128,17 @@ function renderChooser(districts, total, requests = [], view = 'anfragen') {
     + (open.length > MAX_SHOWN_REQUESTS ? `<p class="none">${open.length - MAX_SHOWN_REQUESTS} ältere Anfragen nicht angezeigt</p>` : '')
     + (done.length ? `<details><summary>Erledigt (${done.length})</summary><ul>${done.slice(0, MAX_SHOWN_REQUESTS).map(requestCard).join('')}</ul></details>` : '')
     + '</section>';
+  const busy = top.filter((x) => x.week > 0).slice(0, 10);
+  const topList = !busy.length ? '' : `<section class="req"><h2>Meistbesucht · 7 Tage</h2><ol class="top">`
+    + busy.map((x) => `<li><a href="https://${esc(x.slug)}.namax.at/" target="_blank" rel="noopener">${esc(x.name || x.slug)}</a> <span>${x.week}</span></li>`).join('')
+    + '</ol></section>';
   return `<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow"><title>namax · Admin</title><meta name="theme-color" content="#111">
 <style>*{box-sizing:border-box}body{margin:0;font:16px/1.4 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background:#f4f3ef;color:#111}
 header{background:#111;color:#fff;padding:14px}h1{margin:0;font-size:18px}h1 span{opacity:.7;font-weight:400}
 ${TABS_CSS}
+${VIS_CSS}
+.top{margin:0;padding:0 0 0 28px}.top li{background:#fff;border-radius:8px;padding:10px 12px;margin:6px 0;display:flex;justify-content:space-between;gap:10px}.top a{color:#111;font-weight:600}.top span{color:#555}
 .pick{display:grid;gap:8px;padding:12px;max-width:760px;margin:0 auto}
 .pick button{display:flex;justify-content:space-between;align-items:center;font:inherit;font-size:17px;font-weight:600;min-height:52px;padding:10px 16px;border-radius:10px;border:1px solid #ddd;background:#fff;color:#111;text-align:left}
 .pick span{font-weight:400;color:#666}
@@ -141,8 +150,8 @@ ${TABS_CSS}
 .a a,.a button{font:inherit;font-size:15px;font-weight:600;min-height:42px;padding:9px 14px;border-radius:8px;border:1px solid #111;background:#fff;color:#111;text-decoration:none}
 .a a.pg{background:#111;color:#fff}.a .rot{border-color:#bbb;color:#555;font-weight:500}.no{font-size:13px;color:#888;align-self:center}
 details{margin:6px 2px 4px}summary{min-height:44px;display:flex;align-items:center;color:#555;cursor:pointer}.none{color:#666;margin:4px 2px}</style></head><body>
-<header><h1>namax · Admin${view === 'lokale' ? ` <span>${total} Lokale</span>` : ''}</h1>${tabsNav(view, open.length)}</header>
-${view === 'lokale' ? `<div class="pick" role="group" aria-label="Bezirk wählen">${picks}</div>` : reqs}
+<header><h1>namax · Admin${view === 'lokale' ? ` <span>${total} Lokale</span>` : ''}</h1>${visLine(visits)}${tabsNav(view, open.length)}</header>
+${view === 'lokale' ? `${topList}<div class="pick" role="group" aria-label="Bezirk wählen">${picks}</div>` : reqs}
 <script>(function(){${SWITCH_JS}})();</script>
 <script>(function(){${TABS_JS}${NAV_JS}
 document.addEventListener('click',function(e){var b=e.target.closest('[data-pick]');if(b)go(b.dataset.pick)})})();</script>
@@ -161,8 +170,8 @@ const checkLabel = (c) => ({ both: '2 Quellen ✓', osm: 'nur OSM', closed: 'ges
  * options.districts: [{ d, n }] for every district (the menu switches between them); options.district: the one shown, or 'all';
  * options.chooser: render the district start page instead of cards.
  */
-export function renderAdmin(rows, { districts = null, district = null, chooser = false, requests = [], view = 'anfragen', openRequests = 0 } = {}) {
-  if (chooser && districts) return renderChooser(districts, districts.reduce((a, x) => a + x.n, 0), requests, view);
+export function renderAdmin(rows, { districts = null, district = null, chooser = false, requests = [], view = 'anfragen', openRequests = 0, visits = null, top = [] } = {}) {
+  if (chooser && districts) return renderChooser(districts, districts.reduce((a, x) => a + x.n, 0), requests, view, visits, top);
   const kinds = [...new Set(rows.map((r) => r.kind))].sort((a, b) => kindDe(a).localeCompare(kindDe(b), 'de'));
   const all = districts;
   const inRows = [...new Set(rows.map((r) => r.district).filter(Boolean))].sort((a, b) => a - b);
@@ -194,7 +203,7 @@ export function renderAdmin(rows, { districts = null, district = null, chooser =
     const q = `${r.name} ${r.street} ${r.slug}`.toLowerCase();
     return `<li data-q="${esc(q)}" data-kind="${esc(r.kind)}" data-d="${esc(r.district || '')}" data-check="${esc(c ? c.verdict : '')}" data-name="${esc(r.name)}"><b>${esc(r.name)}</b>${badges}
 <small>${esc(kindDe(r.kind))} · ${esc(r.street)}${r.district ? ` · ${esc(r.district)}. Bezirk` : ''}</small>
-<div class="a"><a class="pg" href="${esc(page)}" target="_blank" rel="noopener">Seite</a><button type="button" data-qr="${esc(page)}">QR</button><button type="button" data-share="${esc(page)}">Teilen</button>${vis}${chat}</div>
+${r.visits ? `<small class="seen">Besuche: heute ${r.visits.today} · 7 Tage ${r.visits.week} · gesamt ${r.visits.total}</small>\n` : ''}<div class="a"><a class="pg" href="${esc(page)}" target="_blank" rel="noopener">Seite</a><button type="button" data-qr="${esc(page)}">QR</button><button type="button" data-share="${esc(page)}">Teilen</button>${vis}${chat}</div>
 ${ovLine}
 ${owner}
 ${photo}</li>`;
@@ -210,6 +219,8 @@ ${photo}</li>`;
 <meta name="robots" content="noindex,nofollow"><title>namax · Lokale</title><meta name="theme-color" content="#111">
 <style>*{box-sizing:border-box}body{margin:0;font:16px/1.4 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background:#f4f3ef;color:#111}
 ${TABS_CSS}
+${VIS_CSS}
+.seen{color:#0b6b3a!important}
 header{position:sticky;top:0;z-index:2;background:#111;color:#fff;padding:12px 14px 10px}
 h1{margin:0 0 8px;font-size:18px}h1 span{opacity:.7;font-weight:400}
 input[type=search]{width:100%;font:inherit;font-size:17px;padding:12px;border:0;border-radius:8px}
@@ -239,7 +250,7 @@ li b{font-size:17px}li small{display:block;color:#555;margin-top:2px}
 #crop input[type=range]{width:min(94vw,520px)}
 .cb{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}.cb button{font:inherit;font-size:16px;font-weight:700;min-height:48px;padding:10px 18px;border-radius:10px;border:1px solid #fff;background:transparent;color:#fff}
 .cb .go{background:#ffc93c;border-color:#ffc93c;color:#111}.cb button:disabled{opacity:.5}</style></head><body>
-<header><h1>namax · Lokale <span data-count>${rows.length}</span></h1>${tabsNav('lokale', openRequests)}
+<header><h1>namax · Lokale <span data-count>${rows.length}</span></h1>${visLine(visits)}${tabsNav('lokale', openRequests)}
 <input type="search" placeholder="Name oder Straße" aria-label="Suche" autocomplete="off">
 <div class="f" role="group" aria-label="Art">${chips}<button type="button" data-only-check>Nur prüfen</button></div>${dsel}</header>
 <ul>${items}</ul><p class="empty" hidden>Nichts gefunden</p>

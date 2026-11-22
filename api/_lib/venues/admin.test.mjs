@@ -444,3 +444,38 @@ test('the "Lokale" tab link reopens the last district used (stored in the browse
   assert.ok(html.includes("namax-liste-d"));
   assert.ok(html.includes('data-lokale'));
 });
+
+// Visit counter: how often the venue pages were opened (owner views excluded), in Vienna days.
+async function visSvc() {
+  const s = await twoDistricts();
+  const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Vienna', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
+  const slugs = (await s.store.listForAdmin()).map((r) => r.slug).sort();
+  for (let i = 0; i < 3; i++) await s.store.addHit(slugs[0], { owner: false, day: today });
+  await s.store.addHit(slugs[0], { owner: false, day: '2020-01-01' });
+  await s.store.addHit(slugs[1], { owner: false, day: today });
+  await s.store.addHit(slugs[1], { owner: true, day: today });
+  return { s, slugs };
+}
+
+test('visits: every admin page shows today / 7 days / total over all pages', async () => {
+  const { s } = await visSvc();
+  for (const r of [req(ADMIN, ''), lokale(ADMIN), req(ADMIN, '12')]) {
+    const html = await (await handleAdmin(r, s)).text();
+    assert.match(html, /<p class="vis">Besuche · heute <b>4<\/b> · 7 Tage <b>4<\/b> · gesamt <b>5<\/b><\/p>/, r.url);
+  }
+});
+
+test('visits: the Lokale tab lists the most visited pages of the last 7 days', async () => {
+  const { s, slugs } = await visSvc();
+  const html = await (await handleAdmin(lokale(ADMIN), s)).text();
+  const top = (html.match(/<ol class="top">[\s\S]*?<\/ol>/) || [''])[0];
+  assert.ok(top.indexOf(`https://${slugs[0]}.namax.at/`) >= 0 && top.indexOf(`https://${slugs[0]}.namax.at/`) < top.indexOf(`https://${slugs[1]}.namax.at/`));
+  assert.ok(top.includes('<span>3</span>'));
+});
+
+test('visits: each card shows its own numbers; a page without visits shows none', async () => {
+  const { s } = await visSvc();
+  const html = await (await handleAdmin(req(ADMIN, 'all'), s)).text();
+  assert.equal((html.match(/class="seen"/g) || []).length, 2);
+  assert.ok(html.includes('<small class="seen">Besuche: heute 3 · 7 Tage 3 · gesamt 4</small>'));
+});

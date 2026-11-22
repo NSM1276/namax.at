@@ -321,10 +321,17 @@ const OWNER_BAR_CSS = `.owner{position:fixed;left:0;right:0;bottom:0;z-index:5;b
 .owner strong{display:block;font-size:19px}
 .owner p{margin:4px 0 12px;font-size:15px;line-height:1.35;opacity:.9}
 .owner a{display:flex;align-items:center;justify-content:center;min-height:56px;border-radius:6px;background:#ffc93c;color:#111;font-weight:800;font-size:20px;text-decoration:none}
-body.has-owner{padding-bottom:210px}`;
-export function ownerBar() {
+body.has-owner{padding-bottom:230px}
+.owner .seen{margin:2px 0 0;font-size:14px;color:#ffc93c;opacity:1}`;
+/** Owner only: visitor views of the page (owner's own views excluded); '' without numbers. */
+export function seenLine(seen) {
+  if (!seen || seen.today == null) return '';
+  return tr(`Ihre Seite wurde geöffnet: heute ${seen.today} · 7 Tage ${seen.week} · insgesamt ${seen.visitors}`,
+    `Your page was opened: today ${seen.today} · 7 days ${seen.week} · total ${seen.visitors}`, 'p', 'class="seen"');
+}
+export function ownerBar(seen = null) {
   return { css: OWNER_BAR_CSS, script: '', html: `<section class="owner" data-owner><div class="wrap">
-${ui('ownerHead', 'strong')}<p dir="auto">${esc(OWNER_LINE)}</p>
+${ui('ownerHead', 'strong')}${seenLine(seen)}<p dir="auto">${esc(OWNER_LINE)}</p>
 <a href="${OWNER_CHAT_FALLBACK}" data-chat-hook rel="noopener">${ui('chat')}</a>
 </div></section>` };
 }

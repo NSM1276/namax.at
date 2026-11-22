@@ -97,6 +97,10 @@ test('hit always answers 204 and counts owner and visitor apart', async () => {
   assert.equal((await hit({ k: KEY })).status, 204);
   assert.equal((await hit({ k: 'nonsense' })).status, 204);
   assert.deepEqual(await s.store.getHits(SLUG), { visitors: 2, owner: 1 });
+  const bot = await handleHit(new Request(`https://${host}/api/venue/hit`, { method: 'POST',
+    headers: { host, 'user-agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)' }, body: '{}' }), s);
+  assert.equal(bot.status, 204);
+  assert.deepEqual(await s.store.getHits(SLUG), { visitors: 2, owner: 1 }, 'crawlers are not counted');
   const unknown = await handleHit(new Request('https://nope.namax.at/api/venue/hit', { method: 'POST', headers: { host: 'nope.namax.at' }, body: '{}' }), s);
   assert.equal(unknown.status, 204);
 });

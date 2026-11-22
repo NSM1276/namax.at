@@ -112,9 +112,26 @@ export function memoryStore() {
       if (!h) { h = { slug, day, visitors: 0, owner: 0 }; hits.push(h); }
       if (owner) h.owner++; else h.visitors++;
     },
-    async getHits(slug) {
+    /** window { today, weekStart } (YYYY-MM-DD) adds visits today and since weekStart. */
+    async getHits(slug, window = null) {
       const mine = hits.filter((h) => h.slug === slug);
-      return { visitors: mine.reduce((a, h) => a + h.visitors, 0), owner: mine.reduce((a, h) => a + h.owner, 0) };
+      const out = { visitors: mine.reduce((a, h) => a + h.visitors, 0), owner: mine.reduce((a, h) => a + h.owner, 0) };
+      if (!window) return out;
+      return { ...out, today: mine.filter((h) => h.day === window.today).reduce((a, h) => a + h.visitors, 0),
+        week: mine.filter((h) => h.day >= window.weekStart).reduce((a, h) => a + h.visitors, 0) };
+    },
+    /** → [{ slug, today, week, total }] visitor views per venue that has any, most this week first. */
+    async hitSummary({ today, weekStart }) {
+      const by = new Map();
+      for (const h of hits) {
+        if (!h.visitors) continue;
+        const x = by.get(h.slug) || { slug: h.slug, today: 0, week: 0, total: 0 };
+        x.total += h.visitors;
+        if (h.day === today) x.today += h.visitors;
+        if (h.day >= weekStart) x.week += h.visitors;
+        by.set(h.slug, x);
+      }
+      return [...by.values()].sort((a, b) => b.week - a.week || b.total - a.total || a.slug.localeCompare(b.slug));
     },
 
     async recordModelCall(slug) { modelCalls.push({ slug, at: nowIso() }); },

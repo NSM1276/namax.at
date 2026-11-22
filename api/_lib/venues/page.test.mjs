@@ -2,7 +2,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { memoryStore } from './store.mjs';
-import { hashKey, newKey, isOwner } from './owner.mjs';
+import { hashKey, newKey, isOwner, viennaDay } from './owner.mjs';
+import { ownerPanel } from './owner-ui.mjs';
 import { renderPage, slugFromHost } from './page.mjs';
 import { renderVenue } from './template.mjs';
 import { venuePath } from '../../../middleware.js';
@@ -135,4 +136,21 @@ test('owner chat: closed by default → the WhatsApp bar; open → the chat part
   await store.setChatOpen(slug, true);
   const open = await renderPage({ store, slug, key: KEY, ownerPart });
   assert.ok(open.body.includes('data-ob-test'));
+});
+
+test('owner page: how often the page was opened (today, 7 days, total); visitors never see it', async () => {
+  const { store, slug } = await setup();
+  const today = viennaDay(new Date());
+  await store.addHit(slug, { owner: false, day: today });
+  await store.addHit(slug, { owner: false, day: '2020-01-01' });
+  await store.addHit(slug, { owner: true, day: today });
+  const line = 'Ihre Seite wurde geöffnet: heute 1 · 7 Tage 1 · insgesamt 2';
+  const closed = await renderPage({ store, slug, key: KEY });
+  assert.ok(closed.body.includes(line));
+  assert.ok(closed.body.includes('data-en="Your page was opened: today 1 · 7 days 1 · total 2"'));
+  await store.setChatOpen(slug, true);
+  const open = await renderPage({ store, slug, key: KEY, ownerPart: ownerPanel });
+  assert.ok(open.body.includes(line));
+  const pub = await renderPage({ store, slug, key: '' });
+  assert.ok(!pub.body.includes('Ihre Seite wurde geöffnet'));
 });

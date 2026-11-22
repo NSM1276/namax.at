@@ -3,7 +3,7 @@
 // The venue is always the one named by the Host header; a body can never pick another venue.
 import { randomBytes, createHash } from 'node:crypto';
 import { slugFromHost, renderPage } from './page.mjs';
-import { isOwner, viennaDayStart, viennaDay, newKey, hashKey } from './owner.mjs';
+import { isOwner, viennaDayStart, viennaDay, visitWindow, newKey, hashKey } from './owner.mjs';
 import { chatTurn } from './assistant.mjs';
 import { effectiveVenue } from './merge.mjs';
 import { isAdmin, openOwnerKey, sealOwnerKey, renderAdmin, ADMIN_KEY_HASH } from './admin.mjs';
@@ -162,9 +162,13 @@ export async function handleSitemap(req, { store }) {
   return new Response(xml, { headers: { 'Content-Type': 'application/xml; charset=utf-8', 'Cache-Control': 'public, s-maxage=3600' } });
 }
 
+// Crawlers that run the page script (Google renders pages) are not visitors.
+const BOT_UA = /bot|crawl|spider|slurp|headless|lighthouse|pagespeed|preview|facebookexternalhit|embedly|python|curl|wget/i;
+
 /** Counts a page view. Always 204, whatever happens, so it tells nobody anything. */
 export async function handleHit(req, { store, now = () => new Date() }) {
   try {
+    if (BOT_UA.test(req.headers.get('user-agent') || '')) throw 0;
     const slug = hostSlug(req);
     const record = slug ? await store.getVenue(slug) : null;
     if (record && record.status !== 'removed') {
@@ -237,20 +241,24 @@ export async function handleAdmin(req, { store, adminKeyHash = ADMIN_KEY_HASH, n
   const live = new Map(records.map((r) => [r.slug, { chatOpen: r.chatOpen, name: effectiveVenue(r, []).name }]));
   const requests = (await store.listRequests()).map((q) => ({ ...q, venueName: live.get(q.slug)?.name || q.venueName, chatOpen: live.get(q.slug)?.chatOpen ?? null }));
   const openRequests = requests.filter((q) => !q.doneAt).length;
+  const hitRows = await store.hitSummary(visitWindow(now()));
+  const visits = hitRows.reduce((a, h) => ({ today: a.today + h.today, week: a.week + h.week, total: a.total + h.total }), { today: 0, week: 0, total: 0 });
+  const hitBy = new Map(hitRows.map((h) => [h.slug, h]));
   // No district: plain /liste is the "Anfragen" start page; ?v=lokale (or an unknown district) the district chooser,
   // so the list never loads every venue at once.
   if (district == null) {
     const view = want || params.get('v') === 'lokale' ? 'lokale' : 'anfragen';
-    return html([], { districts, chooser: true, requests, view });
+    const top = view === 'lokale' ? hitRows.slice(0, 10).map((h) => ({ ...h, name: live.get(h.slug)?.name })) : [];
+    return html([], { districts, chooser: true, requests, view, visits, top });
   }
   const rows = records.filter((r) => district === 'all' || districtOf(r) === district).map((r) => {
     const v = effectiveVenue(r, []);
     const ownerKey = r.ownerKeyEnc ? openOwnerKey(key, r.slug, r.ownerKeyEnc) : null;
     return { slug: r.slug, name: v.name, kind: v.kind, street: v.address?.street || '', district: r.facts.internal?.district || null,
       status: r.status, confirmed: Boolean(r.confirmedAt), facadeUrl: r.facadeUrl || null, ownerUrl: ownerKey ? `https://${r.slug}.namax.at/?k=${ownerKey}` : null,
-      check: overtureRow(r.facts.internal?.overture), chatOpen: Boolean(r.chatOpen) };
+      check: overtureRow(r.facts.internal?.overture), chatOpen: Boolean(r.chatOpen), visits: hitBy.get(r.slug) || null };
   }).sort((a, b) => a.name.localeCompare(b.name, 'de'));
-  return html(rows, { districts, district, openRequests });
+  return html(rows, { districts, district, openRequests, visits });
 }
 
 /**

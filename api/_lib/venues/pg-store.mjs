@@ -82,9 +82,21 @@ export function pgStore(query) {
         on conflict (slug, day) do update set visitors = venue_hits.visitors + excluded.visitors, owner = venue_hits.owner + excluded.owner`,
       [slug, day, owner ? 0 : 1, owner ? 1 : 0]);
     },
-    async getHits(slug) {
-      const r = await one('select coalesce(sum(visitors), 0) as v, coalesce(sum(owner), 0) as o from venue_hits where slug = $1', [slug]);
-      return { visitors: num(r?.v || 0), owner: num(r?.o || 0) };
+    async getHits(slug, window = null) {
+      if (!window) {
+        const r = await one('select coalesce(sum(visitors), 0) as v, coalesce(sum(owner), 0) as o from venue_hits where slug = $1', [slug]);
+        return { visitors: num(r?.v || 0), owner: num(r?.o || 0) };
+      }
+      const r = await one(`select coalesce(sum(visitors), 0) as v, coalesce(sum(owner), 0) as o,
+        coalesce(sum(visitors) filter (where day = $2::date), 0) as t, coalesce(sum(visitors) filter (where day >= $3::date), 0) as w
+        from venue_hits where slug = $1`, [slug, window.today, window.weekStart]);
+      return { visitors: num(r?.v || 0), owner: num(r?.o || 0), today: num(r?.t || 0), week: num(r?.w || 0) };
+    },
+    async hitSummary({ today, weekStart }) {
+      const rows = await query(`select slug, sum(visitors) filter (where day = $1::date) as t, sum(visitors) filter (where day >= $2::date) as w,
+        sum(visitors) as n from venue_hits group by slug having sum(visitors) > 0
+        order by coalesce(sum(visitors) filter (where day >= $2::date), 0) desc, sum(visitors) desc, slug`, [today, weekStart]);
+      return rows.map((r) => ({ slug: r.slug, today: num(r.t || 0), week: num(r.w || 0), total: num(r.n || 0) }));
     },
 
     async recordModelCall(slug) { await query('insert into venue_model_calls (slug) values ($1)', [slug]); },

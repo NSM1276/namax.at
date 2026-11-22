@@ -20,6 +20,14 @@ export function viennaDayStart(now = new Date()) {
   return new Date(now.getTime() - sinceMidnight).toISOString();
 }
 
+/** Visit counter window: Vienna today and the first day of the last 7 days (today included), both YYYY-MM-DD. */
+export function visitWindow(now = new Date()) {
+  const today = viennaDay(now);
+  const d = new Date(today + 'T12:00:00Z');
+  d.setUTCDate(d.getUTCDate() - 6);
+  return { today, weekStart: d.toISOString().slice(0, 10) };
+}
+
 /** Vienna calendar day of `now` as YYYY-MM-DD. */
 export const viennaDay = (now = new Date()) =>
   new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Vienna', year: 'numeric', month: '2-digit', day: '2-digit' }).format(now);

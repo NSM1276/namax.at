@@ -2,16 +2,16 @@
 // ownerPanel({ venue }) → { html, css, script }. The key is read by the browser from the address bar;
 // it is never written into the HTML.
 import { PHRASES, LANGS, RTL } from './phrases.mjs';
-import { esc } from './template.mjs';
+import { esc, seenLine } from './template.mjs';
 
 const UI_KEYS = ['bar', 'ui_chat', 'ui_send', 'ui_placeholder', 'ui_close', 'ui_photo', 'f_closed', 'f_save', 'f_from', 'f_to',
   'c_delete', 'error', 'limitDay', 'days'];
 const UI = Object.fromEntries(LANGS.map((l) => [l, Object.fromEntries(UI_KEYS.map((k) => [k, PHRASES[l][k]]))]));
 const safeJson = (x) => JSON.stringify(x).replace(/</g, '\\u003c').replace(/[\u2028\u2029]/g, '');
 
-const CSS = `body.has-owner{padding-bottom:120px}
+const CSS = `body.has-owner{padding-bottom:144px}
 .ob{position:fixed;left:0;right:0;bottom:0;z-index:20;background:#111;color:#fff;padding:12px 16px calc(12px + env(safe-area-inset-bottom));box-shadow:0 -6px 24px rgba(0,0,0,.25);font:16px/1.4 system-ui,sans-serif}
-.ob p{margin:0 0 10px;font-size:15px;opacity:.9}
+.ob p{margin:0 0 10px;font-size:15px;opacity:.9}.ob .seen{margin:0 0 6px;font-size:14px;color:#ffc93c;opacity:1}
 .ob button{width:100%;min-height:56px;border:0;border-radius:6px;background:#ffc93c;color:#111;font:800 20px/1 system-ui,sans-serif;cursor:pointer}
 .oc{position:fixed;inset:auto 0 0 0;z-index:30;height:min(88vh,720px);display:flex;flex-direction:column;background:#fff;color:#111;border-radius:14px 14px 0 0;box-shadow:0 -10px 40px rgba(0,0,0,.35);font:17px/1.45 system-ui,sans-serif}
 .oc[hidden]{display:none}
@@ -110,9 +110,9 @@ try{fetch('/api/venue/hit',{method:'POST',body:JSON.stringify({k:K}),keepalive:t
 })();`;
 }
 
-export function ownerPanel({ venue }) {
+export function ownerPanel({ venue, seen = null }) {
   const de = UI.de;
-  const html = `<section class="ob" data-ob data-owner><p dir="auto">${esc(de.bar)}</p><button type="button">${esc(de.ui_chat)}</button></section>
+  const html = `<section class="ob" data-ob data-owner>${seenLine(seen)}<p dir="auto">${esc(de.bar)}</p><button type="button">${esc(de.ui_chat)}</button></section>
 <div class="oc" data-oc role="dialog" aria-modal="true" aria-labelledby="oc-title" hidden>
 <header><strong id="oc-title">${esc(de.ui_chat)}</strong><button type="button" class="x" aria-label="${esc(de.ui_close)}">×</button></header>
 <div class="ol" aria-live="polite"></div>

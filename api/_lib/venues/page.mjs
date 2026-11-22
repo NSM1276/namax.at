@@ -1,7 +1,7 @@
 // Answers a request for <slug>.namax.at: the public page, the owner page, or the removed notice.
 import { renderVenue, ownerBar, esc } from './template.mjs';
 import { effectiveVenue } from './merge.mjs';
-import { isOwner } from './owner.mjs';
+import { isOwner, visitWindow } from './owner.mjs';
 
 /** Venue slug for a host such as friseur-meidling.namax.at, or null. */
 export function slugFromHost(host) {
@@ -40,7 +40,8 @@ export async function renderPage({ store, slug, key, ownerPart }) {
       body: renderVenue(venue).replace('</body>', `${HIT}</body>`) };
   }
   // The chat works only where Nasim opened it after talking to the owner; elsewhere the bar leads to him.
-  const part = ownerPart && record.chatOpen ? await ownerPart({ store, slug, record, venue, photos }) : ownerBar();
+  const seen = await store.getHits(slug, visitWindow());
+  const part = ownerPart && record.chatOpen ? await ownerPart({ store, slug, record, venue, photos, seen }) : ownerBar(seen);
   return { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'private, no-store', 'X-Robots-Tag': 'noindex' },
     body: renderVenue(venue, { owner: part }) };
 }
