@@ -1,0 +1,4544 @@
+{
+ "https://www.cafe-lounge.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "http://www.gschirreiter.at": {
+  "ok": false,
+  "state": "dead",
+  "detail": "EAI_AGAIN",
+  "checked": "2026-11-22"
+ },
+ "https://www.salonheike.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "https://www.h3-hairstyle.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ERR_TLS_CERT_ALTNAME_INVALID",
+  "checked": "2026-11-22"
+ },
+ "https://www.pizzeriadaluca.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "http://www.daluca-linz.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "https://www.reparaturfreund.at/index.htm": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://handyreparatur-linz.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.haar-harmonie.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://pizzeria-tuana.at": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "http://pizzeria-tuana.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.olymp-jugend.club/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "http://www.bravo.co.at": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "https://www.pizzeria-tuana.at/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.chinacourt.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.reparaturfreund.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.reparaturfreund.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.schnittabhof.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.cafe-tassilo.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.cafe-tassilo.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.platzhirschlinz.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "CERT_HAS_EXPIRED",
+  "checked": "2026-11-22"
+ },
+ "http://www.haar-harmonie.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.haar-harmonie.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.asteri-restaurant.at/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.bigoli.at/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.Longline.co.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "http://www.longline.co.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.longline.co.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "http://www.longline.co.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.chinacourt.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.chinacourt.at/",
+  "checked": "2026-11-22"
+ },
+ "https://sabai-thai.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.linz.at/wissensturm/bibliothek/928.asp": {
+  "ok": false,
+  "state": "dead",
+  "detail": "HTTP 404",
+  "status": 404,
+  "finalUrl": "https://www.linz.at/wissensturm/bibliothek/928.asp",
+  "checked": "2026-11-22"
+ },
+ "https://www.wok-more.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.friseur-gerhardt.at": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "http://x-restaurant.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://Gentlemans-hairstyle.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "UND_ERR_SOCKET",
+  "checked": "2026-11-22"
+ },
+ "https://www.x-restaurant.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://friseur-thaler.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "https://la-baguette.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.wok-more.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.wok-more.at/",
+  "checked": "2026-11-22"
+ },
+ "https://gentlemans-hairstyle.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "UND_ERR_SOCKET",
+  "checked": "2026-11-22"
+ },
+ "http://www.friseursalon-mira.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://friseursalon-mira.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.seimayr.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.seimayr.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.bigoli.at/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "https://www.bigoli.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.pizzabaron.at": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "https://burger-pizza-blitz.jimdo.com/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ERR_SSL_SSL/TLS_ALERT_HANDSHAKE_FAILURE",
+  "checked": "2026-11-22"
+ },
+ "https://kneifelkosmetik.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://last-space.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.platzhirsch-linz.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://halfetto.orderboy.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.diebohne-linz.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.diebohne-linz.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.haubis.com": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://haubis.com/de/",
+  "checked": "2026-11-22"
+ },
+ "http://www.gasthaus-keferfeld.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.shawarmaking.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "UND_ERR_SOCKET",
+  "checked": "2026-11-22"
+ },
+ "http://www.makart-stubn.at": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "http://www.la-baguette.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://la-baguette.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.last-space.at/page/event": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.momohub.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.chinapalast.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.poschacherstueberl.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "http://www.kneifelkosmetik.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://kneifelkosmetik.at/",
+  "checked": "2026-11-22"
+ },
+ "https://swagatindianrestaurant.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "http://www.pizza2you.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.pizza2you.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "http://www.pizza2you.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.pizzamann.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.pizzamann.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.wirzhaus-linz.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "https://www.sarang-linz.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://spice-club.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 403,
+  "checked": "2026-11-22"
+ },
+ "http://www.schieferapfelbaum.at": {
+  "ok": true,
+  "state": "works",
+  "status": 403,
+  "finalUrl": "http://www.schieferapfelbaum.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.breitwieserhof.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://breitwieserhof.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.makartstubn.at/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "https://www.makartstubn.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.shawarma-king.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.shawarma-king.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.fab.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.fab.at/de/",
+  "checked": "2026-11-22"
+ },
+ "http://www.tg-haarstudio.at": {
+  "ok": false,
+  "state": "dead",
+  "detail": "HTTP 503",
+  "status": 503,
+  "finalUrl": "http://www.tg-haarstudio.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.sarang-linz.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.sarang-linz.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.suunddu.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.ilteatro.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.ilteatro.at/",
+  "checked": "2026-11-22"
+ },
+ "https://spice-club.at/menu": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.pezaar.pk/product-category/khussa/",
+  "checked": "2026-11-22"
+ },
+ "http://www.zumschiefenapfelbaum.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://zumschiefenapfelbaum.godaddysites.com/",
+  "checked": "2026-11-22"
+ },
+ "http://www.linz.at/kultur/raum_37158.asp": {
+  "ok": false,
+  "state": "dead",
+  "detail": "HTTP 404",
+  "status": 404,
+  "finalUrl": "https://www.linz.at/kultur/raum_37158.asp",
+  "checked": "2026-11-22"
+ },
+ "http://www.mensen.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.mensen.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.jku.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.jku.at/",
+  "checked": "2026-11-22"
+ },
+ "https://jku.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.jku.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.gruenepapaya.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 403,
+  "checked": "2026-11-22"
+ },
+ "http://www.wittstylepark.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://wittstylepark.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.wittstylepark.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://wittstylepark.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.gruenepapaya.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 403,
+  "finalUrl": "https://www.gruenepapaya.at/",
+  "checked": "2026-11-22"
+ },
+ "http://mrpepper.at/app": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.mrpepper.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.gustavgruen.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://hungrylama.at/speisekarte/gustav-gruen-urfahr",
+  "checked": "2026-11-22"
+ },
+ "https://www.sunandbeauty.at/solarien-standorte/sonnenstudio-4040-linz": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.asiarestaurant-ost18.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://fu-asia.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.askoe-linz-auhof.at/restaurant-oase": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.peters-platz.at": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "http://www.sunlounge-dornach.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.sunandbeauty.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.mrwen-uni.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.mrwen-uni.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.friseurimauhof.com": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "http://www.friseurimauhof.com/",
+  "checked": "2026-11-22"
+ },
+ "http://www.friseurimauhof.com/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.cafe-h-linz.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "http://www.cafe-h-linz.at": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "https://www.dornacher-stubn.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://mostbauer.com/Schatzbauer": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.mostbauer.com/Schatzbauer",
+  "checked": "2026-11-22"
+ },
+ "https://www.die-obelisk.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.cycleclub.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.chillig.net/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://chillig.eatbu.com/?lang=en",
+  "checked": "2026-11-22"
+ },
+ "http://Asiarestaurant-ost18.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://asiarestaurant-ost18.at/",
+  "checked": "2026-11-22"
+ },
+ "http://petersplatz.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "http://petersplatz.at/",
+  "checked": "2026-11-22"
+ },
+ "https://piatto-pizza-kebap.stadtausstellung.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.nails-beautyart.at/kontakt/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.medapizzaburgerkebap.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.hair-styling-studio.at/de/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.donhoze.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "http://www.destiny-afro-center.com/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://spiceclubaustria.com/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.destiny-afro-center.com": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "http://www.destiny-afro-center.com/",
+  "checked": "2026-11-22"
+ },
+ "https://annabelle-friends.eatbu.com": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://annabelle-friends.eatbu.com/?lang=en",
+  "checked": "2026-11-22"
+ },
+ "http://piatto-pizza-kebap.gemeindeausstellung.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://piatto-pizza-kebap.gemeindeausstellung.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.pizza-valentinos.com/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "http://www.hair-styling-studio.at/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "https://www.hair-styling-studio.at/de/",
+  "checked": "2026-11-22"
+ },
+ "https://www.handy-shop-linz.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.handy-shop-linz.at/",
+  "checked": "2026-11-22"
+ },
+ "https://rizzma.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.stadtwirt.eu/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.coiffeur-feischl.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://coiffeur-feischl.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.lakitapizzeria.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.lakitapizzeria.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.marriott.com/en-us/hotels/lnzcy-courtyard-linz/overview/?scid=d2406702-e8ea-4b45-bb9b-69cddaaef03d": {
+  "ok": true,
+  "state": "works",
+  "status": 403,
+  "checked": "2026-11-22"
+ },
+ "https://la-perla-restaurant.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://la-perla-restaurant.at/",
+  "checked": "2026-11-22"
+ },
+ "http://rizzma.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://rizzma.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.dagiulio.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://dagiulio.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.cafe-am-froschberg.at/": {
+  "ok": false,
+  "state": "parked",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.burgerista.com": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.burgerista.com/",
+  "checked": "2026-11-22"
+ },
+ "https://www.burgerista.com/urfahr-altenberger/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.cafe-orchidee.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://lava-pizza.eatbu.com/?lang=de": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.coiffeur-feischl.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://coiffeur-feischl.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.cafe-orchidee.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.bistrobox.com/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.pizzasolo.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.lieferzeit.at/pizza-solo",
+  "checked": "2026-11-22"
+ },
+ "http://www.restaurant-manolo.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "http://annabelle-friends.eatbu.com/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://annabelle-friends.eatbu.com/?lang=en",
+  "checked": "2026-11-22"
+ },
+ "https://lava-pizza.eatbu.com/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "https://lava-pizza.eatbu.com/?lang=en",
+  "checked": "2026-11-22"
+ },
+ "http://agathon-restaurant.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://lehners-beeren.at/beerencafe-linz/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.antica-locanda.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.essigs.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "HTTP 404",
+  "status": 404,
+  "checked": "2026-11-22"
+ },
+ "https://www.essigs.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ERR_TLS_CERT_ALTNAME_INVALID",
+  "checked": "2026-11-22"
+ },
+ "https://www.dunkelschwarz-restaurant.at/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://handy-repair-linz.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.handy-repair-linz.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.agathon-restaurant.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.fortuna-pizzeria.at/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.aris-taverna.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.aris-taverna.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.antica-locanda.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.antica-locanda.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.bella-casa.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://bella-casa.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.bella-casa.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://bella-casa.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.lehners-beeren.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://lehners-beeren.at/",
+  "checked": "2026-11-22"
+ },
+ "https://maleewan-thai-imbiss.eatbu.com/?lang=de": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.lunzerwirt.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ERR_SSL_TLSV1_ALERT_INTERNAL_ERROR",
+  "checked": "2026-11-22"
+ },
+ "http://www.restaurant-landhof.at": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "http://www.lunzerwirt.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "HTTP 404",
+  "status": 404,
+  "checked": "2026-11-22"
+ },
+ "https://linzer-stadtalm.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://linzer-stadtalm.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.dunkelschwarz-restaurant.at/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "https://www.dunkelschwarz-restaurant.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.gasthofrothmayr.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.gasthofrothmayr.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.barista-linz.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "HTTP 404",
+  "status": 404,
+  "checked": "2026-11-22"
+ },
+ "http://www.linzer-stadtalm.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://linzer-stadtalm.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.gerberei.co.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "http://www.gerberei.co.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.gerberei.co.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.auersperg-linz.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.gasthofrothmayr.com": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://slotonlinedeposit20get100.com/",
+  "checked": "2026-11-22"
+ },
+ "http://www.cafeamber.sta.io/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.daslandhof.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.daslandhof.at/",
+  "checked": "2026-11-22"
+ },
+ "https://krokodil.at/stern/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://shorturl.at/JTkIr": {
+  "ok": true,
+  "state": "works",
+  "status": 403,
+  "checked": "2026-11-22"
+ },
+ "http://www.ciaoundjassu.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://ciaoundjassu.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.kulturformen.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.bistro-frederic.at/cafeteria-kunstuniversitaet-linz/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.dachcafe.at": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "https://caffe-bar-alfredo.eatbu.com/?lang=de": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.krokodil.at/s_cafebar.php": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://krokodil.at/stern/",
+  "checked": "2026-11-22"
+ },
+ "http://www.va-bene.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://va-bene.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.aris-linz.at/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "https://aris-linz.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.va-bene.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://va-bene.at/",
+  "checked": "2026-11-22"
+ },
+ "https://deli-linz.at/": {
+  "ok": false,
+  "state": "placeholder",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.bistro-stellwerk.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.bistro-stellwerk.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.bistro-stellwerk.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.bistro-stellwerk.at/",
+  "checked": "2026-11-22"
+ },
+ "https://caffe-bar-alfredo.eatbu.com/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://caffe-bar-alfredo.eatbu.com/?lang=en",
+  "checked": "2026-11-22"
+ },
+ "http://www.Deli-Linz.at/": {
+  "ok": false,
+  "state": "placeholder",
+  "status": 200,
+  "finalUrl": "https://www.deli-linz.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.kaffee-glockenspiel.com": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "https://www.naturbackstube.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.naturbackstube.at/",
+  "checked": "2026-11-22"
+ },
+ "http://cafe-meier.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://cafe-meier.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.kaffee-glockenspiel.at": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "https://www.gutmut.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.naturbackstube.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.naturbackstube.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.danecker.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://baeckerei-danecker.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.freudig-linz.at/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "https://www.freudig-linz.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.kaffeeladen.cc/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://WWW.KAFFEELADEN.CC/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.kaffeeladen.cc/",
+  "checked": "2026-11-22"
+ },
+ "https://www.lentos-gastro.net/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.lentos-gastro.net/de/",
+  "checked": "2026-11-22"
+ },
+ "http://www.lentos-gastro.net": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.lentos-gastro.net/de/",
+  "checked": "2026-11-22"
+ },
+ "https://www.hotspots-linz.at/hotspots-gastronomie/cafes/design-cafe-am-park/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "HTTP 404",
+  "status": 404,
+  "finalUrl": "https://hotspots-linz.at/hotspots-gastronomie/cafes/design-cafe-am-park/",
+  "checked": "2026-11-22"
+ },
+ "http://www.heuschober.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.heuschober.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.littledancer.at/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "https://www.littledancer.at/de",
+  "checked": "2026-11-22"
+ },
+ "http://www.nomnom-linz.at": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "https://heuschober.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.heuschober.at/",
+  "checked": "2026-11-22"
+ },
+ "http://dasbruckner.at/kontakt/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "HTTP 404",
+  "status": 404,
+  "finalUrl": "https://www.dasbruckner.at/kontakt/",
+  "checked": "2026-11-22"
+ },
+ "http://www.friedlieb.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://friedlieb.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.friedlieb.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://friedlieb.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.cafe-meier.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://cafe-meier.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.reisis.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "http://www.danecker.at/standorte": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://baeckerei-danecker.at/standorte/",
+  "checked": "2026-11-22"
+ },
+ "http://www.littledancer.at/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "https://www.littledancer.at/de",
+  "checked": "2026-11-22"
+ },
+ "https://www.cafe-traxlmayr.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.resch-frisch.com/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.cafe-traxlmayr.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.cafe-traxlmayr.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.madamewu.net/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://madamewu.net/",
+  "checked": "2026-11-22"
+ },
+ "http://www.madamewu.net": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://madamewu.net/",
+  "checked": "2026-11-22"
+ },
+ "https://www.victors-cafe.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "https://www.maestro-linz.com": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.maestro-linz.com/",
+  "checked": "2026-11-22"
+ },
+ "http://www.austria-trend.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.austria-trend.at/en",
+  "checked": "2026-11-22"
+ },
+ "https://www.uferei.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.wohnzimmer.cafe": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.wohnzimmer.cafe/",
+  "checked": "2026-11-22"
+ },
+ "https://www.wohnzimmer.cafe/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://elegance-salon.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "http://www.tworabbitslinz.com/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.tworabbitslinz.com/",
+  "checked": "2026-11-22"
+ },
+ "https://www.dayubeauty.at": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "https://www.dayubeauty.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.cici-hair-beauty.com": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.cici-hair-beauty.com/",
+  "checked": "2026-11-22"
+ },
+ "https://www.cici-hair-beauty.com/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.maestro-linz.com/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.maestro-linz.com/",
+  "checked": "2026-11-22"
+ },
+ "https://www.tiktak.cafe/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.dayubeauty.at/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "https://www.dayubeauty.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.victors.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://victors.at/",
+  "checked": "2026-11-22"
+ },
+ "http://bistro-frederic.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.bistro-frederic.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.friseur-juhu.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.friseur-juhu.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.elegancebarbershop.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.elegancebarbershop.at/",
+  "checked": "2026-11-22"
+ },
+ "https://friseur-loranz.jimdosite.com/": {
+  "ok": true,
+  "state": "works",
+  "status": 403,
+  "checked": "2026-11-22"
+ },
+ "https://www.ewinger.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.tiktak.cafe": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.tiktak.cafe/",
+  "checked": "2026-11-22"
+ },
+ "http://www.ergin.studio/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.ergin.studio/",
+  "checked": "2026-11-22"
+ },
+ "http://www.maennersalon.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.maennersalon.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.friseur-juhu.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.friseur-juhu.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.ewinger.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.ewinger.at/",
+  "checked": "2026-11-22"
+ },
+ "https://haarschneiderfranz.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.männersalon.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.maennersalon.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.lofthaar.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "http://www.lofthaar.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.lofthaar.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.traumhaar.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "http://www.labiosthetique-linz.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.labiosthetique-linz.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.haircutters.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.haircutters.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.haircompany.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.kuks-frisuren.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://kuks-frisuren.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.haaroase.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://haaroase.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.mittermeier.at/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.star-hairstyle.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.handy-linz.at/": {
+  "ok": false,
+  "state": "placeholder",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.diefaerberei.net/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.diefaerberei.net/",
+  "checked": "2026-11-22"
+ },
+ "http://www.hair-unity.at/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "https://www.phorest.com/salon/haarwerkstattginner",
+  "checked": "2026-11-22"
+ },
+ "https://h-unity.at/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "https://www.phorest.com/salon/haarwerkstattginner",
+  "checked": "2026-11-22"
+ },
+ "http://www.burgers.at": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "https://www.firmenabc.at/juergen-auinger_PKGM": {
+  "ok": true,
+  "state": "works",
+  "status": 429,
+  "checked": "2026-11-22"
+ },
+ "https://mtel.at": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "https://mtel.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.handy-planet.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://handy-planet.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.mtel.at/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "https://mtel.at/",
+  "checked": "2026-11-22"
+ },
+ "https://schadzi.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://schadzi.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.bigjoe.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://bigjoe.at/",
+  "checked": "2026-11-22"
+ },
+ "https://legandros.at": {
+  "ok": true,
+  "state": "works",
+  "status": 403,
+  "finalUrl": "https://legandros.at/",
+  "checked": "2026-11-22"
+ },
+ "www.pizzeria-marco-polo.at": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "http://www.firmenabc.at/gueven-kebab-kg_EaEW": {
+  "ok": true,
+  "state": "works",
+  "status": 429,
+  "finalUrl": "https://www.firmenabc.at/gueven-kebab-kg_EaEW",
+  "checked": "2026-11-22"
+ },
+ "https://pizzeriaphonebox.at/phonebox": {
+  "ok": true,
+  "state": "works",
+  "status": 403,
+  "checked": "2026-11-22"
+ },
+ "https://www.burgerliebe.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.thegaragelinz.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.thegaragelinz.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "http://www.thegaragelinz.at/",
+  "checked": "2026-11-22"
+ },
+ "https://pizzeria-mamma-mia.eatbu.com/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "https://pizzeria-mamma-mia.eatbu.com/?lang=en",
+  "checked": "2026-11-22"
+ },
+ "http://www.speedservice.co.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://speedservice.co.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.phonebox-pizzeria.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.schnellimbiss-silvia.at": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "http://www.rikscha-linz.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.rikscha-linz.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.pizzamir.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.pizzamir.at/",
+  "checked": "2026-11-22"
+ },
+ "http://burgerliebe.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.burgerliebe.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.schadzi.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://schadzi.at/",
+  "checked": "2026-11-22"
+ },
+ "https://kosmetik-linz.jimdosite.com/": {
+  "ok": true,
+  "state": "works",
+  "status": 403,
+  "checked": "2026-11-22"
+ },
+ "https://dief%C3%A4rberei.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.diefaerberei.net/",
+  "checked": "2026-11-22"
+ },
+ "https://www.elabeautyskin.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://drbrows.net/filiale-4020-linz/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.stilzone.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://fashionnails.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://fashionnails.at/",
+  "checked": "2026-11-22"
+ },
+ "https://pizzeriagonzales-linz.at/13314": {
+  "ok": false,
+  "state": "dead",
+  "detail": "TimeoutError",
+  "checked": "2026-11-22"
+ },
+ "http://www.alte-metzgerei.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.alte-metzgerei.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.goettfried.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.stilzone.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.stilzone.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.ängus.at/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "https://www.xn--ngus-koa.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.silalinz.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.silalinz.at/",
+  "checked": "2026-11-22"
+ },
+ "https://xn--ngus-koa.at/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://frontfood.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.fashionnails.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.fashionnails.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.goettfried.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.goettfried.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.frontfood.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://frontfood.at/",
+  "checked": "2026-11-22"
+ },
+ "http://haar-plus.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.haar-plus.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.teknom.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.teknom.at/",
+  "checked": "2026-11-22"
+ },
+ "https://alarabe.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://drbrows.net/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://ayamzaman.rest": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://ayamzaman.rest/",
+  "checked": "2026-11-22"
+ },
+ "http://www.altemetzgerei.at": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "http://altemetzgerei.at/",
+  "checked": "2026-11-22"
+ },
+ "https://order.site/alarabe-restaurant/en/aut/linz/restaurant/alarabe-restaurant-sf": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.akakiko.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://akakiko.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.wild-wuchs.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://wild-wuchs.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.azuma.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.barokbelgie.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "http://www.barokbelgie.at": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "http://wirt.amgraben.at": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "http://wirt.amgraben.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.altewelt.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.altewelt.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.altewelt.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.altewelt.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.beimhannes.com/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.amgraben.com/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.hawthorngardens.com.au/",
+  "checked": "2026-11-22"
+ },
+ "https://www.brucknerhaus.at/das-haus/restaurant-bruckner-s": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.azuma.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.azuma.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.pizzasolo.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "UND_ERR_CONNECT_TIMEOUT",
+  "checked": "2026-11-22"
+ },
+ "https://kitchenandbar.at/kontakt-oeffnungszeiten": {
+  "ok": false,
+  "state": "dead",
+  "detail": "UND_ERR_CONNECT_TIMEOUT",
+  "checked": "2026-11-22"
+ },
+ "https://www.boerserie.at/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.casa-italiana-linz.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.casa-italiana-linz.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.casa-italiana-linz.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.coconutrestaurant.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "http://www.beimhannes.com/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.beimhannes.com/",
+  "checked": "2026-11-22"
+ },
+ "https://qrmenu.fun/panel/definitions/preview_menu.php?restaurant_id=118": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.chinoiss.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.chinoiss.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.cookingli.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "https://www.cookingli.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "https://www.chinoiss.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.f1-cafebistro.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "https://www.coco-linz.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.blueheaven.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.klammstrasse20a.com/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "https://www.da-tato.at/index.html": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.derledera.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 403,
+  "checked": "2026-11-22"
+ },
+ "https://www.derledera.at/speisen-und-getraenke/": {
+  "ok": true,
+  "state": "works",
+  "status": 403,
+  "checked": "2026-11-22"
+ },
+ "https://www.bangbangkitchen.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://bangbangkitchen.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.cafecentral-linz.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://cafecentral-linz.at/",
+  "checked": "2026-11-22"
+ },
+ "https://coconut-restaurant.eatbu.com/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://coconut-restaurant.eatbu.com/?lang=en",
+  "checked": "2026-11-22"
+ },
+ "https://www.pianino.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://shop.spreadshirt.at/game-and-dine/": {
+  "ok": true,
+  "state": "works",
+  "status": 403,
+  "checked": "2026-11-22"
+ },
+ "https://gasthaus-tramway.jimdo.com/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ERR_SSL_SSL/TLS_ALERT_HANDSHAKE_FAILURE",
+  "checked": "2026-11-22"
+ },
+ "https://www.elpaso-linz.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 403,
+  "finalUrl": "https://elpaso-linz.at/",
+  "checked": "2026-11-22"
+ },
+ "https://das-sassi.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://das-sassi.at/?lang=en",
+  "checked": "2026-11-22"
+ },
+ "http://www.diepastamacher.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.diepastamacher.at/",
+  "checked": "2026-11-22"
+ },
+ "http://Fika-linz.eatbu.com/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://fika-linz.eatbu.com/?lang=en",
+  "checked": "2026-11-22"
+ },
+ "http://www.don-am-graben.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.don-am-graben.at/",
+  "checked": "2026-11-22"
+ },
+ "https://fika-linz.eatbu.com/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://fika-linz.eatbu.com/?lang=en",
+  "checked": "2026-11-22"
+ },
+ "http://www.elpaso-linz.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 403,
+  "finalUrl": "https://elpaso-linz.at/",
+  "checked": "2026-11-22"
+ },
+ "https://krokodil.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.dasanton.at": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "https://das-anton.at/",
+  "checked": "2026-11-22"
+ },
+ "http://tramway-linz.eatbu.com/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "HTTP 404",
+  "status": 404,
+  "finalUrl": "https://tramway-linz.eatbu.com/",
+  "checked": "2026-11-22"
+ },
+ "http://www.krokodil.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://krokodil.at/",
+  "checked": "2026-11-22"
+ },
+ "https://glorious-bastards.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.goethe-stube.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.goethe-stube.at/",
+  "checked": "2026-11-22"
+ },
+ "http://xn--goldkste-b6a.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://xn--goldkste-b6a.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.centrallinz.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.centrallinz.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.hotel-lokomotive.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.davinci-ristorante.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://huberei.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.huberei.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.huberei.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.huberei.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.ilcaminetto.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "CERT_HAS_EXPIRED",
+  "checked": "2026-11-22"
+ },
+ "http://www.beauty-arts.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://beauty-arts.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.davinci-ristorante.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.davinci-ristorante.at/",
+  "checked": "2026-11-22"
+ },
+ "https://i-fratelli-linz.metro.bar": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://i-fratelli-linz.metro.bar/?lang=en",
+  "checked": "2026-11-22"
+ },
+ "http://www.ilcaminetto.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "CERT_HAS_EXPIRED",
+  "checked": "2026-11-22"
+ },
+ "http://www.pizzeria-fratelli.at": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "https://www.pizzeria-fratelli.at/",
+  "checked": "2026-11-22"
+ },
+ "http://hotel-lokomotive.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.hotel-lokomotive.at/",
+  "checked": "2026-11-22"
+ },
+ "https://keintzel.at": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "http://www.coco-linz.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.coco-linz.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.goldenepagode.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.goldenepagode.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.izakaya.eu/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.goldenepagode.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.goldenepagode.at/",
+  "checked": "2026-11-22"
+ },
+ "https://kontrast.jimdo.com/restaurant/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ERR_SSL_SSL/TLS_ALERT_HANDSHAKE_FAILURE",
+  "checked": "2026-11-22"
+ },
+ "https://www.gasthaus-eisernehand.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.gasthaus-eisernehand.at/start/",
+  "checked": "2026-11-22"
+ },
+ "http://www.pianino.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.pianino.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.linzerie.at/shop/holy/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "HTTP 404",
+  "status": 404,
+  "checked": "2026-11-22"
+ },
+ "http://www.izakaya.eu": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.izakaya.eu/",
+  "checked": "2026-11-22"
+ },
+ "https://guestplan.io/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "HTTP 404",
+  "status": 404,
+  "finalUrl": "https://www.guestplan.com/404",
+  "checked": "2026-11-22"
+ },
+ "https://www.jack-the-ripperl.com/linz-landstrasse/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.riva-linz.com/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ERR_TLS_CERT_ALTNAME_INVALID",
+  "checked": "2026-11-22"
+ },
+ "https://www.great-linz.com/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.makmur76fun.com/",
+  "checked": "2026-11-22"
+ },
+ "http://www.gasthaus-eisernehand.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.gasthaus-eisernehand.at/start/",
+  "checked": "2026-11-22"
+ },
+ "http://www.kliemstein-linz.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.kliemstein-linz.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.jack-the-ripperl.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.jack-the-ripperl.com/",
+  "checked": "2026-11-22"
+ },
+ "http://www.kungfu.cooking/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "HTTP 404",
+  "status": 404,
+  "checked": "2026-11-22"
+ },
+ "https://labodega.stadtausstellung.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.klosterhof.at": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "https://www.klosterhof.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.lily-kitchen.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.keintzel.at": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "https://mobil.keintzel.at/?lang=en",
+  "checked": "2026-11-22"
+ },
+ "https://www.maharaja-linz.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.cafe-kowalski.at/standorte/kowalski-linz-suedbahnhofmarkt/speisekarten": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://eatmakani.com/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://hanoi.at/royal": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://nicsell.com/en/domain/hanoi.at",
+  "checked": "2026-11-22"
+ },
+ "http://Labottegapuglia.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://labottegapuglia.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.cafe-kowalski.at/standorte/kowalski-linz-suedbahnhofmarkt": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://miso-austria.at/linz/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.goesserkeller.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.klosterhof-linz.at": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "https://www.klosterhof.at/",
+  "checked": "2026-11-22"
+ },
+ "https://reserve.dish.co/285453": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "https://reservation.dish.co/shortlink/285453",
+  "checked": "2026-11-22"
+ },
+ "http://www.linzwiki.at/wiki/Little_Saigon/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.mrwenlinz.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.mrwenlinz.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.nosh-linz.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.meeresbrise.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.meeresbrise.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.meeresbrise.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.meeresbrise.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.meenoodles.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.meenoodles.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.new-namastey.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.new-namastey.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.makeabreak.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://makeabreak.at/",
+  "checked": "2026-11-22"
+ },
+ "http://orpheus-linz.eu/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "http://www.orpheus-linz.eu/",
+  "checked": "2026-11-22"
+ },
+ "http://www.new-namastey.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.new-namastey.at/",
+  "checked": "2026-11-22"
+ },
+ "https://ox-city.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.pizzeriaverona-linz.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "http://www.pizzeriaverona-linz.at": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "http://www.mutolinz.at/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.osteriailpescatore.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.osteriailpescatore.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.osteriailpescatore.at/",
+  "checked": "2026-11-22"
+ },
+ "https://miyako-ramen.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://nicsell.com/en/domain/miyako-ramen.at",
+  "checked": "2026-11-22"
+ },
+ "http://www.makeabreak.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://makeabreak.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.pandawok.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.pandawok.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.pauls-linz.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.pauls-linz.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.rossbarth.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "http://miyako-ramen.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://nicsell.com/en/domain/miyako-ramen.at",
+  "checked": "2026-11-22"
+ },
+ "https://www.restaurant-pattaya.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.restaurant-pattaya.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.myindigo.com/stores.html#!": {
+  "ok": false,
+  "state": "dead",
+  "detail": "HTTP 404",
+  "status": 404,
+  "finalUrl": "https://www.myindigo.com/stores.html",
+  "checked": "2026-11-22"
+ },
+ "http://www.pizza-valentinos.at": {
+  "ok": false,
+  "state": "dead",
+  "detail": "TimeoutError",
+  "checked": "2026-11-22"
+ },
+ "https://www.restaurant-pattaya.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://rossbarth.at": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "https://rossbarth.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.pizzaadria.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.pizzaadria.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.herberstein-linz.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://ox-city.at/",
+  "checked": "2026-11-22"
+ },
+ "https://schlosscafe-linz.com/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.hotel-kolping.at/impressum": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.mundwerkstatt.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://pinsamore-linz-restaurant.eatbu.com": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "https://pinsamore-linz-restaurant.eatbu.com/?lang=en",
+  "checked": "2026-11-22"
+ },
+ "https://pizzaadria.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.pizzaadria.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.taverne-sorbas.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.radissonhotels.com/de-de/hotels/park-inn-linz/restaurant-bar/square": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.bombaypalace.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.bombaypalace.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.hotel-kolping.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.hotel-kolping.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.mundwerkstatt.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.mundwerkstatt.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.goesserkeller.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.goesserkeller.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.station183.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.parkinn.de/hotel-linz/restaurants-und-bars": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.radissonhotels.com/de-de/hotels/park-inn-linz",
+  "checked": "2026-11-22"
+ },
+ "http://tavernesorbas.stadtausstellung.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://tavernesorbas.stadtausstellung.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.tokyo-runningsushi.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "https://www.szechuan-impression.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.surace.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.surace.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.szechuan-impression.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.szechuan-impression.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.stadtliebe.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.stadtliebe.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.stadtliebe.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.stadtliebe.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.h-m-p.at": {
+  "ok": false,
+  "state": "dead",
+  "detail": "UND_ERR_CONNECT_TIMEOUT",
+  "checked": "2026-11-22"
+ },
+ "https://www.sonams-momos.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "http://www.rox-musicbar.com": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://rox-linz.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.kunststopferei.com/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.wakuwaku.at/linz": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://zaffran.at": {
+  "ok": false,
+  "state": "dead",
+  "detail": "UND_ERR_SOCKET",
+  "checked": "2026-11-22"
+ },
+ "https://www.linzadoener.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.schneiderei-monika.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.wow-thai-kitchen-linz-linz.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.wow-thai-kitchen-linz-linz.at/",
+  "checked": "2026-11-22"
+ },
+ "https://cafe-antonia.jimdosite.com/": {
+  "ok": true,
+  "state": "works",
+  "status": 403,
+  "checked": "2026-11-22"
+ },
+ "https://www.zumkleinengriechen.at/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.schneiderei-linz.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://cejnurfa.at": {
+  "ok": true,
+  "state": "works",
+  "status": 403,
+  "finalUrl": "https://cejnurfa.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.rox-linz.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://rox-linz.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.modeamsuedbahnhof.webnode.at/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "https://modeamsuedbahnhof.webnode.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.linz.diakonissen.at/aufenthalt-service/wohlfuhlbereiche/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.josef.eu/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://josef.eu/",
+  "checked": "2026-11-22"
+ },
+ "http://www.zumkleinengriechen.at/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "https://www.zumkleinengriechen.at/",
+  "checked": "2026-11-22"
+ },
+ "http://lotuslinz.at/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "https://lotuslinz.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.restaurant-mrji.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "http://www.restaurant-mrji.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.restaurant-mrji.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.donerium.net": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.donerium.net/",
+  "checked": "2026-11-22"
+ },
+ "http://www.wsz-linz.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.linz.diakonissen.at/",
+  "checked": "2026-11-22"
+ },
+ "https://steakhouse.co.at/speisen/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.josef.eu/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://josef.eu/",
+  "checked": "2026-11-22"
+ },
+ "https://store.e-swin.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://store.e-swin.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.caseli.at/Mittagspause/Mittagstisch-fuer-Unternehmen/OeGK": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.linz-hotel.at/rooftop-7-bar/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "HTTP 404",
+  "status": 404,
+  "finalUrl": "https://linz-hotel.at/rooftop-7-bar/",
+  "checked": "2026-11-22"
+ },
+ "https://www.uvooe.at/sb_copstop/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://li-li-linz.at": {
+  "ok": true,
+  "state": "works",
+  "status": 403,
+  "finalUrl": "https://li-li-linz.at/",
+  "checked": "2026-11-22"
+ },
+ "https://li-lis-linz.at/delivery": {
+  "ok": false,
+  "state": "dead",
+  "detail": "EAI_AGAIN",
+  "checked": "2026-11-22"
+ },
+ "http://www.linz-hotel.at/rooftop-7-bar/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "HTTP 404",
+  "status": 404,
+  "finalUrl": "https://linz-hotel.at/rooftop-7-bar/",
+  "checked": "2026-11-22"
+ },
+ "http://www.uvooe.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.uvooe.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.femina.co.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.femina.co.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.femina.co.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.posthofbeisl.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.askoe-linz-eislauf.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.askoe-linz-eislauf.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.posthof.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.posthof.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.pizza-milano.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.pizza-milano.at/",
+  "checked": "2026-11-22"
+ },
+ "http://22k.pizza/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "https://22k.pizza/",
+  "checked": "2026-11-22"
+ },
+ "https://www.q27linz.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.pizza-milano.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.pizza-milano.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.hotel-donauwelle.at/de/kulinarik/restaurant/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.charmanterelefant.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://charmanterelefant.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.charmanterelefant.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://charmanterelefant.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.stubm.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "HTTP 503",
+  "status": 503,
+  "checked": "2026-11-22"
+ },
+ "https://www.stefansstubm.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.stefansstubm.at/",
+  "checked": "2026-11-22"
+ },
+ "https://techharbor.at/luncherie": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.cafe-pizzeria-sissi-linz.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "http://www.linz.twhotels.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.hotel-donauwelle.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.luncherie.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://techharbor.at/luncherie",
+  "checked": "2026-11-22"
+ },
+ "https://www.goscinna-chata.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "www.steakhouse.co.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://steakhouse.co.at/",
+  "checked": "2026-11-22"
+ },
+ "https://kaffeemuehle-linz.sta.io/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.burgerei.at": {
+  "ok": false,
+  "state": "dead",
+  "detail": "UND_ERR_CONNECT_TIMEOUT",
+  "checked": "2026-11-22"
+ },
+ "http://www.restaurant-rauchkuchl.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.restaurant-rauchkuchl.at/",
+  "checked": "2026-11-22"
+ },
+ "https://lakoprestaurant.at": {
+  "ok": false,
+  "state": "dead",
+  "detail": "EAI_AGAIN",
+  "checked": "2026-11-22"
+ },
+ "http://www.acquaesole.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.restaurantrosso.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.restaurant-rauchkuchl.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.restaurant-rauchkuchl.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.tomyam.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://tomyam.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.acquaesole.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.restaurantrosso.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.delphin.co.at": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "https://www.fuyuan.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "http://www.atrio-restaurant.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.atrio-restaurant.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.pizzaexpresslinz.at/": {
+  "ok": false,
+  "state": "placeholder",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.atrio-restaurant.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://pizzaexpress.orderboy.at/online-bestellen": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.dies-und-das-linz.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.hofkneipe.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://hofkneipe.at/",
+  "checked": "2026-11-22"
+ },
+ "https://tabakfabrik.arcotel.com/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://tabakfabrik.arcotel.com/de/",
+  "checked": "2026-11-22"
+ },
+ "http://www.chami.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://chami.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.firmenabc.at/pizzamann-gmbh_lv": {
+  "ok": true,
+  "state": "works",
+  "status": 429,
+  "checked": "2026-11-22"
+ },
+ "http://www.chinarestaurant-taiyang.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.chinarestaurant-taiyang.at/",
+  "checked": "2026-11-22"
+ },
+ "http://ricecorner.eatbu.com/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://ricecorner.eatbu.com/?lang=en",
+  "checked": "2026-11-22"
+ },
+ "https://www.pizzamercato.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://tante-kaethe.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://tante-kaethe.at/",
+  "checked": "2026-11-22"
+ },
+ "https://dauphinepizza.orderboy.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.altebrueckemostar.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.altebrueckemostar.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "http://www.altebrueckemostar.at/",
+  "checked": "2026-11-22"
+ },
+ "https://linzer-pizza.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://weborder.pro/order/linzer-pizza-2026",
+  "checked": "2026-11-22"
+ },
+ "http://www.pizzamercato.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.pizzamercato.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.goscinna-chata.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.goscinna-chata.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.das-kleine-cafe.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.das-kleine-cafe.at/",
+  "checked": "2026-11-22"
+ },
+ "https://aroma-indisches-restaurant.at": {
+  "ok": true,
+  "state": "works",
+  "status": 403,
+  "finalUrl": "https://aroma-indisches-restaurant.at/",
+  "checked": "2026-11-22"
+ },
+ "https://aroma-indisches-restaurant.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 403,
+  "checked": "2026-11-22"
+ },
+ "http://www.schnitzelhaus.com": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "http://www.schnitzelhaus.com/",
+  "checked": "2026-11-22"
+ },
+ "http://www.etagerelaxstyling.com/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "http://www.baar.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "http://www.baar.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.robert-for-hair.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "http://www.robert-for-hair.at": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "http://www.mandis-wirtshaus.at/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.mandis-wirtshaus.at": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "https://www.mandis-wirtshaus.at/",
+  "checked": "2026-11-22"
+ },
+ "https://chinarestaurant-gluecksgarten-linz.business.site": {
+  "ok": false,
+  "state": "dead",
+  "detail": "HTTP 404",
+  "status": 404,
+  "finalUrl": "https://chinarestaurant-gluecksgarten-linz.business.site/",
+  "checked": "2026-11-22"
+ },
+ "https://123losgmbh.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.franzesco.at/": {
+  "ok": false,
+  "state": "placeholder",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.franzesco.at": {
+  "ok": false,
+  "state": "dead",
+  "detail": "CERT_HAS_EXPIRED",
+  "checked": "2026-11-22"
+ },
+ "http://www.denopizzagrill.com": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://denopizzagrill.com/",
+  "checked": "2026-11-22"
+ },
+ "https://bestellen-amano.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 403,
+  "checked": "2026-11-22"
+ },
+ "https://www.relax-beauty.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "HTTP 404",
+  "status": 404,
+  "checked": "2026-11-22"
+ },
+ "https://benthanhkitchen.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.hofkneipe.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://hofkneipe.at/",
+  "checked": "2026-11-22"
+ },
+ "http://members.aon.at/wirt/lokal.html": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "https://www.a1.net/",
+  "checked": "2026-11-22"
+ },
+ "http://www.askoe-linz-klm.at/gastronomie": {
+  "ok": false,
+  "state": "dead",
+  "detail": "HTTP 404",
+  "status": 404,
+  "checked": "2026-11-22"
+ },
+ "https://www.zurliesl.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.die-beletage.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.pizza-leonardo.co.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.pizza-leonardo.co.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.kirchenwirt-linz.at": {
+  "ok": false,
+  "state": "dead",
+  "detail": "HTTP 404",
+  "status": 404,
+  "finalUrl": "http://www.kirchenwirt-linz.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.zurliesl.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.zurliesl.at/",
+  "checked": "2026-11-22"
+ },
+ "https://pichling.golf-staerk.at/club/#restaurant": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://pichling.golf-staerk.at/club/",
+  "checked": "2026-11-22"
+ },
+ "https://de.restaurantguru.com/Monkeys-Island-Linz": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.kirchenwirt-linz.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "HTTP 404",
+  "status": 404,
+  "checked": "2026-11-22"
+ },
+ "https://ludwigs-pizzeria-ristorante.eatbu.com/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://ludwigs-pizzeria-ristorante.eatbu.com/?lang=en",
+  "checked": "2026-11-22"
+ },
+ "http://ludwigs.eatbu.com/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "HTTP 404",
+  "status": 404,
+  "finalUrl": "https://ludwigs.eatbu.com/",
+  "checked": "2026-11-22"
+ },
+ "https://metes-restaurant.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://metes-restaurant.at/",
+  "checked": "2026-11-22"
+ },
+ "http://seeterrasse.webnode.at/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "https://seeterrasse.webnode.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.mostbauer.com/Waldschänke": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.mostbauer.com/Waldsch%C3%A4nke",
+  "checked": "2026-11-22"
+ },
+ "https://frisurstyle.at": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "http://frisurstyle.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "https://www.techengel.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "http://www.techengel.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "https://www.thaithai.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.thai-thai-imbiss.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.wiazhaus-lehner.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.wirtshaus-pichling.at/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "https://wirtshaus-pichling.at/?lang=en",
+  "checked": "2026-11-22"
+ },
+ "http://www.bellapizzaoflongbeach.com": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "http://poestlingberg.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.zum-hauermandl.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.benthanhkitchen.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://benthanhkitchen.at/",
+  "checked": "2026-11-22"
+ },
+ "https://poestlingberg.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.thaithai.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.thai-thai-imbiss.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.fabios-cucina.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "http://www.friseur-carina.at/de/impressum/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "HTTP 404",
+  "status": 404,
+  "checked": "2026-11-22"
+ },
+ "http://www.wiazhaus-lehner.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.wiazhaus-lehner.at/",
+  "checked": "2026-11-22"
+ },
+ "https://verdi.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://verdi.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.spallerhofdiele.at": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "https://www.zoo-linz.at/der-zoo/kiosk-kinderspielplatz": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.zoo-linz.at/de/der-zoo/kiosk-kinderspielplatz",
+  "checked": "2026-11-22"
+ },
+ "http://www.wirtschaft-Spallerhofdiele.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "http://www.muldenstueberl.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.hotel-turmfalke.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.friseur-heidi.at": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "https://zentrum-muldenstrasse.at/news/frische-grillhendl/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.skygarden.at/": {
+  "ok": false,
+  "state": "placeholder",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.zum-hauermandl.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.zum-hauermandl.at/",
+  "checked": "2026-11-22"
+ },
+ "restaurant-loewenfeld.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.gasthaus-loewenfeld.at/",
+  "checked": "2026-11-22"
+ },
+ "http://restaurant-loewenfeld.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.gasthaus-loewenfeld.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.bratwurstgloeckerl.at": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "https://www.bratwurstgloeckerl.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.hotel-turmfalke.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.hotel-turmfalke.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.skygarden.at/skygardencafe/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.haarpunkt.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.haarpunkt.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.verdi.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://verdi.at/",
+  "checked": "2026-11-22"
+ },
+ "https://horizont-wifi.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.stadtmuenchen.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.stadtmuenchen.at/?lang=en",
+  "checked": "2026-11-22"
+ },
+ "http://www.mondigo.co.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.mondigo.co.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.mondigo.co.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.mondigo.co.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.fischundgrill.at/": {
+  "ok": false,
+  "state": "placeholder",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.fischundgrill.at/": {
+  "ok": false,
+  "state": "placeholder",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://eris-beauty.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://haarspa.at/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "https://haarspa.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.unipizza.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.lieferzeit.at/uni-pizza-urfahr",
+  "checked": "2026-11-22"
+ },
+ "http://www.ihrfriseur.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.ihrfriseur.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.haarpunkt.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.haarpunkt.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.aufderwies.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.davinci-ristorante.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.davinci-ristorante.at/",
+  "checked": "2026-11-22"
+ },
+ "https://la-pizzeria.at/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "https://www.la-pizzeria.at/",
+  "checked": "2026-11-22"
+ },
+ "https://gh-lueftner.at/tickets/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.zlinz.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.zlinz.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.horizont-wifi.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://horizont-wifi.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.nestroystueberl.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "https://www.askoe-linz-steg.at/html/stegerl.html": {
+  "ok": false,
+  "state": "dead",
+  "detail": "HTTP 404",
+  "status": 404,
+  "checked": "2026-11-22"
+ },
+ "https://www.haarpunkt.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.sonnentor.com/de-at/geschaefte/sonnentor-geschaefte/sonnentor-linz-lentia-city": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.beenie.cafe/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://hairstyling-by-thomas-k.jimdosite.com": {
+  "ok": true,
+  "state": "works",
+  "status": 403,
+  "finalUrl": "https://hairstyling-by-thomas-k.jimdosite.com/",
+  "checked": "2026-11-22"
+ },
+ "http://weinstadl-urfahr.eatbu.com/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://weinstadl-urfahr.eatbu.com/?lang=en",
+  "checked": "2026-11-22"
+ },
+ "http://www.beenie.cafe/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.beenie.cafe/",
+  "checked": "2026-11-22"
+ },
+ "http://Restaurant-Mobydick.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "http://www.restaurant-mobydick.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.eris-portrait.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://eris-portrait.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.gasthaus-auf-der-wies.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://nicsell.com/en/domain/www.gasthaus-auf-der-wies.at",
+  "checked": "2026-11-22"
+ },
+ "http://www.eve-hstudio.at/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "https://www.eve-hstudio.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.auerhahn-linz.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://auerhahn-linz.at/",
+  "checked": "2026-11-22"
+ },
+ "http://weinstadl-urfahr.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://weinstadl-urfahr.eatbu.com/?lang=en",
+  "checked": "2026-11-22"
+ },
+ "http://www.fuzoexpress.at": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "http://www.athene-linz.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://athene-linz.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.pizza-station-lucia.at": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "http://www.gh-lueftner.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://gh-lueftner.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.frisiersalon-brigitte.com/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.sonnentor.com": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.sonnentor.com/de-at",
+  "checked": "2026-11-22"
+ },
+ "http://www.cafe-im-wohnpark.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.cafe-im-wohnpark.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.mostbauer-linz.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.national-casino-echtgeld.at/",
+  "checked": "2026-11-22"
+ },
+ "https://asahii-linz.jimdo.com/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ERR_SSL_SSL/TLS_ALERT_HANDSHAKE_FAILURE",
+  "checked": "2026-11-22"
+ },
+ "http://datoni.com/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.sunlounge.at/studio2.htm": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.1mobileshop.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.zauners-goldener-adler.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.ebisu.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.ebisu.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.ebisu.at/",
+  "checked": "2026-11-22"
+ },
+ "https://restaurant-hamta.eatbu.com/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "HTTP 404",
+  "status": 404,
+  "checked": "2026-11-22"
+ },
+ "https://casa-corrado.eatbu.com/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://casa-corrado.eatbu.com/?lang=en",
+  "checked": "2026-11-22"
+ },
+ "https://www.zauners-goldener-adler.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.1mobileshop.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.1mobileshop.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.vietnampho-linz.at": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "http://www.asahii-linz.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.asahii-linz.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.indianvibez.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.indianvibez.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.goldenpub.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.goldenpub.at/",
+  "checked": "2026-11-22"
+ },
+ "https://app.pho-hanoi.at/online-bestellen": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.goldenpub.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.goldenpub.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.kai-sushi-nudeln.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.seidlgartl.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ENOTFOUND",
+  "checked": "2026-11-22"
+ },
+ "http://jadeplaza.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.jadeplaza.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.fischerhaeusl.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://xn--fischerhusl-s8a.at/",
+  "checked": "2026-11-22"
+ },
+ "https://salon-karizma.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "ECONNREFUSED",
+  "checked": "2026-11-22"
+ },
+ "http://claudio.pizza/": {
+  "ok": false,
+  "state": "social",
+  "status": 200,
+  "finalUrl": "https://www.instagram.com/pizzeria_daclaudio/",
+  "checked": "2026-11-22"
+ },
+ "http://www.farnooshaesthetik.com/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.farnooshaesthetik.com/",
+  "checked": "2026-11-22"
+ },
+ "https://fischerhaeusl.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://xn--fischerhusl-s8a.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.thaihaus.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.surace.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.surace.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.tamusana.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.tamusana.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.tamusana.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.tamusana.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.alles-haar.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.alles-haar.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.red-level.at/friseur-lentiacity-linz.html": {
+  "ok": false,
+  "state": "dead",
+  "detail": "HTTP 404",
+  "status": 404,
+  "finalUrl": "http://red-level.at/friseur-lentiacity-linz.html",
+  "checked": "2026-11-22"
+ },
+ "http://trattoria-scollo.webnode.com/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "https://trattoria-scollo.webnode.page/",
+  "checked": "2026-11-22"
+ },
+ "https://trattoria-scollo.webnode.com": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "finalUrl": "https://trattoria-scollo.webnode.page/",
+  "checked": "2026-11-22"
+ },
+ "https://www.wirtshaus-gretzl.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.urbanides.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.geisch.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.urbanides.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.geisch.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.monteverde.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.monteverde.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.monteverde.at": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.monteverde.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.red-level.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://red-level.at/",
+  "checked": "2026-11-22"
+ },
+ "https://www.good-karma.at/under-the-bridge/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://under-the-bridge.at/",
+  "checked": "2026-11-22"
+ },
+ "http://www.thaihaussom.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://thaihaussom.at/",
+  "checked": "2026-11-22"
+ },
+ "http://wirtshaus-gretzl.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://www.wirtshaus-gretzl.at/",
+  "checked": "2026-11-22"
+ },
+ "https://linz.lakop.at/online-bestellen": {
+  "ok": false,
+  "state": "dead",
+  "detail": "UND_ERR_CONNECT_TIMEOUT",
+  "checked": "2026-11-22"
+ },
+ "https://www.la-dolce.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "UND_ERR_CONNECT_TIMEOUT",
+  "checked": "2026-11-22"
+ },
+ "http://www.nova.at": {
+  "ok": false,
+  "state": "dead",
+  "detail": "UND_ERR_CONNECT_TIMEOUT",
+  "checked": "2026-11-22"
+ },
+ "https://www.roswithas-frisurenstudio.at/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "finalUrl": "https://ranked.1st-idrtoto.com/",
+  "checked": "2026-11-22"
+ },
+ "https://frl-florentine.at/shipshop/": {
+  "ok": true,
+  "state": "works",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "http://www.kammundschere.at": {
+  "ok": false,
+  "state": "dead",
+  "detail": "UND_ERR_CONNECT_TIMEOUT",
+  "checked": "2026-11-22"
+ },
+ "https://pizzaheaven.at/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "UND_ERR_CONNECT_TIMEOUT",
+  "checked": "2026-11-22"
+ },
+ "https://frl-florentine.at/": {
+  "ok": true,
+  "state": "works",
+  "detail": "redirect or frame",
+  "status": 200,
+  "checked": "2026-11-22"
+ },
+ "https://www.pizzeria-david.net/": {
+  "ok": false,
+  "state": "dead",
+  "detail": "TimeoutError",
+  "checked": "2026-11-22"
+ }
+}

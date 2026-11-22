@@ -1,0 +1,530 @@
+[
+ {
+  "osm": "node/1262007989",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/3699101122",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/4682305465",
+  "name": "Be right back - Asia Street Food",
+  "reason": "closed"
+ },
+ {
+  "osm": "node/5124850676",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/5539744575",
+  "name": "183 Street Bites",
+  "reason": "closed"
+ },
+ {
+  "osm": "node/9195861333",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/9892444277",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/9892444283",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/14066746610",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/14067958336",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/14077274608",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "way/243124709",
+  "name": "Zum Schwarzen Schiff",
+  "reason": "closed"
+ },
+ {
+  "osm": "way/1119177213",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "way/1308581843",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/206243231",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 8,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/269526436",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 3,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/277290057",
+  "name": "Jindrak",
+  "reason": "chain",
+  "detail": "same name in 3 districts",
+  "district": 16,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/277298325",
+  "name": "Mensa Kunst",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 16,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/277305150",
+  "name": "La Ruffa",
+  "reason": "chain",
+  "detail": "same name in 3 districts",
+  "district": 16,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/294860523",
+  "name": "Leberkas-Pepi",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 8,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/302215128",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 8,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/308689911",
+  "name": "Jindrak",
+  "reason": "chain",
+  "detail": "same name in 3 districts",
+  "district": 8,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/315046705",
+  "name": "JKU Mensa",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 3,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/320745736",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/410126470",
+  "name": "Mensa der Katholischen Hochschulgemeinde",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 3,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/506801084",
+  "name": "Klipp",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 16,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/703147513",
+  "name": "Mensa des OÖ. Studentenwerkes",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 3,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/876467493",
+  "name": "Jindrak",
+  "reason": "chain",
+  "detail": "same name in 3 districts",
+  "district": 16,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/876467514",
+  "name": "dean&david",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 16,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/963900679",
+  "name": "Klipp",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 8,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/986821896",
+  "name": "Billa Marktküche",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 16,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/1032474490",
+  "name": "Klipp",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 2,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/1075410740",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 16,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/1106589119",
+  "name": "Nordsee",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 8,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/1196621973",
+  "name": "Klipp",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 11,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/1493604941",
+  "name": "Klipp",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 10,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/1565970463",
+  "name": "Klipp",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 1,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/1665984728",
+  "name": "Klipp",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/1697846129",
+  "name": "Jindrak",
+  "reason": "chain",
+  "detail": "same name in 3 districts",
+  "district": 8,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/2324845387",
+  "name": "Subway",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 3,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/3247846051",
+  "name": "L'Osteria",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 8,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/3448148402",
+  "name": "Noodle King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 2,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/3455344594",
+  "name": "Interspar Restaurant",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 1,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/3772370100",
+  "name": "Vapiano",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 8,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/4149167245",
+  "name": "Jindrak",
+  "reason": "chain",
+  "detail": "same name in 3 districts",
+  "district": 8,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/4951664938",
+  "name": "Jindrak",
+  "reason": "chain",
+  "detail": "same name in 3 districts",
+  "district": 13,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/5178707325",
+  "name": "Klipp",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 2,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/5679549924",
+  "name": "Mensa PHDL",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 6,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/5948687488",
+  "name": "Subway",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 8,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/6549543181",
+  "name": "dean&david",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 8,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/6565181718",
+  "name": "Klipp",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 9,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/8261526533",
+  "name": "Klipp",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 2,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/9041429217",
+  "name": "Dunkin'",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 8,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/9048841538",
+  "name": "La Ruffa",
+  "reason": "chain",
+  "detail": "same name in 3 districts",
+  "district": 15,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/9893073037",
+  "name": "Aida",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 2,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/11900782151",
+  "name": "XXXLutz Linz - Restaurant",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 9,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/12718269386",
+  "name": "Wild Bean Cafe",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 3,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/13464507581",
+  "name": "KFC",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 8,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/13532485398",
+  "name": "Klipp",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 2,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/13724285946",
+  "name": "INTERSPAR-Restaurant",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 7,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/13966179710",
+  "name": "L'Osteria",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 16,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/14201710173",
+  "name": "Le Burger",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 16,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/102418877",
+  "name": "Burger King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 11,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/220470851",
+  "name": "Burger King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 7,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/385865860",
+  "name": "Leberkas-Pepi",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 8,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/385865862",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 8,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/385865871",
+  "name": "Tchibo",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 8,
+  "kind": "cafe"
+ },
+ {
+  "osm": "way/874213577",
+  "name": "La Ruffa",
+  "reason": "chain",
+  "detail": "same name in 3 districts",
+  "district": 1,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "way/1429905511",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 10,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/10102892654",
+  "name": "Victor Café Bistro",
+  "reason": "duplicate",
+  "of": "node/10102892653"
+ },
+ {
+  "osm": "way/151228466",
+  "name": "Athène",
+  "reason": "duplicate",
+  "of": "way/69059702"
+ },
+ {
+  "osm": "node/3677959561",
+  "name": "Schnellimbiss am Schillerpark",
+  "reason": "duplicate",
+  "of": "way/88686751"
+ }
+]
