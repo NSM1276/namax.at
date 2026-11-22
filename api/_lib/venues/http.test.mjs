@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { memoryStore } from './store.mjs';
 import { hashKey } from './owner.mjs';
-import { handleChat, handleClaim, handlePhoto, handleHit, handlePage, handleSitemap, MAX_PHOTO_BYTES, DAILY_PHOTOS, MAX_STORED_PHOTOS } from './http.mjs';
+import { handleChat, handleClaim, handleSearch, handleSignup, handlePhoto, handleHit, handlePage, handleSitemap, MAX_PHOTO_BYTES, DAILY_PHOTOS, MAX_STORED_PHOTOS } from './http.mjs';
 
 const KEY = 'a'.repeat(32);
 const SLUG = 'friseur-meidling';
@@ -286,4 +286,79 @@ test('claim: a visitor report needs only what is wrong; the number is optional',
   }
   // an owner still has to leave a number
   assert.equal((await handleClaim(claimReq({ ...claim, phone: '', channel: '' }), s)).status, 400);
+});
+
+// ── namax.at/kostenlos: search for one's venue, then a request from the main site ──
+const wwwReq = (path, body) => new Request(`https://www.namax.at${path}`, body === undefined
+  ? { headers: { host: 'www.namax.at' } }
+  : { method: 'POST', headers: { host: 'www.namax.at', 'content-type': 'application/json', 'x-forwarded-for': '1.2.3.4' }, body: JSON.stringify(body) });
+async function directory() {
+  const s = await services();
+  const add = (slug, name, status = 'public', street = 'Hauptstraße 1', zip = '1050') =>
+    s.store.upsertFacts(slug, { facts: { ...facts, name, address: { street, zip, city: 'Wien' } }, keyHash: hashKey(KEY), status });
+  await add('cafe-dani', 'Café Dani');
+  await add('dani-kebab', 'Kebab bei Dani', 'public', 'Gasse 2', '1100');
+  await add('danube-bar', 'Danube Bar');
+  await add('dani-hidden', 'Dani Versteckt', 'hidden');
+  return s;
+}
+
+test('search finds public venues by name, accents ignored, best match first, hidden ones never', async () => {
+  const s = await directory();
+  const r = await handleSearch(wwwReq('/api/venue/search?q=cafe%20dan'), s);
+  assert.equal(r.status, 200);
+  const { results } = await r.json();
+  assert.deepEqual(results.map((x) => x.slug), ['cafe-dani']);
+  assert.equal(results[0].name, 'Café Dani');
+  assert.match(results[0].place, /Hauptstraße 1, 1050 Wien/);
+  const all = (await (await handleSearch(wwwReq('/api/venue/search?q=dani'), s)).json()).results.map((x) => x.slug);
+  assert.ok(all.includes('cafe-dani') && all.includes('dani-kebab'));
+  assert.ok(!all.includes('dani-hidden'));
+  assert.deepEqual(all, ['cafe-dani', 'dani-kebab']); // both have a word starting with "dani": alphabetical
+  const dan = (await (await handleSearch(wwwReq('/api/venue/search?q=dan'), s)).json()).results.map((x) => x.slug);
+  assert.equal(dan[0], 'danube-bar'); // the name itself starts with the query
+});
+
+test('search: short or long queries give nothing, at most 8 results', async () => {
+  const s = await directory();
+  for (let i = 0; i < 12; i++) await s.store.upsertFacts(`pizza-${i}`, { facts: { ...facts, name: `Pizza ${i}` }, keyHash: hashKey(KEY), status: 'public' });
+  assert.deepEqual((await (await handleSearch(wwwReq('/api/venue/search?q=d'), s)).json()).results, []);
+  assert.deepEqual((await (await handleSearch(wwwReq('/api/venue/search?q=' + 'x'.repeat(80)), s)).json()).results, []);
+  assert.equal((await (await handleSearch(wwwReq('/api/venue/search?q=pizza'), s)).json()).results.length, 8);
+});
+
+const signup = { slug: 'cafe-dani', role: 'owner', wish: 'manage', name: 'Dani', phone: '+43 660 1234567', channel: 'call' };
+test('signup for a found venue lands in the requests of that venue', async () => {
+  const s = await directory();
+  const r = await handleSignup(wwwReq('/api/venue/signup', signup), s);
+  assert.equal(r.status, 200);
+  const [q] = await s.store.listRequests();
+  assert.equal(q.slug, 'cafe-dani'); assert.equal(q.wish, 'manage'); assert.equal(q.lokal, '');
+});
+
+test('signup for a venue we do not list keeps its name and address, without a page', async () => {
+  const s = await directory();
+  const r = await handleSignup(wwwReq('/api/venue/signup', { ...signup, slug: undefined, lokal: 'Neues Café, Gasse 5, 1160 Wien' }), s);
+  assert.equal(r.status, 200);
+  const [q] = await s.store.listRequests();
+  assert.equal(q.slug, null); assert.equal(q.lokal, 'Neues Café, Gasse 5, 1160 Wien');
+});
+
+test('signup refuses hidden venues, visitors, missing number or missing venue', async () => {
+  const s = await directory();
+  for (const bad of [{ slug: 'dani-hidden' }, { slug: 'nope' }, { role: 'other' }, { wish: 'remove' }, { phone: '' }, { channel: 'none' },
+    { slug: undefined }, { slug: undefined, lokal: 'ab' }, { slug: undefined, lokal: 'x'.repeat(200) }]) {
+    assert.notEqual((await handleSignup(wwwReq('/api/venue/signup', { ...signup, ...bad }), s)).status, 200, JSON.stringify(bad));
+  }
+  assert.equal((await s.store.listRequests()).length, 0);
+  const trap = await handleSignup(wwwReq('/api/venue/signup', { ...signup, website: 'http://spam' }), s);
+  assert.equal(trap.status, 200);
+  assert.equal((await s.store.listRequests()).length, 0);
+});
+
+test('signup: one sender cannot flood', async () => {
+  const s = await directory();
+  let last;
+  for (let i = 0; i < 7; i++) last = await handleSignup(wwwReq('/api/venue/signup', { ...signup, slug: undefined, lokal: `Lokal Nummer ${i}` }), s);
+  assert.equal(last.status, 429);
 });

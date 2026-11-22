@@ -96,4 +96,16 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://www.namax.at/en/datenschutz"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.namax.at/datenschutz"/>
   </url>
+  <url>
+    <loc>https://www.namax.at/kostenlos</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.namax.at/kostenlos"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.namax.at/en/free-page"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.namax.at/kostenlos"/>
+  </url>
+  <url>
+    <loc>https://www.namax.at/en/free-page</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.namax.at/kostenlos"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.namax.at/en/free-page"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.namax.at/kostenlos"/>
+  </url>
 </urlset>

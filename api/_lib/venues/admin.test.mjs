@@ -533,3 +533,11 @@ test('cities: an unknown city falls back to Wien; with one city only there is no
   const one = await (await handleAdmin(lokale(ADMIN), await twoDistricts())).text();
   assert.equal(cityNav(one), '');
 });
+
+test('a request for a venue we do not list shows its name and "Neues Lokal", no page link, escaped', async () => {
+  const s = await svc();
+  await s.store.addRequest(null, { role: 'owner', wish: 'photos', name: 'Sara', phone: '+43 660 1234567', channel: 'call', lokal: 'Neu <b>Café</b>, 1160' });
+  const html = await chooser(s);
+  assert.match(html, /Neu &lt;b&gt;Café&lt;\/b&gt;, 1160<\/b><span class="b">Neues Lokal<\/span>/);
+  assert.ok(!html.includes('https://null.namax.at'));
+});

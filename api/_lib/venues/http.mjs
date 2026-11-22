@@ -352,3 +352,68 @@ export function handleAdminPost(req, services) {
   if (originHost && originHost !== (req.headers.get('host') || new URL(req.url).host)) return Promise.resolve(fail(403, 'forbidden'));
   return /multipart\/form-data/i.test(req.headers.get('content-type') || '') ? handleAdminFacade(req, services) : handleAdminRotate(req, services);
 }
+
+// ── namax.at/kostenlos ───────────────────────────────────────────────────────
+// The owner finds the venue among the public pages and leaves a number. Search shows only public pages,
+// and a request from the main site can name only a public venue (or a new one, by name and address).
+
+export const SEARCH_LIMIT = 8;
+const DIRECTORY_TTL = 5 * 60 * 1000;
+let directoryCache = { store: null, at: 0, list: [] };
+/** Lowercase, no accents, ß → ss, only letters and digits separated by single spaces. */
+export const fold = (s) => String(s || '').toLowerCase().replace(/ß/g, 'ss').normalize('NFD').replace(/[̀-ͯ]/g, '')
+  .replace(/[^a-z0-9]+/g, ' ').trim();
+
+async function directoryOf(store, now) {
+  if (directoryCache.store !== store || now - directoryCache.at > DIRECTORY_TTL) {
+    const list = (await store.listDirectory()).map((v) => ({ ...v, key: fold(v.name), all: fold(`${v.name} ${v.street} ${v.zip}`) }));
+    directoryCache = { store, at: now, list };
+  }
+  return directoryCache.list;
+}
+
+/** GET /api/venue/search?q= → { results: [{ slug, name, place }] }, best first: name starts with the query,
+ *  then a word of the name does, then the query is somewhere in name, street or postcode; ties alphabetical. */
+export async function handleSearch(req, { store, now = () => new Date() }) {
+  const q = fold(new URL(req.url).searchParams.get('q'));
+  const headers = { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'public, max-age=60, s-maxage=300', 'X-Robots-Tag': 'noindex' };
+  if (q.length < 2 || q.length > 60) return new Response(JSON.stringify({ results: [] }), { status: 200, headers });
+  const words = q.split(' ');
+  const rank = (v) => v.key.startsWith(q) ? 0 : (' ' + v.key).includes(' ' + q) ? 1 : 2;
+  const hits = (await directoryOf(store, now().getTime()))
+    .filter((v) => words.every((w) => v.all.includes(w)))
+    .sort((a, b) => rank(a) - rank(b) || a.key.localeCompare(b.key))
+    .slice(0, SEARCH_LIMIT)
+    .map((v) => ({ slug: v.slug, name: v.name, place: [v.street, [v.zip, v.city].filter(Boolean).join(' ')].filter(Boolean).join(', ') }));
+  return new Response(JSON.stringify({ results: hits }), { status: 200, headers });
+}
+
+export const SIGNUP_ROLES = ['owner', 'staff'];
+export const SIGNUP_WISHES = ['manage', 'fix', 'photos', 'website'];  // 'manage' only here: the venue form has its own title for it
+
+/** POST /api/venue/signup { slug | lokal, role, wish, name, phone, channel, website } from namax.at/kostenlos.
+ *  Same rules as the venue form: the owner writes first, a number is required, honeypot and daily limits. */
+export async function handleSignup(req, { store, now = () => new Date() }) {
+  if (req.method !== 'POST') return fail(405, 'POST only');
+  const body = await readJson(req, MAX_CLAIM_BODY);
+  if (!body) return fail(400, 'bad request');
+  if (typeof body.website === 'string' && body.website.trim()) return json(200, { ok: true });
+  const role = pick(body.role, SIGNUP_ROLES), wish = pick(body.wish, SIGNUP_WISHES), channel = pick(body.channel, CLAIM_CHANNELS);
+  const phone = typeof body.phone === 'string' ? body.phone.trim() : '';
+  const name = typeof body.name === 'string' ? body.name.trim() : '';
+  const lokal = typeof body.lokal === 'string' ? body.lokal.trim().replace(/\s+/g, ' ') : '';
+  const slug = typeof body.slug === 'string' && /^[a-z0-9-]{1,80}$/.test(body.slug) ? body.slug : null;
+  if (!role || !wish || !channel || name.length > 80 || !PHONE.test(phone) || phone.replace(/\D/g, '').length < 6) return fail(400, 'bad request');
+  if (slug) {
+    const record = await store.getVenue(slug);
+    if (!record || record.status !== 'public') return fail(404, 'not found');
+  } else if (lokal.length < 3 || lokal.length > 160) return fail(400, 'bad request');
+  const day = viennaDayStart(now());
+  const ip = (req.headers.get('x-forwarded-for') || '').split(',')[0].trim();
+  const ipHash = ip ? createHash('sha256').update('namax claim v1:' + ip).digest('hex').slice(0, 16) : '';
+  if ((slug && await store.countRequestsSince(slug, day) >= DAILY_CLAIMS)
+    || (ipHash && await store.countRequestsByIpSince(ipHash, day) >= DAILY_CLAIMS_PER_SENDER)
+    || await store.countAllRequestsSince(day) >= DAILY_CLAIMS_TOTAL) return fail(429, 'too many');
+  await store.addRequest(slug, { role, wish, name, phone, channel, text: '', ipHash, lokal: slug ? '' : lokal });
+  return json(200, { ok: true });
+}

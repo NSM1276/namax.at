@@ -232,7 +232,7 @@ export function storeContract(makeStore, prefix = '') {
     let rows = await mine(s);
     assert.deepEqual(rows.map((r) => r.id), [c, a, b]);
     assert.deepEqual({ ...rows[1], at: undefined }, { id: a, slug: A, venueName: 'X ' + A, role: 'owner', wish: 'fix', name: 'Ali',
-      phone: '+43 660 1234567', channel: 'call', text: 'Hallo', at: undefined, doneAt: null });
+      phone: '+43 660 1234567', channel: 'call', text: 'Hallo', lokal: '', at: undefined, doneAt: null });
     assert.ok(!Number.isNaN(Date.parse(rows[1].at)));
     assert.ok(!Number.isNaN(Date.parse(rows[2].doneAt)));
     assert.equal(rows[2].channel, 'whatsapp');
@@ -240,6 +240,15 @@ export function storeContract(makeStore, prefix = '') {
     rows = await mine(s);
     assert.deepEqual(rows.map((r) => r.id), [c, b, a]);
     assert.equal(rows.find((r) => r.id === b).doneAt, null);
+  });
+
+  test('requests: a venue we do not list (no slug) keeps its name; directory lists public venues only', async () => {
+    const s = await fresh();
+    const id = await s.addRequest(null, req({ lokal: 'Neues Café, 1160 Wien' }));
+    const row = (await s.listRequests()).find((r) => r.id === id);
+    assert.equal(row.slug, null); assert.equal(row.lokal, 'Neues Café, 1160 Wien'); assert.equal(row.venueName, '');
+    const dir = await s.listDirectory();
+    assert.ok(dir.every((v) => typeof v.name === 'string' && typeof v.zip === 'string'));
   });
 
   test('requests: count per venue since a time', async () => {

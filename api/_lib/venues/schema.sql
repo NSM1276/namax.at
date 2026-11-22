@@ -75,7 +75,7 @@ create table if not exists venue_requests (
   id       bigserial primary key,
   slug     text not null references venues(slug) on delete cascade,
   role     text not null check (role in ('owner', 'staff', 'other')),
-  wish     text not null check (wish in ('fix', 'photos', 'website', 'remove')),
+  wish     text not null check (wish in ('manage', 'fix', 'photos', 'website', 'remove')),
   name     text not null default '',
   phone    text not null,
   channel  text not null check (channel in ('call', 'whatsapp', 'none')),
@@ -95,3 +95,9 @@ alter table venue_photos drop constraint if exists venue_photos_kind_check;
 alter table venue_photos add constraint venue_photos_kind_check check (kind in ('show', 'outside', 'inside', 'work', 'priceboard'));
 alter table venue_requests drop constraint if exists venue_requests_channel_check;
 alter table venue_requests add constraint venue_requests_channel_check check (channel in ('call', 'whatsapp', 'none'));
+
+-- namax.at/kostenlos: a request may name a venue we do not list yet (no page, slug empty, name and address in lokal).
+alter table venue_requests alter column slug drop not null;
+alter table venue_requests add column if not exists lokal text not null default '';
+alter table venue_requests drop constraint if exists venue_requests_wish_check;
+alter table venue_requests add constraint venue_requests_wish_check check (wish in ('manage', 'fix', 'photos', 'website', 'remove'));

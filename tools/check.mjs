@@ -24,6 +24,7 @@ for (const page of pages) {
     .replace(/\s+/g, ' ');
   const isLegal = /impressum|datenschutz/.test(page);
   const isHome = /(^|\/)index\.html$/.test(page);
+  const isFree = /(^|\/)(kostenlos|free-page)\.html$/.test(page); // short search page, not a service page
   const rule = (ok, name) => { if (!ok) failures.push(`${page}: ${name}`); };
 
   rule(!/€|\bEUR\b|\b799\b/.test(html), 'no-price');
@@ -43,7 +44,7 @@ for (const page of pages) {
   // service pages: a real page of text with its own heading and a way to get in touch
   if (!isLegal && !isHome) {
     rule(/<h1[ >]/.test(html), 'service-h1');
-    rule(text.length > 1600, 'service-text'); // English runs shorter than German
+    if (!isFree) rule(text.length > 1600, 'service-text'); // English runs shorter than German
     rule((html.match(/href="https:\/\/wa\.me\/4367764292055\?text=/g) || []).length >= 2, 'service-whatsapp-cta');
   }
 

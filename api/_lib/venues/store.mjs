@@ -16,7 +16,8 @@
 // setContexts([{ slug, context }]) → number updated (unknown slugs skipped); getVenue(...).context is null until set
 // listForAdmin() → [{ slug, status, facts, changes, confirmedAt, ownerKeyEnc, facadeUrl, chatOpen }] (not removed)
 // setChatOpen(slug, bool): the owner chat works only for venues Nasim opened it for (closed by default)
-// addRequest(slug, { role, wish, name, phone, channel, text }) → id;  listRequests() (open first, website wishes first, newest)
+// listDirectory() → [{ slug, name, street, zip, city }] of public venues (the search on namax.at/kostenlos)
+// addRequest(slug|null, { role, wish, name, phone, channel, text, lokal }) → id (null slug: a venue we do not list, named in lokal);  listRequests() (open first, website wishes first, newest)
 // setRequestDone(id, bool);  countRequestsSince(slug, iso);  countRequestsByIpSince(ipHash, iso);  countAllRequestsSince(iso);  purgeRequests(nowIso): done > 90 days, open > 180 days
 
 const clone = (x) => (x == null ? x : structuredClone(x));
@@ -158,17 +159,21 @@ export function memoryStore() {
     },
     async setChatOpen(slug, open) { need(slug).chatOpen = Boolean(open); },
 
-    async addRequest(slug, { role, wish, name = '', phone, channel, text = '', ipHash = '' }) {
-      need(slug);
+    async listDirectory() {
+      return [...venues.values()].filter((v) => v.status === 'public')
+        .map((v) => ({ slug: v.slug, name: v.facts?.name || '', street: v.facts?.address?.street || '', zip: v.facts?.address?.zip || '', city: v.facts?.address?.city || '' }));
+    },
+    async addRequest(slug, { role, wish, name = '', phone, channel, text = '', ipHash = '', lokal = '' }) {
+      if (slug != null) need(slug);
       const id = ++seq;
-      requests.push({ id, slug, role, wish, name, phone, channel, text, ipHash, at: nowIso(), doneAt: null });
+      requests.push({ id, slug: slug ?? null, role, wish, name, phone, channel, text, ipHash, lokal, at: nowIso(), doneAt: null });
       return id;
     },
     async listRequests() {
-      return requests.map((r) => ({ ...r, venueName: venues.get(r.slug)?.facts?.name ?? '' }))
+      return requests.map((r) => ({ ...r, venueName: (r.slug && venues.get(r.slug)?.facts?.name) || '' }))
         .sort(requestOrder)
-        .map(({ id, slug, venueName, role, wish, name, phone, channel, text, at, doneAt }) =>
-          ({ id, slug, venueName, role, wish, name, phone, channel, text, at, doneAt }));
+        .map(({ id, slug, venueName, role, wish, name, phone, channel, text, lokal = '', at, doneAt }) =>
+          ({ id, slug, venueName, role, wish, name, phone, channel, text, lokal, at, doneAt }));
     },
     async setRequestDone(id, done) {
       const r = requests.find((x) => x.id === Number(id));

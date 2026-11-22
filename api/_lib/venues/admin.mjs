@@ -101,7 +101,10 @@ function requestCard(q) {
   const done = q.doneAt
     ? `<button type="button" data-done="${q.id}" data-to="0" class="rot">Wieder offen</button>`
     : `<button type="button" data-done="${q.id}" data-to="1">Erledigt</button>`;
-  return `<li class="rq"><b><a href="https://${esc(q.slug)}.namax.at/" target="_blank" rel="noopener">${esc(q.venueName || q.slug)}</a></b>`
+  const head = q.slug
+    ? `<a href="https://${esc(q.slug)}.namax.at/" target="_blank" rel="noopener">${esc(q.venueName || q.slug)}</a>`
+    : `${esc(q.lokal || '–')}</b><span class="b">Neues Lokal</span><b>`;  // from namax.at/kostenlos, no page yet
+  return `<li class="rq"><b>${head}</b>`
     + (q.wish === 'website' && !q.doneAt ? '<span class="b hot">Website!</span>' : '')
     + `<small>${esc(viennaTime(q.at))} · ${esc(line)}</small>`
     + `<p class="who"><span class="nm">${esc(q.name || '–')}</span> · ${esc(q.phone)}</p>`

@@ -298,6 +298,72 @@ mark::before{content:"";position:absolute;z-index:-1;inset:.06em 0 .02em;backgro
   .flow{grid-template-columns:repeat(3,1fr)}
   .more{grid-template-columns:repeat(4,minmax(0,1fr))}
 }
+
+/* ───────── 10c free page (/kostenlos) ───────── */
+.free-hero h1{max-width:15ch}
+.free-hero .hl{position:relative;display:inline-block;isolation:isolate;rotate:-2deg}
+.free-hero .hl::before{content:"";position:absolute;z-index:-1;inset:.08em -.1em .02em;background:var(--white);border:3px solid var(--ink);border-radius:.14em}
+.free-find{margin-top:clamp(24px,4vw,36px);max-width:640px}
+.free-find label{display:block;font-weight:700;margin-bottom:8px}
+.free-find input{width:100%;font:600 clamp(18px,2.4vw,22px)/1.2 var(--body);padding:18px 20px;border:3px solid var(--ink);border-radius:999px;
+  background:var(--white);color:var(--ink);box-shadow:5px 5px 0 var(--ink);-webkit-appearance:none;appearance:none}
+.free-find input:focus{outline:none;box-shadow:5px 5px 0 var(--violet)}
+.free-res{display:grid;gap:10px;margin-top:16px}
+.free-res .hit{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;background:var(--white);border:2px solid var(--ink);border-radius:18px;padding:12px 14px}
+.free-res .t{flex:1 1 220px;min-width:0}
+.free-res .t b{display:block;font:800 19px/1.15 var(--display);letter-spacing:-.02em;overflow-wrap:anywhere}
+.free-res .t small{display:block;font-size:14px;color:#55544f;margin-top:2px}
+.free-res .view{font-size:14px;font-weight:700;text-underline-offset:3px}
+.free-res .msg{font-weight:600;padding:6px 4px}
+.free-new{margin-top:14px;font-weight:600}
+.linkish{font:inherit;font-weight:700;color:inherit;background:none;border:0;padding:0;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.free-ex{margin-top:22px;font-weight:700;font-size:18px}
+.free-ex a{text-underline-offset:4px}
+.free-dlg{width:min(560px,calc(100vw - 24px));max-height:calc(100dvh - 24px);border:3px solid var(--ink);border-radius:var(--radius);
+  padding:0;background:var(--cream);color:var(--ink);box-shadow:8px 8px 0 var(--ink)}
+.free-dlg::backdrop{background:#14141499}
+.free-form,.free-thanks{position:relative;display:grid;gap:16px;padding:clamp(20px,4vw,30px)}
+.free-dlg h2{font-size:clamp(28px,5vw,40px);padding-right:40px}
+.free-dlg .x{position:absolute;top:14px;right:14px;width:40px;height:40px;border-radius:50%;border:2px solid var(--ink);background:var(--white);font:700 22px/1 var(--body);cursor:pointer}
+.free-pick{background:var(--white);border:2px solid var(--ink);border-radius:14px;padding:10px 14px}
+.free-pick small{color:#55544f}
+.free-dlg fieldset{border:0;padding:0;margin:0}
+.free-dlg legend{font-weight:700;margin-bottom:8px}
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill input{position:absolute;opacity:0;pointer-events:none}
+.pill span{display:inline-block;padding:10px 14px;border:2px solid var(--ink);border-radius:999px;background:var(--white);font-weight:600;font-size:15px;cursor:pointer}
+.pill input:checked+span{background:var(--lime);box-shadow:3px 3px 0 var(--ink)}
+.pill input:focus-visible+span{outline:3px solid var(--violet);outline-offset:2px}
+.fld span{display:block;font-weight:700;margin-bottom:6px}
+.fld input{width:100%;font:500 17px/1.2 var(--body);padding:14px 16px;border:2px solid var(--ink);border-radius:14px;background:var(--white);color:var(--ink)}
+.free-dlg .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.free-dlg .fine{font-size:13px;color:#55544f}
+.free-dlg .err{color:#b3261e;font-weight:700}
+.free-dlg [type=submit]{justify-self:start}
+.free-thanks p{font:800 clamp(24px,4vw,30px)/1.15 var(--display);letter-spacing:-.03em}
+.free-thanks .btn{justify-self:start}
+.free-dlg [hidden]{display:none}
+
+/* ───────── 10d doodles from the design library (home page) ───────── */
+h1 .ul{position:relative}
+h1 .d-ul{position:absolute;left:-2%;bottom:-.24em;width:104%;height:.2em;color:var(--ink);pointer-events:none}
+.tiles{position:relative}
+.free-badge{position:absolute;z-index:2;bottom:-44px;right:-14px;width:88px;height:88px;rotate:8deg}
+.free-badge a{position:relative;display:block;width:100%;height:100%;color:var(--ink);text-decoration:none;transition:scale .2s var(--out)}
+.free-badge a:hover{scale:1.06}
+.free-badge svg{position:absolute;inset:0;width:100%;height:100%}
+.fb-shape{color:var(--ink)}
+.fb-ring text{font:800 14.5px var(--body);letter-spacing:.06em;fill:var(--lime)}
+.free-badge .fb-spark{inset:34%;width:32%;height:32%;color:var(--lime)}
+.d-bubble{display:inline-block;width:.95em;height:.9em;margin-left:.14em;vertical-align:-.1em;color:var(--ink);rotate:8deg}
+.contact-cta{display:flex;align-items:center;justify-content:center;gap:clamp(8px,2vw,18px)}
+.d-hand{flex:none;width:clamp(64px,10vw,110px);height:clamp(40px,6vw,66px);color:var(--ink);--fill:var(--cream);transform:scaleX(-1) rotate(-6deg)}
+@media(max-width:419px){.d-hand{display:none}}
+@media(min-width:760px){.free-badge{bottom:auto;top:-132px;right:-12px;width:150px;height:150px}}
+@media (prefers-reduced-motion:no-preference){
+  .fb-ring{animation:fb-spin 18s linear infinite}
+  @keyframes fb-spin{to{rotate:360deg}}
+}
 .svc-more{display:inline-block;margin-top:18px;font-weight:700;text-underline-offset:4px;color:inherit}
 .foot-line a{text-decoration:none}
 .foot-line a:hover{text-decoration:underline}
@@ -328,6 +394,7 @@ mark::before{content:"";position:absolute;z-index:-1;inset:.06em 0 .02em;backgro
   .tile{animation:drop .6s var(--out) both}
   .tile-1{animation-delay:.25s}.tile-2{animation-delay:.34s}.tile-3{animation-delay:.43s}
   .tile-4{animation-delay:.52s}.tile-5{animation-delay:.61s}
+  .free-badge{animation:drop .6s var(--out) .75s both}
 
   .browser i{animation:pop .5s var(--out) both}
   .browser i:nth-child(2){animation-delay:.15s}.browser i:nth-child(3){animation-delay:.3s}
@@ -436,9 +503,9 @@ mark::before{content:"";position:absolute;z-index:-1;inset:.06em 0 .02em;backgro
 
   /* finale: the headline grows into place */
   .js-motion #contact h2{scale:.7;transition:scale .9s var(--out)}
-  .js-motion #contact p,.js-motion #contact .btn{opacity:0;transition:opacity .6s .25s,transform .2s var(--out),box-shadow .2s var(--out)}
+  .js-motion #contact p,.js-motion #contact .btn,.js-motion #contact .d-hand{opacity:0;transition:opacity .6s .25s,transform .2s var(--out),box-shadow .2s var(--out)}
   .js-motion #contact[data-step="1"] h2{scale:1}
-  .js-motion #contact[data-step="1"] p,.js-motion #contact[data-step="1"] .btn{opacity:1}
+  .js-motion #contact[data-step="1"] p,.js-motion #contact[data-step="1"] .btn,.js-motion #contact[data-step="1"] .d-hand{opacity:1}
 
   /* a scene whose content does not fit this screen is not pinned (class set by the script) */
   .js-motion #services.no-pin .svc{position:relative;height:auto;min-height:70svh;padding-block:56px;scale:none;border-radius:0;box-shadow:none}

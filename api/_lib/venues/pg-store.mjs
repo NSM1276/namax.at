@@ -126,17 +126,22 @@ export function pgStore(query) {
     },
     async setChatOpen(slug, open) { await query('update venues set chat_open = $2 where slug = $1', [slug, Boolean(open)]); },
 
-    async addRequest(slug, { role, wish, name = '', phone, channel, text = '', ipHash = '' }) {
-      return num((await one(`insert into venue_requests (slug, role, wish, name, phone, channel, text, ip_hash)
-        values ($1, $2, $3, $4, $5, $6, $7, $8) returning id`, [slug, role, wish, String(name), String(phone), channel, String(text), String(ipHash)])).id);
+    async listDirectory() {
+      return (await query(`select slug, coalesce(facts ->> 'name', '') as name, coalesce(facts #>> '{address,street}', '') as street,
+          coalesce(facts #>> '{address,zip}', '') as zip, coalesce(facts #>> '{address,city}', '') as city from venues where status = 'public'`))
+        .map((r) => ({ slug: r.slug, name: r.name, street: r.street, zip: r.zip, city: r.city }));
+    },
+    async addRequest(slug, { role, wish, name = '', phone, channel, text = '', ipHash = '', lokal = '' }) {
+      return num((await one(`insert into venue_requests (slug, role, wish, name, phone, channel, text, ip_hash, lokal)
+        values ($1, $2, $3, $4, $5, $6, $7, $8, $9) returning id`, [slug ?? null, role, wish, String(name), String(phone), channel, String(text), String(ipHash), String(lokal)])).id);
     },
     async listRequests() {
       const rows = await query(`select r.id, r.slug, coalesce(v.facts ->> 'name', '') as venue_name, r.role, r.wish, r.name, r.phone,
-          r.channel, r.text, r.at, r.done_at
+          r.channel, r.text, r.lokal, r.at, r.done_at
         from venue_requests r left join venues v on v.slug = r.slug
         order by (r.done_at is not null), (r.done_at is null and r.wish = 'website') desc, r.at desc, r.id desc`);
       return rows.map((r) => ({ id: num(r.id), slug: r.slug, venueName: r.venue_name, role: r.role, wish: r.wish, name: r.name,
-        phone: r.phone, channel: r.channel, text: r.text, at: iso(r.at), doneAt: iso(r.done_at) }));
+        phone: r.phone, channel: r.channel, text: r.text, lokal: r.lokal || '', at: iso(r.at), doneAt: iso(r.done_at) }));
     },
     async setRequestDone(id, done) {
       await query(`update venue_requests set done_at = case when $2 then now() else null end where id = $1`, [num(id), Boolean(done)]);
