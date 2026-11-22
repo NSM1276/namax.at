@@ -1,0 +1,1240 @@
+[
+ {
+  "osm": "node/885451506",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/1101682560",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/1363117547",
+  "name": "Il Gusto",
+  "reason": "closed"
+ },
+ {
+  "osm": "node/1432204925",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/1540270964",
+  "name": "Francis Bistro",
+  "reason": "closed"
+ },
+ {
+  "osm": "node/1691891069",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/1805062786",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/1836959186",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/1871815070",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/1932223099",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/2087267926",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/2258877050",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/2419400704",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/2440869560",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/2972015661",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/2972015730",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/3113239675",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/3360065397",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/4168094381",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/4217050553",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/5241409967",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/6428848040",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/7702984626",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/7770222243",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/8354733279",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/8354733280",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/8905141730",
+  "name": "Duo Restaurant",
+  "reason": "closed"
+ },
+ {
+  "osm": "node/9205073324",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/10561941599",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/13030349135",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/13121442702",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/13121442704",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/13254698077",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/13273691819",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/77811489",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 6,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/251710888",
+  "name": "tribeka",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 5,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/269063448",
+  "name": "Sorger",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 14,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/274088373",
+  "name": "Schillerhof by Martin Auer",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 2,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/278903257",
+  "name": "Klipp",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 6,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/280171006",
+  "name": "Cafe Sorger",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 4,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/291464829",
+  "name": "3 Goldenen Kugeln",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 3,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/291465007",
+  "name": "3 Goldenen Kugeln",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 4,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/339415026",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 7,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/339715582",
+  "name": "KFC",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 5,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/371204083",
+  "name": "Interspar Restaurant",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 5,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/371388852",
+  "name": "Interspar Restaurant",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 7,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/446866223",
+  "name": "Don Camillo",
+  "reason": "chain",
+  "detail": "same name in 3 districts",
+  "district": 1,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/482375479",
+  "name": "Mensa Inffeldgasse",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 6,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/616898598",
+  "name": "Sorger",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 1,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/704495434",
+  "name": "tribeka",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 2,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/847359462",
+  "name": "Burger King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 6,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/868971370",
+  "name": "Subway",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 6,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/876338129",
+  "name": "Rosamunde Kebab & Pizza",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 12,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/885451366",
+  "name": "Martin Auer",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/898031263",
+  "name": "BIPA Styling Lounge",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 1,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/911035765",
+  "name": "IKEA Restaurant",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 17,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/919891124",
+  "name": "Maria & Maria",
+  "reason": "chain",
+  "detail": "same name in 3 districts",
+  "district": 3,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/926922357",
+  "name": "DM Frisör",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 7,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/926922376",
+  "name": "Intercoiffeur Mayer",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 7,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/937611039",
+  "name": "Pronto",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/937611046",
+  "name": "Landhauskeller",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/940425097",
+  "name": "Don Camillo",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 7,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/994994742",
+  "name": "XXXLutz Restaurant",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 5,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/994994983",
+  "name": "intercoiffeur mayer",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 3,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/1055050873",
+  "name": "Sorger",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 3,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/1060247363",
+  "name": "barista's",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 1,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/1098006492",
+  "name": "tribeka",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/1200796561",
+  "name": "Schnittig!",
+  "reason": "chain",
+  "detail": "same name in 3 districts",
+  "district": 12,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/1259706281",
+  "name": "Martin Auer",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/1363125010",
+  "name": "tribeka",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 2,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/1373285025",
+  "name": "Schnittig",
+  "reason": "chain",
+  "detail": "same name in 3 districts",
+  "district": 6,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/1434330631",
+  "name": "Barista's",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 2,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/1482363548",
+  "name": "Rosamunde",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 3,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/1587241577",
+  "name": "Klipp",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 4,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/1587562129",
+  "name": "Interspar Restaurant",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 13,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/1599341726",
+  "name": "Martin Auer",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 3,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/1605696661",
+  "name": "Rosamunde",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 2,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/1613660568",
+  "name": "Zu den 3 goldenen Kugeln",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 3,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/1661205598",
+  "name": "Dunkin'",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/1687899357",
+  "name": "Salon Aida",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 6,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/1790776950",
+  "name": "Klipp",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 12,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/1826530800",
+  "name": "Klipp",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 4,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/1848893845",
+  "name": "Segafredo",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 4,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/1976671741",
+  "name": "bamb♀♂o",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/1977862009",
+  "name": "Martin Auer",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 10,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/2142832590",
+  "name": "IKEA Café",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 17,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/2255566390",
+  "name": "Klipp",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 17,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/2348386330",
+  "name": "Baristas",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 3,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/2403872878",
+  "name": "dm Frisör",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 12,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/2450440878",
+  "name": "L´Osteria",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 1,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/2474183524",
+  "name": "Tchibo",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 13,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/2475991598",
+  "name": "Billa Marktküche",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 13,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/2675565659",
+  "name": "Martin Auer",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/2678404873",
+  "name": "Martin Auer",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 3,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/2974964140",
+  "name": "Barista's",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 14,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/2989087764",
+  "name": "Café Cappuccino",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 5,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/2989087766",
+  "name": "DM Frisör",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 5,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/3096409282",
+  "name": "Zu den 3 goldenen Kugeln",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 5,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/3578292689",
+  "name": "dean&david",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 6,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/3595919129",
+  "name": "Rosamunde Liebenau",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 7,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/3602947297",
+  "name": "Fandl-Hendl",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 12,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/3890369196",
+  "name": "Pizzeria David",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 3,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/3999272455",
+  "name": "Betriebskantine Magna",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 7,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/3999272456",
+  "name": "Betriebskantine Magna",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 7,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/3999273657",
+  "name": "Betriebskantine VG-Nord",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 7,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/4207174540",
+  "name": "Greimel",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 10,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/4299717108",
+  "name": "dm Friseurstudio",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 2,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/4374698990",
+  "name": "Rooftop Mensa TU Graz",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 6,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/4693752897",
+  "name": "Brezelkönig",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 4,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/4857108307",
+  "name": "Martin Auer",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 3,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/4942346077",
+  "name": "Mensa Cafe",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 6,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/5118489224",
+  "name": "Vapiano",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/5409413202",
+  "name": "Martin Auer",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 16,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/5905942463",
+  "name": "dean&david",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 7,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/5994722927",
+  "name": "Klipp",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 14,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/7076422461",
+  "name": "Sorger",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 4,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/7570420583",
+  "name": "Martin Auer",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 9,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/7999975167",
+  "name": "Klipp",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 13,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/8804156591",
+  "name": "Café Cappuccino",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 7,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/9054674708",
+  "name": "Martin Auer",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 8,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/9137035560",
+  "name": "Le Burger",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 1,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/9714560882",
+  "name": "Zu den 3 goldenen Kugeln",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 16,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/10004030134",
+  "name": "Martin Auer",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 8,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/10085839910",
+  "name": "Martin Auer",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 14,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/10185831898",
+  "name": "Maria & Maria",
+  "reason": "chain",
+  "detail": "same name in 3 districts",
+  "district": 2,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/10199298423",
+  "name": "Klipp",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 7,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/10564535091",
+  "name": "Dunkin'",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 7,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/10687076750",
+  "name": "Mensa Med Uni Graz",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 10,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/10700064741",
+  "name": "Bar Amouro",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/10735223290",
+  "name": "Baristas",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 6,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/10758339159",
+  "name": "Intercoiffeur Mayer",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 16,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/10859951216",
+  "name": "Billa Marktküche",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 14,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/11164843407",
+  "name": "Mensa",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 2,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/11206239075",
+  "name": "Fandl-Hendl: Grill-Mobil",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 10,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/11206327283",
+  "name": "Fandl-Hendl",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 15,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/11206335954",
+  "name": "Fandl-Hendl",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 6,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/11209926523",
+  "name": "IKEA Bistro",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 17,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/12212874075",
+  "name": "Schnittig!",
+  "reason": "chain",
+  "detail": "same name in 3 districts",
+  "district": 16,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/13058474975",
+  "name": "Noodle King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 17,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/13116529292",
+  "name": "Magenta",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 13,
+  "kind": "handy"
+ },
+ {
+  "osm": "node/13364115598",
+  "name": "KFC",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/13443469961",
+  "name": "Intercoiffeur Mayer",
+  "reason": "chain",
+  "detail": "same name in 4 districts",
+  "district": 5,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/13596127849",
+  "name": "Noodle King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 14,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/14300927750",
+  "name": "Rosamunde Kebab & Pizza",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 3,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/24776172",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 13,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/83714696",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 17,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/85580289",
+  "name": "Burger King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 17,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/85666893",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 2,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/87936618",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 6,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/88380019",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 16,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/94468634",
+  "name": "Cafe Promenade",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "cafe"
+ },
+ {
+  "osm": "way/106449854",
+  "name": "Maria & Maria",
+  "reason": "chain",
+  "detail": "same name in 3 districts",
+  "district": 6,
+  "kind": "friseur"
+ },
+ {
+  "osm": "way/130470943",
+  "name": "Martin Auer",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 6,
+  "kind": "cafe"
+ },
+ {
+  "osm": "way/135336762",
+  "name": "Subway",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 5,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/164985738",
+  "name": "Subway",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 17,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/179860441",
+  "name": "Sorger",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 9,
+  "kind": "cafe"
+ },
+ {
+  "osm": "way/199824394",
+  "name": "Klipp",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 14,
+  "kind": "friseur"
+ },
+ {
+  "osm": "way/202527240",
+  "name": "dean&david",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 3,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/373217850",
+  "name": "Don Camillo",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 4,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "way/373217853",
+  "name": "Aida",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 4,
+  "kind": "cafe"
+ },
+ {
+  "osm": "way/373217856",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 4,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/373217872",
+  "name": "Subway",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 4,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/1394866832",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 8,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/2463393987",
+  "name": "pölzl",
+  "reason": "duplicate",
+  "of": "node/1829905091"
+ },
+ {
+  "osm": "node/6450145115",
+  "name": "Contra Punto",
+  "reason": "duplicate",
+  "of": "node/5297962422"
+ },
+ {
+  "osm": "node/1684698981",
+  "name": "Michael Pummer",
+  "reason": "duplicate",
+  "of": "node/4297207309"
+ },
+ {
+  "osm": "node/3957332187",
+  "name": "Top Solar",
+  "reason": "duplicate",
+  "of": "node/1908136807"
+ },
+ {
+  "osm": "node/1432209301",
+  "name": "Salon Mersa",
+  "reason": "duplicate",
+  "of": "node/10931992591"
+ },
+ {
+  "osm": "node/10140043981",
+  "name": "Franzl Weinstube",
+  "reason": "duplicate",
+  "of": "node/992768455"
+ }
+]
