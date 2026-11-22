@@ -37,3 +37,17 @@ test('the 17 Graz districts are found by their OSM names', () => {
   assert.equal(districtNumber('graz', { name: 'Katastralgemeinde Gösting' }), null);
   assert.equal(districtNumber('wien', { ref: '12', name: 'Meidling' }), 12, 'Vienna boundaries carry the number');
 });
+
+test('Linz and Salzburg parts have no numbers: the name alone, found by its OSM name; refs are not district numbers there', () => {
+  assert.equal(districtLabel('salzburg', districtNumber('salzburg', { name: 'Parsch' })), 'Parsch');
+  assert.equal(districtLabel('linz', districtNumber('linz', { name: 'Urfahr' })), 'Urfahr');
+  assert.equal(districtNumber('linz', { name: 'St. Magdalena', ref: '4' }), 15, 'a ref outside Vienna is ignored');
+  assert.equal(Object.keys(CITIES.linz.districts).length, 16);
+  assert.equal(Object.keys(CITIES.salzburg.districts).length, 27);
+});
+
+test('Innsbruck: 9 Katastralgemeinden; the one OSM names "Innsbruck" is the Innenstadt', () => {
+  assert.equal(districtLabel('innsbruck', districtNumber('innsbruck', { name: 'Innsbruck' })), 'Innenstadt');
+  assert.equal(districtLabel('innsbruck', districtNumber('innsbruck', { name: 'Wilten' })), 'Wilten');
+  assert.ok(CITIES.innsbruck.zip.test('6080') && CITIES.innsbruck.zip.test('6020') && !CITIES.innsbruck.zip.test('6060'));
+});

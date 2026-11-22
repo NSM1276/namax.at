@@ -4,7 +4,7 @@
 
 export const CITIES = {
   wien: {
-    name: 'Wien', osm: 109166, districtLevel: 9, zip: /^1(0[1-9]|1\d|2[0-3])0$/,
+    name: 'Wien', osm: 109166, districtLevel: 9, refIsNumber: true, zip: /^1(0[1-9]|1\d|2[0-3])0$/,
     districts: {
       1: 'Innere Stadt', 2: 'Leopoldstadt', 3: 'Landstraße', 4: 'Wieden', 5: 'Margareten', 6: 'Mariahilf',
       7: 'Neubau', 8: 'Josefstadt', 9: 'Alsergrund', 10: 'Favoriten', 11: 'Simmering', 12: 'Meidling',
@@ -20,10 +20,20 @@ export const CITIES = {
       15: 'Wetzelsdorf', 16: 'Straßgang', 17: 'Puntigam',
     },
   },
-  // Not opened yet: their district tables are filled in when each city's turn comes.
-  linz: { name: 'Linz', osm: 86708, districtLevel: 9, zip: /^40[0-4]\d$/, districts: null },
-  salzburg: { name: 'Salzburg', osm: 86538, districtLevel: 9, zip: /^50[0-3]\d$/, districts: null },
-  innsbruck: { name: 'Innsbruck', osm: 4835169, districtLevel: 9, zip: /^60[0-2]\d$/, districts: null },
+  // Linz and Salzburg: statistical districts / Stadtteile in OSM (admin_level 10) with no numbers of their own; ids alphabetical.
+  linz: {
+    name: 'Linz', osm: 86708, districtLevel: 10, zip: /^40[0-4]\d$/, unnumbered: true,
+    districts: { 1: 'Bindermichl-Keferfeld', 2: 'Bulgariplatz', 3: 'Dornach-Auhof', 4: 'Ebelsberg', 5: 'Franckviertel', 6: 'Froschberg', 7: 'Industriegebiet-Hafen', 8: 'Innere Stadt', 9: 'Kaplanhof', 10: 'Kleinmünchen-Auwiesen', 11: 'Neue Heimat', 12: 'Pichling', 13: 'Pöstlingberg', 14: 'Spallerhof', 15: 'St. Magdalena', 16: 'Urfahr' },
+  },
+  salzburg: {
+    name: 'Salzburg', osm: 86538, districtLevel: 10, zip: /^50[0-3]\d$/, unnumbered: true,
+    districts: { 1: 'Aigen', 2: 'Altstadt', 3: 'Elisabeth-Vorstadt', 4: 'Gaisberg', 5: 'Gneis', 6: 'Gneis Süd', 7: 'Gnigl', 8: 'Hellbrunn', 9: 'Heuberg', 10: 'Itzling', 11: 'Itzling Nord', 12: 'Kasern', 13: 'Langwied', 14: 'Lehen', 15: 'Leopoldskroner Moos', 16: 'Liefering', 17: 'Maxglan', 18: 'Maxglan West', 19: 'Morzg', 20: 'Mülln', 21: 'Neustadt', 22: 'Nonntal', 23: 'Parsch', 24: 'Riedenburg', 25: 'Salzburg Süd', 26: 'Schallmoos', 27: 'Taxham' },
+  },
+  // Innsbruck: its 9 Katastralgemeinden (admin_level 9); OSM calls the central one "Innsbruck", the city says Innenstadt.
+  innsbruck: {
+    name: 'Innsbruck', osm: 4835169, districtLevel: 9, zip: /^60([0-2]\d|80)$/, unnumbered: true, osmNames: { innsbruck: 5 },
+    districts: { 1: 'Amras', 2: 'Arzl', 3: 'Hötting', 4: 'Igls', 5: 'Innenstadt', 6: 'Mühlau', 7: 'Pradl', 8: 'Vill', 9: 'Wilten' },
+  },
 };
 export const CITY_ORDER = ['wien', 'graz', 'linz', 'salzburg', 'innsbruck'];
 
@@ -49,14 +59,21 @@ export function toRoman(n) {
 /** The district number as the city writes it: "12" in Vienna, "III" in Graz. */
 export const districtNo = (city, d) => (CITIES[city]?.roman ? toRoman(Number(d)) : String(d));
 
-/** "12. Meidling", "III. Geidorf"; "N. Bezirk" when the name is unknown. */
-export const districtLabel = (city, d) => `${districtNo(city, d)}. ${CITIES[city]?.districts?.[d] || 'Bezirk'}`;
+/**
+ * "12. Meidling", "III. Geidorf"; "N. Bezirk" when the name is unknown.
+ * A city whose parts have no numbers of their own (unnumbered: true; our ids are alphabetical) shows the name alone: "Parsch".
+ */
+export const districtLabel = (city, d) => (CITIES[city]?.unnumbered
+  ? CITIES[city].districts?.[d] || 'Stadtteil'
+  : `${districtNo(city, d)}. ${CITIES[city]?.districts?.[d] || 'Bezirk'}`);
 
 const plain = (s) => String(s || '').toLowerCase().replace(/^sankt /, 'st. ').trim();
 
-/** District number for an OSM boundary relation's tags: its numeric ref, else its name in the city's table. */
+/** District number for an OSM boundary relation's tags: its ref where that is the district number (Vienna), else its name in the city's table. */
 export function districtNumber(city, tags = {}) {
-  if (/^\d+$/.test(String(tags.ref || ''))) return Number(tags.ref);
+  if (CITIES[city]?.refIsNumber && /^\d+$/.test(String(tags.ref || ''))) return Number(tags.ref);
+  const alias = CITIES[city]?.osmNames?.[plain(tags.name)];
+  if (alias) return alias;
   const table = CITIES[city]?.districts || {};
   const hit = Object.entries(table).find(([, name]) => plain(name) === plain(tags.name));
   return hit ? Number(hit[0]) : null;

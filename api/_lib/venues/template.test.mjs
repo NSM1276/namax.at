@@ -208,4 +208,7 @@ test('schema.org: after midnight and until midnight; a name with </script> canno
     { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Sunday'], opens: '18:00', closes: '02:00' },
   ]);
   assert.ok(!renderVenue({ ...m, name: 'X</script><b>' }).includes('X</script><b>'));
+test('district line in Salzburg: the Stadtteil name and the city, no number', () => {
+  assert.equal(districtLine({ area: 'Parsch', address: { zip: '5020', city: 'Salzburg' } }), 'PARSCH, SALZBURG');
+  assert.equal(districtLine({ area: 'Urfahr', address: { zip: '4040', city: 'Linz' } }), 'URFAHR, LINZ');
 });

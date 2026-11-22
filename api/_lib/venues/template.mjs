@@ -196,7 +196,7 @@ export function districtLine(v) {
   }
   const table = city && CITIES[city].districts;
   const hit = table && v.area && Object.entries(table).find(([, name]) => name.toLowerCase() === String(v.area).toLowerCase());
-  if (hit) return `${districtNo(city, hit[0])}. ${area}, ${CITIES[city].name.toUpperCase()}`;
+  if (hit) return `${CITIES[city].unnumbered ? '' : districtNo(city, hit[0]) + '. '}${area}, ${CITIES[city].name.toUpperCase()}`;
   return area;
 }
 
