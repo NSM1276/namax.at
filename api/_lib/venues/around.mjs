@@ -173,21 +173,33 @@ const LANDMARKS = {
   'wien-15': 'Westbahnhof', 'wien-16': 'Schloss Wilhelminenberg', 'wien-17': 'Wienerwald', 'wien-18': 'Türkenschanzpark', 'wien-19': 'Weingärten am Kahlenberg',
   'wien-20': 'Millennium Tower', 'wien-21': 'Floridsdorfer Brücke', 'wien-22': 'Donauturm', 'wien-23': 'Wotrubakirche',
   graz: 'Uhrturm am Schlossberg', linz: 'Pöstlingberg', salzburg: 'Festung Hohensalzburg', innsbruck: 'Goldenes Dachl',
+  'graz-01': 'Uhrturm am Schlossberg', 'graz-02': 'Leonhardkirche', 'graz-03': 'Universität Graz', 'graz-04': 'Kunsthaus Graz', 'graz-05': 'Straßenbahn in Gries',
+  'graz-06': 'Augarten an der Mur', 'graz-07': 'Stadion Liebenau', 'graz-08': 'Pfarrkirche St. Peter', 'graz-09': 'Villen am Ruckerlberg', 'graz-10': 'Hügel in Ries',
+  'graz-11': 'Basilika Mariatrost', 'graz-12': 'Kirche in Andritz', 'graz-13': 'Burgruine Gösting', 'graz-14': 'Schloss Eggenberg', 'graz-15': 'Kapelle in Wetzelsdorf',
+  'graz-16': 'Pfarrkirche Straßgang', 'graz-17': 'Brauerei in Puntigam',
 };
-function artKey(a = {}) {
+const ART_FILE = { 'graz-01': 'graz' }; // Innere Stadt keeps the city picture
+/** { key, where } for the venue's area: Vienna by post code, Graz by district name, other cities by name; null when none. */
+function artKey(v) {
+  const a = v.address || {};
   const city = String(a.city || '').toLowerCase();
-  const m = /^1(\d\d)0$/.exec(String(a.zip || ''));
-  if (city === 'wien') return m && +m[1] >= 1 && +m[1] <= 23 ? `wien-${m[1]}` : '';
-  return LANDMARKS[city] ? city : '';
+  if (city === 'wien') {
+    const m = /^1(\d\d)0$/.exec(String(a.zip || ''));
+    return m && +m[1] >= 1 && +m[1] <= 23 ? { key: `wien-${m[1]}`, where: districtLabel('wien', +m[1]) } : null;
+  }
+  const table = CITIES[city] && CITIES[city].districts;
+  const d = table && Object.keys(table).find((n) => table[n] === v.area);
+  if (d && LANDMARKS[`${city}-${String(d).padStart(2, '0')}`]) return { key: `${city}-${String(d).padStart(2, '0')}`, where: districtLabel(city, d) };
+  return LANDMARKS[city] ? { key: city, where: CITIES[city].name } : null;
 }
 /** The district illustration block, or '' when the venue's area has none. */
 export function districtArt(v) {
-  const k = artKey(v.address);
+  const k = artKey(v);
   if (!k) return '';
-  const u = `/v/_shared/districts/${k}.webp`;
+  const u = `/v/_shared/districts/${ART_FILE[k.key] || k.key}.webp`;
+  const name = LANDMARKS[k.key];
   // The caption names the district first, so the landmark reads as the district's emblem, not as something next door.
-  const where = k.startsWith('wien-') ? districtLabel('wien', Number(k.slice(5))) : CITIES[k].name;
-  return `<figure class="vista"><i role="img" aria-label="${esc(LANDMARKS[k])}" style="-webkit-mask-image:url(${u});mask-image:url(${u})"></i><figcaption>${esc(where)} · ${esc(LANDMARKS[k])}</figcaption></figure>`;
+  return `<figure class="vista"><i role="img" aria-label="${esc(name)}" style="-webkit-mask-image:url(${u});mask-image:url(${u})"></i><figcaption>${esc(k.where)} · ${esc(name)}</figcaption></figure>`;
 }
 
 export function aroundSections(v) {

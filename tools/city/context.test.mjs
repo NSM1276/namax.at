@@ -130,3 +130,14 @@ test('photo placeholder: only on unconfirmed pages without photos; picture by tr
   assert.ok(!page({ photos: ['__blob/venues/x/1.jpg'] }).includes('placeholder-'));
   assert.ok(!page({ kind: 'other' }).includes('placeholder-'));
 });
+
+test('Graz: the picture by district (roman numeral in the caption); Innere Stadt keeps the clock tower; an unknown area falls back to the city', async () => {
+  const { districtArt } = await import('../../api/_lib/venues/around.mjs');
+  const g = (area) => districtArt({ area, address: { zip: '8020', city: 'Graz' } });
+  assert.match(g('Lend'), /districts\/graz-04\.webp/);
+  assert.match(g('Lend'), /<figcaption>IV\. Lend · Kunsthaus Graz<\/figcaption>/);
+  assert.match(g('Innere Stadt'), /districts\/graz\.webp/);
+  assert.match(g('Innere Stadt'), /<figcaption>I\. Innere Stadt · Uhrturm am Schlossberg<\/figcaption>/);
+  assert.match(g('Gösting'), /graz-13\.webp/);
+  assert.match(g(undefined), /districts\/graz\.webp[\s\S]*<figcaption>Graz · Uhrturm am Schlossberg/);
+});

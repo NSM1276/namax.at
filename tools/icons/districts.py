@@ -1,14 +1,15 @@
 # District illustrations -> transparent WebP masks for v/_shared/districts (black lines opaque, white paper transparent), 960px wide.
-# Usage: python -I tools/icons/districts.py <namax-library dir> <out dir> [sets, default district; e.g. placeholder]
+# Usage: python -I tools/icons/districts.py <namax-library dir> <out dir> [sets, default district] [name prefix, e.g. graz-]
 import sys, os, json
 from PIL import Image, ImageOps
 lib, out = sys.argv[1], sys.argv[2]
 sets = sys.argv[3].split(',') if len(sys.argv) > 3 else ['district']
+only = sys.argv[4] if len(sys.argv) > 4 else ''  # name prefix, e.g. graz-
 os.makedirs(out, exist_ok=True)
 L = json.load(open(os.path.join(lib, 'library.json'), encoding='utf8'))
 tot = 0
 for it in L['items']:
-    if it['set'] not in sets or it.get('superseded'): continue
+    if it['set'] not in sets or it.get('superseded') or not it['name'].startswith(only): continue
     g = ImageOps.grayscale(Image.open(os.path.join(lib, it['file'])))
     g = g.crop(ImageOps.invert(g).point(lambda p: 255 if p > 40 else 0).getbbox())   # trim white margins
     g.thumbnail((960, 960))
