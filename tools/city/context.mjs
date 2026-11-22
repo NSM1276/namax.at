@@ -31,7 +31,11 @@ export function osmFacts(tags = {}) {
   if (tags.delivery === 'yes') f.push('delivery');
   if (tags['diet:vegan'] === 'yes' || tags['diet:vegan'] === 'only') f.push('vegan');
   else if (tags['diet:vegetarian'] === 'yes' || tags['diet:vegetarian'] === 'only') f.push('vegetarian');
-  if (['payment:cards', 'payment:debit_cards', 'payment:credit_cards'].some((k) => tags[k] === 'yes')) f.push('cards');
+  const cards = ['payment:cards', 'payment:debit_cards', 'payment:credit_cards'].some((k) => tags[k] === 'yes');
+  // cash only: said outright, or cash yes with cards said no (never read from a missing card tag)
+  const noCards = tags['payment:cards'] === 'no' || (tags['payment:debit_cards'] === 'no' && tags['payment:credit_cards'] !== 'yes');
+  if (tags['payment:cash'] === 'only' || (tags['payment:cash'] === 'yes' && noCards && !cards)) f.push('cashOnly');
+  else if (cards) f.push('cards');
   if (tags.internet_access === 'wlan' || tags.internet_access === 'yes') f.push('wifi');
   if (tags.dog === 'yes' || tags.dog === 'leashed') f.push('dog');
   if (tags.air_conditioning === 'yes') f.push('aircon');

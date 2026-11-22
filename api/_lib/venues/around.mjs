@@ -14,6 +14,7 @@ const tr = (de, en, tag = 'span', attrs = '') =>
 
 export const FACT_LABELS = {
   terrace: ['Schanigarten / Terrasse', 'Outdoor seating'],
+  cashOnly: ['Nur Barzahlung', 'Cash only'],
   wheelchair: ['Rollstuhlgerecht', 'Wheelchair accessible'],
   wheelchairLimited: ['Teilweise rollstuhlgerecht', 'Partly wheelchair accessible'],
   takeaway: ['Zum Mitnehmen', 'Takeaway'],
@@ -58,7 +59,7 @@ const CUISINE_ICON = {
   indian: 'curry', mexican: 'taco', steak_house: 'steak', fish: 'fish', seafood: 'fish', sandwich: 'sandwich', toast: 'sandwich',
   donut: 'donut', waffle: 'waffle', bagel: 'bagel', soup: 'soup', tea: 'tea', juice: 'juice',
 };
-const FACT_ICON = { terrace: 'terrace', wheelchair: 'wheelchair', wheelchairLimited: 'wheelchair', takeaway: 'takeaway', delivery: 'delivery', vegan: 'vegan', vegetarian: 'vegan', cards: 'card', wifi: 'wifi',
+const FACT_ICON = { terrace: 'terrace', wheelchair: 'wheelchair', wheelchairLimited: 'wheelchair', takeaway: 'takeaway', delivery: 'delivery', vegan: 'vegan', vegetarian: 'vegan', cards: 'card', cashOnly: 'cash', wifi: 'wifi',
   dog: 'dog-friendly', aircon: 'snowflake', highchair: 'high-chair', reservation: 'reservation' };
 const STOP_ICON = { u: 'subway', s: 'train', tram: 'tram', bus: 'bus' };
 /** Every pictogram name the pages can ask for (kept honest by a test against pictograms.mjs). */
@@ -107,6 +108,7 @@ export const AROUND_CSS = `
 .medal{display:grid;place-items:center;width:66px;height:66px;margin:-4px auto 10px;color:var(--sign-ink);border:2px solid var(--sign-ink);border-radius:50%;box-shadow:0 0 0 3px var(--sign-bg),0 0 0 4.5px var(--sign-ink)}
 @media (min-width:700px){.medal{width:78px;height:78px}.medal svg{width:52px;height:52px}}
 .facts li.food{background:var(--ink);color:var(--bg)}
+.facts li.key{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 .facts li{display:inline-flex;align-items:center;gap:7px}.facts li svg{flex:none}
 .map{margin:0;border:2px solid var(--accent);border-radius:12px;overflow:hidden;background:color-mix(in srgb,var(--sign-bg) 7%,var(--bg))}
 .map svg{display:block;width:100%;height:auto}
@@ -137,7 +139,10 @@ export function contextFacts(v) {
   const food = (c.cuisine || []).map((k) => CUISINE[k]).filter((x) => x && !seen.has(x[0]) && seen.add(x[0]))
     .map(([de, en]) => tr(de, en, 'li', 'class="food"'));
   const chip = (de, en, icon, cls) => `<li${cls ? ` class="${cls}"` : ''}>${pictogram(icon, 20)}${tr(de, en)}</li>`;
-  return [...food, ...(c.facts || []).filter((k) => FACT_LABELS[k]).map((k) => chip(FACT_LABELS[k][0], FACT_LABELS[k][1], FACT_ICON[k]))];
+  // "cash only" changes whether someone can come at all, so it leads, filled in the sign colour
+  const keys = (c.facts || []).filter((k) => FACT_LABELS[k]);
+  return [...keys.filter((k) => k === 'cashOnly').map((k) => chip(...FACT_LABELS[k], FACT_ICON[k], 'key')), ...food,
+    ...keys.filter((k) => k !== 'cashOnly').map((k) => chip(FACT_LABELS[k][0], FACT_LABELS[k][1], FACT_ICON[k]))];
 }
 
 function mapSvg(c, v) {

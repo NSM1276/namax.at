@@ -299,3 +299,19 @@ test('without a model (no API key yet) free text goes to Nasim and nothing break
   assert.ok(r.say.includes(say('de', 'forwarded')));
   assert.equal(await store.countModelCalls(SLUG), 0);
 });
+
+test('photos: the owner\'s "outside" answer is stored on that photo and puts it first on the page', async () => {
+  const store = await setup(); const llm = fakeLlm();
+  await inGerman(store, llm);
+  await turn(store, llm, { chip: 'yes_all' }); await turn(store, llm, { chip: 'photos_yes' });
+  const url = (i) => `https://abc.public.blob.vercel-storage.com/venues/x/${i}.jpg`;
+  const a = await store.addPhoto(SLUG, { url: url(1), kind: 'priceboard' });
+  await turn(store, llm, { photo: { id: a } });
+  await turn(store, llm, { chip: 'kind_inside' });
+  const b = await store.addPhoto(SLUG, { url: url(2), kind: 'priceboard' });
+  await turn(store, llm, { photo: { id: b } });
+  await turn(store, llm, { chip: 'kind_outside' });
+  const kinds = Object.fromEntries((await store.listPhotos(SLUG)).map((p) => [p.id, p.kind]));
+  assert.deepEqual(kinds, { [a]: 'inside', [b]: 'outside' });
+  assert.equal(llm.calls.length, 0);
+});

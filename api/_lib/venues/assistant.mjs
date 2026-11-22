@@ -7,7 +7,7 @@
 // the script shows that data back and the owner's yes in a LATER request applies it.
 import { step } from './script.mjs';
 import { say as phrase, LANGS } from './phrases.mjs';
-import { effectiveVenue, checkChanges } from './merge.mjs';
+import { effectiveVenue, checkChanges, SHOWN_KINDS } from './merge.mjs';
 import { normalizePhone } from './phone.mjs';
 import { viennaDayStart, viennaDay } from './owner.mjs';
 
@@ -15,6 +15,7 @@ export const MODEL = 'claude-haiku-5-5';
 export const FREE_MODEL_CALLS = { perDay: 10, total: 40 };
 export const DAILY_REQUESTS = 40;
 const MAX_SHOWN_PHOTOS = 3; // free pages; more photos are a paid feature
+const FOOD_KINDS = ['imbiss', 'restaurant', 'cafe']; // "Speisen" instead of "Unsere Arbeit" on the photo chip
 const HISTORY = 6;
 
 const HHMM = { type: 'string', description: 'time as HH:MM, 24-hour clock' };
@@ -242,7 +243,8 @@ export async function chatTurn({ store, llm, now = () => new Date() }, { slug, i
   const ctx = {
     name: record.facts.name, url: `https://${slug}.namax.at/`, status: record.status,
     confirmed: Boolean(record.confirmedAt), hits: hits.visitors,
-    shownPhotos: photos.filter((p) => p.kind === 'show').length, hasPending: Boolean(record.pending),
+    shownPhotos: photos.filter((p) => SHOWN_KINDS.includes(p.kind)).length, hasPending: Boolean(record.pending),
+    food: FOOD_KINDS.includes(record.facts.kind), hasFacade: Boolean(record.facadeUrl),
     budgetLeft: Boolean(llm) && callsToday < FREE_MODEL_CALLS.perDay && callsTotal < FREE_MODEL_CALLS.total,
     check: (changes) => checkChanges(record, changes),
   };
@@ -317,8 +319,14 @@ async function runEffect(store, slug, effect, { record, at, ownerMessageId, phot
     }
     case 'showPhoto': {
       const p = photos.find((x) => x.id === Number(effect.photoId));
-      if (!p || photos.filter((x) => x.kind === 'show').length >= MAX_SHOWN_PHOTOS) return false;
+      if (!p || photos.filter((x) => SHOWN_KINDS.includes(x.kind)).length >= MAX_SHOWN_PHOTOS) return false;
       await store.setPhotoKind(slug, p.id, 'show');
+      return true;
+    }
+    case 'photoKind': {
+      const p = photos.find((x) => x.id === Number(effect.photoId));
+      if (!p || !SHOWN_KINDS.includes(p.kind) || !['outside', 'inside', 'work'].includes(effect.kind)) return false;
+      await store.setPhotoKind(slug, p.id, effect.kind);
       return true;
     }
     case 'handoff':

@@ -47,6 +47,8 @@ T.claim = {
     consent: 'Mit dem Absenden sind Sie einverstanden, dass wir Sie dazu kontaktieren.',
     send: 'Anfrage senden', back: 'Zurück', err: 'Das hat nicht geklappt. Bitte prüfen Sie die Nummer oder versuchen Sie es später.',
     thanks: 'Danke! Wir melden uns, meist innerhalb eines Tages.',
+    reportLink: 'Angaben falsch? Melden', report: 'Was stimmt nicht?', reportMsg: 'Was stimmt nicht? Zum Beispiel die Öffnungszeiten',
+    phoneOpt: 'Telefon (optional, falls wir nachfragen dürfen)', reportThanks: 'Danke! Wir prüfen das.',
   },
   en: {
     link: 'Are you the owner?', title: 'Manage for free', sub: 'Opening hours, phone, photos – we help you.',
@@ -57,6 +59,8 @@ T.claim = {
     consent: 'By sending you agree that we contact you about it.',
     send: 'Send request', back: 'Back', err: 'That did not work. Please check the number or try again later.',
     thanks: 'Thank you! We get back to you, usually within a day.',
+    reportLink: 'Details wrong? Tell us', report: 'What is wrong?', reportMsg: 'What is wrong? For example the opening hours',
+    phoneOpt: 'Phone (optional, in case we may ask back)', reportThanks: 'Thank you! We will check it.',
   },
 };
 

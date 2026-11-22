@@ -27,7 +27,7 @@ create table if not exists venue_photos (
   id    bigserial primary key,
   slug  text not null references venues(slug) on delete cascade,
   url   text not null,
-  kind  text not null check (kind in ('show', 'priceboard')),
+  kind  text not null check (kind in ('show', 'outside', 'inside', 'work', 'priceboard')),
   at    timestamptz not null default now()
 );
 create index if not exists venue_photos_slug on venue_photos (slug, id);
@@ -78,7 +78,7 @@ create table if not exists venue_requests (
   wish     text not null check (wish in ('fix', 'photos', 'website', 'remove')),
   name     text not null default '',
   phone    text not null,
-  channel  text not null check (channel in ('call', 'whatsapp')),
+  channel  text not null check (channel in ('call', 'whatsapp', 'none')),
   text     text not null default '',
   at       timestamptz not null default now(),
   done_at  timestamptz
@@ -89,3 +89,9 @@ create index if not exists venue_requests_slug on venue_requests (slug, at);
 -- Anonymous sender tag (hash of the address, never the address) so one sender cannot flood every venue.
 alter table venue_requests add column if not exists ip_hash text not null default '';
 create index if not exists venue_requests_ip on venue_requests (ip_hash, at);
+
+-- Photo types the owner picks (outside goes to the top of the page) and visitor reports that leave no number.
+alter table venue_photos drop constraint if exists venue_photos_kind_check;
+alter table venue_photos add constraint venue_photos_kind_check check (kind in ('show', 'outside', 'inside', 'work', 'priceboard'));
+alter table venue_requests drop constraint if exists venue_requests_channel_check;
+alter table venue_requests add constraint venue_requests_channel_check check (channel in ('call', 'whatsapp', 'none'));

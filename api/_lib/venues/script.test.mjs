@@ -210,3 +210,33 @@ test('R3: a price board photo without budget goes to Nasim, no model', () => {
   const o = step({ lang: 'de', step: 'priceboard' }, { photo: { id: 3 } }, ctx({ budgetLeft: false }));
   assert.equal(o.effect.type, 'handoff');
 });
+
+test('after a photo the owner says what it shows; outside leads the page', () => {
+  const o = run([{ start: true }, { chip: 'lang_de' }, { chip: 'yes_all' }, { chip: 'photos_yes' }, { photo: { id: 5 } }]);
+  assert.equal(o.state.step, 'photoKind');
+  assert.equal(o.form, 'photo');
+  assert.deepEqual(o.effect, { type: 'showPhoto', photoId: 5 });
+  assert.deepEqual(ids(o), ['kind_outside', 'kind_inside', 'kind_work', 'photos_done']);
+  assert.ok(o.say.includes(say('de', 'photoWhat')));
+  const k = step(o.state, { chip: 'kind_outside' }, ctx({ shownPhotos: 1 }));
+  assert.deepEqual(k.effect, { type: 'photoKind', photoId: 5, kind: 'outside' });
+  assert.equal(k.say[0], say('de', 'photoTop'));
+  assert.equal(k.state.step, 'photo');
+  assert.equal(k.state.lastPhoto, undefined);
+  // with Nasim's facade photo the outside photo does not lead, so no promise of "top"
+  assert.equal(step(o.state, { chip: 'kind_outside' }, ctx({ shownPhotos: 1, hasFacade: true })).say[0], say('de', 'saved'));
+});
+
+test('the work chip says "Speisen" for food places and closes the chat at the third photo', () => {
+  const o = run([{ start: true }, { chip: 'lang_de' }, { chip: 'yes_all' }, { chip: 'photos_yes' }, { photo: { id: 7 } }], ctx({ food: true, shownPhotos: 2 }));
+  assert.equal(o.chips.find((c) => c.id === 'kind_work').label, say('de', 'c_kind_food'));
+  const k = step(o.state, { chip: 'kind_work' }, ctx({ food: true, shownPhotos: 3 }));
+  assert.deepEqual(k.effect, { type: 'photoKind', photoId: 7, kind: 'work' });
+  assert.equal(k.state.step, 'closing');
+  assert.equal(step(o.state, { chip: 'kind_work' }, ctx()).chips.length > 0, true);
+});
+
+test('a kind chip without a fresh photo is not understood; a fourth photo is not taken', () => {
+  assert.ok(step({ lang: 'de', step: 'photoKind' }, { chip: 'kind_inside' }, ctx()).say.includes(say('de', 'notUnderstood')));
+  assert.equal(step({ lang: 'de', step: 'photo' }, { photo: { id: 9 } }, ctx({ shownPhotos: 3 })).state.step, 'closing');
+});

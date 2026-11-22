@@ -26,6 +26,7 @@ const STEP_CHIPS = {
   else: ['more', 'done'],
   photos: ['photos_yes', 'photos_no'],
   photo: ['photos_done'],
+  photoKind: ['kind_outside', 'kind_inside', 'kind_work', 'photos_done'],
   closing: ['more', 'questions'],
   confirmDelete: ['delete_yes', 'delete_no'],
 };
@@ -33,7 +34,8 @@ const CHIP_LABEL = { more: 'c_more', done: 'c_done', apply_yes: 'c_apply_yes', a
   not_quite: 'c_not_quite', price_photo: 'c_price_photo', price_write: 'c_price_write', hours: 'c_hours', prices: 'c_prices',
   phone: 'c_phone', other: 'c_other', yes_all: 'c_yes_all', change: 'c_change', photos_yes: 'c_photos_yes', photos_no: 'c_photos_no',
   photos_done: 'c_photos_done', questions: 'c_questions', q_who: 'c_q_who', q_data: 'c_q_data', q_cost: 'c_q_cost',
-  q_sees: 'c_q_sees', q_work: 'c_q_work', talk: 'c_talk', delete_yes: 'c_delete_yes', delete_no: 'c_delete_no' };
+  q_sees: 'c_q_sees', q_work: 'c_q_work', kind_outside: 'c_kind_outside', kind_inside: 'c_kind_inside', talk: 'c_talk', delete_yes: 'c_delete_yes', delete_no: 'c_delete_no' };
+const PHOTO_LIMIT = 3; // shown photos on a free page (merge.mjs MAX_SHOWN_PHOTOS)
 const ANSWERS = { who: 'a_who', data: 'a_data', cost: 'a_cost', sees: 'a_sees', work: 'a_work', human: 'humanQ' };
 
 const REMOVAL = /lösch|losch|anwalt|polizei|klage|verboten|nicht erlaubt|\bdelete\b|take (it|this|the page) down|lawyer|police|\bsil\b|silin|silmek|avukat|şikayet|polis|احذف|حذف|امسح|محامي|شرطة|پاک|وکیل|پلیس|obriš|izbriš|advokat|policij|tužb/i;
@@ -50,7 +52,8 @@ export function step(state0, input, ctx) {
   // read the language on every call: a lang_* chip changes it in the middle of this step
   const t = (key, vars) => phrase(LANGS.includes(state.lang) ? state.lang : 'de', key, vars);
   const chip = (id) => (id === 'talk' ? { id, label: t('c_talk'), href: TALK_URL }
-    : id.startsWith('lang_') ? { id, label: LANG_NAMES[id.slice(5)] } : { id, label: t(CHIP_LABEL[id]) });
+    : id.startsWith('lang_') ? { id, label: LANG_NAMES[id.slice(5)] }
+    : id === 'kind_work' ? { id, label: t(ctx.food ? 'c_kind_food' : 'c_kind_work') } : { id, label: t(CHIP_LABEL[id]) });
   const out = (say, chipIds = [], extra = {}) => ({ state, say, chips: chipIds.map(chip), form: null, effect: null, ...extra });
   const at = (stepName, say, extra = {}) => {
     state.step = stepName;
@@ -62,9 +65,9 @@ export function step(state0, input, ctx) {
     const s = state.step || 'ask';
     const again = { ask: [t('askCorrect')], change: [t('whatChange')], prices: [t('pricesHow')], else: [t('anythingElse')],
       photos: [t('askPhotos')], closing: [t('closing', { url: ctx.url })], hours: [t('hoursForm')], phone: [t('phoneForm')],
-      priceboard: [t('pricePhotoAsk')], text: [t('writeAsk')], photo: [t('photoAsk')],
+      priceboard: [t('pricePhotoAsk')], text: [t('writeAsk')], photo: [t('photoAsk')], photoKind: [t('photoWhat')],
       pending: [t('anythingElse')], pricePending: [t('anythingElse')] }[s] || [t('askCorrect')];
-    const form = { hours: 'hours', phone: 'phone', priceboard: 'photo', photo: 'photo' }[s] || null;
+    const form = { hours: 'hours', phone: 'phone', priceboard: 'photo', photo: 'photo', photoKind: 'photo' }[s] || null;
     if ((s === 'pending' || s === 'pricePending') && !ctx.hasPending) return at('else', [...before, t('anythingElse')]);
     return at(s, [...before, ...again], { form });
   };
@@ -132,9 +135,19 @@ export function step(state0, input, ctx) {
       case 'not_quite': return at('text', [t('notApplied'), t('writeAsk')], { effect: { type: 'clearPending' } });
       case 'done': return at('photos', [t('askPhotos')]);
       case 'photos_yes':
-        if (ctx.shownPhotos >= 4) return closing();
+        if (ctx.shownPhotos >= PHOTO_LIMIT) return closing();
         return at('photo', [t('photoAsk')], { form: 'photo' });
       case 'photos_no': case 'photos_done': return closing();
+      case 'kind_outside': case 'kind_inside': case 'kind_work': {
+        // the owner says what the last photo shows; an outside photo leads the page unless Nasim's facade photo is there
+        if (state.lastPhoto == null) return resume([t('notUnderstood')]);
+        const kind = id.slice(5), photoId = state.lastPhoto;
+        delete state.lastPhoto;
+        const said = kind === 'outside' && !ctx.hasFacade ? t('photoTop') : t('saved');
+        const effect = { type: 'photoKind', photoId, kind };
+        if (ctx.shownPhotos >= PHOTO_LIMIT) { const c = closing(); return { ...c, say: [said, ...c.say], effect }; }
+        return at('photo', [said, t('photoAsk')], { form: 'photo', effect });
+      }
     }
     return resume([t('notUnderstood')]);
   }
@@ -156,13 +169,10 @@ export function step(state0, input, ctx) {
       if (!ctx.budgetLeft) return { ...resume([t('forwarded')]), effect: { type: 'handoff', text: '[Foto der Preisliste, Budget aufgebraucht]' } };
       return out([], [], { effect: { type: 'needModel', kind: 'priceboard', photoId } });
     }
-    if (ctx.shownPhotos >= 4) return closing();
+    if (ctx.shownPhotos >= PHOTO_LIMIT) return closing();
     const n = ctx.shownPhotos + 1;
-    if (n >= 4) {
-      const c = closing();
-      return { ...c, say: [t('photoAdded', { n }), ...c.say], effect: { type: 'showPhoto', photoId } };
-    }
-    return at('photo', [t('photoAdded', { n })], { form: 'photo', effect: { type: 'showPhoto', photoId } });
+    state.lastPhoto = photoId;
+    return at('photoKind', [t('photoAdded', { n }), t('photoWhat')], { form: 'photo', effect: { type: 'showPhoto', photoId } });
   }
 
   if (typeof input.text === 'string') {

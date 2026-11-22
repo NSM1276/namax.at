@@ -114,7 +114,7 @@ function css(p, l) {
 --display:${l.family};--body:${BRAND.text}}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
-body{margin:0;background-color:var(--bg);background-image:radial-gradient(color-mix(in srgb,var(--ink) 9%,transparent) 1px,transparent 1.3px);background-size:7px 7px;color:var(--ink);font:17px/1.5 var(--body)}
+body{margin:0;background-color:var(--bg);background-image:radial-gradient(color-mix(in srgb,var(--accent) 16%,transparent) 1px,transparent 1.3px);background-size:7px 7px;color:var(--ink);font:17px/1.5 var(--body)}
 .wrap{max-width:560px;margin:0 auto;padding:0 16px}
 h1,h2{margin:0;font-family:var(--display);font-weight:${l.weight};letter-spacing:${l.spacing};${l.upper ? 'text-transform:uppercase;' : ''}line-height:1}
 a{color:inherit}
@@ -158,6 +158,7 @@ h2{font-size:28px;margin-bottom:12px}
 .row .d{flex:1 1 16px;min-width:16px;border-bottom:2px dotted currentColor;opacity:.3;transform:translateY(-4px)}
 .row .p{flex:none;white-space:nowrap;font-family:var(--display);font-weight:${l.weight};font-size:24px;line-height:1;font-variant-numeric:tabular-nums}
 .stand{margin:14px 0 0;font-size:13px;opacity:.7;text-align:center}
+.asof{margin:-6px 0 0;font-size:13px;opacity:.7}
 .facts{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
 .facts li{border:2px solid var(--ink);border-radius:999px;padding:7px 14px;font-weight:700;font-size:15px}
 .rating{margin:0;font-size:17px}
@@ -265,10 +266,18 @@ function rating(v) {
 }
 
 /** Nasim's photo of the front, under the plate (4:3, cropped on his phone). Only our Blob store or the local preview. */
+const blobSrc = (u) => (typeof u !== 'string' ? ''
+  : /^https:\/\/[a-z0-9-]+\.public\.blob\.vercel-storage\.com\/venues\/[\w./-]+$/.test(u) ? u : /^__blob\/venues\/[\w./-]+$/.test(u) ? '/' + u : '');
+/** The big photo under the sign: Nasim's facade photo, else the owner's first photo (an outside one, merge puts it first). */
+function lead(v) {
+  const own = blobSrc(v.facade);
+  if (own) return { src: own, fromPhotos: false };
+  const first = blobSrc(v.photos && v.photos[0]);
+  return first ? { src: first, fromPhotos: true } : null;
+}
 function facade(v) {
-  const u = typeof v.facade === 'string' ? v.facade : '';
-  const src = /^https:\/\/[a-z0-9-]+\.public\.blob\.vercel-storage\.com\/venues\/[\w./-]+$/.test(u) ? u : /^__blob\/venues\/[\w./-]+$/.test(u) ? '/' + u : '';
-  return src ? `<figure class="facade"><img src="${esc(src)}" alt="${esc(v.name)}" width="1600" height="1200" fetchpriority="high"></figure>` : '';
+  const l = lead(v);
+  return l ? `<figure class="facade"><img src="${esc(l.src)}" alt="${esc(v.name)}" width="1600" height="1200" fetchpriority="high"></figure>` : '';
 }
 
 // A linocut empty frame where photos would be, by trade; its button opens the owner form with "add photos" chosen.
@@ -283,7 +292,9 @@ function noPhoto(v, owner) {
 function photos(v, owner) {
   if (!v.photos || !v.photos.length) return noPhoto(v, owner);
   const src = (p) => (p.startsWith('https://') ? p : '/' + p);
-  const imgs = v.photos.map((p) => `<img src="${esc(src(p))}" alt="${esc(v.name)}" loading="lazy">`).join('');
+  const rest = lead(v)?.fromPhotos ? v.photos.slice(1) : v.photos; // the first one already leads the page
+  if (!rest.length) return '';
+  const imgs = rest.map((p) => `<img src="${esc(src(p))}" alt="${esc(v.name)}" loading="lazy">`).join('');
   return `<section class="photos" data-photos>${imgs}</section>`;
 }
 
@@ -296,6 +307,19 @@ function hoursTable(v) {
     return `<div data-day="${d}">${tr(T.de.daysLong[d], T.en.daysLong[d], 'dt')}${dd}</div>`;
   }).join('');
   return `<section>${ui('hoursTitle', 'h2')}<dl class="hours">${rows}</dl></section>`;
+}
+
+const MONTHS = { de: ['Jänner', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
+  en: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] };
+// When mappers last checked the place, and for anyone who knows better a way to say so (unconfirmed pages only).
+function checked(v, owner) {
+  const m = /^(\d{4})-(\d{2})$/.exec(v.checked || '');
+  const when = (l) => `${MONTHS[l][+m[2] - 1]} ${m[1]}`;
+  const date = m && +m[2] >= 1 && +m[2] <= 12
+    ? tr(`Angaben zuletzt vor Ort geprüft: ${when('de')} (OpenStreetMap)`, `Details last checked on site: ${when('en')} (OpenStreetMap)`) : '';
+  const report = offersClaim(v, owner)
+    ? `<button type="button" class="claimlink" data-claim-open data-role="other" data-wish="fix">${tr(C.de.reportLink, C.en.reportLink)}</button>` : '';
+  return date || report ? `<p class="asof">${[date, report].filter(Boolean).join('<br>')}</p>` : '';
 }
 
 function address(v) {
@@ -316,16 +340,16 @@ function claimDialog() {
 <p class="ttl" id="claim-title">${tr(C.de.title, C.en.title, 'strong')}<br>${tr(C.de.sub, C.en.sub)}</p>
 <div data-step="1">${stepHead(1, 'who')}${['owner', 'staff', 'other'].map((x) => pick('role', x)).join('')}</div>
 <div data-step="2" hidden>${stepHead(2, 'want')}${['fix', 'photos', 'website', 'remove'].map((x) => pick('wish', x)).join('')}${back(1)}</div>
-<form data-step="3" hidden>${stepHead(3, 'reach')}
+<form data-step="3" hidden><div data-std>${stepHead(3, 'reach')}</div><div data-rep>${tr(C.de.report, C.en.report, 'h2')}</div>
 <div class="ch"><label><input type="radio" name="channel" value="call" required>${tr(C.de.call, C.en.call)}</label><label><input type="radio" name="channel" value="whatsapp" required>WhatsApp</label></div>
 <label>${tr(C.de.name, C.en.name)}<input name="who" autocomplete="name" maxlength="80"></label>
-<label>${tr(C.de.phone, C.en.phone)}<input name="phone" type="tel" autocomplete="tel" inputmode="tel" required maxlength="20"></label>
-<label>${tr(C.de.msg, C.en.msg)}<textarea name="text" rows="2" maxlength="500"></textarea></label>
+<label><span data-std>${tr(C.de.phone, C.en.phone)}</span><span data-rep>${tr(C.de.phoneOpt, C.en.phoneOpt)}</span><input name="phone" type="tel" autocomplete="tel" inputmode="tel" required maxlength="20"></label>
+<label><span data-std>${tr(C.de.msg, C.en.msg)}</span><span data-rep>${tr(C.de.reportMsg, C.en.reportMsg)}</span><textarea name="text" rows="2" maxlength="500"></textarea></label>
 <label class="hp" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>
 <p class="ok">${tr(C.de.consent, C.en.consent)} <a href="${SITE}/datenschutz#inhaber">${ui('privacy')}</a></p>
 <p class="err" data-claim-err hidden>${tr(C.de.err, C.en.err)}</p>
 <button type="submit" class="btn primary">${tr(C.de.send, C.en.send)}</button>${back(2)}</form>
-<div data-step="4" hidden>${tr(C.de.thanks, C.en.thanks, 'h2')}</div>
+<div data-step="4" hidden><div data-std>${tr(C.de.thanks, C.en.thanks, 'h2')}</div><div data-rep>${tr(C.de.reportThanks, C.en.reportThanks, 'h2')}</div></div>
 </dialog>`;
 }
 const CLAIM_CSS = `.claimlink{font:inherit;color:inherit;background:none;border:0;padding:0;text-decoration:underline;cursor:pointer;min-height:44px}
@@ -341,13 +365,15 @@ dialog.claim input:not([type=radio]),dialog.claim textarea{display:block;width:1
 dialog.claim .ch{display:flex;gap:10px;margin:0 0 12px}dialog.claim .ch label{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;min-height:54px;margin:0;border:2px solid var(--ink);border-radius:12px;font-size:17px}
 dialog.claim .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 dialog.claim .ok{font-size:13px;opacity:.8}dialog.claim .ok a{color:inherit}dialog.claim .err{color:#c8372d;font-weight:700}
-dialog.claim .btn{width:100%;font-family:var(--body)}`;
+dialog.claim .btn{width:100%;font-family:var(--body)}
+dialog.claim:not(.report) [data-rep],dialog.claim.report [data-std],dialog.claim.report .ch,dialog.claim.report .ttl,dialog.claim.report .back{display:none}`;
 const CLAIM_SCRIPT = `
 var cd=document.querySelector('[data-claim]');
 if(cd){var A={};
-function step(n){var ss=cd.querySelectorAll('[data-step]');for(var i=0;i<ss.length;i++)ss[i].hidden=ss[i].getAttribute('data-step')!==String(n)}
+function step(n){if(n===3){var rep=A.role==='other'&&A.wish==='fix',fm=cd.querySelector('form');cd.classList.toggle('report',rep);fm.querySelector('[name=phone]').required=!rep;fm.querySelector('[name=text]').required=rep;var rs=fm.querySelectorAll('[name=channel]');for(var j=0;j<rs.length;j++)rs[j].required=!rep}
+var ss=cd.querySelectorAll('[data-step]');for(var i=0;i<ss.length;i++)ss[i].hidden=ss[i].getAttribute('data-step')!==String(n)}
 document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('[data-claim-open],[data-claim-close],[data-pick],[data-back]');if(!t)return;
-if(t.hasAttribute('data-claim-open')){A={};if(t.getAttribute('data-wish'))A.wish=t.getAttribute('data-wish');step(1);if(cd.showModal)cd.showModal();else cd.setAttribute('open','');return}
+if(t.hasAttribute('data-claim-open')){A={};if(t.getAttribute('data-wish'))A.wish=t.getAttribute('data-wish');if(t.getAttribute('data-role'))A.role=t.getAttribute('data-role');step(A.role&&A.wish?3:1);if(cd.showModal)cd.showModal();else cd.setAttribute('open','');return}
 if(t.hasAttribute('data-claim-close')){if(cd.close)cd.close();else cd.removeAttribute('open');return}
 if(t.hasAttribute('data-back')){step(t.getAttribute('data-back'));return}
 var k=t.getAttribute('data-pick');A[k]=t.getAttribute('data-value');step(k==='role'&&!A.wish?2:3)});
@@ -455,7 +481,7 @@ ${board(v)}
 ${facts(v)}
 ${rating(v)}
 ${photos(v, owner)}
-${hoursTable(v)}
+${hoursTable(v)}${checked(v, owner)}
 ${address(v)}
 ${aroundSections(v)}
 </div>

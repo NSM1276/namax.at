@@ -153,3 +153,18 @@ test('claim dialog has three steps with all answers, channel choice, consent, ho
   assert.match(html, /class="hp"/);
   for (const m of html.matchAll(/<script>([\s\S]*?)<\/script>/g)) assert.doesNotThrow(() => new Function(m[1]));
 });
+
+test('photos: an outside photo comes first; typed and untyped photos all show', () => {
+  const p = (id, kind) => ({ id, url: blob(id), kind });
+  const v = effectiveVenue(record(load('full')), [p(1, 'inside'), p(2, 'priceboard'), p(3, 'show'), p(4, 'outside')]);
+  assert.deepEqual(v.photos, [blob(4), blob(1), blob(3)]);
+});
+
+test('checked: a recent on-site check date shows, an old one or owner hours hide it', () => {
+  const y = new Date().getFullYear();
+  const with_ = (d, extra) => effectiveVenue(record({ ...load('full'), internal: { checkDate: d } }, extra), []);
+  assert.equal(with_(`${y - 1}-08-14`).checked, `${y - 1}-08`);
+  assert.equal(with_(`${y - 4}-08-14`).checked, undefined);
+  assert.equal(with_(`${y}-02-01`, { changes: { hours: SAT_17 } }).checked, undefined);
+  assert.equal(with_('soon').checked, undefined);
+});

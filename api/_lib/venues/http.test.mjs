@@ -273,3 +273,17 @@ test('chat and photo upload → 404 while Nasim has not opened the chat for the 
   assert.equal(s.llm.calls, 0);
   assert.equal((await s.store.listMessages(SLUG, 10)).length, 0);
 });
+
+test('claim: a visitor report needs only what is wrong; the number is optional', async () => {
+  const s = await services();
+  const report = { role: 'other', wish: 'fix', text: 'Montag ist geschlossen' };
+  assert.equal((await handleClaim(claimReq(report), s)).status, 200);
+  const [q] = await s.store.listRequests();
+  assert.equal(q.channel, 'none'); assert.equal(q.phone, ''); assert.equal(q.text, 'Montag ist geschlossen');
+  assert.equal((await handleClaim(claimReq({ ...report, phone: '+43 660 1234567' }), s)).status, 200);
+  for (const bad of [{ text: '' }, { text: 'x' }, { phone: '123' }]) {
+    assert.equal((await handleClaim(claimReq({ ...report, ...bad }), s)).status, 400, JSON.stringify(bad));
+  }
+  // an owner still has to leave a number
+  assert.equal((await handleClaim(claimReq({ ...claim, phone: '', channel: '' }), s)).status, 400);
+});

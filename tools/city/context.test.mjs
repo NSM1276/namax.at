@@ -141,3 +141,19 @@ test('Graz: the picture by district (roman numeral in the caption); Innere Stadt
   assert.match(g('Gösting'), /graz-13\.webp/);
   assert.match(g(undefined), /districts\/graz\.webp[\s\S]*<figcaption>Graz · Uhrturm am Schlossberg/);
 });
+
+test('osmFacts: cash only only when said, never beside a card yes; halal never from OSM (it comes from akiwi)', () => {
+  assert.deepEqual(osmFacts({ 'payment:cash': 'only' }), ['cashOnly']);
+  assert.deepEqual(osmFacts({ 'payment:cash': 'yes', 'payment:cards': 'no' }), ['cashOnly']);
+  assert.deepEqual(osmFacts({ 'payment:cash': 'yes' }), []);
+  assert.deepEqual(osmFacts({ 'payment:cash': 'yes', 'payment:debit_cards': 'no', 'payment:credit_cards': 'yes' }), ['cards']);
+  assert.deepEqual(osmFacts({ 'diet:halal': 'yes' }), []);
+});
+
+test('the cash-only chip leads the chips in the sign colour', () => {
+  const html = renderVenue({ slug: 'k', kind: 'imbiss', name: 'K', status: 'public', address: { street: 'A 1', zip: '1100', city: 'Wien' },
+    context: { cuisine: ['kebab'], facts: ['terrace', 'cashOnly'] } });
+  const chips = html.slice(html.indexOf('class="facts"'));
+  assert.ok(chips.indexOf('class="key"') < chips.indexOf('class="food"'));
+  assert.ok(chips.includes('Nur Barzahlung'));
+});

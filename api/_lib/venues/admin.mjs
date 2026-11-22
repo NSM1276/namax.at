@@ -94,7 +94,7 @@ function chatButton(slug, open) {
 /** One request card: what the owner chose, and the way back to them that they chose, on the number they typed. */
 function requestCard(q) {
   const tel = dialable(q.phone);
-  const main = !tel ? '<span class="no">Nummer unlesbar</span>'
+  const main = !q.phone ? '<span class="no">ohne Nummer</span>' : !tel ? '<span class="no">Nummer unlesbar</span>'
     : q.channel === 'whatsapp' ? `<a class="pg" href="https://wa.me/${tel.slice(1)}" target="_blank" rel="noopener">WhatsApp</a>`
     : `<a class="pg" href="tel:${tel}">Anrufen</a>`;
   const line = [CL.role[q.role], CL.wish[q.wish], CHANNEL_DE[q.channel]].filter(Boolean).join(' · ');

@@ -93,7 +93,7 @@ export async function handleChat(req, { store, llm, blob, now }) {
 
 export const CLAIM_ROLES = ['owner', 'staff', 'other'];
 export const CLAIM_WISHES = ['fix', 'photos', 'website', 'remove'];
-export const CLAIM_CHANNELS = ['call', 'whatsapp'];
+export const CLAIM_CHANNELS = ['call', 'whatsapp'];  // 'none' is stored for visitor reports only
 export const DAILY_CLAIMS = 3; // per venue
 export const DAILY_CLAIMS_PER_SENDER = 5;
 export const DAILY_CLAIMS_TOTAL = 200;
@@ -115,15 +115,18 @@ export async function handleClaim(req, { store, now = () => new Date() }) {
   const phone = typeof body.phone === 'string' ? body.phone.trim() : '';
   const name = typeof body.name === 'string' ? body.name.trim() : '';
   const message = typeof body.text === 'string' ? body.text.trim() : '';
-  if (!role || !wish || !channel || !PHONE.test(phone) || phone.replace(/\D/g, '').length < 6
-    || name.length > 80 || message.length > 500) return fail(400, 'bad request');
+  // A visitor telling us the details are wrong needs no way back: the message is what counts, the number is optional.
+  const report = role === 'other' && wish === 'fix';
+  const phoneOk = PHONE.test(phone) && phone.replace(/\D/g, '').length >= 6;
+  if (!role || !wish || name.length > 80 || message.length > 500) return fail(400, 'bad request');
+  if (report ? (message.length < 3 || (phone && !phoneOk)) : (!channel || !phoneOk)) return fail(400, 'bad request');
   const day = viennaDayStart(now());
   const ip = (req.headers.get('x-forwarded-for') || '').split(',')[0].trim();
   const ipHash = ip ? createHash('sha256').update('namax claim v1:' + ip).digest('hex').slice(0, 16) : '';
   if (await store.countRequestsSince(slug, day) >= DAILY_CLAIMS
     || (ipHash && await store.countRequestsByIpSince(ipHash, day) >= DAILY_CLAIMS_PER_SENDER)
     || await store.countAllRequestsSince(day) >= DAILY_CLAIMS_TOTAL) return fail(429, 'too many');
-  await store.addRequest(slug, { role, wish, name, phone, channel, text: message, ipHash });
+  await store.addRequest(slug, { role, wish, name, phone, channel: channel || 'none', text: message, ipHash });
   return json(200, { ok: true });
 }
 

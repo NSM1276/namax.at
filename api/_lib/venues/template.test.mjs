@@ -214,3 +214,24 @@ test('district line in Salzburg: the Stadtteil name and the city, no number', ()
   assert.equal(districtLine({ area: 'Parsch', address: { zip: '5020', city: 'Salzburg' } }), 'PARSCH, SALZBURG');
   assert.equal(districtLine({ area: 'Urfahr', address: { zip: '4040', city: 'Linz' } }), 'URFAHR, LINZ');
 });
+
+test('without a facade photo the owner\'s first photo leads the page and leaves the grid', () => {
+  const b = (n) => `https://abc.public.blob.vercel-storage.com/venues/x/${n}.jpg`;
+  const html = renderVenue({ ...load('full'), photos: [b(1), b(2)] });
+  assert.match(html, new RegExp(`<figure class="facade"><img src="${b(1)}"`));
+  assert.equal((html.match(new RegExp(b(1), 'g')) || []).length, 1);
+  assert.match(html, new RegExp(`class="photos"[^>]*><img src="${b(2)}"`));
+  const one = renderVenue({ ...load('full'), photos: [b(1)] });
+  assert.ok(!one.includes('class="photos"') && !one.includes('class="nophoto"'));
+  const withFacade = renderVenue({ ...load('full'), facade: b(9), photos: [b(1), b(2)] });
+  assert.match(withFacade, new RegExp(`<figure class="facade"><img src="${b(9)}"`));
+  assert.match(withFacade, new RegExp(`class="photos"[^>]*><img src="${b(1)}"`));
+});
+
+test('the on-site check date and the visitor report link', () => {
+  const html = renderVenue({ ...load('full'), checked: '2025-08' });
+  assert.ok(text(html).includes('Angaben zuletzt vor Ort geprüft: August 2025 (OpenStreetMap)'));
+  assert.match(html, /data-claim-open data-role="other" data-wish="fix"/);
+  const confirmed = renderVenue({ ...load('full'), confirmed: true, checked: '2025-13' });
+  assert.ok(!confirmed.includes('class="asof"'));
+});
