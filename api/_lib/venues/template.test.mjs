@@ -169,3 +169,43 @@ test('merge: the stored facade url reaches the page', async () => {
   assert.equal(effectiveVenue(rec).facade, 'https://x.public.blob.vercel-storage.com/f.jpg');
   assert.equal(effectiveVenue({ ...rec, facadeUrl: null }).facade, undefined);
 });
+
+// schema.org block for search engines: only what the page itself shows.
+const ld = (html) => { const m = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/); return m ? JSON.parse(m[1]) : null; };
+
+test('schema.org: type, name, address, phone, page and opening hours of the venue', () => {
+  const j = ld(renderVenue({ ...load('full'), status: 'public' }));
+  assert.equal(j['@context'], 'https://schema.org');
+  assert.equal(j['@type'], 'HairSalon');
+  assert.equal(j.name, 'Friseur Meidling');
+  assert.equal(j.url, 'https://friseur-meidling.namax.at/');
+  assert.deepEqual(j.address, { '@type': 'PostalAddress', streetAddress: 'Meidlinger Hauptstraße 32', postalCode: '1120', addressLocality: 'Wien', addressCountry: 'AT' });
+  assert.equal(j.telephone, '+436604130063');
+  assert.deepEqual(j.openingHoursSpecification, [
+    { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], opens: '09:00', closes: '19:00' },
+    { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Saturday'], opens: '09:00', closes: '18:00' },
+  ]);
+  assert.equal(j.aggregateRating, undefined, 'ratings from Google are not ours to mark up');
+});
+
+test('schema.org: no phone or hours when the page shows none; every kind has a type', () => {
+  const m = load('minimal');
+  const j = ld(renderVenue({ ...m, phone: undefined, hours: undefined }));
+  assert.equal(j.telephone, undefined);
+  assert.equal(j.openingHoursSpecification, undefined);
+  const types = {};
+  for (const kind of ['friseur', 'cafe', 'restaurant', 'imbiss', 'handy', 'kosmetik', 'nails', 'schneider']) types[kind] = ld(renderVenue({ ...m, kind }))['@type'];
+  assert.deepEqual(types, { friseur: 'HairSalon', cafe: 'CafeOrCoffeeShop', restaurant: 'Restaurant', imbiss: 'FastFoodRestaurant',
+    handy: 'Store', kosmetik: 'BeautySalon', nails: 'NailSalon', schneider: 'LocalBusiness' });
+});
+
+test('schema.org: after midnight and until midnight; a name with </script> cannot break out', () => {
+  const m = load('minimal');
+  const j = ld(renderVenue({ ...m, name: 'X</script><b>', hours: [[1080, 120], null, null, null, null, null, [600, 1440]] }));
+  assert.equal(j.name, 'X</script><b>');
+  assert.deepEqual(j.openingHoursSpecification, [
+    { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Saturday'], opens: '10:00', closes: '23:59' },
+    { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Sunday'], opens: '18:00', closes: '02:00' },
+  ]);
+  assert.ok(!renderVenue({ ...m, name: 'X</script><b>' }).includes('X</script><b>'));
+});

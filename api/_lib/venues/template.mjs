@@ -47,6 +47,36 @@ const titleOf = (v, lang) => {
   return `${v.name} — ${[kind, where].filter(Boolean).join(', ')}`;
 };
 
+// schema.org for search engines: only what the page itself shows (no ratings: they are Google's, not ours).
+const LD_TYPE = { friseur: 'HairSalon', cafe: 'CafeOrCoffeeShop', restaurant: 'Restaurant', imbiss: 'FastFoodRestaurant',
+  handy: 'Store', kosmetik: 'BeautySalon', nails: 'NailSalon', schneider: 'LocalBusiness' };
+const LD_DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const hhmm = (m) => (m >= 1440 ? '23:59' : `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`);
+function ldHours(hours) {
+  if (!Array.isArray(hours) || hours.length !== 7) return undefined;
+  const specs = [];
+  for (const d of [1, 2, 3, 4, 5, 6, 0]) {
+    const h = hours[d];
+    if (!h) continue;
+    const opens = hhmm(h[0]), closes = hhmm(h[1]);
+    const same = specs.find((s) => s.opens === opens && s.closes === closes);
+    if (same) same.dayOfWeek.push(LD_DAYS[d]);
+    else specs.push({ '@type': 'OpeningHoursSpecification', dayOfWeek: [LD_DAYS[d]], opens, closes });
+  }
+  return specs.length ? specs : undefined;
+}
+function jsonLd(v) {
+  const j = {
+    '@context': 'https://schema.org', '@type': LD_TYPE[v.kind] || 'LocalBusiness', name: v.name, url: `https://${v.slug}.namax.at/`,
+    address: { '@type': 'PostalAddress', streetAddress: v.address.street, postalCode: v.address.zip, addressLocality: v.address.city, addressCountry: 'AT' },
+    image: ogImageUrl(v),
+  };
+  if (v.phone) j.telephone = v.phone;
+  const oh = ldHours(v.hours);
+  if (oh) j.openingHoursSpecification = oh;
+  return `<script type="application/ld+json">${JSON.stringify(j).replace(/</g, '\\u003c')}</script>`;
+}
+
 function head(v, pal, let_) {
   const kind = kindLabel(v.kind, 'de');
   const where = `${v.address.street}, ${v.address.zip} ${v.address.city}`;
@@ -70,6 +100,7 @@ ${robots}
 <meta property="og:image" content="${esc(ogImageUrl(v))}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
+${jsonLd(v)}
 <meta property="og:image:alt" content="${esc(title)}">
 <meta name="twitter:card" content="summary_large_image">
 <style>${let_.faces}${css(pal, let_)}</style>`;
