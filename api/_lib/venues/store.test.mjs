@@ -20,6 +20,17 @@ export function storeContract(makeStore, prefix = '') {
     assert.equal(await s.getVenue(prefix + 'nope'), null);
   });
 
+  test(`${prefix}context: null until set, kept apart from facts, survives a facts re-sync; unknown slugs skipped`, async () => {
+    const s = await fresh();
+    assert.equal((await s.getVenue(A)).context, null);
+    const ctx = { near: [{ slug: B, name: 'B', kind: 'cafe', m: 40 }], stop: null, facts: [], cuisine: [], map: { w: 600, h: 340, streets: [], dots: [] } };
+    assert.equal(await s.setContexts([{ slug: A, context: ctx }, { slug: prefix + 'nope', context: ctx }]), 1);
+    assert.deepEqual((await s.getVenue(A)).context, ctx);
+    await s.upsertFacts(A, { facts: facts(A), keyHash: 'h-a', status: 'public' });
+    assert.deepEqual((await s.getVenue(A)).context, ctx, 'a facts re-sync keeps the context');
+    assert.equal((await s.getVenue(B)).context, null);
+  });
+
   test('a new venue starts clean', async () => {
     const s = await fresh();
     const v = await s.getVenue(A);

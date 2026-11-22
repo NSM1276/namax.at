@@ -1,0 +1,73 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { buildContext, osmFacts } from './context.mjs';
+import { aroundSections } from '../../api/_lib/venues/around.mjs';
+import { renderVenue } from '../../api/_lib/venues/template.mjs';
+
+const at = (slug, kind, dLat, dLon = 0) => ({ slug, kind, name: slug.toUpperCase(), internal: { lat: 48.18 + dLat, lon: 16.33 + dLon, osm: `node/${slug.length}` } });
+const me = { ...at('doener', 'imbiss', 0), address: { street: 'Meidlinger Hauptstraße 67', zip: '1120', city: 'Wien' }, theme: {} };
+const street = { type: 'way', tags: { name: 'Meidlinger Hauptstraße', highway: 'secondary' }, geometry: [{ lat: 48.178, lon: 16.33 }, { lat: 48.182, lon: 16.33 }] };
+
+test('neighbours are never the same kind, nearest first, at most six, within 300 m', () => {
+  const venues = [me, at('kebab-2', 'imbiss', 0.0002), ...Array.from({ length: 8 }, (_, i) => at(`cafe-${i}`, 'cafe', 0.0003 * (i + 1))), at('far', 'friseur', 0.01)];
+  const c = buildContext(me, { venues, streets: [street], stops: [], osmById: new Map() });
+  assert.equal(c.near.length, 6);
+  assert.ok(c.near.every((x) => x.kind !== 'imbiss'), 'no other kebab on a kebab page');
+  assert.deepEqual(c.near.map((x) => x.slug), ['cafe-0', 'cafe-1', 'cafe-2', 'cafe-3', 'cafe-4', 'cafe-5'], 'only cafés nearby: they fill the list');
+  assert.ok(!c.near.some((x) => x.slug === 'far'));
+  assert.ok(c.map.streets.length === 1 && c.map.streets[0].d.startsWith('M'));
+});
+
+test('nearest stop: a U-Bahn a little further beats a bus at the door; walking minutes', () => {
+  const stops = [
+    { type: 'node', lat: 48.1801, lon: 16.33, tags: { name: 'Bus Ecke', highway: 'bus_stop' } },
+    { type: 'node', lat: 48.1815, lon: 16.33, tags: { name: 'Niederhofstraße', railway: 'station', station: 'subway' } },
+  ];
+  const c = buildContext(me, { venues: [me], streets: [], stops, osmById: new Map() });
+  assert.equal(c.stop.name, 'Niederhofstraße');
+  assert.equal(c.stop.type, 'u');
+  assert.equal(c.stop.min, 3);
+});
+
+test('OSM facts only from a clear yes, never from a missing tag', () => {
+  assert.deepEqual(osmFacts({ outdoor_seating: 'yes', wheelchair: 'no', takeaway: 'only', 'diet:vegan': 'no', 'diet:vegetarian': 'yes', 'payment:debit_cards': 'yes' }),
+    ['terrace', 'takeaway', 'vegetarian', 'cards']);
+  assert.deepEqual(osmFacts({}), []);
+  assert.deepEqual(osmFacts(undefined), []);
+});
+
+test('page: map and nearby only with a context; a paying owner (near = []) gets the map without neighbours', () => {
+  const base = { slug: 'doener', kind: 'imbiss', name: 'Döner', address: me.address, theme: { palette: 'black-gold', lettering: 'serif' } };
+  const plain = renderVenue(base);
+  assert.ok(!plain.includes('Rundherum') && !plain.includes('In der Nähe') && !plain.includes('class="medal"'));
+  const ctx = buildContext(me, { venues: [me, at('cafe-0', 'cafe', 0.0005)], streets: [street], stops: [], osmById: new Map([['node/6', { tags: { outdoor_seating: 'yes' } }]]) });
+  const page = renderVenue({ ...base, context: ctx });
+  assert.ok(page.includes('Rundherum') && page.includes('https://cafe-0.namax.at/') && page.includes('class="medal"') && page.includes('Schanigarten'));
+  const paid = aroundSections({ ...base, context: { ...ctx, near: [] } });
+  assert.ok(paid.includes('<svg') && !paid.includes('In der Nähe'));
+});
+
+test('no neighbour that serves the same food, even when it is filed as another kind', () => {
+  const kebab = { ...me, internal: { ...me.internal, cuisine: 'kebab' } };
+  const turk = { ...at('konak', 'restaurant', 0.0002), internal: { ...at('konak', 'restaurant', 0.0002).internal, cuisine: 'turkish' } };
+  const pizza = { ...at('pizzeria', 'restaurant', 0.0003), internal: { ...at('pizzeria', 'restaurant', 0.0003).internal, cuisine: 'pizza;kebab' } };
+  const c = buildContext(kebab, { venues: [kebab, turk, pizza, at('salon', 'friseur', 0.0004)], streets: [], stops: [], osmById: new Map() });
+  assert.deepEqual(c.near.map((x) => x.slug), ['salon']);
+});
+
+test('medallion: first known cuisine wins, else the kind; a kebab stand shows the döner spit', async () => {
+  const { medalIcon } = await import('../../api/_lib/venues/around.mjs');
+  assert.equal(medalIcon({ kind: 'imbiss', context: { cuisine: ['unknown', 'kebab', 'pizza'] } }), 'kebab');
+  assert.equal(medalIcon({ kind: 'imbiss', context: { cuisine: [] } }), 'restaurant');
+  assert.equal(medalIcon({ kind: 'friseur', context: {} }), 'scissors');
+  assert.equal(medalIcon({ kind: 'other', context: {} }), '');
+});
+
+test('other trades come first: a kebab stand shows hairdresser and tailor before a café; a phone shop shows food and beauty first', () => {
+  const venues = [me, at('cafe-near', 'cafe', 0.0001), at('salon', 'friseur', 0.0015), at('tailor', 'schneider', 0.002), at('handy-2', 'handy', 0.0003)];
+  const c = buildContext(me, { venues, streets: [], stops: [], osmById: new Map() });
+  assert.deepEqual(c.near.map((x) => x.slug), ['handy-2', 'salon', 'tailor', 'cafe-near']);
+  const shop = { ...at('handy', 'handy', 0), address: me.address };
+  const d = buildContext(shop, { venues: [shop, ...venues.slice(1)], streets: [], stops: [], osmById: new Map() });
+  assert.deepEqual(d.near.map((x) => x.slug), ['cafe-near', 'salon', 'tailor'], 'no other phone shop, the tailor (same trade group) last');
+});

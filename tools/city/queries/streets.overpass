@@ -1,0 +1,4 @@
+[out:json][timeout:300];
+area({{AREA}})->.city;
+way(area.city)["highway"~"^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street|pedestrian)$"]["name"];
+out geom tags qt;

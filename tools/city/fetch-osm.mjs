@@ -1,5 +1,5 @@
 // Downloads one city's venues (of the kinds we serve), district boundaries and house addresses from OpenStreetMap.
-// Usage: node tools/city/fetch-osm.mjs [city=wien] [venues|districts|addresses ...]   (default: all three)
+// Usage: node tools/city/fetch-osm.mjs [city=wien] [venues|districts|addresses|streets|stops ...]   (default: the first three)
 // Writes the files named in tools/city/paths.mjs, e.g. data/raw/osm-graz.json, osm-graz-districts.json, osm-graz-addresses.json.
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
@@ -8,7 +8,7 @@ import { cityPaths, overpassQuery } from './paths.mjs';
 const city = process.argv[2] || 'wien';
 const paths = cityPaths(city);
 const parts = process.argv.slice(3).length ? process.argv.slice(3) : ['venues', 'districts', 'addresses'];
-const OUT = { venues: paths.osm, districts: paths.districts, addresses: paths.addresses };
+const OUT = { venues: paths.osm, districts: paths.districts, addresses: paths.addresses, streets: paths.streets, stops: paths.stops };
 const MIRRORS = [
   'https://overpass-api.de/api/interpreter',
   'https://maps.mail.ru/osm/tools/overpass/api/interpreter',

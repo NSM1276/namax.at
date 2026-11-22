@@ -13,6 +13,7 @@
 // recordModelCall(slug);  countModelCalls(slug, sinceIso?)
 // listSlugs(status) → slugs
 // setKeyHash(slug, hash);  setOwnerKeyEnc(slug, enc);  setFacade(slug, url|null)
+// setContexts([{ slug, context }]) → number updated (unknown slugs skipped); getVenue(...).context is null until set
 // listForAdmin() → [{ slug, status, facts, changes, confirmedAt, ownerKeyEnc, facadeUrl, chatOpen }] (not removed)
 // setChatOpen(slug, bool): the owner chat works only for venues Nasim opened it for (closed by default)
 // addRequest(slug, { role, wish, name, phone, channel, text }) → id;  listRequests() (open first, website wishes first, newest)
@@ -39,7 +40,7 @@ export function memoryStore() {
   return {
     async getVenue(slug) {
       const v = venues.get(slug);
-      return v ? { facadeUrl: null, chatOpen: false, ...clone(v) } : null;
+      return v ? { facadeUrl: null, chatOpen: false, context: null, ...clone(v) } : null;
     },
     async upsertFacts(slug, { facts, keyHash, status = 'hidden' }) {
       const v = venues.get(slug);
@@ -145,6 +146,11 @@ export function memoryStore() {
     async setKeyHash(slug, hash) { need(slug).keyHash = hash; },
     async setOwnerKeyEnc(slug, enc) { need(slug).ownerKeyEnc = enc; },
     async setFacade(slug, url) { need(slug).facadeUrl = url || null; },
+    async setContexts(entries) {
+      let n = 0;
+      for (const e of entries) { const v = venues.get(e.slug); if (v) { v.context = clone(e.context); n++; } }
+      return n;
+    },
     async listForAdmin() {
       return [...venues.values()].filter((v) => v.status !== 'removed').sort((a, b) => a.slug.localeCompare(b.slug))
         .map((v) => ({ slug: v.slug, status: v.status, facts: clone(v.facts), changes: clone(v.changes),

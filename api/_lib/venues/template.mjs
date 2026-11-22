@@ -1,6 +1,7 @@
 // Turns one venue facts object into a complete, self-contained HTML page.
 // A block whose data is missing is left out entirely; nothing is invented.
 import { T, OWNER_LINE, listTitle, kindLabel, languageName } from './i18n.mjs';
+import { AROUND_CSS, aroundSections, contextFacts, medal } from './around.mjs';
 import { PALETTES, LETTERINGS, DEFAULT_THEME, BRAND } from './themes.mjs';
 
 // One sign face for every page (the namax brand); the venue's lettering field no longer changes it.
@@ -103,7 +104,7 @@ ${robots}
 ${jsonLd(v)}
 <meta property="og:image:alt" content="${esc(title)}">
 <meta name="twitter:card" content="summary_large_image">
-<style>${let_.faces}${css(pal, let_)}</style>`;
+<style>${let_.faces}${css(pal, let_)}${v.context ? AROUND_CSS : ''}</style>`;
 }
 
 function css(p, l) {
@@ -206,7 +207,7 @@ function sign(v) {
   const district = districtLine(v) ? `<p class="district">${esc(districtLine(v))}</p>` : '';
   return `<header class="sign"><div class="wrap">
 <div class="lang" role="group" aria-label="Sprache / Language"><button type="button" data-lang="de" lang="de" aria-label="Deutsch" aria-pressed="true">DE</button><button type="button" data-lang="en" lang="en" aria-label="English" aria-pressed="false">EN</button></div>
-<div class="plate"><i class="screw l" aria-hidden="true"></i><i class="screw r" aria-hidden="true"></i><div class="rim">${kind}<h1 lang="de"${titleSize(v.name)}>${esc(v.name)}</h1>${district}</div><i class="gleam" aria-hidden="true"></i></div>
+<div class="plate"><i class="screw l" aria-hidden="true"></i><i class="screw r" aria-hidden="true"></i><div class="rim">${v.context ? medal(v) : ''}${kind}<h1 lang="de"${titleSize(v.name)}>${esc(v.name)}</h1>${district}</div><i class="gleam" aria-hidden="true"></i></div>
 </div></header>`;
 }
 
@@ -237,8 +238,7 @@ function board(v) {
 }
 
 function facts(v) {
-  const f = v.facts;
-  if (!f) return '';
+  const f = v.facts || {};
   const li = [];
   if (f.walkIn === true) li.push(ui('walkIn', 'li'));
   if (f.walkIn === false) li.push(ui('byAppointment', 'li'));
@@ -248,6 +248,7 @@ function facts(v) {
     const names = (lang) => f.languages.map((c) => languageName(c, lang)).join(', ');
     li.push(tr(`${T.de.languages}: ${names('de')}`, `${T.en.languages}: ${names('en')}`, 'li'));
   }
+  li.push(...contextFacts(v));
   return li.length ? `<section><ul class="facts">${li.join('')}</ul></section>` : '';
 }
 
@@ -443,6 +444,7 @@ ${rating(v)}
 ${photos(v)}
 ${hoursTable(v)}
 ${address(v)}
+${aroundSections(v)}
 </div>
 ${footer(v, owner)}
 </main>

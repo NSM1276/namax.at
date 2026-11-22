@@ -12,11 +12,11 @@ export function pgStore(query) {
 
   return {
     async getVenue(slug) {
-      const r = await one(`select slug, key_hash, status, facts, changes, pending, confirmed_at, do_not_contact, chat_state, facade_url, chat_open
+      const r = await one(`select slug, key_hash, status, facts, changes, pending, confirmed_at, do_not_contact, chat_state, facade_url, chat_open, context
         from venues where slug = $1`, [slug]);
       if (!r) return null;
       return { slug: r.slug, keyHash: r.key_hash, status: r.status, facts: r.facts, changes: r.changes || {},
-        pending: r.pending || null, confirmedAt: iso(r.confirmed_at), doNotContact: Boolean(r.do_not_contact), chatState: r.chat_state || {}, facadeUrl: r.facade_url || null, chatOpen: Boolean(r.chat_open) };
+        pending: r.pending || null, confirmedAt: iso(r.confirmed_at), doNotContact: Boolean(r.do_not_contact), chatState: r.chat_state || {}, facadeUrl: r.facade_url || null, chatOpen: Boolean(r.chat_open), context: r.context || null };
     },
     async upsertFacts(slug, { facts, keyHash, status = 'hidden' }) {
       await query(`insert into venues (slug, key_hash, status, facts) values ($1, $2, $3, $4::jsonb)
@@ -112,6 +112,12 @@ export function pgStore(query) {
     async setKeyHash(slug, hash) { await query('update venues set key_hash = $2 where slug = $1', [slug, hash]); },
     async setOwnerKeyEnc(slug, enc) { await query('update venues set owner_key_enc = $2 where slug = $1', [slug, enc]); },
     async setFacade(slug, url) { await query('update venues set facade_url = $2 where slug = $1', [slug, url || null]); },
+    async setContexts(entries) {
+      // one statement per call: [{ slug, context }] → venues.context; unknown slugs are skipped. Returns rows updated.
+      const rows = await query(`update venues as v set context = d.c from jsonb_to_recordset($1::jsonb) as d(slug text, c jsonb)
+        where v.slug = d.slug returning v.slug`, [JSON.stringify(entries.map((e) => ({ slug: e.slug, c: e.context })))]);
+      return rows.length;
+    },
     async listForAdmin() {
       const rows = await query(`select slug, status, facts, changes, confirmed_at, owner_key_enc, facade_url, chat_open
         from venues where status <> 'removed' order by slug`);

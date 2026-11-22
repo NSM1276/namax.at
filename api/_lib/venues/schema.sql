@@ -66,6 +66,10 @@ alter table venues add column if not exists facade_url text;
 -- The owner chat works only for venues Nasim opened it for after talking to the owner.
 alter table venues add column if not exists chat_open boolean not null default false;
 
+-- What is around the venue (neighbours, nearest stop, OSM facts, street map), built by tools/city/context.mjs.
+-- Kept apart from facts so a facts re-sync never wipes it; null = the page shows no map or neighbours.
+alter table venues add column if not exists context jsonb;
+
 -- Requests from the "Sind Sie der Inhaber?" form; deleted 90 days after done, open ones after 180 days.
 create table if not exists venue_requests (
   id       bigserial primary key,

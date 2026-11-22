@@ -1,0 +1,8 @@
+[out:json][timeout:300];
+area({{AREA}})->.city;
+(
+  node(area.city)["railway"~"^(station|halt|tram_stop)$"]["name"];
+  node(area.city)["highway"="bus_stop"]["name"];
+  node(area.city)["public_transport"="station"]["name"];
+);
+out qt;

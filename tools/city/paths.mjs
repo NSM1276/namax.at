@@ -9,6 +9,8 @@ export function cityPaths(city) {
     osm: `data/raw/osm-${city}.json`,
     districts: w ? 'data/raw/osm-districts.json' : `data/raw/osm-${city}-districts.json`,
     addresses: w ? 'data/raw/osm-addresses.json' : `data/raw/osm-${city}-addresses.json`,
+    streets: `data/raw/osm-${city}-streets.json`,
+    stops: `data/raw/osm-${city}-stops.json`,
     overture: `data/places/overture-${city}.json`,
     dir,
     venues: `${dir}/venues.json`,

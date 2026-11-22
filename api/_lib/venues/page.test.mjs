@@ -154,3 +154,13 @@ test('owner page: how often the page was opened (today, 7 days, total); visitors
   const pub = await renderPage({ store, slug, key: '' });
   assert.ok(!pub.body.includes('Ihre Seite wurde geöffnet'));
 });
+
+test('a stored context puts the street map, the medallion and the neighbours on the public page', async () => {
+  const { store, slug } = await setup();
+  const before = await renderPage({ store, slug, key: '' });
+  assert.ok(!before.body.includes('Rundherum') && !before.body.includes('class="medal"'));
+  await store.setContexts([{ slug, context: { near: [{ slug: 'minimal', name: 'Nebenan', kind: 'cafe', m: 50, icon: 'cafe' }], stop: null, facts: ['terrace'], cuisine: [],
+    map: { w: 600, h: 340, streets: [], dots: [] } } }]);
+  const r = await renderPage({ store, slug, key: '' });
+  assert.ok(r.body.includes('Rundherum') && r.body.includes('https://minimal.namax.at/') && r.body.includes('class="medal"') && r.body.includes('Schanigarten'));
+});
