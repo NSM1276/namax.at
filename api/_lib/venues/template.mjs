@@ -89,6 +89,7 @@ function head(v, pal, let_) {
   return `<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(title)}</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <meta name="description" content="${esc(desc)}">
 ${robots}
 <meta name="theme-color" content="${pal.signBg}">
@@ -163,6 +164,9 @@ h2{font-size:28px;margin-bottom:12px}
 .rating b{font-family:var(--display);font-weight:${l.weight};font-size:30px;line-height:1;margin-right:4px}
 .photos{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .photos img{display:block;width:100%;aspect-ratio:1;object-fit:cover;border-radius:4px}
+.nophoto{margin:0;padding:14px;border:2px dashed color-mix(in srgb,var(--accent) 55%,transparent);border-radius:12px;text-align:center}
+.nophoto i{display:block;width:min(240px,70%);aspect-ratio:1;margin:0 auto;background:var(--accent);-webkit-mask:center/contain no-repeat;mask:center/contain no-repeat;opacity:.85}
+.nophoto figcaption{margin-top:8px;font-size:15px}
 .hours{margin:0}
 .hours div{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid color-mix(in srgb,var(--ink) 18%,transparent)}
 .hours dt,.hours dd{margin:0}
@@ -267,8 +271,17 @@ function facade(v) {
   return src ? `<figure class="facade"><img src="${esc(src)}" alt="${esc(v.name)}" width="1600" height="1200" fetchpriority="high"></figure>` : '';
 }
 
-function photos(v) {
-  if (!v.photos || !v.photos.length) return '';
+// A linocut empty frame where photos would be, by trade; its button opens the owner form with "add photos" chosen.
+const NOPHOTO = { imbiss: 'food', restaurant: 'food', cafe: 'food', friseur: 'beauty', nails: 'beauty', kosmetik: 'beauty', handy: 'repair', schneider: 'repair' };
+function noPhoto(v, owner) {
+  const g = NOPHOTO[v.kind];
+  if (!g || !offersClaim(v, owner)) return '';
+  const u = `/v/_shared/placeholders/placeholder-${g}.webp`;
+  return `<figure class="nophoto"><i aria-hidden="true" style="-webkit-mask-image:url(${u});mask-image:url(${u})"></i><figcaption>${tr('Noch keine Fotos.', 'No photos yet.')} <button type="button" class="claimlink" data-claim-open data-wish="photos">${tr('Sind Sie der Inhaber? Fotos hinzufügen', 'Are you the owner? Add photos')}</button></figcaption></figure>`;
+}
+
+function photos(v, owner) {
+  if (!v.photos || !v.photos.length) return noPhoto(v, owner);
   const src = (p) => (p.startsWith('https://') ? p : '/' + p);
   const imgs = v.photos.map((p) => `<img src="${esc(src(p))}" alt="${esc(v.name)}" loading="lazy">`).join('');
   return `<section class="photos" data-photos>${imgs}</section>`;
@@ -334,10 +347,10 @@ var cd=document.querySelector('[data-claim]');
 if(cd){var A={};
 function step(n){var ss=cd.querySelectorAll('[data-step]');for(var i=0;i<ss.length;i++)ss[i].hidden=ss[i].getAttribute('data-step')!==String(n)}
 document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('[data-claim-open],[data-claim-close],[data-pick],[data-back]');if(!t)return;
-if(t.hasAttribute('data-claim-open')){step(1);if(cd.showModal)cd.showModal();else cd.setAttribute('open','');return}
+if(t.hasAttribute('data-claim-open')){A={};if(t.getAttribute('data-wish'))A.wish=t.getAttribute('data-wish');step(1);if(cd.showModal)cd.showModal();else cd.setAttribute('open','');return}
 if(t.hasAttribute('data-claim-close')){if(cd.close)cd.close();else cd.removeAttribute('open');return}
 if(t.hasAttribute('data-back')){step(t.getAttribute('data-back'));return}
-var k=t.getAttribute('data-pick');A[k]=t.getAttribute('data-value');step(k==='role'?2:3)});
+var k=t.getAttribute('data-pick');A[k]=t.getAttribute('data-value');step(k==='role'&&!A.wish?2:3)});
 var f=cd.querySelector('form');
 f.addEventListener('submit',function(e){e.preventDefault();var b=f.querySelector('[type=submit]'),err=cd.querySelector('[data-claim-err]');b.disabled=true;err.hidden=true;
 var q=function(n){return f.querySelector('[name='+n+']').value},ch=f.querySelector('[name=channel]:checked');
@@ -441,7 +454,7 @@ ${actions(v)}</aside><div class="col">
 ${board(v)}
 ${facts(v)}
 ${rating(v)}
-${photos(v)}
+${photos(v, owner)}
 ${hoursTable(v)}
 ${address(v)}
 ${aroundSections(v)}

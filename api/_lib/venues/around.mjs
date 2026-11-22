@@ -2,7 +2,7 @@
 // the nearest stop, other kinds of venues nearby (never the same kind), a few OSM facts, and a medallion on the sign with one pictogram per cuisine or kind.
 // Everything comes from v.context, built offline by tools/city/context.mjs. A paying owner's page sets v.context.near = [].
 import { kindLabel } from './i18n.mjs';
-import { PALETTES } from './themes.mjs';
+import { PALETTES, DEFAULT_THEME } from './themes.mjs';
 import { CITIES, districtLabel } from './cities.mjs';
 
 import PICTOGRAMS from './pictograms.mjs';
@@ -79,6 +79,14 @@ function nameIcon(name) {
   for (const [re, icon] of NAME_ICON) { const m = re.exec(s); if (m && (!best || m.index < best.at)) best = { at: m.index, icon }; }
   return best ? best.icon : '';
 }
+/** The browser-tab icon: the venue's medallion pictogram on a disc in its sign colours (a pin when no pictogram fits). */
+export function faviconSvg(v) {
+  const pal = PALETTES[(v.theme && v.theme.palette) || DEFAULT_THEME.palette] || PALETTES[DEFAULT_THEME.palette];
+  const d = PICTOGRAMS[medalIcon(v)] || PICTOGRAMS.pin;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="${pal.signBg}"/>` +
+    `<path fill="${pal.signInk}" fill-rule="evenodd" d="${d}" transform="translate(11 11) scale(.78)"/></svg>`;
+}
+
 /** The pictogram name for a venue's medallion (dish word in the name, then cuisine, then kind), or '' when none fits. */
 export function medalIcon(v) {
   const n = FOOD_KINDS.has(v.kind) ? nameIcon(v.name) : '';

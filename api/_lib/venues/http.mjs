@@ -8,6 +8,7 @@ import { chatTurn } from './assistant.mjs';
 import { effectiveVenue } from './merge.mjs';
 import { isAdmin, openOwnerKey, sealOwnerKey, renderAdmin, ADMIN_KEY_HASH } from './admin.mjs';
 import { CITIES, CITY_ORDER, cityOf } from './cities.mjs';
+import { faviconSvg } from './around.mjs';
 
 export const MAX_PHOTO_BYTES = 3 * 1024 * 1024;
 export const DAILY_PHOTOS = 12;
@@ -48,6 +49,13 @@ export async function handlePage(req, { store, ownerPart }) {
     const record = slug ? await store.getVenue(slug) : null;
     if (!record || record.status !== 'public') return text(200, 'User-agent: *\nDisallow: /\n');
     return text(200, 'User-agent: *\nAllow: /\n\nSitemap: https://www.namax.at/api/venue/sitemap\n');
+  }
+  if (url.pathname === '/favicon.svg') {
+    const slug = hostSlug(req);
+    const record = slug ? await store.getVenue(slug) : null;
+    if (!record || record.status === 'removed') return text(404, 'Not found\n', 'public, s-maxage=600');
+    return new Response(faviconSvg(effectiveVenue(record)), {
+      status: 200, headers: { 'Content-Type': 'image/svg+xml', 'Cache-Control': 'public, max-age=86400, s-maxage=86400' } });
   }
   // '/' as the visitor asked; '/api/venue/page' if the platform passes the rewritten path
   if (url.pathname !== '/' && url.pathname !== '/api/venue/page') return text(404, 'Not found\n', 'public, s-maxage=600');

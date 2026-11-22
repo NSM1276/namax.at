@@ -115,6 +115,19 @@ test('page handler: key from ?k, owner page private, public page cached', async 
   assert.ok(!(await pub.text()).includes(KEY));
 });
 
+test('venue host: /favicon.svg is the venue medallion in its sign colours; the page links it; unknown hosts 404', async () => {
+  const s = await services();
+  const get = (path, h = host) => handlePage(new Request(`https://${h}${path}`, { headers: { host: h } }), s);
+  const r = await get('/favicon.svg');
+  assert.equal(r.status, 200);
+  assert.match(r.headers.get('content-type'), /image\/svg\+xml/);
+  const svg = await r.text();
+  assert.match(svg, /^<svg xmlns="http:\/\/www\.w3\.org\/2000\/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#[0-9a-f]{6}"\/>/);
+  assert.match(svg, /<path fill="#[0-9a-f]{6}" fill-rule="evenodd" d="M/);
+  assert.equal((await get('/favicon.svg', 'nobody-here.namax.at')).status, 404);
+  assert.match(await (await get('/')).text(), /<link rel="icon" type="image\/svg\+xml" href="\/favicon\.svg">/);
+});
+
 test('venue host: robots.txt per status, other paths 404, only "/" renders the page', async () => {
   const s = await services();
   const get = (path, st = s) => handlePage(new Request(`https://${host}${path}`, { headers: { host } }), st);

@@ -118,3 +118,15 @@ test('district illustration: Vienna by post code, other cities by name, nothing 
   assert.ok(page.includes('districts/wien-04.webp'));
   assert.ok(!renderVenue({ slug: 'x', kind: 'cafe', name: 'X', address: { street: 'A 1', zip: '1040', city: 'Wien' }, theme: {} }).includes('districts/'));
 });
+
+test('photo placeholder: only on unconfirmed pages without photos; picture by trade; its button opens the owner form on "photos"', () => {
+  const page = (o = {}, opts) => renderVenue({ slug: 'x', kind: 'imbiss', name: 'X', address: { street: 'A 1', zip: '1040', city: 'Wien' }, theme: {},
+    context: { near: [], facts: [], map: { w: 600, h: 340, streets: [], dots: [] } }, ...o }, opts);
+  assert.match(page(), /placeholders\/placeholder-food\.webp/);
+  assert.match(page(), /data-claim-open data-wish="photos"/);
+  assert.match(page({ kind: 'friseur' }), /placeholder-beauty\.webp/);
+  assert.match(page({ kind: 'handy' }), /placeholder-repair\.webp/);
+  assert.ok(!page({ confirmed: true }).includes('placeholder-'));
+  assert.ok(!page({ photos: ['__blob/venues/x/1.jpg'] }).includes('placeholder-'));
+  assert.ok(!page({ kind: 'other' }).includes('placeholder-'));
+});
