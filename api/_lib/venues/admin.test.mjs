@@ -332,7 +332,7 @@ test('start page: "Anfragen" with the open count, website wishes first, escaped,
 test('request card: the main button answers the way the owner chose, on the number they typed', async () => {
   const html = await chooser(await reqSvc());
   assert.ok(html.includes('href="tel:+436601234567"'));
-  assert.ok(html.includes('href="https://wa.me/436647654321"'), 'Austrian 0664… becomes 43664…');
+  assert.ok(html.includes('href="https://wa.me/436647654321?text='), 'Austrian 0664… becomes 43664…');
 });
 
 test('POST requestId done → marked done and back; without admin → 404', async () => {
@@ -540,4 +540,39 @@ test('a request for a venue we do not list shows its name and "Neues Lokal", no 
   const html = await chooser(s);
   assert.match(html, /Neu &lt;b&gt;Café&lt;\/b&gt;, 1160<\/b><span class="b">Neues Lokal<\/span>/);
   assert.ok(!html.includes('https://null.namax.at'));
+});
+
+test('request card: WhatsApp opens with a greeting by name and venue; without a name just "Hallo,"', async () => {
+  const s = await svc();
+  await s.store.addRequest('cafe-a', { role: 'owner', wish: 'fix', name: 'Dani', phone: '0664 765 43 21', channel: 'whatsapp', text: '' });
+  await s.store.addRequest(null, { role: 'owner', wish: 'photos', name: '', phone: '0660 1234567', channel: 'call', lokal: 'Neu & Co, Gasse 2, 1160 Wien' });
+  const html = await chooser(s);
+  const hi = encodeURIComponent('Hallo Dani, hier ist Nasim von namax. Danke für Ihre Anfrage zu Café cafe-a.');
+  assert.ok(html.includes(`href="https://wa.me/436647654321?text=${hi}"`));
+  const anon = encodeURIComponent('Hallo, hier ist Nasim von namax. Danke für Ihre Anfrage zu Neu & Co.');
+  assert.ok(html.includes(`https://wa.me/436601234567?text=${anon}`), 'a call request also gets a WhatsApp link with the greeting');
+  assert.ok(html.includes('href="tel:+436601234567"'));
+});
+
+test('request card: "Chat + Link senden" only where the page has an owner link; the message carries that link', async () => {
+  const s = await svc();
+  await s.store.addRequest('cafe-a', { role: 'owner', wish: 'fix', name: 'Dani', phone: '0664 765 43 21', channel: 'whatsapp', text: '' });
+  await s.store.addRequest('friseur-b', { role: 'owner', wish: 'fix', name: 'Mo', phone: '0664 111 22 33', channel: 'whatsapp', text: '' });
+  await s.store.addRequest(null, { role: 'owner', wish: 'photos', name: 'Sara', phone: '0660 1234567', channel: 'whatsapp', lokal: 'Neu' });
+  const html = await chooser(s);
+  assert.equal((html.match(/data-send="/g) || []).length, 1, 'friseur-b has no sealed key, the new venue no page');
+  const msg = encodeURIComponent('Hallo Dani, hier ist Nasim von namax. Danke für Ihre Anfrage zu Café cafe-a.\n\n'
+    + `Mit diesem Link ändern Sie Öffnungszeiten, Telefon und Fotos selbst: https://cafe-a.namax.at/?k=${OWNER}`);
+  assert.ok(html.includes(`data-send="cafe-a" data-wa="https://wa.me/436647654321?text=${msg}"`));
+  assert.ok(html.includes('Chat + Link senden'));
+});
+
+test('request card: "Nummer passt zur Seite" only when the typed number is the page phone', async () => {
+  const store = memoryStore();
+  await store.upsertFacts('cafe-p', { facts: facts('cafe-p', { phone: '+43 1 234 56 78' }), keyHash: 'h', status: 'public' });
+  await store.addRequest('cafe-p', { role: 'owner', wish: 'fix', name: 'A', phone: '01 2345678', channel: 'call', text: '' });
+  const s = { store, adminKeyHash: hash(ADMIN) };
+  assert.ok((await chooser(s)).includes('Nummer passt zur Seite ✓'));
+  await store.addRequest('cafe-p', { role: 'owner', wish: 'fix', name: 'B', phone: '0660 9999999', channel: 'call', text: '' });
+  assert.equal(((await chooser(s)).match(/Nummer passt zur Seite/g) || []).length, 1);
 });

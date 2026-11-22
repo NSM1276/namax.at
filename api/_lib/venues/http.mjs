@@ -257,7 +257,15 @@ export async function handleAdmin(req, { store, adminKeyHash = ADMIN_KEY_HASH, n
   const district = want === 'all' ? 'all' : districts.some((x) => String(x.d) === want) ? Number(want) : null;
   const html = (rows, opts) => new Response(renderAdmin(rows, opts), { headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'private, no-store', 'X-Robots-Tag': 'noindex, nofollow' } });
   const live = new Map(all.map((r) => [r.slug, { chatOpen: r.chatOpen, name: effectiveVenue(r, []).name }]));
-  const requests = (await store.listRequests()).map((q) => ({ ...q, venueName: live.get(q.slug)?.name || q.venueName, chatOpen: live.get(q.slug)?.chatOpen ?? null }));
+  const bySlug = new Map(all.map((r) => [r.slug, r]));
+  // The owner link goes into "Chat + Link senden"; the page phone shows whether the typed number is the venue's own.
+  const extra = (slug) => {
+    const r = slug && bySlug.get(slug);
+    if (!r) return { ownerUrl: null, pagePhone: null };
+    const ownerKey = r.ownerKeyEnc ? openOwnerKey(key, r.slug, r.ownerKeyEnc) : null;
+    return { ownerUrl: ownerKey ? `https://${r.slug}.namax.at/?k=${ownerKey}` : null, pagePhone: effectiveVenue(r, []).phone || null };
+  };
+  const requests = (await store.listRequests()).map((q) => ({ ...q, venueName: live.get(q.slug)?.name || q.venueName, chatOpen: live.get(q.slug)?.chatOpen ?? null, ...extra(q.slug) }));
   const openRequests = requests.filter((q) => !q.doneAt).length;
   const hitRows = await store.hitSummary(visitWindow(now()));
   const visits = hitRows.reduce((a, h) => ({ today: a.today + h.today, week: a.week + h.week, total: a.total + h.total }), { today: 0, week: 0, total: 0 });

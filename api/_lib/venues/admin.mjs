@@ -92,11 +92,25 @@ function chatButton(slug, open) {
 }
 
 /** One request card: what the owner chose, and the way back to them that they chose, on the number they typed. */
+// First line of every message to a requester: name and venue, so they know at once who writes.
+export function greeting(q) {
+  const venue = q.slug ? (q.venueName || q.slug) : (q.lokal || '').split(',')[0].trim();  // new venue: name without the address
+  return `Hallo${q.name ? ' ' + q.name : ''}, hier ist Nasim von namax.` + (venue ? ` Danke für Ihre Anfrage zu ${venue}.` : '');
+}
+const waLink = (tel, text) => `https://wa.me/${tel.slice(1)}?text=${encodeURIComponent(text)}`;
+
 function requestCard(q) {
   const tel = dialable(q.phone);
+  const hi = greeting(q);
+  const wa = tel && `<a${q.channel === 'whatsapp' ? ' class="pg"' : ''} href="${esc(waLink(tel, hi))}" target="_blank" rel="noopener">WhatsApp</a>`;
   const main = !q.phone ? '<span class="no">ohne Nummer</span>' : !tel ? '<span class="no">Nummer unlesbar</span>'
-    : q.channel === 'whatsapp' ? `<a class="pg" href="https://wa.me/${tel.slice(1)}" target="_blank" rel="noopener">WhatsApp</a>`
-    : `<a class="pg" href="tel:${tel}">Anrufen</a>`;
+    : q.channel === 'whatsapp' ? wa : `<a class="pg" href="tel:${tel}">Anrufen</a>${wa}`;
+  // One tap: opens the owner chat and sends the owner link, so corrections come in without Nasim.
+  const send = tel && q.slug && q.ownerUrl
+    ? `<button type="button" data-send="${esc(q.slug)}" data-wa="${esc(waLink(tel, `${hi}
+
+Mit diesem Link ändern Sie Öffnungszeiten, Telefon und Fotos selbst: ${q.ownerUrl}`))}">Chat + Link senden</button>` : '';
+  const same = tel && q.pagePhone && dialable(q.pagePhone) === tel ? '<span class="b ok">Nummer passt zur Seite ✓</span>' : '';
   const line = [CL.role[q.role], CL.wish[q.wish], CHANNEL_DE[q.channel]].filter(Boolean).join(' · ');
   const done = q.doneAt
     ? `<button type="button" data-done="${q.id}" data-to="0" class="rot">Wieder offen</button>`
@@ -106,10 +120,11 @@ function requestCard(q) {
     : `${esc(q.lokal || '–')}</b><span class="b">Neues Lokal</span><b>`;  // from namax.at/kostenlos, no page yet
   return `<li class="rq"><b>${head}</b>`
     + (q.wish === 'website' && !q.doneAt ? '<span class="b hot">Website!</span>' : '')
+    + same
     + `<small>${esc(viennaTime(q.at))} · ${esc(line)}</small>`
     + `<p class="who"><span class="nm">${esc(q.name || '–')}</span> · ${esc(q.phone)}</p>`
     + (q.text ? `<p class="tx">${esc(q.text)}</p>` : '')
-    + `<div class="a">${main}${q.chatOpen == null ? '' : chatButton(q.slug, q.chatOpen)}${done}</div></li>`;
+    + `<div class="a">${main}${send}${q.chatOpen == null ? '' : chatButton(q.slug, q.chatOpen)}${done}</div></li>`;
 }
 
 // Chat switch and "Erledigt" on both pages of the list.
@@ -120,6 +135,9 @@ document.addEventListener('click',function(e){var b=e.target.closest('[data-chat
 if(b){var on=b.dataset.to==='1',slug=b.dataset.chat;
 if(on&&!confirm('Chat freischalten? Schicken Sie dem Inhaber danach seinen Link.'))return;
 post(b,{slug:slug,chatOpen:on},function(){[].forEach.call(document.querySelectorAll('[data-chat="'+slug+'"]'),function(x){x.dataset.to=on?'0':'1';x.textContent=on?'Chat sperren':'Chat freischalten';x.className=on?'rot':''})});return}
+b=e.target.closest('[data-send]');
+if(b){var s=b.dataset.send,c=document.querySelector('[data-chat="'+s+'"]');window.open(b.dataset.wa,'_blank','noopener');
+if(c&&c.dataset.to==='1')post(c,{slug:s,chatOpen:true},function(){[].forEach.call(document.querySelectorAll('[data-chat="'+s+'"]'),function(x){x.dataset.to='0';x.textContent='Chat sperren';x.className='rot'})});return}
 b=e.target.closest('[data-done]');if(b){post(b,{requestId:Number(b.dataset.done),done:b.dataset.to==='1'},function(){location.reload()})}});`;
 
 /**
@@ -155,7 +173,7 @@ ${CITIES_CSS}
 .req{max-width:760px;margin:0 auto;padding:12px 12px 0}.req h2{margin:4px 2px 6px;font-size:18px}.req h2 span{display:inline-block;min-width:26px;padding:1px 8px;border-radius:999px;background:#ffc93c;text-align:center}
 .req ul{list-style:none;margin:0;padding:0}.rq{background:#fff;border-radius:10px;padding:12px;margin:8px 0;box-shadow:0 1px 2px rgba(0,0,0,.08)}
 .rq b{font-size:17px}.rq b a{color:#111}.rq small{display:block;color:#555;margin-top:2px}.rq p{margin:6px 0 0}.rq .tx{white-space:pre-wrap;background:#f4f3ef;border-radius:6px;padding:6px 8px}
-.b{display:inline-block;margin-left:8px;font-size:12px;padding:2px 8px;border-radius:999px;background:#eee;vertical-align:2px}.b.hot{background:#ffc93c;font-weight:700}
+.b{display:inline-block;margin-left:8px;font-size:12px;padding:2px 8px;border-radius:999px;background:#eee;vertical-align:2px}.b.hot{background:#ffc93c;font-weight:700}.b.ok{background:#d8f3dc}
 .a{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .a a,.a button{font:inherit;font-size:15px;font-weight:600;min-height:42px;padding:9px 14px;border-radius:8px;border:1px solid #111;background:#fff;color:#111;text-decoration:none}
 .a a.pg{background:#111;color:#fff}.a .rot{border-color:#bbb;color:#555;font-weight:500}.no{font-size:13px;color:#888;align-self:center}
