@@ -238,6 +238,14 @@
   "kind": "friseur"
  },
  {
+  "osm": "node/1366485085",
+  "name": "Akakiko",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 8,
+  "kind": "restaurant"
+ },
+ {
   "osm": "node/1493604941",
   "name": "Klipp",
   "reason": "chain",
@@ -275,6 +283,14 @@
   "reason": "chain",
   "detail": "brand tag",
   "district": 3,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/2628729409",
+  "name": "Burgerista",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 8,
   "kind": "imbiss"
  },
  {
@@ -332,6 +348,14 @@
   "detail": "brand tag",
   "district": 2,
   "kind": "friseur"
+ },
+ {
+  "osm": "node/5261815237",
+  "name": "Glorious Bastards",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 8,
+  "kind": "restaurant"
  },
  {
   "osm": "node/5679549924",
@@ -398,6 +422,14 @@
   "kind": "friseur"
  },
  {
+  "osm": "node/9970463490",
+  "name": "Burgerista Urfahr",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 3,
+  "kind": "imbiss"
+ },
+ {
   "osm": "node/11900782151",
   "name": "XXXLutz Linz - Restaurant",
   "reason": "chain",
@@ -442,6 +474,14 @@
   "name": "L'Osteria",
   "reason": "chain",
   "detail": "brand tag",
+  "district": 16,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/14201679039",
+  "name": "akakiko",
+  "reason": "chain",
+  "detail": "known chain",
   "district": 16,
   "kind": "restaurant"
  },

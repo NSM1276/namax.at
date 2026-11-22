@@ -19,6 +19,8 @@ const KNOWN = [
   // Graz
   'martin auer', 'sorger', 'purkarthofer', 'dm frisor', 'dm friseur', 'zu den 3 goldenen kugeln', '3 goldenen kugeln', 'rosamunde',
   'fandl hendl', 'barista s', 'baristas', 'tribeka',
+  // seen in several Austrian cities
+  'burgerista', 'akakiko', 'glorious bastards', 'coffee fellows', 'testa rossa',
   // canteens of universities and companies: nobody there to ask for a page
   'mensa', 'betriebskantine',
 ];

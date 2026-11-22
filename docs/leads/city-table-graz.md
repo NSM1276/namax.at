@@ -3,15 +3,15 @@
 Источник: OpenStreetMap, выгрузка 2026-11-22. Сети, дубликаты и закрытые убраны.
 Пересчитать: `node tools/city/build-dataset.mjs graz`.
 
-**Всего точек:** 1115 · с точным адресом: 1063 · с телефоном: 609 · с часами: 636 · свой сайт указан: 493 (открывается: 398) · **без своего сайта: 717**
+**Всего точек:** 1114 · с точным адресом: 1062 · с телефоном: 608 · с часами: 635 · свой сайт указан: 492 (открывается: 397) · **без своего сайта: 717**
 
-Исключено: сети 129, дубликаты 6, без названия 31, закрытые 3, другой вид 0.
+Исключено: сети 130, дубликаты 6, без названия 31, закрытые 3, другой вид 0.
 
 ## Сколько точек (в скобках — без своего сайта)
 
 | Район | Парикм. | Кебаб/закус. | Рестор. | Кафе | Маникюр | Космет. | Телеф. | Портные | Всего |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| I. Innere Stadt | 31 (20) | 44 (36) | 76 (24) | 44 (25) | 1 (1) | 8 (2) | 1 (1) | 7 (7) | **212** (116) |
+| I. Innere Stadt | 31 (20) | 44 (36) | 75 (24) | 44 (25) | 1 (1) | 8 (2) | 1 (1) | 7 (7) | **211** (116) |
 | II. St. Leonhard | 19 (14) | 14 (10) | 35 (12) | 16 (10) | 1 (0) | 4 (2) | 3 (3) | 8 (4) | **100** (55) |
 | III. Geidorf | 9 (8) | 16 (12) | 38 (19) | 26 (14) | 3 (2) | 6 (6) | — | 2 (2) | **100** (63) |
 | IV. Lend | 21 (18) | 21 (21) | 44 (14) | 33 (26) | 3 (1) | — | 4 (4) | 2 (2) | **128** (86) |
@@ -28,7 +28,7 @@
 | XV. Wetzelsdorf | 3 (3) | 8 (8) | 11 (5) | 5 (1) | — | — | — | — | **27** (17) |
 | XVI. Straßgang | 3 (3) | 6 (4) | 20 (7) | 7 (7) | 2 (2) | — | — | — | **38** (23) |
 | XVII. Puntigam | 1 (1) | 1 (1) | 13 (5) | 1 (0) | — | 1 (1) | — | 1 (1) | **18** (9) |
-| **Грац** | **170** (141) | **179** (151) | **424** (182) | **223** (153) | **20** (14) | **43** (30) | **21** (17) | **35** (29) | **1115** (717) |
+| **Грац** | **170** (141) | **179** (151) | **423** (182) | **223** (153) | **20** (14) | **43** (30) | **21** (17) | **35** (29) | **1114** (717) |
 
 ## Насколько полные данные, по нишам
 
@@ -36,7 +36,7 @@
 |---|---:|---:|---:|---:|---:|---:|---:|
 | Парикм. | 170 | 98% | 42% | 62% | 26% | 66% | 4% |
 | Кебаб/закус. | 179 | 89% | 36% | 53% | 22% | 72% | 9% |
-| Рестор. | 424 | 98% | 74% | 60% | 68% | 84% | 8% |
+| Рестор. | 423 | 98% | 74% | 60% | 68% | 84% | 9% |
 | Кафе | 223 | 93% | 48% | 59% | 39% | 80% | 11% |
 | Маникюр | 20 | 95% | 50% | 40% | 35% | 86% | 5% |
 | Космет. | 43 | 95% | 42% | 49% | 35% | 87% | 0% |
@@ -45,4 +45,4 @@
 
 ## Убраны как сети (проверить список)
 
-Martin Auer (13) · McDonald's (9) · Klipp (9) · Sorger (5) · tribeka (4) · Subway (4) · Interspar Restaurant (3) · Don Camillo (3) · Maria & Maria (3) · Intercoiffeur Mayer (3) · Zu den 3 goldenen Kugeln (3) · dean&david (3) · Fandl-Hendl (3) · 3 Goldenen Kugeln (2) · KFC (2) · Burger King (2) · Rosamunde Kebab & Pizza (2) · DM Frisör (2) · Schnittig! (2) · Barista's (2) · Rosamunde (2) · Dunkin' (2) · Baristas (2) · Billa Marktküche (2) · Café Cappuccino (2) · Betriebskantine Magna (2) · Noodle King (2) · Schillerhof by Martin Auer (1) · Cafe Sorger (1) · Mensa Inffeldgasse (1) · BIPA Styling Lounge (1) · IKEA Restaurant (1) · Pronto (1) · Landhauskeller (1) · XXXLutz Restaurant (1) · intercoiffeur mayer (1) · barista's (1) · Schnittig (1) · Salon Aida (1) · Segafredo (1) · bamb♀♂o (1) · IKEA Café (1) · dm Frisör (1) · L´Osteria (1) · Tchibo (1) · Rosamunde Liebenau (1) · Pizzeria David (1) · Betriebskantine VG-Nord (1) · Greimel (1) · dm Friseurstudio (1) · Rooftop Mensa TU Graz (1) · Brezelkönig (1) · Mensa Cafe (1) · Vapiano (1) · Le Burger (1) · Mensa Med Uni Graz (1) · Bar Amouro (1) · Mensa (1) · Fandl-Hendl: Grill-Mobil (1) · IKEA Bistro (1) · Magenta (1) · Cafe Promenade (1) · Aida (1)
+Martin Auer (13) · McDonald's (9) · Klipp (9) · Sorger (5) · tribeka (4) · Subway (4) · Interspar Restaurant (3) · Don Camillo (3) · Maria & Maria (3) · Intercoiffeur Mayer (3) · Zu den 3 goldenen Kugeln (3) · dean&david (3) · Fandl-Hendl (3) · 3 Goldenen Kugeln (2) · KFC (2) · Burger King (2) · Rosamunde Kebab & Pizza (2) · DM Frisör (2) · Schnittig! (2) · Barista's (2) · Rosamunde (2) · Dunkin' (2) · Baristas (2) · Billa Marktküche (2) · Café Cappuccino (2) · Betriebskantine Magna (2) · Noodle King (2) · Schillerhof by Martin Auer (1) · Cafe Sorger (1) · Mensa Inffeldgasse (1) · BIPA Styling Lounge (1) · IKEA Restaurant (1) · Pronto (1) · Landhauskeller (1) · XXXLutz Restaurant (1) · intercoiffeur mayer (1) · barista's (1) · Schnittig (1) · Salon Aida (1) · Segafredo (1) · bamb♀♂o (1) · IKEA Café (1) · Akakiko (1) · dm Frisör (1) · L´Osteria (1) · Tchibo (1) · Rosamunde Liebenau (1) · Pizzeria David (1) · Betriebskantine VG-Nord (1) · Greimel (1) · dm Friseurstudio (1) · Rooftop Mensa TU Graz (1) · Brezelkönig (1) · Mensa Cafe (1) · Vapiano (1) · Le Burger (1) · Mensa Med Uni Graz (1) · Bar Amouro (1) · Mensa (1) · Fandl-Hendl: Grill-Mobil (1) · IKEA Bistro (1) · Magenta (1) · Cafe Promenade (1) · Aida (1)

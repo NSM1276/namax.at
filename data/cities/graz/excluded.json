@@ -594,6 +594,14 @@
   "kind": "friseur"
  },
  {
+  "osm": "node/2322317570",
+  "name": "Akakiko",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 1,
+  "kind": "restaurant"
+ },
+ {
   "osm": "node/2348386330",
   "name": "Baristas",
   "reason": "chain",

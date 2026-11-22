@@ -1,0 +1,364 @@
+[
+ {
+  "osm": "node/759647695",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/3263392546",
+  "name": "Interspar Restaurant",
+  "reason": "closed"
+ },
+ {
+  "osm": "node/4874064893",
+  "name": "Prima",
+  "reason": "closed"
+ },
+ {
+  "osm": "node/4907999070",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/4959864430",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/5119251509",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/5189421703",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/6210118836",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/9890553270",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/10137803502",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/12078362393",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "way/48315029",
+  "name": null,
+  "reason": "no name"
+ },
+ {
+  "osm": "node/343518909",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 5,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/593725376",
+  "name": "Tchibo",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 5,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/599186274",
+  "name": "Dunkin'",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 5,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/599186391",
+  "name": "Hofer",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 5,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/614236426",
+  "name": "Burger King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 5,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/1019546344",
+  "name": "Vapiano",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/2408998985",
+  "name": "Çiğköftem",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 5,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/2659131977",
+  "name": "Vapiano",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 9,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/3144548177",
+  "name": "L'Osteria",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 5,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/3263382108",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 5,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/3388245725",
+  "name": "Subway",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 5,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/3647112959",
+  "name": "Glorious Bastards",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 9,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/4254515204",
+  "name": "Klipp",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 5,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/4775056663",
+  "name": "Der Bäcker Ruetz",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 7,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/4834949727",
+  "name": "Sushi Noodle King",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 5,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/4927636763",
+  "name": "Starbucks",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 5,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/5010318286",
+  "name": "Felby",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 5,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/5012516720",
+  "name": "Klipp",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "friseur"
+ },
+ {
+  "osm": "node/5012621963",
+  "name": "Aida",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/5016011721",
+  "name": "Testa Rossa",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 3,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/6127915968",
+  "name": "Burger King",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/6139473377",
+  "name": "Subway",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 5,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "node/7018205578",
+  "name": "McCafé",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/11963638560",
+  "name": "Royaltea",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 5,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/12487621221",
+  "name": "Café Cappuccino",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 5,
+  "kind": "cafe"
+ },
+ {
+  "osm": "node/13751778165",
+  "name": "Le Burger",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 5,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "way/4761015",
+  "name": "Mensa Technik",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 3,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "way/71931666",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/102638435",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 3,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/373890228",
+  "name": "McDonald's",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 5,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/373890230",
+  "name": "Testa Rossa",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 5,
+  "kind": "cafe"
+ },
+ {
+  "osm": "way/1238172036",
+  "name": "Le Burger",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 1,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "way/1238172046",
+  "name": "Testa Rossa",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 1,
+  "kind": "cafe"
+ },
+ {
+  "osm": "way/1238172049",
+  "name": "Nordsee",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/1238172069",
+  "name": "Dunkin'",
+  "reason": "chain",
+  "detail": "brand tag",
+  "district": 1,
+  "kind": "imbiss"
+ },
+ {
+  "osm": "way/1322725175",
+  "name": "Testa Rossa",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 3,
+  "kind": "cafe"
+ },
+ {
+  "osm": "way/1322725178",
+  "name": "Marktküche Billa",
+  "reason": "chain",
+  "detail": "known chain",
+  "district": 3,
+  "kind": "restaurant"
+ },
+ {
+  "osm": "node/6139622788",
+  "name": "Max",
+  "reason": "duplicate",
+  "of": "node/4289157261"
+ }
+]

@@ -81,3 +81,8 @@ test('chains: a name in 3 districts is a chain in a city of 17 small districts, 
   for (const name of ['Martin Auer', 'dm Frisör', 'Zu den 3 goldenen Kugeln', "Barista's", 'Mensa Café']) assert.equal(chainReason({ name }), 'known chain', name);
   assert.equal(chainReason({ name: 'Pizzeria' }, new Map([['pizzeria', 9]]), 3), null, 'generic names never');
 });
+
+test('chains seen in several Austrian cities are known chains', async () => {
+  const { chainReason } = await import('./chains.mjs');
+  for (const name of ['Burgerista', 'Akakiko', 'Glorious Bastards']) assert.equal(chainReason({ name }), 'known chain', name);
+});

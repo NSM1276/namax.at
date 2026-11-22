@@ -8,7 +8,7 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync } from 
 import { kindOf, normalizePhone, parseOpeningHours, siteKind } from './normalize.mjs';
 import { assignSlugs } from './slug.mjs';
 import { makeDistrictLocator, zipDistrict } from './district.mjs';
-import { CITIES, districtLabel } from '../../api/_lib/venues/cities.mjs';
+import { CITIES, CITY_ORDER, districtLabel } from '../../api/_lib/venues/cities.mjs';
 import { cityPaths } from './paths.mjs';
 import { chainReason, normName } from './chains.mjs';
 import { validateVenue } from '../../api/_lib/venues/schema.mjs';
@@ -165,7 +165,11 @@ const factsFiles = existsSync('venues') ? readdirSync('venues').filter((f) => f.
   .map((f) => read(`venues/${f}`)) : [];
 const existing = factsFiles.filter((v) => (v.address?.city || 'Wien') === C.name);
 const existingSlugs = new Set(factsFiles.map((v) => v.slug));
-if (!vienna && existsSync('data/city/venues.json')) for (const v of read('data/city/venues.json')) existingSlugs.add(v.slug);
+// Every city built before this one (CITY_ORDER) keeps its slugs, also for venues not in the database yet.
+for (const other of CITY_ORDER.slice(0, CITY_ORDER.indexOf(city))) {
+  const f = cityPaths(other).venues;
+  if (existsSync(f)) for (const v of read(f)) existingSlugs.add(v.slug);
+}
 if (existsSync('data/raw/taken-slugs.txt')) {
   for (const s of readFileSync('data/raw/taken-slugs.txt', 'utf8').split(/\r?\n/)) if (s.trim()) existingSlugs.add(s.trim());
 } else if (!vienna) console.warn('data/raw/taken-slugs.txt missing: slugs are checked against files only, not the database');
@@ -183,8 +187,13 @@ for (const r of unique) {
   if (match) { r.existing = match.slug; claimed.add(match.slug); }
 }
 
-// ---- slugs (venues with a facts file keep theirs)
-const slugs = assignSlugs(unique.filter((r) => !r.existing), existingSlugs, { city });
+// ---- slugs (venues with a facts file keep theirs; so does every venue this city's last build already named:
+// its page may be live, and its own slug must not count as taken by someone else)
+const before = new Map(existsSync(P.venues) ? read(P.venues).map((v) => [v.internal.osm, v.slug]) : []);
+for (const r of unique) if (!r.existing && before.has(r.id)) r.existing = before.get(r.id);
+for (const r of unique) if (r.existing) existingSlugs.delete(r.existing);
+const keptSlugs = new Set(unique.filter((r) => r.existing).map((r) => r.existing));
+const slugs = assignSlugs(unique.filter((r) => !r.existing), new Set([...existingSlugs, ...keptSlugs]), { city });
 for (const r of unique) r.slug = r.existing || slugs.get(r.id);
 if (new Set(unique.map((r) => r.slug)).size !== unique.length) throw new Error('two venues got the same slug');
 
