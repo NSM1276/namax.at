@@ -4,6 +4,7 @@
 //   New venues are public (in search) from the start, as agreed; --hidden stores them with noindex.
 //   node tools/venue-sync.mjs --city graz --new-only [--write]   another city's dataset (tools/city/paths.mjs);
 //   --new-only adds venues whose slug is not in the store yet and never touches one that is (the way a new city is opened).
+//   --non-empty leaves out pages that would show only the sign (see signOnly); they stay in the dataset for later.
 //   node tools/venue-sync.mjs --files                     (venues/*.json)
 //
 // Without --write nothing leaves this computer: it runs against an empty in-memory store and prints what it would do.
@@ -26,8 +27,15 @@ const KEYS_FILE = join(root, 'venues/.keys.tsv');
 export const hasWorkingSite = (v) => (v.internal?.site === 'own' && v.internal?.siteCheck?.state === 'works')
   || v.internal?.overture?.siteCheck?.state === 'works'; // a site only Overture knows counts too
 
-export function pickVenues(all, { district, kind, limit } = {}) {
+/** A page that would show only its sign: no phone, and both address and hours are held back until the owner confirms them. */
+export const signOnly = (v) => {
+  const u = v.uncertain || [];
+  return !v.phone && (!v.hours || u.includes('hours')) && u.includes('address');
+};
+
+export function pickVenues(all, { district, kind, limit, nonEmpty = false } = {}) {
   let out = all.filter((v) => v.ready !== false && !hasWorkingSite(v));
+  if (nonEmpty) out = out.filter((v) => !signOnly(v));
   if (district != null) out = out.filter((v) => Number(v.internal?.district) === Number(district));
   if (kind) out = out.filter((v) => v.kind === kind);
   return limit ? out.slice(0, Number(limit)) : out;
@@ -95,7 +103,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   }
   if (a.city) all.push(...JSON.parse(readFileSync(join(root, a.city === true ? 'data/city/venues.json' : cityPaths(a.city).venues), 'utf8')));
   if (!all.length) { console.error('Nothing to sync: pass --city and/or --files'); process.exit(1); }
-  const venues = pickVenues(all, { district: a.district, kind: a.kind, limit: a.limit });
+  const venues = pickVenues(all, { district: a.district, kind: a.kind, limit: a.limit, nonEmpty: Boolean(a['non-empty']) });
   let store = memoryStore();
   if (a.write) {
     loadEnv();

@@ -123,3 +123,14 @@ test('--new-only: a new city adds only slugs the store does not have, and never 
   assert.equal((await store.getVenue('pizza-roma-graz')).facts.internal.city, 'graz');
   assert.deepEqual(r.links.map((l) => l.slug), ['pizza-roma-graz']);
 });
+
+test('--non-empty: pages that would show only the sign are left out; a phone or confirmed hours keep a page', async () => {
+  const { signOnly } = await import('../venue-sync.mjs');
+  const bare = v('bare', { uncertain: ['address', 'hours'], hours: [null, [600, 1080], null, null, null, null, null] });
+  const phone = v('tel', { uncertain: ['address'], phone: '+4366012345' });
+  const hours = v('hrs', { uncertain: ['address'], hours: [null, [600, 1080], null, null, null, null, null] });
+  const sure = v('sure');
+  assert.equal(signOnly(bare), true);
+  assert.deepEqual(pickVenues([bare, phone, hours, sure], { nonEmpty: true }).map((x) => x.slug), ['tel', 'hrs', 'sure']);
+  assert.equal(pickVenues([bare, phone, hours, sure]).length, 4, 'without the flag nothing changes');
+});
