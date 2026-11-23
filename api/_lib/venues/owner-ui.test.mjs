@@ -25,6 +25,11 @@ test('the owner page has the chat dialog; the key is never in the HTML', async (
   assert.ok(!owner.includes(KEY) && !pub.includes(KEY));
   assert.ok(!pub.includes('data-oc'), 'no chat for visitors');
   assert.ok(pub.includes("sendBeacon('/api/venue/hit'"), 'visitors are counted');
+  // only people: not for programmed browsers, only once the page was visible and touched (or read for a while), with the source
+  assert.ok(pub.includes('navigator.webdriver'));
+  assert.ok(pub.includes('visibilityState'));
+  assert.ok(pub.includes('document.referrer'));
+  assert.ok(!pub.includes("sendBeacon('/api/venue/hit','{}')"), 'no bare beacon on load');
 });
 
 test('the panel carries labels for all 6 languages and no contact details', async () => {

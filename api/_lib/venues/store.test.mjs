@@ -160,18 +160,33 @@ export function storeContract(makeStore, prefix = '') {
 
   test('hits count visitors and owner separately', async () => {
     const s = await fresh();
-    await s.addHit(A, { owner: false, day: '2026-11-21' });
-    await s.addHit(A, { owner: false, day: '2026-11-22' });
+    await s.addHit(A, { owner: false, day: '2026-11-21', source: 'google' });
+    await s.addHit(A, { owner: false, day: '2026-11-22', source: 'direct' });
     await s.addHit(A, { owner: true, day: '2026-11-22' });
     assert.deepEqual(await s.getHits(A), { visitors: 2, owner: 1 });
     assert.deepEqual(await s.getHits(B), { visitors: 0, owner: 0 });
   });
 
+  test('a visitor hit without a source (the old load beacon) is not counted', async () => {
+    const s = await fresh();
+    await s.addHit(A, { owner: false, day: '2026-11-22' });
+    assert.deepEqual(await s.getHits(A), { visitors: 0, owner: 0 });
+    assert.deepEqual(await s.hitSummary({ today: '2026-11-22', weekStart: '2026-11-16' }), []);
+  });
+
+  test('hit sources: visitors of the last 7 days per source, over all pages', async () => {
+    const s = await fresh();
+    for (const [slug, day, source] of [[A, '2026-11-22', 'google'], [B, '2026-11-20', 'google'], [A, '2026-11-21', 'namax'], [A, '2026-11-01', 'social']])
+      await s.addHit(slug, { owner: false, day, source });
+    await s.addHit(A, { owner: true, day: '2026-11-22' });
+    assert.deepEqual(await s.hitSources({ today: '2026-11-22', weekStart: '2026-11-16' }), { google: 2, namax: 1 });
+  });
+
   test('hits by window: today, the last 7 days and in total; owner views never count as visits', async () => {
     const s = await fresh();
-    for (const day of ['2026-11-01', '2026-11-16', '2026-11-22', '2026-11-22']) await s.addHit(A, { owner: false, day });
+    for (const day of ['2026-11-01', '2026-11-16', '2026-11-22', '2026-11-22']) await s.addHit(A, { owner: false, day, source: 'direct' });
     await s.addHit(A, { owner: true, day: '2026-11-22' });
-    await s.addHit(B, { owner: false, day: '2026-11-20' });
+    await s.addHit(B, { owner: false, day: '2026-11-20', source: 'google' });
     const w = { today: '2026-11-22', weekStart: '2026-11-16' };
     assert.deepEqual(await s.getHits(A, w), { visitors: 4, owner: 1, today: 2, week: 3 });
     assert.deepEqual(await s.getHits(B, w), { visitors: 1, owner: 0, today: 0, week: 1 });

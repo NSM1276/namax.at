@@ -9,7 +9,7 @@
 // addMessage(slug, { role, content }) → id;  listMessages(slug, limit);  countOwnerMessagesSince(slug, iso)
 // addPhoto(slug, { url, kind }) → id;  listPhotos;  setPhotoKind(slug, id, kind);  removePhoto;  countPhotosSince
 // addEvent(slug, { type, text });  listEvents(sinceIso);  countEventsSince(slug, type, sinceIso)
-// addHit(slug, { owner, day });  getHits(slug) → { visitors, owner }
+// addHit(slug, { owner, day, source });  getHits(slug) → { visitors, owner };  hitSources({ weekStart }) → { source: n }
 // recordModelCall(slug);  countModelCalls(slug, sinceIso?)
 // listSlugs(status) → slugs
 // setKeyHash(slug, hash);  setOwnerKeyEnc(slug, enc);  setFacade(slug, url|null)
@@ -28,7 +28,7 @@ const requestOrder = (a, b) => (Boolean(a.doneAt) - Boolean(b.doneAt))
 
 export function memoryStore() {
   const venues = new Map();
-  const messages = [], photos = [], events = [], hits = [], modelCalls = [];
+  const messages = [], photos = [], events = [], hits = [], srcHits = [], modelCalls = [];
   let requests = [];
   let seq = 0;
   const nowIso = () => new Date().toISOString();
@@ -109,31 +109,44 @@ export function memoryStore() {
     async listEvents(sinceIso) { return events.filter((e) => e.at >= sinceIso).map((e) => ({ ...e })); },
     async countEventsSince(slug, type, sinceIso) { return events.filter((e) => e.slug === slug && e.type === type && e.at >= sinceIso).length; },
 
-    async addHit(slug, { owner, day }) {
-      let h = hits.find((x) => x.slug === slug && x.day === day);
-      if (!h) { h = { slug, day, visitors: 0, owner: 0 }; hits.push(h); }
-      if (owner) h.owner++; else h.visitors++;
+    // Owner views per day (hits) and visitor views per day and source (srcHits). A visitor view without a source
+    // (the old load beacon) is not counted, so only views that passed the person check add up.
+    async addHit(slug, { owner, day, source = null }) {
+      if (owner) {
+        let h = hits.find((x) => x.slug === slug && x.day === day);
+        if (!h) { h = { slug, day, owner: 0 }; hits.push(h); }
+        h.owner++;
+      } else if (source) {
+        let h = srcHits.find((x) => x.slug === slug && x.day === day && x.source === source);
+        if (!h) { h = { slug, day, source, n: 0 }; srcHits.push(h); }
+        h.n++;
+      }
     },
     /** window { today, weekStart } (YYYY-MM-DD) adds visits today and since weekStart. */
     async getHits(slug, window = null) {
-      const mine = hits.filter((h) => h.slug === slug);
-      const out = { visitors: mine.reduce((a, h) => a + h.visitors, 0), owner: mine.reduce((a, h) => a + h.owner, 0) };
+      const mine = srcHits.filter((h) => h.slug === slug);
+      const out = { visitors: mine.reduce((a, h) => a + h.n, 0), owner: hits.filter((h) => h.slug === slug).reduce((a, h) => a + h.owner, 0) };
       if (!window) return out;
-      return { ...out, today: mine.filter((h) => h.day === window.today).reduce((a, h) => a + h.visitors, 0),
-        week: mine.filter((h) => h.day >= window.weekStart).reduce((a, h) => a + h.visitors, 0) };
+      return { ...out, today: mine.filter((h) => h.day === window.today).reduce((a, h) => a + h.n, 0),
+        week: mine.filter((h) => h.day >= window.weekStart).reduce((a, h) => a + h.n, 0) };
     },
     /** → [{ slug, today, week, total }] visitor views per venue that has any, most this week first. */
     async hitSummary({ today, weekStart }) {
       const by = new Map();
-      for (const h of hits) {
-        if (!h.visitors) continue;
+      for (const h of srcHits) {
         const x = by.get(h.slug) || { slug: h.slug, today: 0, week: 0, total: 0 };
-        x.total += h.visitors;
-        if (h.day === today) x.today += h.visitors;
-        if (h.day >= weekStart) x.week += h.visitors;
+        x.total += h.n;
+        if (h.day === today) x.today += h.n;
+        if (h.day >= weekStart) x.week += h.n;
         by.set(h.slug, x);
       }
       return [...by.values()].sort((a, b) => b.week - a.week || b.total - a.total || a.slug.localeCompare(b.slug));
+    },
+    /** → { source: visitor views since weekStart } over all venues, most first. */
+    async hitSources({ weekStart }) {
+      const by = new Map();
+      for (const h of srcHits) if (h.day >= weekStart) by.set(h.source, (by.get(h.source) || 0) + h.n);
+      return Object.fromEntries([...by].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])));
     },
 
     async recordModelCall(slug) { modelCalls.push({ slug, at: nowIso() }); },

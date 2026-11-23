@@ -49,6 +49,15 @@ create table if not exists venue_hits (
   owner     int not null default 0,
   primary key (slug, day)
 );
+-- visitors column above is no longer read (it counted robots); visitor views that passed the person check, by source:
+create table if not exists venue_hit_sources (
+  slug      text not null references venues(slug) on delete cascade,
+  day       date not null,
+  source    text not null,
+  n         int not null default 0,
+  primary key (slug, day, source)
+);
+create index if not exists venue_hit_sources_day on venue_hit_sources (day);
 
 create table if not exists venue_model_calls (
   id    bigserial primary key,

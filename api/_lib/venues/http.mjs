@@ -177,15 +177,25 @@ export async function handleSitemap(req, { store }) {
 // Crawlers that run the page script (Google renders pages) are not visitors.
 const BOT_UA = /bot|crawl|spider|slurp|headless|lighthouse|pagespeed|preview|facebookexternalhit|embedly|python|curl|wget/i;
 
+// The words the page script may send as the visitor's source (page.mjs srcOf); anything else is "other".
+export const HIT_SOURCES = ['google', 'bing', 'social', 'namax', 'direct', 'other'];
+// Set by the admin page on Nasim's own devices: his views of the venue pages are not visits.
+export const STAFF_COOKIE = 'nx_staff';
+const STAFF_MARK = `${STAFF_COOKIE}=1; Domain=namax.at; Path=/; Max-Age=31536000; Secure; SameSite=Lax`;
+const isStaff = (req) => (req.headers.get('cookie') || '').split(';').some((p) => p.trim() === `${STAFF_COOKIE}=1`);
+
 /** Counts a page view. Always 204, whatever happens, so it tells nobody anything. */
 export async function handleHit(req, { store, now = () => new Date() }) {
   try {
-    if (BOT_UA.test(req.headers.get('user-agent') || '')) throw 0;
+    if (BOT_UA.test(req.headers.get('user-agent') || '') || isStaff(req)) throw 0;
     const slug = hostSlug(req);
     const record = slug ? await store.getVenue(slug) : null;
     if (record && record.status !== 'removed') {
       const body = (await readJson(req, 512)) || {};
-      await store.addHit(slug, { owner: isOwner(record, typeof body.k === 'string' ? body.k : ''), day: viennaDay(now()) });
+      const owner = isOwner(record, typeof body.k === 'string' ? body.k : '');
+      // A visitor view carries the source word of the person check (page.mjs); the old bare beacon has none and is not counted.
+      const source = owner || typeof body.src !== 'string' ? null : HIT_SOURCES.includes(body.src) ? body.src : 'other';
+      await store.addHit(slug, { owner, day: viennaDay(now()), source });
     }
   } catch { /* never fails visibly */ }
   return new Response(null, { status: 204, headers: { 'Cache-Control': 'no-store' } });
@@ -236,8 +246,10 @@ export async function handleAdmin(req, { store, adminKeyHash = ADMIN_KEY_HASH, n
     if (!isAdmin(k, adminKeyHash)) return text(404, 'Not found\n', 'no-store');
     params.delete('k');
     // Always /liste: behind the vercel.json rewrite the function may see its own path (/api/venue/admin).
-    return new Response(null, { status: 303, headers: { Location: '/liste' + (params.size ? '?' + params : ''), 'Cache-Control': 'no-store',
-      'Set-Cookie': `${ADMIN_COOKIE}=${k}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=31536000` } });
+    const h = new Headers({ Location: '/liste' + (params.size ? '?' + params : ''), 'Cache-Control': 'no-store' });
+    h.append('Set-Cookie', `${ADMIN_COOKIE}=${k}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=31536000`);
+    h.append('Set-Cookie', STAFF_MARK);
+    return new Response(null, { status: 303, headers: h });
   }
   const key = adminKey(req, null, adminKeyHash);
   if (!key) return text(404, 'Not found\n', 'no-store');
@@ -255,7 +267,7 @@ export async function handleAdmin(req, { store, adminKeyHash = ADMIN_KEY_HASH, n
   const districts = [...counts].filter(([d]) => d).sort((a, b) => a[0] - b[0]).map(([d, n]) => ({ d, n }));
   const want = params.get('d') || '';
   const district = want === 'all' ? 'all' : districts.some((x) => String(x.d) === want) ? Number(want) : null;
-  const html = (rows, opts) => new Response(renderAdmin(rows, opts), { headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'private, no-store', 'X-Robots-Tag': 'noindex, nofollow' } });
+  const html = (rows, opts) => new Response(renderAdmin(rows, opts), { headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'private, no-store', 'X-Robots-Tag': 'noindex, nofollow', 'Set-Cookie': STAFF_MARK } });
   const live = new Map(all.map((r) => [r.slug, { chatOpen: r.chatOpen, name: effectiveVenue(r, []).name }]));
   const bySlug = new Map(all.map((r) => [r.slug, r]));
   // The owner link goes into "Chat + Link senden"; the page phone shows whether the typed number is the venue's own.
@@ -268,7 +280,8 @@ export async function handleAdmin(req, { store, adminKeyHash = ADMIN_KEY_HASH, n
   const requests = (await store.listRequests()).map((q) => ({ ...q, venueName: live.get(q.slug)?.name || q.venueName, chatOpen: live.get(q.slug)?.chatOpen ?? null, ...extra(q.slug) }));
   const openRequests = requests.filter((q) => !q.doneAt).length;
   const hitRows = await store.hitSummary(visitWindow(now()));
-  const visits = hitRows.reduce((a, h) => ({ today: a.today + h.today, week: a.week + h.week, total: a.total + h.total }), { today: 0, week: 0, total: 0 });
+  const sources = await store.hitSources(visitWindow(now()));
+  const visits = { ...hitRows.reduce((a, h) => ({ today: a.today + h.today, week: a.week + h.week, total: a.total + h.total }), { today: 0, week: 0, total: 0 }), sources };
   const hitBy = new Map(hitRows.map((h) => [h.slug, h]));
   // No district: plain /liste is the "Anfragen" start page; ?v=lokale (or an unknown district) the district chooser,
   // so the list never loads every venue at once.

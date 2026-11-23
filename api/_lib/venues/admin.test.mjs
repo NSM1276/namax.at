@@ -290,7 +290,7 @@ test('login: ?k= sets the cookie and redirects to the same address without the k
   const res = await handleAdmin(new Request(`https://www.namax.at/liste?k=${ADMIN}&d=12`, { headers: { host: 'www.namax.at' } }), s);
   assert.equal(res.status, 303);
   assert.equal(res.headers.get('location'), '/liste?d=12');
-  assert.equal(res.headers.get('set-cookie'), `namax_admin=${ADMIN}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=31536000`);
+  assert.equal(res.headers.getSetCookie()[0], `namax_admin=${ADMIN}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=31536000`);
   assert.equal(res.headers.get('cache-control'), 'no-store');
   const bad = await handleAdmin(new Request(`https://www.namax.at/liste?k=${'x'.repeat(32)}`, { headers: { host: 'www.namax.at' } }), s);
   assert.equal(bad.status, 404);
@@ -450,9 +450,9 @@ async function visSvc() {
   const s = await twoDistricts();
   const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Vienna', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
   const slugs = (await s.store.listForAdmin()).map((r) => r.slug).sort();
-  for (let i = 0; i < 3; i++) await s.store.addHit(slugs[0], { owner: false, day: today });
-  await s.store.addHit(slugs[0], { owner: false, day: '2020-01-01' });
-  await s.store.addHit(slugs[1], { owner: false, day: today });
+  for (let i = 0; i < 3; i++) await s.store.addHit(slugs[0], { owner: false, day: today, source: 'google' });
+  await s.store.addHit(slugs[0], { owner: false, day: '2020-01-01', source: 'direct' });
+  await s.store.addHit(slugs[1], { owner: false, day: today, source: 'namax' });
   await s.store.addHit(slugs[1], { owner: true, day: today });
   return { s, slugs };
 }
@@ -478,6 +478,23 @@ test('visits: each card shows its own numbers; a page without visits shows none'
   const html = await (await handleAdmin(req(ADMIN, 'all'), s)).text();
   assert.equal((html.match(/class="seen"/g) || []).length, 2);
   assert.ok(html.includes('<small class="seen">Besuche: heute 3 · 7 Tage 3 · gesamt 4</small>'));
+});
+
+test('visits: where the visitors of the last 7 days came from, most first', async () => {
+  const { s } = await visSvc();
+  const html = await (await handleAdmin(req(ADMIN, ''), s)).text();
+  assert.ok(html.includes('<p class="src">Woher (7 Tage): Google 3 · namax 1</p>'));
+});
+
+test('staff mark: the admin login and every admin page mark this device, so Nasim\'s own page views are not counted', async () => {
+  const s = await twoDistricts();
+  const staff = /nx_staff=1; Domain=namax\.at; Path=\/; Max-Age=31536000; Secure; SameSite=Lax/;
+  const login = await handleAdmin(new Request(`https://www.namax.at/liste?k=${ADMIN}`), s);
+  assert.match(login.headers.getSetCookie().join('\n'), staff);
+  assert.ok(login.headers.getSetCookie().some((c) => c.startsWith('namax_admin=') || c.includes('HttpOnly')), 'the login cookie stays');
+  assert.match((await handleAdmin(req(ADMIN, ''), s)).headers.getSetCookie().join('\n'), staff);
+  const wrong = await handleAdmin(new Request('https://www.namax.at/liste?k=wrong'), s);
+  assert.equal(wrong.headers.getSetCookie().length, 0);
 });
 
 // More than one city: "Lokale" first asks for the city (Wien first), then its districts; ?d= alone stays Vienna.

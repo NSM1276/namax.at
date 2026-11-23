@@ -73,8 +73,14 @@ function tabsNav(active, openCount) {
     + `<a href="/liste?v=lokale" data-lokale${cur('lokale')}>Lokale</a></nav>`;
 }
 // Visit counter line, on every page under the title: visitor views of all venue pages (owner views excluded).
-const VIS_CSS = '.vis{margin:6px 0 0;font-size:14px;color:#ddd}.vis b{color:#fff}';
-const visLine = (v) => (v ? `<p class="vis">Besuche · heute <b>${v.today}</b> · 7 Tage <b>${v.week}</b> · gesamt <b>${v.total}</b></p>` : '');
+const VIS_CSS = '.vis{margin:6px 0 0;font-size:14px;color:#ddd}.vis b{color:#fff}.src{margin:2px 0 0;font-size:13px;color:#bbb}';
+// Where the visitors of the last 7 days came from (the page script's source words), most first.
+const SRC_DE = { google: 'Google', bing: 'Bing/DuckDuckGo', social: 'Social/WhatsApp', namax: 'namax', direct: 'direkt', other: 'andere' };
+const srcLine = (s) => {
+  const parts = Object.entries(s || {}).filter(([k, n]) => n && SRC_DE[k]).map(([k, n]) => `${SRC_DE[k]} ${n}`);
+  return parts.length ? `<p class="src">Woher (7 Tage): ${esc(parts.join(' · '))}</p>` : '';
+};
+const visLine = (v) => (v ? `<p class="vis">Besuche · heute <b>${v.today}</b> · 7 Tage <b>${v.week}</b> · gesamt <b>${v.total}</b></p>${srcLine(v.sources)}` : '');
 // The "Lokale" tab reopens the last district used on this device.
 const TABS_JS = `var t=document.querySelector('[data-lokale]'),l='',lc='';try{l=(localStorage.getItem('namax-liste-d')||'').replace(/[^0-9a-z]/g,'');lc=(localStorage.getItem('namax-liste-c')||'').replace(/[^a-z]/g,'')}catch(e){}if(t&&l)t.href='/liste?'+(lc&&lc!=='wien'?'c='+lc+'&':'')+'d='+l;`;
 

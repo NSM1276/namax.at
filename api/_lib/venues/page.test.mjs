@@ -141,8 +141,8 @@ test('owner chat: closed by default → the WhatsApp bar; open → the chat part
 test('owner page: how often the page was opened (today, 7 days, total); visitors never see it', async () => {
   const { store, slug } = await setup();
   const today = viennaDay(new Date());
-  await store.addHit(slug, { owner: false, day: today });
-  await store.addHit(slug, { owner: false, day: '2020-01-01' });
+  await store.addHit(slug, { owner: false, day: today, source: 'direct' });
+  await store.addHit(slug, { owner: false, day: '2020-01-01', source: 'direct' });
   await store.addHit(slug, { owner: true, day: today });
   const line = 'Ihre Seite wurde geöffnet: heute 1 · 7 Tage 1 · insgesamt 2';
   const closed = await renderPage({ store, slug, key: KEY });
@@ -163,4 +163,21 @@ test('a stored context puts the street map, the medallion and the neighbours on 
     map: { w: 600, h: 340, streets: [], dots: [] } } }]);
   const r = await renderPage({ store, slug, key: '' });
   assert.ok(r.body.includes('Rundherum') && r.body.includes('https://minimal.namax.at/') && r.body.includes('class="medal"') && r.body.includes('Schanigarten'));
+});
+
+test('visit source: only the host of the page the visitor came from, sorted into a few words', async () => {
+  const { srcOf } = await import('./page.mjs');
+  const here = 'kardash.namax.at';
+  assert.equal(srcOf('', here), 'direct');
+  assert.equal(srcOf('https://www.google.com/', here), 'google');
+  assert.equal(srcOf('https://www.google.at/search?q=x', here), 'google');
+  assert.equal(srcOf('https://duckduckgo.com/', here), 'bing');
+  assert.equal(srcOf('https://www.bing.com/', here), 'bing');
+  assert.equal(srcOf('https://l.instagram.com/', here), 'social');
+  assert.equal(srcOf('https://web.whatsapp.com/', here), 'social');
+  assert.equal(srcOf('https://www.namax.at/kostenlos', here), 'namax');
+  assert.equal(srcOf('https://demirer.namax.at/', here), 'namax');
+  assert.equal(srcOf('https://kardash.namax.at/', here), 'direct', 'a reload is not a new source');
+  assert.equal(srcOf('https://evilgoogle.com/', here), 'other');
+  assert.equal(srcOf('not a url', here), 'other');
 });

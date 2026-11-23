@@ -65,6 +65,8 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     blob: { async del(urls) { for (const u of [].concat(urls)) blobs.delete(String(u).replace(/^__blob\//, '')); },
       async put(path, bytes, opts) { blobs.set(path, { bytes, type: opts.contentType }); return { url: `__blob/${path}` }; } }, // the template serves a non-https photo from "/" + url
   };
+  // Object.fromEntries keeps only the last Set-Cookie; the admin login sets two
+  const heads = (r) => { const h = Object.fromEntries(r.headers); const c = r.headers.getSetCookie(); if (c.length) h['set-cookie'] = c; return h; };
   createServer(async (req, res) => {
     const url = new URL(req.url, 'http://localhost');
     if (url.pathname.startsWith('/__blob/')) {
@@ -80,7 +82,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
       const handler = { '/api/venue/chat': handleChat, '/api/venue/photo': handlePhoto, '/api/venue/hit': handleHit, '/api/venue/claim': handleClaim }[url.pathname]
         || (url.pathname.startsWith('/api/') ? null : handlePage);
       const r = handler ? await handler(request, svc) : new Response('404', { status: 404 });
-      res.writeHead(r.status, { ...Object.fromEntries(r.headers), 'cache-control': 'no-store' });
+      res.writeHead(r.status, { ...heads(r), 'cache-control': 'no-store' });
       res.end(Buffer.from(await r.arrayBuffer()));
       return;
     }
@@ -88,13 +90,13 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
       const body = ['GET', 'HEAD'].includes(req.method) ? undefined : Readable.toWeb(req);
       const request = new Request('https://www.namax.at' + url.pathname + url.search, { method: req.method, headers: req.headers, body, duplex: 'half' });
       const r = await (url.pathname.endsWith('search') ? handleSearch : handleSignup)(request, svc);
-      res.writeHead(r.status, { ...Object.fromEntries(r.headers), 'cache-control': 'no-store' }); res.end(Buffer.from(await r.arrayBuffer())); return;
+      res.writeHead(r.status, { ...heads(r), 'cache-control': 'no-store' }); res.end(Buffer.from(await r.arrayBuffer())); return;
     }
     if (url.pathname === '/liste') {
       const body = ['GET', 'HEAD'].includes(req.method) ? undefined : Readable.toWeb(req);
       const request = new Request('https://www.namax.at' + url.pathname + url.search, { method: req.method, headers: req.headers, body, duplex: 'half' });
       const r = await (req.method === 'POST' ? handleAdminPost : handleAdmin)(request, svc);
-      res.writeHead(r.status, Object.fromEntries(r.headers)); res.end(Buffer.from(await r.arrayBuffer())); return;
+      res.writeHead(r.status, heads(r)); res.end(Buffer.from(await r.arrayBuffer())); return;
     }
     const file = await resolve(url.pathname);
     if (!file) { res.writeHead(404, { 'content-type': 'text/plain' }); res.end('404'); return; }

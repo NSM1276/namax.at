@@ -77,26 +77,35 @@ export function pgStore(query) {
       return count('select count(*) as n from venue_events where slug = $1 and type = $2 and at >= $3::timestamptz', [slug, type, since]);
     },
 
-    async addHit(slug, { owner, day }) {
-      await query(`insert into venue_hits (slug, day, visitors, owner) values ($1, $2::date, $3, $4)
-        on conflict (slug, day) do update set visitors = venue_hits.visitors + excluded.visitors, owner = venue_hits.owner + excluded.owner`,
-      [slug, day, owner ? 0 : 1, owner ? 1 : 0]);
+    // Owner views stay in venue_hits.owner; visitor views that passed the person check go to venue_hit_sources.
+    // The old venue_hits.visitors column is no longer read (it counted robots), so the count starts fresh.
+    async addHit(slug, { owner, day, source = null }) {
+      if (owner) {
+        await query(`insert into venue_hits (slug, day, visitors, owner) values ($1, $2::date, 0, 1)
+          on conflict (slug, day) do update set owner = venue_hits.owner + 1`, [slug, day]);
+      } else if (source) {
+        await query(`insert into venue_hit_sources (slug, day, source, n) values ($1, $2::date, $3, 1)
+          on conflict (slug, day, source) do update set n = venue_hit_sources.n + 1`, [slug, day, source]);
+      }
     },
     async getHits(slug, window = null) {
-      if (!window) {
-        const r = await one('select coalesce(sum(visitors), 0) as v, coalesce(sum(owner), 0) as o from venue_hits where slug = $1', [slug]);
-        return { visitors: num(r?.v || 0), owner: num(r?.o || 0) };
-      }
-      const r = await one(`select coalesce(sum(visitors), 0) as v, coalesce(sum(owner), 0) as o,
-        coalesce(sum(visitors) filter (where day = $2::date), 0) as t, coalesce(sum(visitors) filter (where day >= $3::date), 0) as w
-        from venue_hits where slug = $1`, [slug, window.today, window.weekStart]);
-      return { visitors: num(r?.v || 0), owner: num(r?.o || 0), today: num(r?.t || 0), week: num(r?.w || 0) };
+      const o = await one('select coalesce(sum(owner), 0) as o from venue_hits where slug = $1', [slug]);
+      const r = await one(`select coalesce(sum(n), 0) as v,
+        coalesce(sum(n) filter (where day = $2::date), 0) as t, coalesce(sum(n) filter (where day >= $3::date), 0) as w
+        from venue_hit_sources where slug = $1`, [slug, window?.today || '1970-01-01', window?.weekStart || '1970-01-01']);
+      const out = { visitors: num(r?.v || 0), owner: num(o?.o || 0) };
+      return window ? { ...out, today: num(r?.t || 0), week: num(r?.w || 0) } : out;
     },
     async hitSummary({ today, weekStart }) {
-      const rows = await query(`select slug, sum(visitors) filter (where day = $1::date) as t, sum(visitors) filter (where day >= $2::date) as w,
-        sum(visitors) as n from venue_hits group by slug having sum(visitors) > 0
-        order by coalesce(sum(visitors) filter (where day >= $2::date), 0) desc, sum(visitors) desc, slug`, [today, weekStart]);
-      return rows.map((r) => ({ slug: r.slug, today: num(r.t || 0), week: num(r.w || 0), total: num(r.n || 0) }));
+      const rows = await query(`select slug, sum(n) filter (where day = $1::date) as t, sum(n) filter (where day >= $2::date) as w,
+        sum(n) as total from venue_hit_sources group by slug having sum(n) > 0
+        order by coalesce(sum(n) filter (where day >= $2::date), 0) desc, sum(n) desc, slug`, [today, weekStart]);
+      return rows.map((r) => ({ slug: r.slug, today: num(r.t || 0), week: num(r.w || 0), total: num(r.total || 0) }));
+    },
+    async hitSources({ weekStart }) {
+      const rows = await query(`select source, sum(n) as n from venue_hit_sources where day >= $1::date
+        group by source order by sum(n) desc, source`, [weekStart]);
+      return Object.fromEntries(rows.map((r) => [r.source, num(r.n)]));
     },
 
     async recordModelCall(slug) { await query('insert into venue_model_calls (slug) values ($1)', [slug]); },

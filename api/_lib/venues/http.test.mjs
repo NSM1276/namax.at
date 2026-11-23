@@ -93,9 +93,12 @@ test('photo for a removed venue → 410', async () => {
 test('hit always answers 204 and counts owner and visitor apart', async () => {
   const s = await services();
   const hit = (body) => handleHit(new Request(`https://${host}/api/venue/hit`, { method: 'POST', headers: { host }, body: JSON.stringify(body) }), s);
-  assert.equal((await hit({})).status, 204);
+  assert.equal((await hit({ src: 'google' })).status, 204);
   assert.equal((await hit({ k: KEY })).status, 204);
-  assert.equal((await hit({ k: 'nonsense' })).status, 204);
+  assert.equal((await hit({ k: 'nonsense', src: 'direct' })).status, 204);
+  assert.deepEqual(await s.store.getHits(SLUG), { visitors: 2, owner: 1 });
+  // the old beacon on page load sent no source: not a counted visit
+  assert.equal((await hit({})).status, 204);
   assert.deepEqual(await s.store.getHits(SLUG), { visitors: 2, owner: 1 });
   const bot = await handleHit(new Request(`https://${host}/api/venue/hit`, { method: 'POST',
     headers: { host, 'user-agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)' }, body: '{}' }), s);
@@ -103,6 +106,17 @@ test('hit always answers 204 and counts owner and visitor apart', async () => {
   assert.deepEqual(await s.store.getHits(SLUG), { visitors: 2, owner: 1 }, 'crawlers are not counted');
   const unknown = await handleHit(new Request('https://nope.namax.at/api/venue/hit', { method: 'POST', headers: { host: 'nope.namax.at' }, body: '{}' }), s);
   assert.equal(unknown.status, 204);
+});
+
+test('hit: Nasim\'s marked device is not counted; an unknown source becomes "other"', async () => {
+  const s = await services();
+  const hit = (body, headers = {}) => handleHit(new Request(`https://${host}/api/venue/hit`, { method: 'POST', headers: { host, ...headers }, body: JSON.stringify(body) }), s);
+  assert.equal((await hit({ src: 'google' }, { cookie: 'a=b; nx_staff=1' })).status, 204);
+  assert.deepEqual(await s.store.getHits(SLUG), { visitors: 0, owner: 0 });
+  await hit({ src: '<script>' });
+  await hit({ src: 'google' });
+  const w = { today: '2000-01-01', weekStart: '0000-01-01' };
+  assert.deepEqual(await s.store.hitSources(w), { other: 1, google: 1 });
 });
 
 test('page handler: key from ?k, owner page private, public page cached', async () => {
