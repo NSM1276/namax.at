@@ -160,6 +160,14 @@ test('photos: an outside photo comes first; typed and untyped photos all show', 
   assert.deepEqual(v.photos, [blob(4), blob(1), blob(3)]);
 });
 
+test('cuisine: only the OSM cuisine leaves the internal facts, for the niche picture', () => {
+  const v = effectiveVenue(record({ ...load('full'), internal: { cuisine: 'kebab;pizza', notes: 'secret' } }), []);
+  assert.equal(v.cuisine, 'kebab;pizza');
+  assert.equal(v.internal, undefined);
+  assert.equal(effectiveVenue(record({ ...load('full'), internal: { cuisine: 42 } }), []).cuisine, undefined);
+  assert.equal(effectiveVenue(record(load('full')), []).cuisine, undefined);
+});
+
 test('checked: a recent on-site check date shows, an old one or owner hours hide it', () => {
   const y = new Date().getFullYear();
   const with_ = (d, extra) => effectiveVenue(record({ ...load('full'), internal: { checkDate: d } }, extra), []);

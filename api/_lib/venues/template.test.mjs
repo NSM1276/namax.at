@@ -222,7 +222,7 @@ test('without a facade photo the owner\'s first photo leads the page and leaves 
   assert.equal((html.match(new RegExp(b(1), 'g')) || []).length, 1);
   assert.match(html, new RegExp(`class="photos"[^>]*><img src="${b(2)}"`));
   const one = renderVenue({ ...load('full'), photos: [b(1)] });
-  assert.ok(!one.includes('class="photos"') && !one.includes('class="nophoto"'));
+  assert.ok(!one.includes('class="photos"') && !one.includes('class="nophoto"') && !one.includes('class="facade niche"'));
   const withFacade = renderVenue({ ...load('full'), facade: b(9), photos: [b(1), b(2)] });
   assert.match(withFacade, new RegExp(`<figure class="facade"><img src="${b(9)}"`));
   assert.match(withFacade, new RegExp(`class="photos"[^>]*><img src="${b(1)}"`));

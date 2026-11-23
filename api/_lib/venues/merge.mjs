@@ -36,6 +36,9 @@ export function effectiveVenue(record, photos = []) {
     && !Object.hasOwn(record.changes || {}, 'hours')) venue.checked = cd.slice(0, 7); else delete venue.checked;
   // Checked against Overture Maps (CDLA-Permissive-2.0): only the credit reaches the page, never Overture's own facts.
   if (record.facts.internal?.overture?.release) venue.overture = true; else delete venue.overture;
+  // The OSM cuisine only picks the niche picture (pizza, kebab ...); nothing else of the internal facts leaves.
+  const cu = record.facts.internal?.cuisine;
+  if (typeof cu === 'string' && cu.length <= 200) venue.cuisine = cu; else delete venue.cuisine;
   return venue;
 }
 

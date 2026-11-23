@@ -9,6 +9,7 @@ const LOOK = { family: BRAND.display, weight: 700, upper: true, spacing: '.01em'
 import { ogImageUrl } from './og-url.mjs';
 import { openState, formatMinute, viennaNow } from './hours.mjs';
 import { CITIES, cityByName, districtNo } from './cities.mjs';
+import { nicheImage } from './niche.mjs';
 
 const SITE = 'https://www.namax.at';
 const OWNER_CHAT_FALLBACK = 'https://wa.me/4367764292055'; // replaced by the real chat in part 2
@@ -165,9 +166,12 @@ h2{font-size:28px;margin-bottom:12px}
 .rating b{font-family:var(--display);font-weight:${l.weight};font-size:30px;line-height:1;margin-right:4px}
 .photos{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .photos img{display:block;width:100%;aspect-ratio:1;object-fit:cover;border-radius:4px}
-.nophoto{margin:0;padding:14px;border:2px dashed color-mix(in srgb,var(--accent) 55%,transparent);border-radius:12px;text-align:center}
-.nophoto i{display:block;width:min(240px,70%);aspect-ratio:1;margin:0 auto;background:var(--accent);-webkit-mask:center/contain no-repeat;mask:center/contain no-repeat;opacity:.85}
-.nophoto figcaption{margin-top:8px;font-size:15px}
+.nophoto{margin:0;font-size:15px}
+.niche{position:relative;border-radius:14px;overflow:hidden;box-shadow:0 8px 20px color-mix(in srgb,var(--ink) 18%,transparent)}
+.niche img{aspect-ratio:16/9;border-radius:0;box-shadow:none;background:#141414}
+.niche .sym{position:absolute;top:10px;right:10px;padding:3px 8px;border-radius:8px;background:rgba(0,0,0,.5);color:#fff;font:600 11px/1.3 var(--body)}
+.niche figcaption{position:absolute;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:30px 12px 12px;background:linear-gradient(transparent,rgba(0,0,0,.8));color:#fff;font:600 14px/1.25 var(--body)}
+.niche .add{flex:none;min-height:40px;padding:8px 14px;border:2px solid #fff;border-radius:999px;background:var(--accent);color:var(--accent-ink);font:700 14px/1 var(--body);cursor:pointer}
 .hours{margin:0}
 .hours div{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid color-mix(in srgb,var(--ink) 18%,transparent)}
 .hours dt,.hours dd{margin:0}
@@ -275,18 +279,21 @@ function lead(v) {
   const first = blobSrc(v.photos && v.photos[0]);
   return first ? { src: first, fromPhotos: true } : null;
 }
-function facade(v) {
+function facade(v, owner) {
   const l = lead(v);
-  return l ? `<figure class="facade"><img src="${esc(l.src)}" alt="${esc(v.name)}" width="1600" height="1200" fetchpriority="high"></figure>` : '';
+  if (l) return `<figure class="facade"><img src="${esc(l.src)}" alt="${esc(v.name)}" width="1600" height="1200" fetchpriority="high"></figure>`;
+  // No real photo yet: a marked example picture of the trade (niche.mjs); its button opens the owner form on "photos".
+  const n = v.photos && v.photos.length ? null : nicheImage(v);
+  if (!n) return '';
+  const add = offersClaim(v, owner)
+    ? `<figcaption>${tr('Sind Sie der Inhaber?', 'Are you the owner?')}<button type="button" class="add" data-claim-open data-wish="photos">${tr('+ Eigene Fotos', '+ Your photos')}</button></figcaption>` : '';
+  return `<figure class="facade niche"><img src="${n}" alt="" width="1200" height="670" fetchpriority="high">${tr('Symbolbild', 'Example image', 'span', 'class="sym"')}${add}</figure>`;
 }
 
-// A linocut empty frame where photos would be, by trade; its button opens the owner form with "add photos" chosen.
-const NOPHOTO = { imbiss: 'food', restaurant: 'food', cafe: 'food', friseur: 'beauty', nails: 'beauty', kosmetik: 'beauty', handy: 'repair', schneider: 'repair' };
+// No photos and no example picture for the trade: just the owner line.
 function noPhoto(v, owner) {
-  const g = NOPHOTO[v.kind];
-  if (!g || !offersClaim(v, owner)) return '';
-  const u = `/v/_shared/placeholders/placeholder-${g}.webp`;
-  return `<figure class="nophoto"><i aria-hidden="true" style="-webkit-mask-image:url(${u});mask-image:url(${u})"></i><figcaption>${tr('Noch keine Fotos.', 'No photos yet.')} <button type="button" class="claimlink" data-claim-open data-wish="photos">${tr('Sind Sie der Inhaber? Fotos hinzufügen', 'Are you the owner? Add photos')}</button></figcaption></figure>`;
+  if (nicheImage(v) || !offersClaim(v, owner)) return '';
+  return `<p class="nophoto"><button type="button" class="claimlink" data-claim-open data-wish="photos">${tr('Sind Sie der Inhaber? Fotos hinzufügen', 'Are you the owner? Add photos')}</button></p>`;
 }
 
 function photos(v, owner) {
@@ -474,7 +481,7 @@ ${head(v, pal, let_)}
 </head>
 <body${owner ? ' class="has-owner"' : ''}>
 ${sign(v)}
-<main class="wrap page">${facade(v)}
+<main class="wrap page">${facade(v, owner)}
 <aside class="side">${status}
 ${actions(v)}</aside><div class="col">
 ${board(v)}

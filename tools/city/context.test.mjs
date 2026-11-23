@@ -119,16 +119,26 @@ test('district illustration: Vienna by post code, other cities by name, nothing 
   assert.ok(!renderVenue({ slug: 'x', kind: 'cafe', name: 'X', address: { street: 'A 1', zip: '1040', city: 'Wien' }, theme: {} }).includes('districts/'));
 });
 
-test('photo placeholder: only on unconfirmed pages without photos; picture by trade; its button opens the owner form on "photos"', () => {
-  const page = (o = {}, opts) => renderVenue({ slug: 'x', kind: 'imbiss', name: 'X', address: { street: 'A 1', zip: '1040', city: 'Wien' }, theme: {},
+test('niche banner: a "Symbolbild" of the trade where the facade would be, until there are real photos; its button opens the owner form on "photos"', () => {
+  const page = (o = {}, opts) => renderVenue({ slug: 'x', kind: 'schneider', name: 'X', address: { street: 'A 1', zip: '1040', city: 'Wien' }, theme: {},
     context: { near: [], facts: [], map: { w: 600, h: 340, streets: [], dots: [] } }, ...o }, opts);
-  assert.match(page(), /placeholders\/placeholder-food\.webp/);
+  assert.match(page(), /<figure class="facade niche"><img src="\/v\/_shared\/niche\/tailor\.webp"/);
+  assert.match(page(), /data-de="Symbolbild" data-en="Example image"/);
   assert.match(page(), /data-claim-open data-wish="photos"/);
-  assert.match(page({ kind: 'friseur' }), /placeholder-beauty\.webp/);
-  assert.match(page({ kind: 'handy' }), /placeholder-repair\.webp/);
-  assert.ok(!page({ confirmed: true }).includes('placeholder-'));
-  assert.ok(!page({ photos: ['__blob/venues/x/1.jpg'] }).includes('placeholder-'));
-  assert.ok(!page({ kind: 'other' }).includes('placeholder-'));
+  assert.match(page({ kind: 'imbiss', cuisine: 'pizza' }), /niche\/pizza/);
+  // a confirmed page keeps the picture, without the owner button
+  assert.match(page({ confirmed: true }), /class="facade niche"/);
+  assert.ok(!page({ confirmed: true }).includes('data-wish="photos"'));
+  // real photos win
+  assert.ok(!page({ photos: ['__blob/venues/x/1.jpg'] }).includes('/niche/'));
+  assert.ok(!page({ photos: ['foto-1.jpg'] }).includes('/niche/'));
+  // no picture for the trade or the cuisine: only the owner line, no frame, no picture
+  for (const o of [{ kind: 'handy' }, { kind: 'imbiss' }]) {
+    assert.ok(!page(o).includes('/niche/'));
+    assert.match(page(o), /class="nophoto"><button type="button" class="claimlink" data-claim-open data-wish="photos"/);
+  }
+  assert.ok(!page({ kind: 'handy', confirmed: true }).includes('class="nophoto"'));
+  assert.ok(!page().includes('placeholder-'));
 });
 
 test('Graz: the picture by district (roman numeral in the caption); Innere Stadt keeps the clock tower; an unknown area falls back to the city', async () => {
