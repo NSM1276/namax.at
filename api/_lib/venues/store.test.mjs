@@ -182,6 +182,14 @@ export function storeContract(makeStore, prefix = '') {
     assert.deepEqual(await s.hitSources({ today: '2026-11-22', weekStart: '2026-11-16' }), { google: 2, namax: 1 });
   });
 
+  test('hit sources by page: where the visitors of each page of the last 7 days came from', async () => {
+    const s = await fresh();
+    for (const [slug, day, source] of [[A, '2026-11-22', 'google'], [A, '2026-11-22', 'google'], [B, '2026-11-20', 'direct'], [A, '2026-11-21', 'namax'], [A, '2026-11-01', 'social']])
+      await s.addHit(slug, { owner: false, day, source });
+    await s.addHit(A, { owner: true, day: '2026-11-22' });
+    assert.deepEqual(await s.hitSourcesBySlug({ today: '2026-11-22', weekStart: '2026-11-16' }), { [A]: { google: 2, namax: 1 }, [B]: { direct: 1 } });
+  });
+
   test('hits by window: today, the last 7 days and in total; owner views never count as visits', async () => {
     const s = await fresh();
     for (const day of ['2026-11-01', '2026-11-16', '2026-11-22', '2026-11-22']) await s.addHit(A, { owner: false, day, source: 'direct' });

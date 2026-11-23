@@ -287,7 +287,8 @@ export async function handleAdmin(req, { store, adminKeyHash = ADMIN_KEY_HASH, n
   // so the list never loads every venue at once.
   if (district == null) {
     const view = want || params.get('v') === 'lokale' ? 'lokale' : 'anfragen';
-    const top = view === 'lokale' ? hitRows.slice(0, 10).map((h) => ({ ...h, name: live.get(h.slug)?.name })) : [];
+    const bySlug = await store.hitSourcesBySlug(visitWindow(now()));
+    const top = hitRows.slice(0, 20).map((h) => ({ ...h, name: live.get(h.slug)?.name, sources: bySlug[h.slug] || {} }));
     return html([], { districts, chooser: true, requests, view, visits, top, cities, city });
   }
   const rows = records.filter((r) => district === 'all' || districtOf(r) === district).map((r) => {

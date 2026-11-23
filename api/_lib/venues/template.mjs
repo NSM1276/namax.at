@@ -164,6 +164,10 @@ h2{font-size:28px;margin-bottom:12px}
 .facts li{border:2px solid var(--ink);border-radius:999px;padding:7px 14px;font-weight:700;font-size:15px}
 .rating{margin:0;font-size:17px}
 .rating b{font-family:var(--display);font-weight:${l.weight};font-size:30px;line-height:1;margin-right:4px}
+.stars{display:inline-block;position:relative;font-size:22px;line-height:1;letter-spacing:2px;margin:0 8px 0 2px;vertical-align:3px;color:color-mix(in srgb,var(--ink) 20%,transparent)}
+.stars::before{content:"★★★★★"}
+.stars::after{content:"★★★★★";position:absolute;left:0;top:0;width:var(--fill);overflow:hidden;white-space:nowrap;color:#f2a900}
+.rating a{color:inherit}
 .photos{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .photos img{display:block;width:100%;aspect-ratio:1;object-fit:cover;border-radius:4px}
 .nophoto{margin:0;font-size:15px}
@@ -264,9 +268,13 @@ function facts(v) {
 function rating(v) {
   const r = v.rating;
   if (!r) return '';
-  const de = `${T.de.ratingOf} · ${r.count} ${T.de.reviewsOn} ${r.source} · ${T.de.asOf} ${month(r.date)}`;
-  const en = `${T.en.ratingOf} · ${r.count} ${T.en.reviewsOn} ${r.source} · ${T.en.asOf} ${month(r.date)}`;
-  return `<section><p class="rating"><b>${comma(r.value)}</b>${tr(de, en)}</p></section>`;
+  // Our own stars, no Google logo (Google allows its name in plain text only). A Google count links the venue
+  // on Google Maps, so a visitor can read the reviews there; never swapped to Apple Maps, the reviews are Google's.
+  const fill = Math.round(Math.min(5, Math.max(0, r.value)) * 20);
+  const count = tr(`${r.count} ${T.de.reviewsOn} ${r.source}`, `${r.count} ${T.en.reviewsOn} ${r.source}`);
+  const linked = r.source === 'Google' ? `<a href="${esc(`https://www.google.com/maps/search/?api=1&query=${placeQuery(v)}`)}" rel="noopener">${count}</a>` : count;
+  return `<section><p class="rating"><b>${comma(r.value)}</b><span class="stars" style="--fill:${fill}%" aria-hidden="true"></span>`
+    + `${tr(`${T.de.ratingOf} · `, `${T.en.ratingOf} · `)}${linked}${tr(` · ${T.de.asOf} ${month(r.date)}`, ` · ${T.en.asOf} ${month(r.date)}`)}</p></section>`;
 }
 
 /** Nasim's photo of the front, under the plate (4:3, cropped on his phone). Only our Blob store or the local preview. */

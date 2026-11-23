@@ -102,6 +102,13 @@ export function pgStore(query) {
         order by coalesce(sum(n) filter (where day >= $2::date), 0) desc, sum(n) desc, slug`, [today, weekStart]);
       return rows.map((r) => ({ slug: r.slug, today: num(r.t || 0), week: num(r.w || 0), total: num(r.total || 0) }));
     },
+    async hitSourcesBySlug({ weekStart }) {
+      const rows = await query(`select slug, source, sum(n) as n from venue_hit_sources where day >= $1::date
+        group by slug, source order by slug, sum(n) desc, source`, [weekStart]);
+      const by = {};
+      for (const r of rows) (by[r.slug] ||= {})[r.source] = num(r.n);
+      return by;
+    },
     async hitSources({ weekStart }) {
       const rows = await query(`select source, sum(n) as n from venue_hit_sources where day >= $1::date
         group by source order by sum(n) desc, source`, [weekStart]);

@@ -235,3 +235,15 @@ test('the on-site check date and the visitor report link', () => {
   const confirmed = renderVenue({ ...load('full'), confirmed: true, checked: '2025-13' });
   assert.ok(!confirmed.includes('class="asof"'));
 });
+
+test('rating: stars filled to the value, and the Google review count links the venue on Google Maps (no Google logo)', () => {
+  const v = load('full');
+  const html = renderVenue(v);
+  const block = (html.match(/<section><p class="rating">[\s\S]*?<\/section>/) || [''])[0];
+  assert.match(block, /class="stars" style="--fill:98%" aria-hidden="true"/, block);
+  assert.ok(block.includes('https://www.google.com/maps/search/?api=1&amp;query=Friseur%20Meidling'), block);
+  assert.ok(!/data-apple/.test(block), 'the reviews are on Google: iPhones keep the Google link');
+  assert.ok(!/<img|<svg[^>]*google/i.test(block), 'no Google logo');
+  const other = renderVenue({ ...v, rating: { ...v.rating, source: 'Tripadvisor' } });
+  assert.ok(!/<p class="rating">[\s\S]*?<a /.test(other.match(/<section><p class="rating">[\s\S]*?<\/section>/)[0]), 'only a Google rating gets the Maps link');
+});

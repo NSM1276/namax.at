@@ -9,7 +9,7 @@
 // addMessage(slug, { role, content }) → id;  listMessages(slug, limit);  countOwnerMessagesSince(slug, iso)
 // addPhoto(slug, { url, kind }) → id;  listPhotos;  setPhotoKind(slug, id, kind);  removePhoto;  countPhotosSince
 // addEvent(slug, { type, text });  listEvents(sinceIso);  countEventsSince(slug, type, sinceIso)
-// addHit(slug, { owner, day, source });  getHits(slug) → { visitors, owner };  hitSources({ weekStart }) → { source: n }
+// addHit(slug, { owner, day, source });  getHits(slug) → { visitors, owner };  hitSources({ weekStart }) → { source: n };  hitSourcesBySlug({ weekStart }) → { slug: { source: n } }
 // recordModelCall(slug);  countModelCalls(slug, sinceIso?)
 // listSlugs(status) → slugs
 // setKeyHash(slug, hash);  setOwnerKeyEnc(slug, enc);  setFacade(slug, url|null)
@@ -143,6 +143,12 @@ export function memoryStore() {
       return [...by.values()].sort((a, b) => b.week - a.week || b.total - a.total || a.slug.localeCompare(b.slug));
     },
     /** → { source: visitor views since weekStart } over all venues, most first. */
+    async hitSourcesBySlug({ weekStart }) {
+      const by = {};
+      for (const h of srcHits) if (h.day >= weekStart) (by[h.slug] ||= {})[h.source] = (by[h.slug][h.source] || 0) + h.n;
+      for (const k of Object.keys(by)) by[k] = Object.fromEntries(Object.entries(by[k]).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])));
+      return by;
+    },
     async hitSources({ weekStart }) {
       const by = new Map();
       for (const h of srcHits) if (h.day >= weekStart) by.set(h.source, (by.get(h.source) || 0) + h.n);

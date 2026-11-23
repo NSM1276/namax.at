@@ -470,7 +470,16 @@ test('visits: the Lokale tab lists the most visited pages of the last 7 days', a
   const html = await (await handleAdmin(lokale(ADMIN), s)).text();
   const top = (html.match(/<ol class="top">[\s\S]*?<\/ol>/) || [''])[0];
   assert.ok(top.indexOf(`https://${slugs[0]}.namax.at/`) >= 0 && top.indexOf(`https://${slugs[0]}.namax.at/`) < top.indexOf(`https://${slugs[1]}.namax.at/`));
-  assert.ok(top.includes('<span>3</span>'));
+  assert.ok(top.includes('<span>heute 3 · 7 Tage 3 · Google 3</span>'));
+});
+
+test('visits: the start page (Anfragen) lists the visited pages too, each with today, 7 days and where its visitors came from', async () => {
+  const { s, slugs } = await visSvc();
+  const html = await (await handleAdmin(req(ADMIN, ''), s)).text();
+  const top = (html.match(/<ol class="top">[\s\S]*?<\/ol>/) || [''])[0];
+  assert.ok(top.includes(`https://${slugs[0]}.namax.at/`) && top.includes(`https://${slugs[1]}.namax.at/`));
+  assert.ok(top.includes('<span>heute 3 · 7 Tage 3 · Google 3</span>'), top);
+  assert.ok(top.includes('<span>heute 1 · 7 Tage 1 · namax 1</span>'), top);
 });
 
 test('visits: each card shows its own numbers; a page without visits shows none', async () => {

@@ -161,9 +161,10 @@ function renderChooser(districts, total, requests = [], view = 'anfragen', visit
     + (open.length > MAX_SHOWN_REQUESTS ? `<p class="none">${open.length - MAX_SHOWN_REQUESTS} ältere Anfragen nicht angezeigt</p>` : '')
     + (done.length ? `<details><summary>Erledigt (${done.length})</summary><ul>${done.slice(0, MAX_SHOWN_REQUESTS).map(requestCard).join('')}</ul></details>` : '')
     + '</section>';
-  const busy = top.filter((x) => x.week > 0).slice(0, 10);
-  const topList = !busy.length ? '' : `<section class="req"><h2>Meistbesucht · 7 Tage</h2><ol class="top">`
-    + busy.map((x) => `<li><a href="https://${esc(x.slug)}.namax.at/" target="_blank" rel="noopener">${esc(x.name || x.slug)}</a> <span>${x.week}</span></li>`).join('')
+  const busy = top.filter((x) => x.week > 0).slice(0, 20);
+  const from = (s) => Object.entries(s || {}).filter(([k, n]) => n && SRC_DE[k]).map(([k, n]) => ` · ${SRC_DE[k]} ${n}`).join('');
+  const topList = !busy.length ? '' : `<section class="req"><h2>Besuchte Seiten · 7 Tage</h2><ol class="top">`
+    + busy.map((x) => `<li><a href="https://${esc(x.slug)}.namax.at/" target="_blank" rel="noopener">${esc(x.name || x.slug)}</a> <span>heute ${x.today} · 7 Tage ${x.week}${from(x.sources)}</span></li>`).join('')
     + '</ol></section>';
   return `<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow"><title>namax · Admin</title><meta name="theme-color" content="#111">
@@ -185,7 +186,7 @@ ${CITIES_CSS}
 .a a.pg{background:#111;color:#fff}.a .rot{border-color:#bbb;color:#555;font-weight:500}.no{font-size:13px;color:#888;align-self:center}
 details{margin:6px 2px 4px}summary{min-height:44px;display:flex;align-items:center;color:#555;cursor:pointer}.none{color:#666;margin:4px 2px}</style></head><body>
 <header><h1>namax · Admin${view === 'lokale' ? ` <span>${total} Lokale</span>` : ''}</h1>${visLine(visits)}${tabsNav(view, open.length)}</header>
-${view === 'lokale' ? `${topList}${cityNav(cities, city)}<div class="pick" role="group" aria-label="Bezirk wählen">${picks}</div>` : reqs}
+${view === 'lokale' ? `${topList}${cityNav(cities, city)}<div class="pick" role="group" aria-label="Bezirk wählen">${picks}</div>` : reqs + topList}
 <script>(function(){${SWITCH_JS}})();</script>
 <script>(function(){${TABS_JS}${NAV_JS}
 document.addEventListener('click',function(e){var b=e.target.closest('[data-pick]');if(b)go(b.dataset.pick)})})();</script>
