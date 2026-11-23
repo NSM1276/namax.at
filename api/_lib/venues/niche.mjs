@@ -1,7 +1,7 @@
 // The "Symbolbild" of a venue's trade, shown where the facade photo would be until the owner sends real photos.
 // Only tools of the trade or a dish, never a room, so nobody takes it for the place itself.
 // Food follows the OSM cuisine; with no known cuisine there is no picture: a guessed dish would be worse than none.
-// Pictures: v/_shared/niche/<name>.webp (dark still lifes from the design library, 1200x670).
+// Pictures: v/_shared/niche/<name>.webp (dark still lifes from the design library, cropped 4:3 around the subject, 1024x768).
 
 export const NICHE = {
   friseur: ['hair', 'barber'],

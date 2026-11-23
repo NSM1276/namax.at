@@ -168,7 +168,7 @@ h2{font-size:28px;margin-bottom:12px}
 .photos img{display:block;width:100%;aspect-ratio:1;object-fit:cover;border-radius:4px}
 .nophoto{margin:0;font-size:15px}
 .niche{position:relative;border-radius:14px;overflow:hidden;box-shadow:0 8px 20px color-mix(in srgb,var(--ink) 18%,transparent)}
-.niche img{aspect-ratio:16/9;border-radius:0;box-shadow:none;background:#141414}
+.niche img{aspect-ratio:4/3;border-radius:0;box-shadow:none;background:#141414}
 .niche .sym{position:absolute;top:10px;right:10px;padding:3px 8px;border-radius:8px;background:rgba(0,0,0,.5);color:#fff;font:600 11px/1.3 var(--body)}
 .niche figcaption{position:absolute;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:30px 12px 12px;background:linear-gradient(transparent,rgba(0,0,0,.8));color:#fff;font:600 14px/1.25 var(--body)}
 .niche .add{flex:none;min-height:40px;padding:8px 14px;border:2px solid #fff;border-radius:999px;background:var(--accent);color:var(--accent-ink);font:700 14px/1 var(--body);cursor:pointer}
@@ -287,7 +287,7 @@ function facade(v, owner) {
   if (!n) return '';
   const add = offersClaim(v, owner)
     ? `<figcaption>${tr('Sind Sie der Inhaber?', 'Are you the owner?')}<button type="button" class="add" data-claim-open data-wish="photos">${tr('+ Eigene Fotos', '+ Your photos')}</button></figcaption>` : '';
-  return `<figure class="facade niche"><img src="${n}" alt="" width="1200" height="670" fetchpriority="high">${tr('Symbolbild', 'Example image', 'span', 'class="sym"')}${add}</figure>`;
+  return `<figure class="facade niche"><img src="${n}" alt="" width="1024" height="768" fetchpriority="high">${tr('Symbolbild', 'Example image', 'span', 'class="sym"')}${add}</figure>`;
 }
 
 // No photos and no example picture for the trade: just the owner line.
