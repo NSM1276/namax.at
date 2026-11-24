@@ -149,6 +149,9 @@ test('venue host: robots.txt per status, other paths 404, only "/" renders the p
   assert.equal(robots.status, 200);
   assert.match(robots.headers.get('content-type'), /text\/plain/);
   assert.match(await robots.text(), /Allow: \/[\s\S]*Sitemap: https:\/\/www\.namax\.at\/api\/venue\/sitemap/);
+  const rb = await (await get('/robots.txt')).text();
+  assert.match(rb, /User-agent: GPTBot\n[\s\S]*User-agent: Bytespider\n[\s\S]*?Disallow: \/\n\nUser-agent: \*\nAllow: \//, 'training and SEO crawlers are turned away, everyone else may crawl');
+  assert.doesNotMatch(rb, /PerplexityBot|OAI-SearchBot|Googlebot/, 'search crawlers stay allowed');
   assert.equal((await get('/favicon.ico')).status, 404);
   assert.equal((await get('/wp-login.php')).status, 404);
   const hidden = await services('hidden');

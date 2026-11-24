@@ -42,13 +42,19 @@ async function ownerRecord(req, store, key, { needChat = false } = {}) {
 const text = (status, body, cache = 'public, s-maxage=3600') =>
   new Response(body, { status, headers: { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': cache } });
 
+// Crawlers that only collect data for AI training or SEO tools: no visitors for the venue, only billed requests (Nasim, 2026-11-24).
+// AI search and assistants (OAI-SearchBot, ChatGPT-User, PerplexityBot) stay allowed: they can send people to the venue.
+export const NO_CRAWL_BOTS = ['GPTBot', 'CCBot', 'ClaudeBot', 'anthropic-ai', 'Google-Extended', 'Applebot-Extended', 'Bytespider', 'meta-externalagent',
+  'Amazonbot', 'cohere-ai', 'Diffbot', 'omgili', 'AhrefsBot', 'SemrushBot', 'MJ12bot', 'DotBot', 'PetalBot', 'BLEXBot', 'DataForSeoBot'];
+const NO_CRAWL = NO_CRAWL_BOTS.map((b) => `User-agent: ${b}`).join('\n') + '\nDisallow: /\n';
+
 export async function handlePage(req, { store, ownerPart }) {
   const url = new URL(req.url);
   if (url.pathname === '/robots.txt') {
     const slug = hostSlug(req);
     const record = slug ? await store.getVenue(slug) : null;
     if (!record || record.status !== 'public') return text(200, 'User-agent: *\nDisallow: /\n');
-    return text(200, 'User-agent: *\nAllow: /\n\nSitemap: https://www.namax.at/api/venue/sitemap\n');
+    return text(200, `${NO_CRAWL}\nUser-agent: *\nAllow: /\n\nSitemap: https://www.namax.at/api/venue/sitemap\n`);
   }
   if (url.pathname === '/favicon.svg') {
     const slug = hostSlug(req);

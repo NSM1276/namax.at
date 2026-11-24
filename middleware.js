@@ -16,6 +16,10 @@ export function venuePath(host, pathname) {
   return '/api/venue/page';
 }
 
+// Run only where a venue page can be answered: not for chat/photo/hit calls, the shared venue files, or namax.at's own
+// fonts, styles and scripts. Every middleware run is billed, and a page view loads several of those files (Nasim, 2026-11-24).
+export const config = { matcher: ['/((?!api/|v/_shared/|fonts/|css/|js/|_vercel/).*)'] };
+
 export default function middleware(request) {
   const url = new URL(request.url);
   const target = venuePath(request.headers.get('host'), url.pathname);

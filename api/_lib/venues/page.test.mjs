@@ -6,7 +6,7 @@ import { hashKey, newKey, isOwner, viennaDay } from './owner.mjs';
 import { ownerPanel } from './owner-ui.mjs';
 import { renderPage, slugFromHost } from './page.mjs';
 import { renderVenue } from './template.mjs';
-import { venuePath } from '../../../middleware.js';
+import { venuePath, config as middlewareConfig } from '../../../middleware.js';
 
 const load = (n) => JSON.parse(readFileSync(new URL(`./fixtures/${n}.json`, import.meta.url)));
 const KEY = 'a'.repeat(32), OTHER = 'b'.repeat(32);
@@ -60,7 +60,8 @@ test('no key or a wrong key → public page, cached, nothing of the owner', asyn
   for (const key of ['', OTHER, hashKey(KEY), 'x']) {
     const r = await renderPage({ store, slug, key });
     assert.equal(r.status, 200);
-    assert.match(r.headers['Cache-Control'], /^public, s-maxage=60$/);
+    assert.equal(r.headers['Cache-Control'], 'public, s-maxage=21600', 'six hours on the CDN');
+    assert.match(r.headers['Vercel-Cache-Tag'], new RegExp(`^v-${slug}(,|$)`));
     assert.ok(r.body.includes('Friseur Meidling'));
     for (const s of ['data-chat', 'data-owner', 'wa.me', KEY, hashKey(KEY), 'SECRET-OWNER', 'SECRET-NOTE']) assert.ok(!r.body.includes(s), s);
   }
@@ -195,4 +196,25 @@ test('visit source: only the host of the page the visitor came from, sorted into
   assert.equal(srcOf('https://kardash.namax.at/', here), 'direct', 'a reload is not a new source');
   assert.equal(srcOf('https://evilgoogle.com/', here), 'other');
   assert.equal(srcOf('not a url', here), 'other');
+});
+
+test('a page-changing write purges the page tags; reads, hits and failed purges do not get in the way', async () => {
+  const { purgingStore, pageTags } = await import('./page-cache.mjs');
+  const { store, slug } = await setup();
+  const purged = [];
+  const p = purgingStore(store, async (tags) => { purged.push(...tags); if (tags[0] === 'v-boom') throw new Error('down'); });
+  await p.setStatus(slug, 'hidden');
+  await p.getVenue(slug);
+  await p.addHit(slug, { owner: false, day: '2026-11-24' });
+  assert.deepEqual(purged, [`v-${slug}`]);
+  await p.setContexts([{ slug, context: {} }, { slug: 'boom', context: {} }]);
+  assert.deepEqual(purged.slice(1), [`v-${slug}`, 'v-boom']);
+  assert.equal((await store.getVenue(slug)).status, 'hidden', 'the write itself went through');
+  assert.equal(pageTags('a', [{ slug: 'b' }, { slug: 'a' }, null]), 'v-a,v-b');
+});
+
+test('the middleware runs for pages and icons, not for API calls or shared files', () => {
+  const re = new RegExp('^' + middlewareConfig.matcher[0] + '$');
+  for (const p of ['/', '/favicon.ico', '/favicon.svg', '/robots.txt', '/apple-touch-icon.png', '/impressum']) assert.ok(re.test(p), p);
+  for (const p of ['/api/venue/hit', '/v/_shared/fonts/anton-latin.woff2', '/v/_shared/niche/doener.webp', '/fonts/a.woff2', '/css/site.css', '/js/site.js']) assert.ok(!re.test(p), p);
 });

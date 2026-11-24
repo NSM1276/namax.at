@@ -3,6 +3,8 @@
 import { neon } from '@neondatabase/serverless';
 import Anthropic from '@anthropic-ai/sdk';
 import { put, del } from '@vercel/blob';
+import { dangerouslyDeleteByTag } from '@vercel/functions';
+import { purgingStore } from './page-cache.mjs';
 import { pgStore } from './pg-store.mjs';
 import { ownerPanel } from './owner-ui.mjs';
 
@@ -14,7 +16,8 @@ export function services() {
   // without a key the chat still works: free text and price photos go to Nasim as a handoff
   const client = process.env.ANTHROPIC_API_KEY ? new Anthropic({ maxRetries: 1, timeout: 25_000 }) : null;
   cached = {
-    store: pgStore((text, params) => sql.query(text, params)),
+    // a page-changing write refreshes the cached public pages that show this venue (page-cache.mjs)
+    store: purgingStore(pgStore((text, params) => sql.query(text, params)), (tags) => dangerouslyDeleteByTag(tags)),
     llm: client ? { create: (params) => client.messages.create(params) } : null,
     blob: { put: (path, bytes, opts) => put(path, Buffer.from(bytes), opts), del: (urls) => del(urls) },
     ownerPart: ownerPanel,

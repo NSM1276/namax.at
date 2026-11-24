@@ -2,6 +2,7 @@
 import { renderVenue, ownerBar, esc } from './template.mjs';
 import { effectiveVenue } from './merge.mjs';
 import { isOwner, visitWindow } from './owner.mjs';
+import { PAGE_CACHE, pageTags } from './page-cache.mjs';
 
 /** Venue slug for a host such as friseur-meidling.namax.at, or null. */
 export function slugFromHost(host) {
@@ -61,12 +62,13 @@ export async function renderPage({ store, slug, key, ownerPart }) {
   const venue = effectiveVenue(record, photos);
   // Neighbours were picked when the context was built; one hidden or removed since then must not be linked or drawn.
   const near = venue.context?.near || [];
+  const tags = pageTags(slug, near); // before the filter: a neighbour that comes back must refresh this page too
   if (near.length) {
     const live = new Set(await store.publicAmong(near.map((x) => x.slug)));
     venue.context = { ...venue.context, near: near.filter((x) => live.has(x.slug)) };
   }
   if (!isOwner(record, key)) {
-    return { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, s-maxage=60' },
+    return { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': PAGE_CACHE, 'Vercel-Cache-Tag': tags },
       body: renderVenue(venue).replace('</body>', `${HIT}</body>`) };
   }
   // The chat works only where Nasim opened it after talking to the owner; elsewhere the bar leads to him.
