@@ -122,7 +122,7 @@ test('district illustration: Vienna by post code, other cities by name, nothing 
 test('niche banner: a "Symbolbild" of the trade where the facade would be, until there are real photos; its button opens the owner form on "photos"', () => {
   const page = (o = {}, opts) => renderVenue({ slug: 'x', kind: 'schneider', name: 'X', address: { street: 'A 1', zip: '1040', city: 'Wien' }, theme: {},
     context: { near: [], facts: [], map: { w: 600, h: 340, streets: [], dots: [] } }, ...o }, opts);
-  assert.match(page(), /<figure class="facade niche"><img src="\/v\/_shared\/niche\/tailor\.webp"/);
+  assert.match(page(), /<figure class="facade niche"><img src="\/v\/_shared\/niche\/(tailor|sewing-machine|tailor-[a-z]+)\.webp"/);
   assert.match(page(), /data-de="Symbolbild" data-en="Example image"/);
   assert.match(page(), /data-claim-open data-wish="photos"/);
   assert.match(page({ kind: 'imbiss', cuisine: 'pizza' }), /niche\/pizza/);
@@ -132,12 +132,15 @@ test('niche banner: a "Symbolbild" of the trade where the facade would be, until
   // real photos win
   assert.ok(!page({ photos: ['__blob/venues/x/1.jpg'] }).includes('/niche/'));
   assert.ok(!page({ photos: ['foto-1.jpg'] }).includes('/niche/'));
-  // no picture for the trade or the cuisine: only the owner line, no frame, no picture
-  for (const o of [{ kind: 'handy' }, { kind: 'imbiss' }]) {
+  // no known cuisine: a takeaway bag, never a guessed dish; a phone shop: its tools
+  assert.match(page({ kind: 'imbiss' }), /niche\/takeaway/);
+  assert.match(page({ kind: 'handy' }), /niche\/phone-/);
+  // no picture for the trade: only the owner line, no frame, no picture
+  for (const o of [{ kind: 'other' }]) {
     assert.ok(!page(o).includes('/niche/'));
     assert.match(page(o), /class="nophoto"><button type="button" class="claimlink" data-claim-open data-wish="photos"/);
   }
-  assert.ok(!page({ kind: 'handy', confirmed: true }).includes('class="nophoto"'));
+  assert.ok(!page({ kind: 'other', confirmed: true }).includes('class="nophoto"'));
   assert.ok(!page().includes('placeholder-'));
 });
 
