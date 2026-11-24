@@ -132,11 +132,10 @@ test('niche banner: a "Symbolbild" of the trade where the facade would be, until
   // real photos win
   assert.ok(!page({ photos: ['__blob/venues/x/1.jpg'] }).includes('/niche/'));
   assert.ok(!page({ photos: ['foto-1.jpg'] }).includes('/niche/'));
-  // no known cuisine: a takeaway bag, never a guessed dish; a phone shop: its tools
-  assert.match(page({ kind: 'imbiss' }), /niche\/takeaway/);
+  // a phone shop: its tools
   assert.match(page({ kind: 'handy' }), /niche\/phone-/);
-  // no picture for the trade: only the owner line, no frame, no picture
-  for (const o of [{ kind: 'other' }]) {
+  // nothing we surely know it sells (an imbiss with no known food, another trade): only the owner line, no frame, no picture
+  for (const o of [{ kind: 'imbiss' }, { kind: 'other' }]) {
     assert.ok(!page(o).includes('/niche/'));
     assert.match(page(o), /class="nophoto"><button type="button" class="claimlink" data-claim-open data-wish="photos"/);
   }
