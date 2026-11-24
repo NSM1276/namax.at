@@ -218,3 +218,8 @@ test('the middleware runs for pages and icons, not for API calls or shared files
   for (const p of ['/', '/favicon.ico', '/favicon.svg', '/robots.txt', '/apple-touch-icon.png', '/impressum']) assert.ok(re.test(p), p);
   for (const p of ['/api/venue/hit', '/v/_shared/fonts/anton-latin.woff2', '/v/_shared/niche/doener.webp', '/fonts/a.woff2', '/css/site.css', '/js/site.js']) assert.ok(!re.test(p), p);
 });
+
+test('venue pages do not load Vercel Web Analytics: that is for paying owners only (Nasim, 2026-11-24)', async () => {
+  const { store, slug } = await setup();
+  for (const key of ['', KEY]) assert.ok(!(await renderPage({ store, slug, key })).body.includes('/_vercel/insights/'), key ? 'owner' : 'public');
+});
