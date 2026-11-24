@@ -11,7 +11,7 @@ const only = (set, allowed) => [...set].every((x) => allowed.includes(x));
 
 test('a ladies or unisex salon never gets barber tools; a barber does', () => {
   const salon = all('friseur', null, 'Coiffeur Christina');
-  assert.ok(!['barber', 'barber-razor', 'barber-clipper', 'beard-care'].some((x) => salon.has(x)), [...salon].join());
+  assert.ok(!['barber', 'barber-razor', 'barber-clipper', 'barber-scissors', 'beard-care'].some((x) => salon.has(x)), [...salon].join());
   assert.ok(only(all('friseur', null, 'Babos Barbershop'), ['barber', 'barber-razor', 'barber-clipper', 'barber-scissors', 'beard-care']));
   assert.ok(only(all('friseur', null, 'Herrenfriseur Ali'), ['barber', 'barber-razor', 'barber-clipper', 'barber-scissors', 'beard-care']));
 });

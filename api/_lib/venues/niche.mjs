@@ -6,7 +6,7 @@
 // A word we know but have no picture for (Donut, Buffet, Kiosk ...) means no picture, not a guess.
 // Pictures: v/_shared/niche/<name>.webp (dark still lifes from the design library, 4:3, 1024x768).
 
-const HAIR = ['hair', 'hair-dryer', 'barber-scissors', 'hair-colour', 'hair-care', 'hair-clips'];
+const HAIR = ['hair', 'hair-dryer', 'hair-colour', 'hair-care', 'hair-clips'];
 const BARBER = ['barber', 'barber-razor', 'barber-clipper', 'barber-scissors', 'beard-care'];
 const COFFEE = ['coffee', 'cappuccino', 'coffee-beans'];
 const CAKE = ['cake', 'sachertorte', 'pastries'];
