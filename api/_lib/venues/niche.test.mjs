@@ -18,9 +18,11 @@ test('a ladies or unisex salon never gets barber tools; a barber does', () => {
 
 test('an imbiss with no known food gets no picture (no paper bag); a restaurant gets a laid table', () => {
   assert.equal(nicheImage(v('imbiss', null, 'Buffet zum Freundlichen')), null);
-  assert.equal(nicheImage(v('imbiss', 'sandwich', 'Ecke')), null);
+  assert.equal(name(nicheImage(v('imbiss', 'sandwich', 'Ecke'))), 'panini');
+  assert.equal(nicheImage(v('imbiss', 'donut', 'Ecke')), null);
   assert.ok(only(all('restaurant', null, 'Zum Hirschen'), ['table-setting', 'table-setting-2', 'table-setting-3']));
-  assert.equal(nicheImage(v('restaurant', null, 'Oakberry Açai')), null, 'an açaí bar is no laid table');
+  assert.equal(name(nicheImage(v('restaurant', null, 'Oakberry Açai'))), 'acai', 'an açaí bar is no laid table');
+  assert.ok(only(all('restaurant', null, 'Pokerface'), ['table-setting', 'table-setting-2', 'table-setting-3']), 'poker is no poké');
 });
 
 test('a café shows coffee; cake, breakfast or nothing only when name or cuisine says so', () => {
@@ -29,9 +31,12 @@ test('a café shows coffee; cake, breakfast or nothing only when name or cuisine
   assert.ok(only(all('cafe', null, 'Konditorei Oberlaa'), ['cake', 'sachertorte', 'pastries']));
   assert.ok(only(all('cafe', 'breakfast', 'Nelke'), ['breakfast', 'croissant']));
   assert.ok(only(all('cafe', 'austrian', 'Hübler'), ['coffee', 'cappuccino', 'sachertorte']));
-  assert.equal(nicheImage(v('cafe', 'ice_cream', 'Perrella')), null);
-  assert.equal(nicheImage(v('cafe', 'coffee_shop', 'Eissalon Tichy')), null);
-  assert.equal(nicheImage(v('cafe', 'bubble_tea', 'Shodai')), null);
+  const ICE = ['gelato-cups', 'gelato-cone', 'sundae'];
+  assert.ok(only(all('cafe', 'ice_cream', 'Perrella'), ICE));
+  assert.ok(only(all('cafe', 'coffee_shop', 'Eissalon Tichy'), ICE));
+  assert.equal(name(nicheImage(v('cafe', 'bubble_tea', 'Shodai'))), 'bubble-tea');
+  assert.equal(name(nicheImage(v('cafe', null, 'Teehaus Haas'))), 'tea');
+  assert.ok(only(all('restaurant', null, 'All Reis'), ['table-setting', 'table-setting-2', 'table-setting-3']), 'Reis is no Eis');
 });
 
 test('the name on the sign beats the OSM cuisine; the earliest word wins', () => {
@@ -59,6 +64,16 @@ test('Austrian food: Schnitzel and Gulasch, no regional guess; known cuisines ke
   // only the first cuisine decides: "french;italian" is no Italian place, so no pasta; an imbiss then gets nothing
   assert.ok(only(all('restaurant', 'french;german;italian', 'Seven North'), ['table-setting', 'table-setting-2', 'table-setting-3']));
   assert.equal(nicheImage(v('imbiss', 'unknown;korean', 'Y')), null);
+  assert.equal(name(nicheImage(v('imbiss', 'burger', 'Framburi Fries'))), 'fries');
+  assert.equal(name(nicheImage(v('restaurant', 'hawaiian', 'Poké House'))), 'poke');
+  assert.equal(name(nicheImage(v('restaurant', 'georgian', 'Tamada'))), 'khinkali');
+  // a vague word on the sign gives way to an exact first cuisine
+  assert.ok(only(all('restaurant', 'chinese', 'Red Bowl'), ['asian-wok', 'dumplings', 'spring-rolls']));
+  assert.equal(name(nicheImage(v('imbiss', 'american', 'Apapika Bowls'))), 'buddha-bowl');
+  assert.equal(name(nicheImage(v('cafe', 'bubble_tea', 'Tea Plus'))), 'bubble-tea');
+  assert.equal(name(nicheImage(v('cafe', null, 'Tea plus (bubble)'))), 'bubble-tea');
+  assert.equal(name(nicheImage(v('cafe', 'teahouse', 'Teehaus Arteee'))), 'tea');
+  assert.equal(name(nicheImage(v('restaurant', 'fine_dining;austrian', 'Steirereck'))), 'fine-dining');
   assert.ok(only(all('handy', null, 'Mobile Shop'), ['phone-repair', 'phone-accessories']));
   assert.equal(nicheImage(v('other', null, 'Y')), null);
 });

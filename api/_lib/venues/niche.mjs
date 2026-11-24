@@ -3,7 +3,7 @@
 // there is no picture: an empty frame is better than a paper bag at a Buffet or a razor at a ladies' salon.
 // Only tools of the trade or a dish, never a room, so nobody takes it for the place itself.
 // Order: a dish or trade word in the venue's own name (its sign) → the OSM cuisine → a safe default for the kind.
-// A word we know but have no picture for (Eis, Bubble Tea, Buffet ...) means no picture, not a guess.
+// A word we know but have no picture for (Donut, Buffet, Kiosk ...) means no picture, not a guess.
 // Pictures: v/_shared/niche/<name>.webp (dark still lifes from the design library, 4:3, 1024x768).
 
 const HAIR = ['hair', 'hair-dryer', 'barber-scissors', 'hair-colour', 'hair-care', 'hair-clips'];
@@ -13,6 +13,9 @@ const CAKE = ['cake', 'sachertorte', 'pastries'];
 const KAFFEEHAUS = ['coffee', 'cappuccino', 'sachertorte'];
 const BREAKFAST = ['breakfast', 'croissant'];
 const AUSTRIAN = ['schnitzel', 'schnitzel-2', 'goulash'];
+const GELATO = ['gelato-cups', 'gelato-cone', 'sundae'];
+const TEA = ['tea'];
+const BOWL = ['buddha-bowl'];
 
 /** Trades: the default when the name says nothing more. */
 export const NICHE = {
@@ -36,7 +39,13 @@ const NAME_FOOD = [
   [/fisch|\bfish/, ['fish']], [/hendl|chicken|gefl[uü]gel/, ['chicken', 'fried-chicken']], [/w[uü]rstel|wurst/, ['wuerstel']],
   [/heurig|buschenschank/, ['wine']], [/br[aä]u\b|brauerei|brewing|brewery|bierhaus/, ['beer-pretzel']], [/fr[uü]hst[uü]ck|breakfast|brunch/, BREAKFAST],
   [/konditor|patisser|torten|b[aä]cker/, CAKE],
-  [/\beis\b|gelato|eissalon|ice ?cream|bubble ?tea|\btee\b|\btea\b|bagel|donut|waffel|waffle|cr[eê]pe|juice|saft|smoothie|buffet|kiosk|a[cç]a[ií]|pok[eé]|\bbowls?\b/, null],
+  [/\beis\b|eiscaf|eissalon|gelat|ice ?cream/, GELATO], [/bubble|boba/, ['bubble-tea']], [/matcha/, ['matcha']],
+  [/(?:\btee\b|\btea\b|teehaus|teestube)(?!.*(?:bubble|boba))/, TEA], [/juice|\bs[aä]fte?\b|smoothie/, ['juice']], [/bagel/, ['bagel']],
+  [/cr[eêè]pe|palatschink/, ['crepe']], [/waffel|waffle/, ['waffle']], [/hot ?dog/, ['hot-dog']], [/panini|sandwich|\btoast/, ['panini']],
+  [/fries|pommes/, ['fries']], [/\bpok[eé](?![a-z])/, ['poke']], [/a[cç]a[ií]/, ['acai']], [/\bbowls?\b/, BOWL], [/tapas/, ['tapas']],
+  [/[ck]hinkali|chinkali/, ['khinkali']], [/pierog|pirogg|wareniki|vareniki/, ['pierogi']], [/empanad/, ['empanadas']],
+  [/tajine|tagine/, ['tagine']], [/injera/, ['injera']],
+  [/donut|buffet|kiosk/, null],
 ];
 const PEDICURE = [/fu(?:ß|ss)pflege|pedik[uü]r|pedicure|podolog/, ['pedicure']];
 const NAME_NAILS = [PEDICURE];
@@ -66,12 +75,18 @@ export const CUISINE = {
   breakfast: BREAKFAST, brunch: BREAKFAST,
   // cafés
   coffee_shop: COFFEE, coffee: COFFEE, cake: CAKE, pastry: CAKE, confiserie: CAKE, dessert: CAKE,
-  ice_cream: null, ice: null, bubble_tea: null, tea: null, teahouse: null, matcha: null, juice: null, smoothie: null,
-  bagel: null, donut: null, waffle: null, crepe: null, hot_dog: null,
+  ice_cream: GELATO, ice: GELATO, gelato: GELATO, frozen_yogurt: null, bubble_tea: ['bubble-tea'], tea: ['tea'], teahouse: ['tea'],
+  matcha: ['matcha'], juice: ['juice'], smoothie: ['juice'], bagel: ['bagel'], waffle: ['waffle'], crepe: ['crepe'],
+  hot_dog: ['hot-dog'], sandwich: ['panini'], panini: ['panini'], toast: ['panini'], fries: ['fries'], donut: null,
+  poke: ['poke'], poke_bowl: ['poke'], hawaiian: ['poke'], acai: ['acai'], bowl: ['buddha-bowl'], spanish: ['tapas'], tapas: ['tapas'],
+  georgian: ['khinkali'], polish: ['pierogi'], ukrainian: ['pierogi'], afghan: ['kabuli-pulao'], ethiopian: ['injera'], eritrean: ['injera'],
+  moroccan: ['tagine'], empanada: ['empanadas'], fine_dining: ['fine-dining'],
 };
 // A Viennese Kaffeehaus (austrian / regional cuisine on a café) is coffee and cake; Schnitzel would be a guess.
 const CAFE_CUISINE = { austrian: KAFFEEHAUS, regional: KAFFEEHAUS, viennese: KAFFEEHAUS, local: KAFFEEHAUS };
 const FOOD = new Set(['restaurant', 'imbiss', 'cafe']);
+// A vague word on the sign gives way to a more exact first cuisine: 'Red Bowl' (chinese) is a wok, 'Tea Plus' (bubble_tea) is bubble tea.
+const YIELDS = new Map([[BOWL, new Set(['asian', 'chinese', 'japanese', 'korean', 'vietnamese', 'thai', 'hawaiian', 'poke', 'poke_bowl'])], [TEA, new Set(['bubble_tea'])]]);
 
 /** Stable small hash, so a page keeps its picture and neighbours of one trade differ. */
 function pick(list, slug) {
@@ -90,11 +105,11 @@ function byName(rules, name) {
 
 /** The picture list for a venue, or null when we don't know what it surely sells. */
 export function nicheList(v) {
-  const named = byName(NAME_RULES[v.kind], v.name);
-  if (named) return named.list;
-  if (!FOOD.has(v.kind)) return NICHE[v.kind] || null;
   const tokens = typeof v.cuisine === 'string' ? v.cuisine.toLowerCase().split(/[;,]/).map((s) => s.trim()).filter(Boolean) : [];
   const t = tokens[0];
+  const named = byName(NAME_RULES[v.kind], v.name);
+  if (named && !(YIELDS.get(named.list)?.has(t) && CUISINE[t])) return named.list;
+  if (!FOOD.has(v.kind)) return NICHE[v.kind] || null;
   if (t && v.kind === 'cafe' && Object.hasOwn(CAFE_CUISINE, t)) return CAFE_CUISINE[t];
   if (t && Object.hasOwn(CUISINE, t)) return CUISINE[t];
   return v.kind === 'cafe' ? NICHE.cafe : NEUTRAL[v.kind] || null;
