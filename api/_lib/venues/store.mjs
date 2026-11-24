@@ -13,6 +13,7 @@
 // recordModelCall(slug);  countModelCalls(slug, sinceIso?)
 // listSlugs(status) → slugs
 // setKeyHash(slug, hash);  setOwnerKeyEnc(slug, enc);  setFacade(slug, url|null)
+// publicAmong(slugs) → the given slugs whose page is public now (for the neighbours on a page)
 // setContexts([{ slug, context }]) → number updated (unknown slugs skipped); getVenue(...).context is null until set
 // listForAdmin() → [{ slug, status, facts, changes, confirmedAt, ownerKeyEnc, facadeUrl, chatOpen }] (not removed)
 // setChatOpen(slug, bool): the owner chat works only for venues Nasim opened it for (closed by default)
@@ -162,6 +163,9 @@ export function memoryStore() {
 
     async listSlugs(status) {
       return [...venues.values()].filter((v) => v.status === status).map((v) => v.slug).sort();
+    },
+    async publicAmong(slugs) {
+      return [...new Set(slugs)].filter((s) => venues.get(s)?.status === 'public').sort();
     },
     async setKeyHash(slug, hash) { need(slug).keyHash = hash; },
     async setOwnerKeyEnc(slug, enc) { need(slug).ownerKeyEnc = enc; },

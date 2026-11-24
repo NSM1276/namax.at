@@ -125,6 +125,10 @@ export function pgStore(query) {
     async listSlugs(status) {
       return (await query('select slug from venues where status = $1 order by slug', [status])).map((r) => r.slug);
     },
+    async publicAmong(slugs) {
+      if (!slugs.length) return [];
+      return (await query(`select slug from venues where slug = any($1) and status = 'public' order by slug`, [[...new Set(slugs)]])).map((r) => r.slug);
+    },
     async setKeyHash(slug, hash) { await query('update venues set key_hash = $2 where slug = $1', [slug, hash]); },
     async setOwnerKeyEnc(slug, enc) { await query('update venues set owner_key_enc = $2 where slug = $1', [slug, enc]); },
     async setFacade(slug, url) { await query('update venues set facade_url = $2 where slug = $1', [slug, url || null]); },

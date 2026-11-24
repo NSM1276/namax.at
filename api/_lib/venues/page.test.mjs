@@ -165,6 +165,18 @@ test('a stored context puts the street map, the medallion and the neighbours on 
   assert.ok(r.body.includes('Rundherum') && r.body.includes('https://minimal.namax.at/') && r.body.includes('class="medal"') && r.body.includes('Schanigarten'));
 });
 
+test('a neighbour that is hidden, removed or unknown is left out of "In der Nähe" and the map', async () => {
+  const { store, slug } = await setup();
+  await store.upsertFacts('weg', { facts: { ...load('minimal'), slug: 'weg', name: 'Versteckt' }, keyHash: hashKey(OTHER), status: 'hidden' });
+  const dot = (s, name) => ({ slug: s, name, kind: 'cafe', m: 50, icon: 'cafe', xy: [10, 10] });
+  await store.setContexts([{ slug, context: { near: [dot('minimal', 'Nebenan'), dot('weg', 'Versteckt'), dot('gibtsnicht', 'Unbekannt')], stop: null, facts: [], cuisine: [],
+    map: { w: 600, h: 340, streets: [], dots: [] } } }]);
+  const r = await renderPage({ store, slug, key: '' });
+  assert.ok(r.body.includes('https://minimal.namax.at/'));
+  assert.ok(!r.body.includes('weg.namax.at') && !r.body.includes('Versteckt'));
+  assert.ok(!r.body.includes('gibtsnicht') && !r.body.includes('Unbekannt'));
+});
+
 test('visit source: only the host of the page the visitor came from, sorted into a few words', async () => {
   const { srcOf } = await import('./page.mjs');
   const here = 'kardash.namax.at';

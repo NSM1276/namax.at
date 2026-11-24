@@ -243,6 +243,12 @@ export function storeContract(makeStore, prefix = '') {
     assert.deepEqual((await s.listSlugs('public')).filter((x) => x.startsWith(prefix)), [A]);
   });
 
+  test('publicAmong keeps only the given slugs whose page is public', async () => {
+    const s = await fresh();
+    assert.deepEqual(await s.publicAmong([B, A, prefix + 'nope', A]), [A]);
+    assert.deepEqual(await s.publicAmong([]), []);
+  });
+
   const req = (extra = {}) => ({ role: 'owner', wish: 'fix', name: 'Ali', phone: '+43 660 1234567', channel: 'call', text: 'Hallo', ...extra });
   const mine = async (s) => (await s.listRequests()).filter((r) => r.slug.startsWith(prefix));
 

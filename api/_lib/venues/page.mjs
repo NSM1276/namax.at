@@ -59,6 +59,12 @@ export async function renderPage({ store, slug, key, ownerPart }) {
   }
   const photos = await store.listPhotos(slug);
   const venue = effectiveVenue(record, photos);
+  // Neighbours were picked when the context was built; one hidden or removed since then must not be linked or drawn.
+  const near = venue.context?.near || [];
+  if (near.length) {
+    const live = new Set(await store.publicAmong(near.map((x) => x.slug)));
+    venue.context = { ...venue.context, near: near.filter((x) => live.has(x.slug)) };
+  }
   if (!isOwner(record, key)) {
     return { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, s-maxage=60' },
       body: renderVenue(venue).replace('</body>', `${HIT}</body>`) };
