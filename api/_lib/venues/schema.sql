@@ -121,9 +121,15 @@ alter table venue_requests add column if not exists lokal text not null default 
 alter table venue_requests drop constraint if exists venue_requests_wish_check;
 alter table venue_requests add constraint venue_requests_wish_check check (wish in ('manage', 'fix', 'photos', 'website', 'remove', 'social', 'content', 'seo', 'ads', 'advice'));
 
--- The contact form on namax.at's own pages (no venue, slug empty): who they are and what they need.
+-- The request forms of Nasim's sites (namax.at, akiwi.at, fightfolio.de; no venue, slug empty): which project, who they
+-- are and what they need. Each project has its own words (projects.mjs), so the database only checks their form.
+alter table venue_requests add column if not exists project text not null default 'namax';
+alter table venue_requests drop constraint if exists venue_requests_project_check;
+alter table venue_requests add constraint venue_requests_project_check check (project in ('namax', 'akiwi', 'fightfolio'));
 alter table venue_requests drop constraint if exists venue_requests_role_check;
-alter table venue_requests add constraint venue_requests_role_check check (role in ('owner', 'staff', 'other', 'nosite', 'hassite', 'misc'));
+alter table venue_requests add constraint venue_requests_role_check check (role ~ '^[a-z]{2,16}$');
+alter table venue_requests drop constraint if exists venue_requests_wish_check;
+alter table venue_requests add constraint venue_requests_wish_check check (wish ~ '^[a-z]{2,16}$');
 -- Its steps per page and day, like venue_claim_events: counts only, nothing typed.
 create table if not exists site_form_events (
   day       date not null,

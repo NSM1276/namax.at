@@ -404,7 +404,7 @@ test('start page: at most 50 open requests are shown; the count says how many th
   const s = await svc();
   for (let i = 0; i < 53; i++) await s.store.addRequest('cafe-a', { role: 'owner', wish: 'fix', name: 'N' + i, phone: '0660 1234567', channel: 'call', text: '' });
   const html = await chooser(s);
-  assert.equal((html.match(/<li class="rq">/g) || []).length, 50);
+  assert.equal((html.match(/<li class="rq"[ >]/g) || []).length, 50);
   assert.match(html, /Anfragen <span>53<\/span>/);
   assert.ok(html.includes('3 ältere Anfragen nicht angezeigt'));
 });
@@ -646,11 +646,30 @@ test('a request from the site contact form shows as a customer request, with its
   assert.ok(!html.includes('Neues Lokal'));
 });
 
+test('requests from Akiwi and FightFolio: their site, their words, topic and greeting; a filter per project', async () => {
+  const s = await svc();
+  await s.store.addRequest(null, { role: 'owner', wish: 'certificate', name: 'Murat', phone: '0664 7654321', channel: 'whatsapp', text: '', lokal: 'Kebab <Haus>', project: 'akiwi' });
+  await s.store.addRequest(null, { role: 'fighter', wish: 'profile', name: '', phone: '0660 1112223', channel: 'call', text: '', project: 'fightfolio' });
+  await s.store.addRequest(null, { role: 'guest', wish: 'report', name: '', phone: '', channel: 'none', text: 'Hat zu', project: 'akiwi' });
+  const html = await (await handleAdmin(req(ADMIN, ''), s)).text();
+  assert.match(html, /Kebab &lt;Haus&gt;<\/b><span class="b hot">akiwi\.at<\/span>/);
+  assert.ok(html.includes('Inhaber/in eines Lokals · Halal-Zertifikat schicken · WhatsApp'));
+  assert.ok(html.includes(encodeURIComponent('Hallo Murat, hier ist Nasim von Akiwi. Danke für Ihre Nachricht zu Kebab <Haus>.')));
+  assert.match(html, /Kundenanfrage<\/b><span class="b hot">fightfolio\.de<\/span>/);
+  assert.ok(html.includes('Kämpfer/in · Profil anlegen · Anruf'));
+  assert.ok(html.includes('ohne Nummer'));
+  assert.match(html, /data-pj="akiwi" aria-pressed="false">Akiwi <span>2<\/span>/);
+  assert.match(html, /data-pj="fightfolio"[^>]*>FightFolio <span>1<\/span>/);
+  assert.ok(!html.includes('data-pj="namax"'), 'no namax chip without namax requests');
+  assert.equal((html.match(/data-p="akiwi"/g) || []).length, 2);
+});
+
 test('statistics page carries the site contact form steps', async () => {
   const s = await svc();
   const now = () => new Date('2026-11-24T10:00:00Z');
   await s.store.addSiteEvent({ day: '2026-11-24', page: 'seo', event: 'open:hero' });
   const html = await (await handleAdmin(statsReq(ADMIN), { ...s, now })).text();
   assert.deepEqual(JSON.parse(html.match(/window\.D=(.*?);<\/script>/)[1]).site, [['seo', '2026-11-24', 'open:hero', 1]]);
-  assert.match(html, /Kundenanfragen auf namax\.at/);
+  assert.match(html, /Kundenanfragen auf /);
+  assert.equal(JSON.parse(html.match(/window\.D=(.*?);<\/script>/)[1]).proj.akiwi.site, 'akiwi.at');
 });

@@ -287,7 +287,7 @@ export function storeContract(makeStore, prefix = '') {
     let rows = await mine(s);
     assert.deepEqual(rows.map((r) => r.id), [c, a, b]);
     assert.deepEqual({ ...rows[1], at: undefined }, { id: a, slug: A, venueName: 'X ' + A, role: 'owner', wish: 'fix', name: 'Ali',
-      phone: '+43 660 1234567', channel: 'call', text: 'Hallo', lokal: '', at: undefined, doneAt: null });
+      phone: '+43 660 1234567', channel: 'call', text: 'Hallo', lokal: '', project: 'namax', at: undefined, doneAt: null });
     assert.ok(!Number.isNaN(Date.parse(rows[1].at)));
     assert.ok(!Number.isNaN(Date.parse(rows[2].doneAt)));
     assert.equal(rows[2].channel, 'whatsapp');

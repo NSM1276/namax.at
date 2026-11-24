@@ -7,6 +7,7 @@ import { esc } from './template.mjs';
 import { T } from './i18n.mjs';
 import { normalizePhone } from './phone.mjs';
 import { CITIES, districtLabel } from './cities.mjs';
+import { PROJECTS, requestProject } from './projects.mjs';
 
 export const ADMIN_KEY_HASH = 'a28eb7d5cdee0e94cd6f950753cbd6614a7ef3425cd1e825708706bc072cc6e9';
 
@@ -87,10 +88,8 @@ export const TABS_JS = `var t=document.querySelector('[data-lokale]'),l='',lc=''
 const CL = T.claim.de;
 const MAX_SHOWN_REQUESTS = 50; // a flood never makes the start page unusable
 const CHANNEL_DE = { call: 'Anruf', whatsapp: 'WhatsApp' };
-// Requests from the contact form on namax.at's own pages (js/contact.js): no venue, own roles and wishes.
-const SITE_ROLE_DE = { nosite: 'hat noch keine Website', hassite: 'hat eine Website, will sie besser', misc: 'etwas anderes' };
-const SITE_WISH_DE = { website: 'Website', social: 'Social Media', content: 'Content & Reels', seo: 'SEO', ads: 'Werbung', advice: 'weiß noch nicht, will Beratung' };
-const fromSite = (q) => !q.slug && Boolean(SITE_ROLE_DE[q.role]);
+// Requests from the contact forms (js/contact.js) on namax.at, akiwi.at and fightfolio.de: no venue page, each project's own roles and wishes.
+const fromSite = (q) => !q.slug && (requestProject(q) !== 'namax' || Boolean(PROJECTS.namax.roles[q.role]));
 const viennaTime = (iso) => new Intl.DateTimeFormat('de-AT', { timeZone: 'Europe/Vienna', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
   .format(new Date(iso)).replace(',', '');
 /** Digits for tel:/wa.me: the number the owner typed, as +43…; null when it cannot be read. */
@@ -105,7 +104,11 @@ function chatButton(slug, open) {
 // First line of every message to a requester: name and venue, so they know at once who writes.
 export function greeting(q) {
   const venue = q.slug ? (q.venueName || q.slug) : (q.lokal || '').split(',')[0].trim();  // new venue: name without the address
-  return `Hallo${q.name ? ' ' + q.name : ''}, hier ist Nasim von namax.` + (venue ? ` Danke für Ihre Anfrage zu ${venue}.` : fromSite(q) ? ' Danke für Ihre Anfrage.' : '');
+  if (fromSite(q)) {  // the topic (a venue on Akiwi, a fighter on FightFolio) is what the button was about
+    const topic = (q.lokal || '').trim();
+    return `Hallo${q.name ? ' ' + q.name : ''}, hier ist Nasim von ${PROJECTS[requestProject(q)].name}.` + (topic ? ` Danke für Ihre Nachricht zu ${topic}.` : ' Danke für Ihre Anfrage.');
+  }
+  return `Hallo${q.name ? ' ' + q.name : ''}, hier ist Nasim von namax.` + (venue ? ` Danke für Ihre Anfrage zu ${venue}.` : '');
 }
 const waLink = (tel, text) => `https://wa.me/${tel.slice(1)}?text=${encodeURIComponent(text)}`;
 
@@ -121,20 +124,20 @@ function requestCard(q) {
 
 Mit diesem Link ändern Sie Öffnungszeiten, Telefon und Fotos selbst: ${q.ownerUrl}`))}">Chat + Link senden</button>` : '';
   const same = tel && q.pagePhone && dialable(q.pagePhone) === tel ? '<span class="b ok">Nummer passt zur Seite ✓</span>' : '';
-  const site = fromSite(q);
-  const line = (site ? [SITE_ROLE_DE[q.role], SITE_WISH_DE[q.wish], CHANNEL_DE[q.channel]] : [CL.role[q.role], CL.wish[q.wish], CHANNEL_DE[q.channel]]).filter(Boolean).join(' · ');
+  const site = fromSite(q), proj = PROJECTS[requestProject(q)];
+  const line = (site ? [proj.roles[q.role], proj.wishes[q.wish], CHANNEL_DE[q.channel]] : [CL.role[q.role], CL.wish[q.wish], CHANNEL_DE[q.channel]]).filter(Boolean).join(' · ');
   const done = q.doneAt
     ? `<button type="button" data-done="${q.id}" data-to="0" class="rot">Wieder offen</button>`
     : `<button type="button" data-done="${q.id}" data-to="1">Erledigt</button>`;
   const head = q.slug
     ? `<a href="https://${esc(q.slug)}.namax.at/" target="_blank" rel="noopener">${esc(q.venueName || q.slug)}</a>`
-    : site ? `Kundenanfrage</b><span class="b${q.doneAt ? '' : ' hot'}">namax.at</span><b>`  // contact form on the site itself
+    : site ? `${q.lokal ? esc(q.lokal) : 'Kundenanfrage'}</b><span class="b${q.doneAt ? '' : ' hot'}">${proj.site}</span><b>`  // contact form on one of the sites
     : `${esc(q.lokal || '–')}</b><span class="b">Neues Lokal</span><b>`;  // from namax.at/kostenlos, no page yet
-  return `<li class="rq"><b>${head}</b>`
+  return `<li class="rq" data-p="${site ? requestProject(q) : 'namax'}"><b>${head}</b>`
     + (q.wish === 'website' && !q.doneAt && !site ? '<span class="b hot">Website!</span>' : '')
     + same
     + `<small>${esc(viennaTime(q.at))} · ${esc(line)}</small>`
-    + `<p class="who"><span class="nm">${esc(q.name || '–')}</span> · ${esc(q.phone)}</p>`
+    + `<p class="who"><span class="nm">${esc(q.name || '–')}</span> · ${esc(q.phone || 'ohne Nummer')}</p>`
     + (q.text ? `<p class="tx">${esc(q.text)}</p>` : '')
     + `<div class="a">${main}${send}${q.chatOpen == null ? '' : chatButton(q.slug, q.chatOpen)}${done}</div></li>`;
 }
@@ -152,6 +155,19 @@ if(b){var s=b.dataset.send,c=document.querySelector('[data-chat="'+s+'"]');windo
 if(c&&c.dataset.to==='1')post(c,{slug:s,chatOpen:true},function(){[].forEach.call(document.querySelectorAll('[data-chat="'+s+'"]'),function(x){x.dataset.to='0';x.textContent='Chat sperren';x.className='rot'})});return}
 b=e.target.closest('[data-done]');if(b){post(b,{requestId:Number(b.dataset.done),done:b.dataset.to==='1'},function(){location.reload()})}});`;
 
+// One chip per project that has requests, so Akiwi and FightFolio can be looked at apart; none while all are namax.
+function projectChips(requests) {
+  const n = {};
+  for (const q of requests) { const p = fromSite(q) ? requestProject(q) : 'namax'; n[p] = (n[p] || 0) + (q.doneAt ? 0 : 1); }
+  const keys = Object.keys(PROJECTS).filter((k) => k in n);
+  if (keys.length < 2) return '';
+  return '<div class="pj" role="group" aria-label="Projekt"><button type="button" data-pj="" aria-pressed="true">Alle</button>'
+    + keys.map((k) => `<button type="button" data-pj="${k}" aria-pressed="false">${esc(PROJECTS[k].name)} <span>${n[k]}</span></button>`).join('') + '</div>';
+}
+const PJ_JS = `document.addEventListener('click',function(e){var b=e.target.closest('[data-pj]');if(!b)return;var p=b.dataset.pj;
+[].forEach.call(document.querySelectorAll('[data-pj]'),function(x){x.setAttribute('aria-pressed',String(x===b))});
+[].forEach.call(document.querySelectorAll('.rq[data-p]'),function(li){li.hidden=Boolean(p)&&li.dataset.p!==p})});`;
+
 /**
  * view 'anfragen' (start page): the owner requests, also when there are none yet.
  * view 'lokale': one button per district with its count.
@@ -160,7 +176,7 @@ function renderChooser(districts, total, requests = [], view = 'anfragen', visit
   const btn = (d, label, n) => `<button type="button" data-pick="${d}">${esc(label)} <span>${n}</span></button>`;
   const picks = districts.map(({ d, n }) => btn(d, districtLabel(city, d), n)).join('') + btn('all', 'Alle Bezirke', total);
   const open = requests.filter((q) => !q.doneAt), done = requests.filter((q) => q.doneAt);
-  const reqs = `<section class="req"><h2>Anfragen <span>${open.length}</span></h2>`
+  const reqs = `<section class="req"><h2>Anfragen <span>${open.length}</span></h2>${projectChips(requests)}`
     + (open.length ? `<ul>${open.slice(0, MAX_SHOWN_REQUESTS).map(requestCard).join('')}</ul>`
       : requests.length ? '<p class="none">Keine offenen Anfragen</p>'
       : '<p class="none">Noch keine Anfragen. Neue erscheinen hier, sobald ein Inhaber auf seiner Seite das Formular „Sind Sie der Inhaber?“ ausfüllt.</p>')
@@ -181,6 +197,8 @@ ${VIS_CSS}
 ${CITIES_CSS}
 .top{margin:0;padding:0 0 0 28px}.top li{background:#fff;border-radius:8px;padding:10px 12px;margin:6px 0;display:flex;justify-content:space-between;gap:10px}.top a{color:#111;font-weight:600}.top span{color:#555}
 .pick{display:grid;gap:8px;padding:12px;max-width:760px;margin:0 auto}
+.pj{display:flex;flex-wrap:wrap;gap:6px;margin:0 2px 6px}.pj button{font:inherit;font-size:14px;font-weight:600;min-height:40px;padding:6px 12px;border-radius:999px;border:1px solid #111;background:#fff;color:#111}
+.pj button[aria-pressed=true]{background:#111;color:#fff}.pj span{opacity:.7;font-weight:400}.rq[hidden]{display:none}
 .pick button{display:flex;justify-content:space-between;align-items:center;font:inherit;font-size:17px;font-weight:600;min-height:52px;padding:10px 16px;border-radius:10px;border:1px solid #ddd;background:#fff;color:#111;text-align:left}
 .pick span{font-weight:400;color:#666}
 .req{max-width:760px;margin:0 auto;padding:12px 12px 0}.req h2{margin:4px 2px 6px;font-size:18px}.req h2 span{display:inline-block;min-width:26px;padding:1px 8px;border-radius:999px;background:#ffc93c;text-align:center}
@@ -193,7 +211,7 @@ ${CITIES_CSS}
 details{margin:6px 2px 4px}summary{min-height:44px;display:flex;align-items:center;color:#555;cursor:pointer}.none{color:#666;margin:4px 2px}</style></head><body>
 <header><h1>namax · Admin${view === 'lokale' ? ` <span>${total} Lokale</span>` : ''}</h1>${visLine(visits)}${tabsNav(view, open.length)}</header>
 ${view === 'lokale' ? `${topList}${cityNav(cities, city)}<div class="pick" role="group" aria-label="Bezirk wählen">${picks}</div>` : reqs + topList}
-<script>(function(){${SWITCH_JS}})();</script>
+<script>(function(){${SWITCH_JS}${PJ_JS}})();</script>
 <script>(function(){${TABS_JS}${NAV_JS}
 document.addEventListener('click',function(e){var b=e.target.closest('[data-pick]');if(b)go(b.dataset.pick)})})();</script>
 </body></html>`;

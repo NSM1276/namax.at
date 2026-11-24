@@ -414,6 +414,39 @@ test('site contact form: a request without a venue, with its own roles and wishe
   assert.equal((await s.store.listRequests()).length, 1, 'the honeypot is not stored');
 });
 
+test('contact form of the other sites: the project comes from the Origin, with CORS for that site only', async () => {
+  const s = await services();
+  const ak = { origin: 'https://lokale.akiwi.at' };
+  const pre = await handleContact(new Request('https://www.namax.at/api/venue/contact', { method: 'OPTIONS', headers: ak }), s);
+  assert.equal(pre.status, 204); assert.equal(pre.headers.get('access-control-allow-origin'), 'https://lokale.akiwi.at');
+  const r = await handleContact(contactReq({ page: 'lokale', role: 'owner', wish: 'certificate', phone: '0660 1234567', channel: 'whatsapp', topic: 'Kebab Haus', project: 'fightfolio' }, ak), s);
+  assert.equal(r.status, 200); assert.equal(r.headers.get('access-control-allow-origin'), 'https://lokale.akiwi.at');
+  const [q] = await s.store.listRequests();
+  assert.equal(q.project, 'akiwi', 'the body cannot choose the project'); assert.equal(q.lokal, 'Kebab Haus'); assert.equal(q.wish, 'certificate');
+  assert.deepEqual((await s.store.siteEventRows({ since: '2000-01-01' })).map((e) => [e.page, e.event]), [['akiwi:lokale', 'sent']]);
+  // FightFolio's own words; namax words are refused there
+  const ff = { origin: 'https://www.fightfolio.de' };
+  assert.equal((await handleContact(contactReq({ role: 'fighter', wish: 'profile', phone: '0660 7654321', channel: 'call' }, ff), s)).status, 200);
+  assert.equal((await handleContact(contactReq({ role: 'nosite', wish: 'seo', phone: '0660 7654321', channel: 'call' }, ff), s)).status, 400);
+  assert.equal((await s.store.listRequests()).filter((x) => x.project === 'fightfolio').length, 1);
+  // any other site: refused, nothing stored, no CORS
+  for (const origin of ['https://evil.example', 'https://akiwi.at.evil.example', 'http://www.fightfolio.de']) {
+    const x = await handleContact(contactReq({ role: 'fighter', wish: 'profile', phone: '0660 7654321', channel: 'call' }, { origin }), s);
+    assert.equal(x.status, 403, origin); assert.equal(x.headers.get('access-control-allow-origin'), null);
+  }
+  assert.equal((await s.store.listRequests()).length, 2);
+});
+
+test('akiwi: a guest may write without a number, then the message counts; owners still need one', async () => {
+  const s = await services();
+  const ak = { origin: 'https://www.akiwi.at' };
+  assert.equal((await handleContact(contactReq({ role: 'guest', wish: 'report', phone: '', text: 'Hat zu', topic: 'Döner X' }, ak), s)).status, 200);
+  assert.equal((await handleContact(contactReq({ role: 'guest', wish: 'report', phone: '', text: '' }, ak), s)).status, 400);
+  assert.equal((await handleContact(contactReq({ role: 'owner', wish: 'fix', phone: '', text: 'Bitte ändern' }, ak), s)).status, 400);
+  const [q] = await s.store.listRequests();
+  assert.equal(q.project, 'akiwi'); assert.equal(q.role, 'guest'); assert.equal(q.text, 'Hat zu');
+});
+
 test('site contact form steps: known words only, per page; Nasim and robots not counted', async () => {
   const s = await services();
   for (const ev of ['open:hero', 'role:nosite', 'wish:seo', 'step:3', 'close:3', 'fail', 'sent', 'name:Ali', '+43 660', 7])

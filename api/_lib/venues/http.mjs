@@ -9,6 +9,7 @@ import { effectiveVenue } from './merge.mjs';
 import { isAdmin, openOwnerKey, sealOwnerKey, renderAdmin, ADMIN_KEY_HASH } from './admin.mjs';
 import { CITIES, CITY_ORDER, cityOf, districtLabel } from './cities.mjs';
 import { renderStats } from './stats.mjs';
+import { PROJECTS, projectOf } from './projects.mjs';
 import { faviconSvg } from './around.mjs';
 
 export const MAX_PHOTO_BYTES = 3 * 1024 * 1024;
@@ -174,39 +175,75 @@ export async function handlePhoto(req, { store, blob, now = () => new Date() }) 
   return json(200, { id });
 }
 
-// The contact form on namax.at's own pages (js/contact.js): who they are, what they need, how to reach them.
-export const SITE_ROLES = ['nosite', 'hassite', 'misc'];
-export const SITE_WISHES = ['website', 'social', 'content', 'seo', 'ads', 'advice'];
+// The request form of Nasim's sites (js/contact.js on namax.at, akiwi.at, fightfolio.de): who they are, what they need,
+// how to reach them. Each project's roles and wishes are in projects.mjs; namax keeps its page names for the statistics.
+export const SITE_ROLES = Object.keys(PROJECTS.namax.roles);
+export const SITE_WISHES = Object.keys(PROJECTS.namax.wishes);
 export const SITE_PAGES = ['home', 'webdesign', 'social', 'content', 'seo', 'ads', 'free'];
-export const SITE_EVENTS = ['open:header', 'open:hero', 'open:chat', 'open:contact', 'open:dock', 'step:2', 'step:3',
-  ...SITE_ROLES.map((r) => 'role:' + r), ...SITE_WISHES.map((w) => 'wish:' + w), 'close:1', 'close:2', 'close:3', 'fail'];
+const STEP_EVENTS = ['step:2', 'step:3', 'close:1', 'close:2', 'close:3', 'fail'];
+const OPEN_EVENT = /^open:[a-z]{1,12}$/;
+/** Is this a step word the form of this project may send? */
+export function siteEvent(project, ev) {
+  const p = PROJECTS[project];
+  if (typeof ev !== 'string' || !p) return false;
+  const [k, v] = ev.split(':');
+  return STEP_EVENTS.includes(ev) || OPEN_EVENT.test(ev) || (k === 'role' && v in p.roles) || (k === 'wish' && v in p.wishes);
+}
+// namax pages by name; another project's page is its first path word, stored as "akiwi:lokale".
+const sitePage = (project, page) => project === 'namax' ? (pick(page, SITE_PAGES) || 'home')
+  : project + ':' + (typeof page === 'string' && /^[a-z0-9-]{1,30}$/.test(page) ? page : 'home');
 
-/** POST www.namax.at/api/venue/contact: { ev, page } counts a form step (always 204);
- *  { page, role, wish, name, phone, channel, text, website } is a request in the admin list (slug empty). */
+function corsHeaders(req, project) {
+  const origin = req.headers.get('origin');
+  return origin && project && project !== 'namax' ? { 'Access-Control-Allow-Origin': origin, Vary: 'Origin' } : {};
+}
+const withHeaders = (res, extra) => { for (const [k, v] of Object.entries(extra)) res.headers.set(k, v); return res; };
+
+/** POST https://www.namax.at/api/venue/contact from one of the project sites: { ev, page } counts a form step (always 204);
+ *  { page, role, wish, name, phone, channel, text, topic, website } is a request in the admin list (slug empty).
+ *  OPTIONS answers the browser's question whether the other sites may send here. */
 export async function handleContact(req, { store, now = () => new Date() }) {
+  const project = projectOf(req.headers.get('origin'));
+  const cors = corsHeaders(req, project);
+  if (req.method === 'OPTIONS') {
+    if (!project) return new Response(null, { status: 403 });
+    return new Response(null, { status: 204, headers: { ...cors, 'Access-Control-Allow-Methods': 'POST', 'Access-Control-Allow-Headers': 'content-type', 'Access-Control-Max-Age': '86400' } });
+  }
   if (req.method !== 'POST') return fail(405, 'POST only');
-  const body = await readJson(req, MAX_CLAIM_BODY);
-  const page = pick(body?.page, SITE_PAGES) || 'home';
+  if (!project) return fail(403, 'not allowed');
+  const body = await readJson(req, MAX_CLAIM_BODY + 2 * (PROJECTS[project].maxText || 0));
+  const page = sitePage(project, body?.page);
   if (body && body.ev !== undefined) {
     try {
-      if (!BOT_UA.test(req.headers.get('user-agent') || '') && !isStaff(req) && typeof body.ev === 'string' && SITE_EVENTS.includes(body.ev))
+      if (!BOT_UA.test(req.headers.get('user-agent') || '') && !isStaff(req) && siteEvent(project, body.ev))
         await store.addSiteEvent({ day: viennaDay(now()), page, event: body.ev });
     } catch { /* never fails visibly */ }
-    return new Response(null, { status: 204, headers: { 'Cache-Control': 'no-store' } });
+    return new Response(null, { status: 204, headers: { 'Cache-Control': 'no-store', ...cors } });
   }
+  const res = await contactRequest(body, req, project, page, store, now);
+  return withHeaders(res, cors);
+}
+
+async function contactRequest(body, req, project, page, store, now) {
   if (!body) return fail(400, 'bad request');
   if (typeof body.website === 'string' && body.website.trim()) return json(200, { ok: true });
-  const role = pick(body.role, SITE_ROLES), wish = pick(body.wish, SITE_WISHES), channel = pick(body.channel, CLAIM_CHANNELS);
+  const p = PROJECTS[project];
+  const role = pick(body.role, Object.keys(p.roles)), wish = pick(body.wish, Object.keys(p.wishes));
   const phone = typeof body.phone === 'string' ? body.phone.trim() : '';
   const name = typeof body.name === 'string' ? body.name.trim() : '';
   const message = typeof body.text === 'string' ? body.text.trim() : '';
-  if (!role || !wish || !channel || name.length > 80 || message.length > 500 || !PHONE.test(phone) || phone.replace(/\D/g, '').length < 6) return fail(400, 'bad request');
+  const topic = typeof body.topic === 'string' ? body.topic.trim().replace(/\s+/g, ' ').slice(0, 120) : '';
+  const phoneOk = PHONE.test(phone) && phone.replace(/\D/g, '').length >= 6;
+  const noPhone = Boolean(role && p.phoneOptional?.(role)) && !phone;
+  const channel = noPhone ? 'none' : pick(body.channel, CLAIM_CHANNELS);
+  if (!role || !wish || !channel || name.length > 80 || message.length > (p.maxText || 500)) return fail(400, 'bad request');
+  if (noPhone ? message.length < 3 : !phoneOk) return fail(400, 'bad request');
   const day = viennaDayStart(now());
   const ip = (req.headers.get('x-forwarded-for') || '').split(',')[0].trim();
   const ipHash = ip ? createHash('sha256').update('namax claim v1:' + ip).digest('hex').slice(0, 16) : '';
   if ((ipHash && await store.countRequestsByIpSince(ipHash, day) >= DAILY_CLAIMS_PER_SENDER)
     || await store.countAllRequestsSince(day) >= DAILY_CLAIMS_TOTAL) return fail(429, 'too many');
-  await store.addRequest(null, { role, wish, name, phone, channel, text: message, ipHash });
+  await store.addRequest(null, { role, wish, name, phone, channel, text: message, ipHash, lokal: topic, project });
   try { await store.addSiteEvent({ day: viennaDay(now()), page, event: 'sent' }); } catch { /* the request counts */ }
   return json(200, { ok: true });
 }

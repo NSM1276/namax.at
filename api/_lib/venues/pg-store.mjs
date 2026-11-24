@@ -172,17 +172,17 @@ export function pgStore(query) {
           coalesce(facts #>> '{address,zip}', '') as zip, coalesce(facts #>> '{address,city}', '') as city from venues where status = 'public'`))
         .map((r) => ({ slug: r.slug, name: r.name, street: r.street, zip: r.zip, city: r.city }));
     },
-    async addRequest(slug, { role, wish, name = '', phone, channel, text = '', ipHash = '', lokal = '' }) {
-      return num((await one(`insert into venue_requests (slug, role, wish, name, phone, channel, text, ip_hash, lokal)
-        values ($1, $2, $3, $4, $5, $6, $7, $8, $9) returning id`, [slug ?? null, role, wish, String(name), String(phone), channel, String(text), String(ipHash), String(lokal)])).id);
+    async addRequest(slug, { role, wish, name = '', phone, channel, text = '', ipHash = '', lokal = '', project = 'namax' }) {
+      return num((await one(`insert into venue_requests (slug, role, wish, name, phone, channel, text, ip_hash, lokal, project)
+        values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) returning id`, [slug ?? null, role, wish, String(name), String(phone), channel, String(text), String(ipHash), String(lokal), project])).id);
     },
     async listRequests() {
       const rows = await query(`select r.id, r.slug, coalesce(v.facts ->> 'name', '') as venue_name, r.role, r.wish, r.name, r.phone,
-          r.channel, r.text, r.lokal, r.at, r.done_at
+          r.channel, r.text, r.lokal, r.project, r.at, r.done_at
         from venue_requests r left join venues v on v.slug = r.slug
         order by (r.done_at is not null), (r.done_at is null and r.wish = 'website') desc, r.at desc, r.id desc`);
       return rows.map((r) => ({ id: num(r.id), slug: r.slug, venueName: r.venue_name, role: r.role, wish: r.wish, name: r.name,
-        phone: r.phone, channel: r.channel, text: r.text, lokal: r.lokal || '', at: iso(r.at), doneAt: iso(r.done_at) }));
+        phone: r.phone, channel: r.channel, text: r.text, lokal: r.lokal || '', project: r.project || 'namax', at: iso(r.at), doneAt: iso(r.done_at) }));
     },
     async setRequestDone(id, done) {
       await query(`update venue_requests set done_at = case when $2 then now() else null end where id = $1`, [num(id), Boolean(done)]);

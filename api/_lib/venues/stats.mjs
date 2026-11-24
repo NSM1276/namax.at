@@ -2,6 +2,7 @@
 // The server sends only counts (visitor views per venue, day and source; owner-form events per venue, day and event)
 // and the browser draws everything from them, so the city filter, the period switch and a venue's own chart need no reload.
 import { KIND_DE, SRC_DE, TABS_CSS, TABS_JS, tabsNav } from './admin.mjs';
+import { PROJECTS } from './projects.mjs';
 
 // Fixed source order and colours (categorical slots 1-6, checked for colour blindness on white); a source keeps its colour.
 export const SRC_ORDER = ['google', 'direct', 'namax', 'social', 'bing', 'other'];
@@ -108,17 +109,21 @@ var steps=[['Geöffnet',op],['Rolle gewählt',sumP('role:')],['Formular erreicht
 return bars(steps.map(function(x){return[x[0],x[1]]}),op,'fun')
 +'<p class="sub">Geöffnet über</p>'+bars(g('open:'),op)+'<div class="grid2"><div><p class="sub">Wer</p>'+bars(g('role:'),0)+'</div><div><p class="sub">Was</p>'+bars(g('wish:'),0)+'</div></div>'
 +'<p class="sub">Geschlossen ohne Senden</p>'+bars(g('close:'),op)+(m.fail?'<p class="sub">Fehler beim Senden: '+m.fail+'</p>':'')}
-// The contact form on namax.at's own pages, 30 days, all pages together (not by city).
+// The contact forms on namax.at, akiwi.at and fightfolio.de, 30 days, one project at a time (events of the other sites are stored as "akiwi:lokale").
 var SE={'open:header':'Knopf oben','open:hero':'Knopf im Titel','open:chat':'Knopf im Chat-Bild','open:contact':'Knopf „Schreiben Sie uns“','open:dock':'Knopf unten am Handy',
-'role:nosite':'hat noch keine Website','role:hassite':'hat Website, will sie besser','role:misc':'etwas anderes',
-'wish:website':'Website','wish:social':'Social Media','wish:content':'Content & Reels','wish:seo':'SEO','wish:ads':'Werbung','wish:advice':'will Beratung',
 'close:1':'bei Schritt 1 (Wer?)','close:2':'bei Schritt 2 (Was?)','close:3':'im Formular'};
 var SP={home:'Startseite',webdesign:'Websites',social:'Social Media',content:'Content',seo:'SEO',ads:'Werbung',free:'Kostenlose Seite'};
-function siteFunnel(){var a=N-30,m={},pg={};(D.site||[]).forEach(function(r){var i=idx(r[1]);if(i<a)return;m[r[2]]=(m[r[2]]||0)+r[3];if(r[2].indexOf('open:')===0)pg[r[0]]=(pg[r[0]]||0)+r[3]});
-var g=function(p){return Object.keys(SE).filter(function(k){return k.indexOf(p)===0&&m[k]}).map(function(k){return[SE[k],m[k]]}).sort(function(x,y){return y[1]-x[1]})};
+var pj='namax';
+function pjOf(page){var i=page.indexOf(':');return i<0?'namax':page.slice(0,i)}
+function pjBtns(){var have={namax:1};(D.site||[]).forEach(function(r){have[pjOf(r[0])]=1});var ks=Object.keys(D.proj).filter(function(k){return have[k]});
+if(ks.length<2)return '';return '<div class="flt" role="group" aria-label="Projekt">'+ks.map(function(k){return '<button type="button" data-pj="'+k+'" aria-pressed="'+(pj===k)+'">'+esc(D.proj[k].name)+'</button>'}).join('')+'</div>'}
+function siteFunnel(){var a=N-30,m={},pg={},P=D.proj[pj]||D.proj.namax;(D.site||[]).forEach(function(r){var i=idx(r[1]);if(i<a||pjOf(r[0])!==pj)return;m[r[2]]=(m[r[2]]||0)+r[3];
+if(r[2].indexOf('open:')===0){var k=pj==='namax'?r[0]:r[0].slice(pj.length+1);pg[k]=(pg[k]||0)+r[3]}});
+var lab=function(k){return SE[k]||(k.indexOf('role:')===0?P.roles[k.slice(5)]:k.indexOf('wish:')===0?P.wishes[k.slice(5)]:k.indexOf('open:')===0?'Knopf „'+k.slice(5)+'“':null)};
+var g=function(p){return Object.keys(m).filter(function(k){return k.indexOf(p)===0&&m[k]&&lab(k)}).map(function(k){return[lab(k),m[k]]}).sort(function(x,y){return y[1]-x[1]})};
 var sumP=function(p){return Object.keys(m).filter(function(k){return k.indexOf(p)===0}).reduce(function(t,k){return t+m[k]},0)};
 var op=sumP('open:');if(!op&&!m.sent)return '<p class="none">Noch niemand hat das Formular geöffnet. Gezählt wird ab jetzt, ohne Namen, Nummern oder Text.</p>';
-var pages=Object.keys(pg).map(function(k){return[SP[k]||k,pg[k]]}).sort(function(x,y){return y[1]-x[1]});
+var pages=Object.keys(pg).map(function(k){return[(pj==='namax'&&SP[k])||(k==='home'?'Startseite':'/'+k),pg[k]]}).sort(function(x,y){return y[1]-x[1]});
 return bars([['Geöffnet',op],['Wer gewählt',sumP('role:')],['Formular erreicht',m['step:3']||0],['Gesendet',m.sent||0]],op,'fun')
 +'<div class="grid2"><div><p class="sub">Auf welcher Seite</p>'+bars(pages,op)+'</div><div><p class="sub">Welcher Knopf</p>'+bars(g('open:'),op)+'</div></div>'
 +'<div class="grid2"><div><p class="sub">Wer</p>'+bars(g('role:'),0)+'</div><div><p class="sub">Was</p>'+bars(g('wish:'),0)+'</div></div>'
@@ -130,15 +135,15 @@ function draw(){var rows=H.filter(inCity);CH={};
 document.getElementById('app').innerHTML=cityBtns()+'<div class="kpi">'+kpis(rows)+'</div>'
 +'<div class="card" style="margin-top:12px"><h2>Besuche pro Tag <small>· 30 Tage</small></h2>'+chart(rows,'all')+'</div>'+shares(rows)
 +'<div class="card"><h2>Meistbesuchte Seiten</h2>'+topPages(rows)+'</div>'
-+'<div class="card"><h2>Kundenanfragen auf namax.at <small>· 30 Tage, alle Seiten</small></h2>'+siteFunnel()+'</div>'
++'<div class="card"><h2>Kundenanfragen auf '+esc((D.proj[pj]||D.proj.namax).site)+' <small>· 30 Tage, alle Seiten</small></h2>'+pjBtns()+siteFunnel()+'</div>'
 +'<div class="card"><h2>Formular „Sind Sie der Inhaber?“ <small>· 30 Tage</small></h2>'+funnel()+'</div>'}
 var tip=document.getElementById('tip');
 function showTip(t,e){var c=CH[t.getAttribute('data-c')];if(!c)return;var o=c.by[+t.getAttribute('data-d')],i=c.a+(+t.getAttribute('data-d'));
 tip.innerHTML='<b>'+dd(i)+' · '+fmt(o._t)+' Besuche</b>'+SRC.filter(function(s){return o[s]}).map(function(s){return '<span class="sw" style="background:'+COL[s]+'"></span>'+esc(SN[s])+' '+o[s]}).join('<br>');
 tip.style.display='block';var x=Math.min(e.clientX+12,innerWidth-tip.offsetWidth-8),y=e.clientY-tip.offsetHeight-12;tip.style.left=x+'px';tip.style.top=(y<8?e.clientY+16:y)+'px'}
 document.addEventListener('pointermove',function(e){var t=e.target.closest&&e.target.closest('.hit');if(t)showTip(t,e);else tip.style.display='none'});
-document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-city],[data-per],[data-ven]');if(!b)return;
-if(b.hasAttribute('data-city')){city=b.getAttribute('data-city');sel=null}else if(b.hasAttribute('data-per'))per=b.getAttribute('data-per');
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-city],[data-per],[data-ven],[data-pj]');if(!b)return;
+if(b.hasAttribute('data-pj'))pj=b.getAttribute('data-pj');else if(b.hasAttribute('data-city')){city=b.getAttribute('data-city');sel=null}else if(b.hasAttribute('data-per'))per=b.getAttribute('data-per');
 else{var s=b.getAttribute('data-ven');sel=sel===s?null:s}draw()});
 draw();`;
 
@@ -151,7 +156,8 @@ export function renderStats({ today, days, hits, claims, site = [], venues, citi
   start.setUTCDate(start.getUTCDate() - (days - 1));
   const D = { since: start.toISOString().slice(0, 10), days, venues, cities,
     hits: hits.map((r) => [r.slug, r.day, r.source, r.n]), claims: claims.map((r) => [r.slug, r.day, r.event, r.n]),
-    site: site.map((r) => [r.page, r.day, r.event, r.n]) };
+    site: site.map((r) => [r.page, r.day, r.event, r.n]),
+    proj: Object.fromEntries(Object.entries(PROJECTS).map(([k, p]) => [k, { name: p.name, site: p.site, roles: p.roles, wishes: p.wishes }])) };
   const data = JSON.stringify(D).replace(/</g, '\\u003c');
   return `<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow"><title>namax · Statistik</title><meta name="theme-color" content="#111">
