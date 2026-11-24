@@ -90,6 +90,8 @@ function head(v, pal, let_) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(title)}</title>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="description" content="${esc(desc)}">
 ${robots}
 <meta name="theme-color" content="${pal.signBg}">

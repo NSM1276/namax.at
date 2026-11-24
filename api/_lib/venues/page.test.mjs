@@ -123,6 +123,9 @@ test('slugFromHost and venuePath', () => {
   assert.equal(venuePath('a.namax.at', '/v/_shared/fonts/anton-latin.woff2'), null);
   assert.equal(venuePath('a.namax.at', '/anything'), '/api/venue/page');
   assert.equal(venuePath('a.namax.at', '/'), '/api/venue/page');
+  assert.equal(venuePath('a.namax.at', '/favicon.ico'), '/api/venue/og', 'PNG/ICO icons are drawn by the picture function');
+  assert.equal(venuePath('a.namax.at', '/apple-touch-icon.png'), '/api/venue/og');
+  assert.equal(venuePath('a.namax.at', '/favicon.svg'), '/api/venue/page');
   assert.equal(venuePath('www.namax.at', '/'), null);
   assert.equal(venuePath('namax.at', '/api/venue/page'), null);
 });

@@ -63,7 +63,7 @@
   ],
   "functions": {
     "api/venue/og.js": {
-      "includeFiles": "{api/_lib/venues/og-fonts/**,node_modules/harfbuzzjs/**,node_modules/satori/**,node_modules/yoga-layout/**}"
+      "includeFiles": "{api/_lib/venues/og-fonts/**,api/_lib/venues/og-niche/**,node_modules/harfbuzzjs/**,node_modules/satori/**,node_modules/yoga-layout/**}"
     }
   },
   "rewrites": [

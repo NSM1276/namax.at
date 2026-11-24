@@ -202,13 +202,20 @@ export async function handleHit(req, { store, now = () => new Date() }) {
 }
 
 /** Link preview picture for the venue on this host. Owner changes (name) are included; no photos are drawn. */
+const ICON_PATHS = { '/favicon.ico': 'ico', '/favicon.png': 'png', '/apple-touch-icon.png': 'apple' };
+
 export async function handleOg(req, { store }) {
+  const url = new URL(req.url);
   const slug = hostSlug(req);
   const record = slug ? await store.getVenue(slug) : null;
   if (!record || record.status === 'removed') return text(404, 'Not found\n', 'public, s-maxage=300');
   // loaded here, not at the top: the renderer has wasm files, and the pages must never depend on them
-  const { renderOg } = await import('./og.mjs');
-  return renderOg(effectiveVenue(record, []));
+  const { renderOg, renderIcon } = await import('./og.mjs');
+  // the middleware sends /favicon.ico etc. here with ?icon=…; the visitor's own path is checked too
+  const icon = url.searchParams.get('icon') || ICON_PATHS[url.pathname];
+  if (icon) return renderIcon(effectiveVenue(record), icon) || text(404, 'Not found\n', 'public, s-maxage=600');
+  // the page shows the niche picture only without owner photos; the preview follows the page
+  return renderOg(effectiveVenue(record, await store.listPhotos(slug)));
 }
 
 /** The Overture second opinion as the list card needs it (private: Overture's phone and site are never on the public page). */
