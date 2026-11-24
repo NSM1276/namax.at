@@ -10,6 +10,7 @@ import { ogImageUrl } from './og-url.mjs';
 import { openState, formatMinute, viennaNow } from './hours.mjs';
 import { CITIES, cityByName, districtNo } from './cities.mjs';
 import { nicheImage } from './niche.mjs';
+import { signName, signSize } from './signname.mjs';
 
 const SITE = 'https://www.namax.at';
 const OWNER_CHAT_FALLBACK = 'https://wa.me/4367764292055'; // replaced by the real chat in part 2
@@ -21,13 +22,11 @@ export function esc(text) {
 }
 
 // A long single word ("Änderungsschneiderei") cannot wrap, so the title shrinks until that word fits a phone.
-function titleSize(name) {
-  const longest = Math.max(...String(name).split(/\s+/).map((w) => w.length));
-  // Barlow Condensed bold capitals are about 0.5em wide; the rim leaves about 78vw on a phone.
-  const vw = Math.floor((150 / longest) * 10) / 10;
+// Since 2026-11-24 it also keeps a long name to two lines (three past 30 letters) and holds a very short one back.
+function titleSize(main) {
+  // cqi = 1% of the rim's width: the name fits at every screen size, without relying on the browser's hyphenation
+  const { vw, cqi } = signSize(main);
   if (vw >= 15) return '';
-  // cqi = 1% of the rim's width: the word fits at every screen size, without relying on the browser's hyphenation
-  const cqi = Math.floor((100 / (longest * 0.52)) * 10) / 10;
   return ` style="font-size:clamp(20px,${vw}vw,80px);font-size:min(80px,${cqi}cqi)"`;
 }
 
@@ -129,6 +128,7 @@ a{color:inherit}
 box-shadow:0 14px 28px color-mix(in srgb,var(--ink) 26%,transparent),inset 0 1px 0 rgba(255,255,255,.22),inset 0 0 0 1px color-mix(in srgb,var(--ink) 14%,transparent);animation:swing 1.4s cubic-bezier(.2,.8,.25,1) both}
 .rim{border:3px solid var(--sign-ink);border-radius:10px;padding:20px 12px 18px;text-align:center;container-type:inline-size}
 .kind{margin:0 0 8px;font:700 13px/1.25 var(--body);letter-spacing:.22em;text-transform:uppercase;opacity:.92}
+.sub{display:block;margin:12px 0 0;font:700 14px/1.3 var(--body);letter-spacing:.14em;text-transform:uppercase;opacity:.92;overflow-wrap:anywhere}
 .district{margin:9px 0 0;font:700 13px/1.25 var(--body);letter-spacing:.14em;opacity:.88}
 .screw{position:absolute;top:50%;width:7px;height:7px;margin-top:-3.5px;border-radius:50%;background:color-mix(in srgb,var(--sign-ink) 65%,#8d96a1);box-shadow:inset 0 -1px 1px rgba(0,0,0,.35)}
 .screw.l{left:4px}.screw.r{right:4px}
@@ -216,11 +216,14 @@ export function districtLine(v) {
 
 function sign(v) {
   // The kind above the name says what the place is, so a page with nothing else on it still makes sense.
-  const kind = kindLabel(v.kind, 'de') ? tr(kindLabel(v.kind, 'de'), kindLabel(v.kind, 'en'), 'p', 'class="kind"') : '';
+  // A sign painter's layout: a trade word from the name ("Gasthaus") replaces the kind label, extra words go below the name.
+  const sn = signName(v.name);
+  const kind = sn.pre ? `<p class="kind">${esc(sn.pre)}</p>`
+    : kindLabel(v.kind, 'de') ? tr(kindLabel(v.kind, 'de'), kindLabel(v.kind, 'en'), 'p', 'class="kind"') : '';
   const district = districtLine(v) ? `<p class="district">${esc(districtLine(v))}</p>` : '';
   return `<header class="sign"><div class="wrap">
 <div class="lang" role="group" aria-label="Sprache / Language"><button type="button" data-lang="de" lang="de" aria-label="Deutsch" aria-pressed="true">DE</button><button type="button" data-lang="en" lang="en" aria-label="English" aria-pressed="false">EN</button></div>
-<div class="plate"><i class="screw l" aria-hidden="true"></i><i class="screw r" aria-hidden="true"></i><div class="rim">${v.context ? medal(v) : ''}${kind}<h1 lang="de"${titleSize(v.name)}>${esc(v.name)}</h1>${district}</div><i class="gleam" aria-hidden="true"></i></div>
+<div class="plate"><i class="screw l" aria-hidden="true"></i><i class="screw r" aria-hidden="true"></i><div class="rim">${v.context ? medal(v) : ''}${kind}<h1 lang="de"${titleSize(sn.main)}>${esc(sn.main)}${sn.sub ? `<span class="sub">${esc(sn.sub)}</span>` : ''}</h1>${district}</div><i class="gleam" aria-hidden="true"></i></div>
 </div></header>`;
 }
 

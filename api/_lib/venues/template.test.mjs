@@ -69,12 +69,16 @@ test('item without price shows no euro sign for it; photos render when present',
   assert.ok(html.includes('data-photos') && (html.match(/<img /g) || []).length === 2);
 });
 test('a long word in the name shrinks the title so it fits a phone', () => {
-  const long = renderVenue({ ...load('minimal'), name: 'Änderungsschneiderei Fa. Orhan' });
+  const long = renderVenue({ ...load('minimal'), name: "Baki's Schnitzelparadies" });
   const m = /<h1 lang="de" style="font-size:clamp\(20px,([\d.]+)vw,80px\);font-size:min\(80px,([\d.]+)cqi\)">/.exec(long);
   assert.ok(m, 'long name gets an inline size');
   // Barlow Condensed bold capitals are about 0.5em wide; inside the rim a 375px phone leaves about 290px
-  assert.ok(Number(m[1]) * 3.75 * 20 * 0.5 <= 290, 'Änderungsschneiderei fits inside the rim at 375px wide');
-  assert.ok(Number(m[2]) * 20 * 0.5 <= 100, 'and fits the rim at any width, whatever the hyphenation');
+  assert.ok(Number(m[1]) * 3.75 * 17 * 0.5 <= 290, 'Schnitzelparadies fits inside the rim at 375px wide');
+  assert.ok(Number(m[2]) * 17 * 0.5 <= 100, 'and fits the rim at any width, whatever the hyphenation');
+  // the sign letters a name like a sign painter: trade word small above, extra words small below, the full name stays in <title>
+  const stella = renderVenue({ ...load('minimal'), name: 'Stella Eissalon / Konditorei / Kaffeehaus' });
+  assert.match(stella, /<p class="kind">Eissalon<\/p><h1 lang="de"[^>]*>Stella<span class="sub">Konditorei · Kaffeehaus<\/span><\/h1>/);
+  assert.match(stella, /<title>Stella Eissalon \/ Konditorei \/ Kaffeehaus — /);
   assert.match(long, /\.rim\{[^}]*container-type:inline-size/);
   assert.match(renderVenue({ ...load('minimal'), name: 'Adonis' }), /<h1 lang="de">Adonis<\/h1>/);
 });
