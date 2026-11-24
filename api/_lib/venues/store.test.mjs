@@ -182,6 +182,23 @@ export function storeContract(makeStore, prefix = '') {
     assert.deepEqual(await s.hitSources({ today: '2026-11-22', weekStart: '2026-11-16' }), { google: 2, namax: 1 });
   });
 
+  test('statistics rows: visitor views per page, day and source since a day; owner views left out', async () => {
+    const s = await fresh();
+    for (const [slug, day, source] of [[A, '2026-11-22', 'google'], [A, '2026-11-22', 'google'], [B, '2026-11-20', 'direct'], [A, '2026-09-01', 'social']])
+      await s.addHit(slug, { owner: false, day, source });
+    await s.addHit(A, { owner: true, day: '2026-11-22' });
+    const rows = (await s.hitRows({ since: '2026-10-01' })).sort((x, y) => x.slug.localeCompare(y.slug));
+    assert.deepEqual(rows, [{ slug: A, day: '2026-11-22', source: 'google', n: 2 }, { slug: B, day: '2026-11-20', source: 'direct', n: 1 }]);
+  });
+
+  test('owner form events: counted per page, day and event', async () => {
+    const s = await fresh();
+    for (const [slug, day, event] of [[A, '2026-11-22', 'open:niche'], [A, '2026-11-22', 'open:niche'], [A, '2026-11-22', 'sent'], [B, '2026-09-01', 'open:link']])
+      await s.addClaimEvent(slug, { day, event });
+    const rows = (await s.claimEventRows({ since: '2026-10-01' })).sort((x, y) => x.event.localeCompare(y.event));
+    assert.deepEqual(rows, [{ slug: A, day: '2026-11-22', event: 'open:niche', n: 2 }, { slug: A, day: '2026-11-22', event: 'sent', n: 1 }]);
+  });
+
   test('hit sources by page: where the visitors of each page of the last 7 days came from', async () => {
     const s = await fresh();
     for (const [slug, day, source] of [[A, '2026-11-22', 'google'], [A, '2026-11-22', 'google'], [B, '2026-11-20', 'direct'], [A, '2026-11-21', 'namax'], [A, '2026-11-01', 'social']])

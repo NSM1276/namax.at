@@ -39,7 +39,7 @@ export function openOwnerKey(adminKey, slug, enc) {
   } catch { return null; }
 }
 
-const KIND_DE = { friseur: 'Friseur', cafe: 'Café', restaurant: 'Restaurant', imbiss: 'Imbiss', handy: 'Handyreparatur',
+export const KIND_DE = { friseur: 'Friseur', cafe: 'Café', restaurant: 'Restaurant', imbiss: 'Imbiss', handy: 'Handyreparatur',
   kosmetik: 'Kosmetik', nails: 'Nagelstudio', schneider: 'Schneiderei' };
 const kindDe = (k) => KIND_DE[k] || k;
 
@@ -65,24 +65,24 @@ function cityNav(cities, city) {
 }
 
 // Two tabs on every page: "Anfragen" (start page) and "Lokale" (districts and cards).
-const TABS_CSS = `.tabs{display:flex;gap:6px;margin-top:10px}.tabs a{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:8px;border-radius:8px;background:#2a2a2a;color:#fff;text-decoration:none;font-weight:600}
+export const TABS_CSS = `.tabs{display:flex;gap:6px;margin-top:10px}.tabs a{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:8px;border-radius:8px;background:#2a2a2a;color:#fff;text-decoration:none;font-weight:600}
 .tabs a[aria-current]{background:#ffc93c;color:#111}.tabs span{display:inline-block;min-width:24px;padding:0 7px;border-radius:999px;background:#fff;color:#111;text-align:center;font-size:14px}`;
-function tabsNav(active, openCount) {
+export function tabsNav(active, openCount) {
   const cur = (t) => (t === active ? ' aria-current="page"' : '');
   return `<nav class="tabs" aria-label="Bereich"><a href="/liste"${cur('anfragen')}>Anfragen <span>${Number(openCount) || 0}</span></a>`
-    + `<a href="/liste?v=lokale" data-lokale${cur('lokale')}>Lokale</a></nav>`;
+    + `<a href="/liste?v=lokale" data-lokale${cur('lokale')}>Lokale</a><a href="/liste/statistik"${cur('statistik')}>Statistik</a></nav>`;
 }
 // Visit counter line, on every page under the title: visitor views of all venue pages (owner views excluded).
 const VIS_CSS = '.vis{margin:6px 0 0;font-size:14px;color:#ddd}.vis b{color:#fff}.src{margin:2px 0 0;font-size:13px;color:#bbb}';
 // Where the visitors of the last 7 days came from (the page script's source words), most first.
-const SRC_DE = { google: 'Google', bing: 'Bing/DuckDuckGo', social: 'Social/WhatsApp', namax: 'namax', direct: 'direkt', other: 'andere' };
+export const SRC_DE = { google: 'Google', bing: 'Bing/DuckDuckGo', social: 'Social/WhatsApp', namax: 'namax', direct: 'direkt', other: 'andere' };
 const srcLine = (s) => {
   const parts = Object.entries(s || {}).filter(([k, n]) => n && SRC_DE[k]).map(([k, n]) => `${SRC_DE[k]} ${n}`);
   return parts.length ? `<p class="src">Woher (7 Tage): ${esc(parts.join(' · '))}</p>` : '';
 };
 const visLine = (v) => (v ? `<p class="vis">Besuche · heute <b>${v.today}</b> · 7 Tage <b>${v.week}</b> · gesamt <b>${v.total}</b></p>${srcLine(v.sources)}` : '');
 // The "Lokale" tab reopens the last district used on this device.
-const TABS_JS = `var t=document.querySelector('[data-lokale]'),l='',lc='';try{l=(localStorage.getItem('namax-liste-d')||'').replace(/[^0-9a-z]/g,'');lc=(localStorage.getItem('namax-liste-c')||'').replace(/[^a-z]/g,'')}catch(e){}if(t&&l)t.href='/liste?'+(lc&&lc!=='wien'?'c='+lc+'&':'')+'d='+l;`;
+export const TABS_JS = `var t=document.querySelector('[data-lokale]'),l='',lc='';try{l=(localStorage.getItem('namax-liste-d')||'').replace(/[^0-9a-z]/g,'');lc=(localStorage.getItem('namax-liste-c')||'').replace(/[^a-z]/g,'')}catch(e){}if(t&&l)t.href='/liste?'+(lc&&lc!=='wien'?'c='+lc+'&':'')+'d='+l;`;
 
 const CL = T.claim.de;
 const MAX_SHOWN_REQUESTS = 50; // a flood never makes the start page unusable

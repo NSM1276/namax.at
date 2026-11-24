@@ -10,6 +10,7 @@
 // addPhoto(slug, { url, kind }) → id;  listPhotos;  setPhotoKind(slug, id, kind);  removePhoto;  countPhotosSince
 // addEvent(slug, { type, text });  listEvents(sinceIso);  countEventsSince(slug, type, sinceIso)
 // addHit(slug, { owner, day, source });  getHits(slug) → { visitors, owner };  hitSources({ weekStart }) → { source: n };  hitSourcesBySlug({ weekStart }) → { slug: { source: n } }
+// hitRows({ since }) → [{ slug, day, source, n }];  addClaimEvent(slug, { day, event });  claimEventRows({ since }) → [{ slug, day, event, n }]
 // recordModelCall(slug);  countModelCalls(slug, sinceIso?)
 // listSlugs(status) → slugs
 // setKeyHash(slug, hash);  setOwnerKeyEnc(slug, enc);  setFacade(slug, url|null)
@@ -29,7 +30,7 @@ const requestOrder = (a, b) => (Boolean(a.doneAt) - Boolean(b.doneAt))
 
 export function memoryStore() {
   const venues = new Map();
-  const messages = [], photos = [], events = [], hits = [], srcHits = [], modelCalls = [];
+  const messages = [], photos = [], events = [], hits = [], srcHits = [], modelCalls = [], claimEvents = [];
   let requests = [];
   let seq = 0;
   const nowIso = () => new Date().toISOString();
@@ -155,6 +156,15 @@ export function memoryStore() {
       for (const h of srcHits) if (h.day >= weekStart) by.set(h.source, (by.get(h.source) || 0) + h.n);
       return Object.fromEntries([...by].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])));
     },
+
+    /** Visitor views per venue, day and source since a day (YYYY-MM-DD), for the statistics page. */
+    async hitRows({ since }) { return srcHits.filter((h) => h.day >= since).map((h) => ({ ...h })); },
+    async addClaimEvent(slug, { day, event }) {
+      let e = claimEvents.find((x) => x.slug === slug && x.day === day && x.event === event);
+      if (!e) { e = { slug, day, event, n: 0 }; claimEvents.push(e); }
+      e.n++;
+    },
+    async claimEventRows({ since }) { return claimEvents.filter((e) => e.day >= since).map((e) => ({ ...e })); },
 
     async recordModelCall(slug) { modelCalls.push({ slug, at: nowIso() }); },
     async countModelCalls(slug, sinceIso) {

@@ -7,7 +7,8 @@ import { isOwner, viennaDayStart, viennaDay, visitWindow, newKey, hashKey } from
 import { chatTurn } from './assistant.mjs';
 import { effectiveVenue } from './merge.mjs';
 import { isAdmin, openOwnerKey, sealOwnerKey, renderAdmin, ADMIN_KEY_HASH } from './admin.mjs';
-import { CITIES, CITY_ORDER, cityOf } from './cities.mjs';
+import { CITIES, CITY_ORDER, cityOf, districtLabel } from './cities.mjs';
+import { renderStats } from './stats.mjs';
 import { faviconSvg } from './around.mjs';
 
 export const MAX_PHOTO_BYTES = 3 * 1024 * 1024;
@@ -133,6 +134,7 @@ export async function handleClaim(req, { store, now = () => new Date() }) {
     || (ipHash && await store.countRequestsByIpSince(ipHash, day) >= DAILY_CLAIMS_PER_SENDER)
     || await store.countAllRequestsSince(day) >= DAILY_CLAIMS_TOTAL) return fail(429, 'too many');
   await store.addRequest(slug, { role, wish, name, phone, channel: channel || 'none', text: message, ipHash });
+  try { await store.addClaimEvent(slug, { day: viennaDay(now()), event: 'sent' }); } catch { /* the request counts, the statistic may miss it */ }
   return json(200, { ok: true });
 }
 
@@ -185,6 +187,10 @@ const BOT_UA = /bot|crawl|spider|slurp|headless|lighthouse|pagespeed|preview|fac
 
 // The words the page script may send as the visitor's source (page.mjs srcOf); anything else is "other".
 export const HIT_SOURCES = ['google', 'bing', 'social', 'namax', 'direct', 'other'];
+// What the owner form may report about itself (template.mjs CLAIM_SCRIPT): which button opened it, the step reached,
+// the role and wish picked, the step it was closed at, an error shown. Counts only; "sent" is counted by handleClaim.
+export const CLAIM_EVENTS = ['open:niche', 'open:nophoto', 'open:link', 'open:report', 'step:2', 'step:3',
+  ...CLAIM_ROLES.map((r) => 'role:' + r), ...CLAIM_WISHES.map((w) => 'wish:' + w), 'close:1', 'close:2', 'close:3', 'fail'];
 // Set by the admin page on Nasim's own devices: his views of the venue pages are not visits.
 export const STAFF_COOKIE = 'nx_staff';
 const STAFF_MARK = `${STAFF_COOKIE}=1; Domain=namax.at; Path=/; Max-Age=31536000; Secure; SameSite=Lax`;
@@ -198,6 +204,11 @@ export async function handleHit(req, { store, now = () => new Date() }) {
     const record = slug ? await store.getVenue(slug) : null;
     if (record && record.status !== 'removed') {
       const body = (await readJson(req, 512)) || {};
+      // A form event instead of a view: only the known words, nothing else from the body is kept.
+      if (body.ev !== undefined) {
+        if (typeof body.ev === 'string' && CLAIM_EVENTS.includes(body.ev)) await store.addClaimEvent(slug, { day: viennaDay(now()), event: body.ev });
+        throw 0;
+      }
       const owner = isOwner(record, typeof body.k === 'string' ? body.k : '');
       // A visitor view carries the source word of the person check (page.mjs); the old bare beacon has none and is not counted.
       const source = owner || typeof body.src !== 'string' ? null : HIT_SOURCES.includes(body.src) ? body.src : 'other';
@@ -266,6 +277,7 @@ export async function handleAdmin(req, { store, adminKeyHash = ADMIN_KEY_HASH, n
   }
   const key = adminKey(req, null, adminKeyHash);
   if (!key) return text(404, 'Not found\n', 'no-store');
+  if (params.get('view') === 'stats') return handleStats(store, now());
   await store.purgeRequests(now().toISOString());
   const all = await store.listForAdmin();
   // One city at a time (?c=graz; none = Wien, so ?d= alone is a Vienna district as before), then one district of it.
@@ -312,6 +324,27 @@ export async function handleAdmin(req, { store, adminKeyHash = ADMIN_KEY_HASH, n
       check: overtureRow(r.facts.internal?.overture), chatOpen: Boolean(r.chatOpen), visits: hitBy.get(r.slug) || null };
   }).sort((a, b) => a.name.localeCompare(b.name, 'de'));
   return html(rows, { districts, district, openRequests, visits, cities, city });
+}
+
+export const STATS_DAYS = 60; // 30 days shown, the 30 before them for the trend
+
+/** www.namax.at/liste/statistik: visits and the owner form, all drawn in the browser from these counts. */
+async function handleStats(store, now) {
+  const today = viennaDay(now);
+  const start = new Date(today + 'T12:00:00Z');
+  start.setUTCDate(start.getUTCDate() - (STATS_DAYS - 1));
+  const since = start.toISOString().slice(0, 10);
+  const [hits, claims, all, requests] = await Promise.all([store.hitRows({ since }), store.claimEventRows({ since }), store.listForAdmin(), store.listRequests()]);
+  const seen = new Set([...hits, ...claims].map((r) => r.slug));
+  const venues = {};
+  for (const r of all) {
+    if (!seen.has(r.slug)) continue;
+    const city = cityOf(r.facts), d = Number(r.facts.internal?.district) || 0;
+    venues[r.slug] = [effectiveVenue(r, []).name, city, d ? districtLabel(city, d) : '', r.facts.kind || ''];
+  }
+  const cities = CITY_ORDER.map((c) => [c, CITIES[c].name]);
+  return new Response(renderStats({ today, days: STATS_DAYS, hits, claims, venues, cities, openRequests: requests.filter((q) => !q.doneAt).length }), { headers: {
+    'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'private, no-store', 'X-Robots-Tag': 'noindex, nofollow', 'Set-Cookie': STAFF_MARK } });
 }
 
 /**

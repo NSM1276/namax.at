@@ -299,14 +299,14 @@ function facade(v, owner) {
   const n = v.photos && v.photos.length ? null : nicheImage(v);
   if (!n) return '';
   const add = offersClaim(v, owner)
-    ? `<figcaption>${tr('Sind Sie der Inhaber?', 'Are you the owner?')}<button type="button" class="add" data-claim-open data-wish="photos">${tr('+ Eigene Fotos', '+ Your photos')}</button></figcaption>` : '';
+    ? `<figcaption>${tr('Sind Sie der Inhaber?', 'Are you the owner?')}<button type="button" class="add" data-claim-open data-ev="niche" data-wish="photos">${tr('+ Eigene Fotos', '+ Your photos')}</button></figcaption>` : '';
   return `<figure class="facade niche"><img src="${n}" alt="" width="1024" height="768" fetchpriority="high">${tr('Symbolbild', 'Example image', 'span', 'class="sym"')}${add}</figure>`;
 }
 
 // No photos and no example picture for the trade: just the owner line.
 function noPhoto(v, owner) {
   if (nicheImage(v) || !offersClaim(v, owner)) return '';
-  return `<p class="nophoto"><button type="button" class="claimlink" data-claim-open data-wish="photos">${tr('Sind Sie der Inhaber? Fotos hinzufügen', 'Are you the owner? Add photos')}</button></p>`;
+  return `<p class="nophoto"><button type="button" class="claimlink" data-claim-open data-ev="nophoto" data-wish="photos">${tr('Sind Sie der Inhaber? Fotos hinzufügen', 'Are you the owner? Add photos')}</button></p>`;
 }
 
 function photos(v, owner) {
@@ -338,7 +338,7 @@ function checked(v, owner) {
   const date = m && +m[2] >= 1 && +m[2] <= 12
     ? tr(`Angaben zuletzt vor Ort geprüft: ${when('de')} (OpenStreetMap)`, `Details last checked on site: ${when('en')} (OpenStreetMap)`) : '';
   const report = offersClaim(v, owner)
-    ? `<button type="button" class="claimlink" data-claim-open data-role="other" data-wish="fix">${tr(C.de.reportLink, C.en.reportLink)}</button>` : '';
+    ? `<button type="button" class="claimlink" data-claim-open data-ev="report" data-role="other" data-wish="fix">${tr(C.de.reportLink, C.en.reportLink)}</button>` : '';
   return date || report ? `<p class="asof">${[date, report].filter(Boolean).join('<br>')}</p>` : '';
 }
 
@@ -389,25 +389,28 @@ dialog.claim .btn{width:100%;font-family:var(--body)}
 dialog.claim:not(.report) [data-rep],dialog.claim.report [data-std],dialog.claim.report .ch,dialog.claim.report .ttl,dialog.claim.report .back{display:none}`;
 const CLAIM_SCRIPT = `
 var cd=document.querySelector('[data-claim]');
-if(cd){var A={};
-function step(n){if(n===3){var rep=A.role==='other'&&A.wish==='fix',fm=cd.querySelector('form');cd.classList.toggle('report',rep);fm.querySelector('[name=phone]').required=!rep;fm.querySelector('[name=text]').required=rep;var rs=fm.querySelectorAll('[name=channel]');for(var j=0;j<rs.length;j++)rs[j].required=!rep}
+if(cd){var A={},cur=0,sent=0,E={};
+function ev(w){if(E[w])return;E[w]=1;try{navigator.sendBeacon('/api/venue/hit',JSON.stringify({ev:w}))}catch(e){}}
+function step(n){n=Number(n);cur=n;if(n===2||n===3)ev('step:'+n);if(n===3){var rep=A.role==='other'&&A.wish==='fix',fm=cd.querySelector('form');cd.classList.toggle('report',rep);fm.querySelector('[name=phone]').required=!rep;fm.querySelector('[name=text]').required=rep;var rs=fm.querySelectorAll('[name=channel]');for(var j=0;j<rs.length;j++)rs[j].required=!rep}
 var ss=cd.querySelectorAll('[data-step]');for(var i=0;i<ss.length;i++)ss[i].hidden=ss[i].getAttribute('data-step')!==String(n)}
 document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('[data-claim-open],[data-claim-close],[data-pick],[data-back]');if(!t)return;
-if(t.hasAttribute('data-claim-open')){A={};if(t.getAttribute('data-wish'))A.wish=t.getAttribute('data-wish');if(t.getAttribute('data-role'))A.role=t.getAttribute('data-role');step(A.role&&A.wish?3:1);if(cd.showModal)cd.showModal();else cd.setAttribute('open','');return}
-if(t.hasAttribute('data-claim-close')){if(cd.close)cd.close();else cd.removeAttribute('open');return}
+if(t.hasAttribute('data-claim-open')){A={};ev('open:'+(t.getAttribute('data-ev')||'link'));if(t.getAttribute('data-wish'))A.wish=t.getAttribute('data-wish');if(t.getAttribute('data-role'))A.role=t.getAttribute('data-role');step(A.role&&A.wish?3:1);if(cd.showModal)cd.showModal();else cd.setAttribute('open','');return}
+if(t.hasAttribute('data-claim-close')){if(cd.close)cd.close();else{cd.removeAttribute('open');closed()}return}
 if(t.hasAttribute('data-back')){step(t.getAttribute('data-back'));return}
-var k=t.getAttribute('data-pick');A[k]=t.getAttribute('data-value');step(k==='role'&&!A.wish?2:3)});
+var k=t.getAttribute('data-pick');A[k]=t.getAttribute('data-value');ev(k+':'+A[k]);step(k==='role'&&!A.wish?2:3)});
+function closed(){if(!sent&&cur>=1&&cur<=3)ev('close:'+cur)}
+cd.addEventListener('close',closed);
 var f=cd.querySelector('form');
 f.addEventListener('submit',function(e){e.preventDefault();var b=f.querySelector('[type=submit]'),err=cd.querySelector('[data-claim-err]');b.disabled=true;err.hidden=true;
 var q=function(n){return f.querySelector('[name='+n+']').value},ch=f.querySelector('[name=channel]:checked');
 var body={role:A.role,wish:A.wish,channel:ch?ch.value:'',name:q('who'),phone:q('phone'),text:q('text'),website:q('website')};
 fetch('/api/venue/claim',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)})
-.then(function(r){if(!r.ok)throw new Error(String(r.status));step(4)})
-.catch(function(){b.disabled=false;err.hidden=false})})}
+.then(function(r){if(!r.ok)throw new Error(String(r.status));sent=1;step(4)})
+.catch(function(){b.disabled=false;err.hidden=false;ev('fail')})})}
 `;
 
 function footer(v, owner) {
-  const claim = offersClaim(v, owner) ? ` · <button type="button" class="claimlink" data-claim-open>${tr(C.de.link, C.en.link)}</button>` : '';
+  const claim = offersClaim(v, owner) ? ` · <button type="button" class="claimlink" data-claim-open data-ev="link">${tr(C.de.link, C.en.link)}</button>` : '';
   const by = v.confirmed === true
     ? ui('by')
     : tr(`${T.de.by} · ${T.de.unconfirmed}`, `${T.en.by} · ${T.en.unconfirmed}`) + claim;

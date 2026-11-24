@@ -379,3 +379,19 @@ test('signup: one sender cannot flood', async () => {
   for (let i = 0; i < 7; i++) last = await handleSignup(wwwReq('/api/venue/signup', { ...signup, slug: undefined, lokal: `Lokal Nummer ${i}` }), s);
   assert.equal(last.status, 429);
 });
+
+test('owner form events: only the known words are counted, per venue and day; "sent" only by the server', async () => {
+  const s = await services();
+  const hit = (body, headers = {}) => handleHit(new Request(`https://${host}/api/venue/hit`, { method: 'POST', headers: { host, ...headers }, body: JSON.stringify(body) }), s);
+  for (const ev of ['open:niche', 'role:owner', 'wish:photos', 'step:3', 'close:3', 'fail', 'sent', 'name:Ali', '+43 660 1', 42])
+    assert.equal((await hit({ ev })).status, 204);
+  await hit({ ev: 'open:link' }, { cookie: 'nx_staff=1' });
+  await hit({ ev: 'open:link' }, { 'user-agent': 'Googlebot' });
+  const rows = (await s.store.claimEventRows({ since: '2000-01-01' })).map((r) => r.event).sort();
+  assert.deepEqual(rows, ['close:3', 'fail', 'open:niche', 'role:owner', 'step:3', 'wish:photos']);
+  assert.deepEqual(await s.store.getHits(SLUG), { visitors: 0, owner: 0 }, 'a form event is not a page view');
+  assert.equal((await handleClaim(claimReq(claim), s)).status, 200);
+  assert.equal((await handleClaim(claimReq({ ...claim, website: 'spam' }), s)).status, 200);
+  const sent = (await s.store.claimEventRows({ since: '2000-01-01' })).filter((r) => r.event === 'sent');
+  assert.equal(sent.length, 1); assert.equal(sent[0].n, 1, 'the honeypot is not counted');
+});

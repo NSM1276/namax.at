@@ -602,3 +602,36 @@ test('request card: "Nummer passt zur Seite" only when the typed number is the p
   await store.addRequest('cafe-p', { role: 'owner', wish: 'fix', name: 'B', phone: '0660 9999999', channel: 'call', text: '' });
   assert.equal(((await chooser(s)).match(/Nummer passt zur Seite/g) || []).length, 1);
 });
+
+// www.namax.at/liste/statistik (vercel.json rewrites it to ?view=stats): same cookie as the list.
+const statsReq = (k) => new Request('https://www.namax.at/liste/statistik?view=stats',
+  { headers: { host: 'www.namax.at', ...(k ? { cookie: `namax_admin=${k}` } : {}) } });
+
+test('statistics page: only with the key, private; it carries counts, venue names and form events, nothing typed', async () => {
+  const s = await svc();
+  const now = () => new Date('2026-11-24T10:00:00Z');
+  for (const k of [null, 'x'.repeat(32)]) assert.equal((await handleAdmin(statsReq(k), { ...s, now })).status, 404);
+  await s.store.addHit('cafe-a', { owner: false, day: '2026-11-24', source: 'google' });
+  await s.store.addHit('cafe-a', { owner: false, day: '2026-09-01', source: 'google' }); // older than 60 days: left out
+  await s.store.addHit('friseur-b', { owner: false, day: '2026-11-20', source: 'direct' });
+  await s.store.addClaimEvent('cafe-a', { day: '2026-11-23', event: 'open:niche' });
+  await s.store.addRequest('cafe-a', { role: 'owner', wish: 'photos', name: 'Geheim Name', phone: '+43 660 9999999', channel: 'call', text: 'privat' });
+  const res = await handleAdmin(statsReq(ADMIN), { ...s, now });
+  assert.equal(res.status, 200);
+  assert.equal(res.headers.get('cache-control'), 'private, no-store');
+  assert.match(res.headers.get('x-robots-tag'), /noindex/);
+  const html = await res.text();
+  const D = JSON.parse(html.match(/window\.D=(.*?);<\/script>/)[1]);
+  assert.equal(D.since, '2026-09-26');
+  assert.deepEqual(D.hits.sort(), [['cafe-a', '2026-11-24', 'google', 1], ['friseur-b', '2026-11-20', 'direct', 1]]);
+  assert.deepEqual(D.claims, [['cafe-a', '2026-11-23', 'open:niche', 1]]);
+  assert.deepEqual(D.venues['cafe-a'], ['Café cafe-a', 'wien', '12. Meidling', 'cafe']);
+  assert.ok(html.includes('Salon \\u003cB>') && !html.includes('Salon <B>'), 'names cannot close the script');
+  for (const secret of ['Geheim', '9999999', 'privat', OWNER]) assert.ok(!html.includes(secret), secret);
+  assert.match(html, /href="\/liste\/statistik" aria-current="page"/);
+  assert.match(html, /Anfragen <span>1<\/span>/);
+});
+
+test('the list links to the statistics page', async () => {
+  assert.match(await (await handleAdmin(req(ADMIN), await svc())).text(), /href="\/liste\/statistik"/);
+});

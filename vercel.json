@@ -70,6 +70,10 @@
     {
       "source": "/liste",
       "destination": "/api/venue/admin"
+    },
+    {
+      "source": "/liste/statistik",
+      "destination": "/api/venue/admin?view=stats"
     }
   ]
 }

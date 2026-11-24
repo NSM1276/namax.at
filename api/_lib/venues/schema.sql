@@ -58,6 +58,16 @@ create table if not exists venue_hit_sources (
   primary key (slug, day, source)
 );
 create index if not exists venue_hit_sources_day on venue_hit_sources (day);
+-- The owner form ("Sind Sie der Inhaber?") per venue and day: which button opened it, the steps reached, the role and
+-- wish picked, the step it was closed at, errors, and "sent" (counted by the server). Counts only, nothing typed.
+create table if not exists venue_claim_events (
+  slug      text not null references venues(slug) on delete cascade,
+  day       date not null,
+  event     text not null,
+  n         int not null default 0,
+  primary key (slug, day, event)
+);
+create index if not exists venue_claim_events_day on venue_claim_events (day);
 
 create table if not exists venue_model_calls (
   id    bigserial primary key,

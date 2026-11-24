@@ -235,7 +235,7 @@ test('without a facade photo the owner\'s first photo leads the page and leaves 
 test('the on-site check date and the visitor report link', () => {
   const html = renderVenue({ ...load('full'), checked: '2025-08' });
   assert.ok(text(html).includes('Angaben zuletzt vor Ort geprüft: August 2025 (OpenStreetMap)'));
-  assert.match(html, /data-claim-open data-role="other" data-wish="fix"/);
+  assert.match(html, /data-claim-open data-ev="report" data-role="other" data-wish="fix"/);
   const confirmed = renderVenue({ ...load('full'), confirmed: true, checked: '2025-13' });
   assert.ok(!confirmed.includes('class="asof"'));
 });

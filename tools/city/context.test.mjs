@@ -124,7 +124,7 @@ test('niche banner: a "Symbolbild" of the trade where the facade would be, until
     context: { near: [], facts: [], map: { w: 600, h: 340, streets: [], dots: [] } }, ...o }, opts);
   assert.match(page(), /<figure class="facade niche"><img src="\/v\/_shared\/niche\/(tailor|sewing-machine|tailor-[a-z]+)\.webp"/);
   assert.match(page(), /data-de="Symbolbild" data-en="Example image"/);
-  assert.match(page(), /data-claim-open data-wish="photos"/);
+  assert.match(page(), /data-claim-open data-ev="niche" data-wish="photos"/);
   assert.match(page({ kind: 'imbiss', cuisine: 'pizza' }), /niche\/pizza/);
   // a confirmed page keeps the picture, without the owner button
   assert.match(page({ confirmed: true }), /class="facade niche"/);
@@ -137,7 +137,7 @@ test('niche banner: a "Symbolbild" of the trade where the facade would be, until
   // nothing we surely know it sells (an imbiss with no known food, another trade): only the owner line, no frame, no picture
   for (const o of [{ kind: 'imbiss' }, { kind: 'other' }]) {
     assert.ok(!page(o).includes('/niche/'));
-    assert.match(page(o), /class="nophoto"><button type="button" class="claimlink" data-claim-open data-wish="photos"/);
+    assert.match(page(o), /class="nophoto"><button type="button" class="claimlink" data-claim-open data-ev="nophoto" data-wish="photos"/);
   }
   assert.ok(!page({ kind: 'other', confirmed: true }).includes('class="nophoto"'));
   assert.ok(!page().includes('placeholder-'));
