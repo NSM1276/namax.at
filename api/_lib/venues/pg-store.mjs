@@ -131,6 +131,14 @@ export function pgStore(query) {
       await query(`insert into site_form_events (day, page, event, n) values ($1::date, $2, $3, 1)
         on conflict (day, page, event) do update set n = site_form_events.n + 1`, [day, page, event]);
     },
+    async addSiteHit({ day, project, page, source }) {
+      await query(`insert into site_hits (day, project, page, source, n) values ($1::date, $2, $3, $4, 1)
+        on conflict (day, project, page, source) do update set n = site_hits.n + 1`, [day, project, page, source]);
+    },
+    async siteHitRows({ since }) {
+      const rows = await query(`select to_char(day, 'YYYY-MM-DD') as day, project, page, source, n from site_hits where day >= $1::date`, [since]);
+      return rows.map((r) => ({ day: r.day, project: r.project, page: r.page, source: r.source, n: num(r.n) }));
+    },
     async siteEventRows({ since }) {
       const rows = await query(`select to_char(day, 'YYYY-MM-DD') as day, page, event, n from site_form_events where day >= $1::date`, [since]);
       return rows.map((r) => ({ day: r.day, page: r.page, event: r.event, n: num(r.n) }));

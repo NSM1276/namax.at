@@ -11,6 +11,7 @@
 // addEvent(slug, { type, text });  listEvents(sinceIso);  countEventsSince(slug, type, sinceIso)
 // addHit(slug, { owner, day, source });  getHits(slug) → { visitors, owner };  hitSources({ weekStart }) → { source: n };  hitSourcesBySlug({ weekStart }) → { slug: { source: n } }
 // hitRows({ since }) → [{ slug, day, source, n }];  addClaimEvent(slug, { day, event });  claimEventRows({ since }) → [{ slug, day, event, n }]
+// addSiteHit({ day, project, page, source });  siteHitRows({ since }) → [{ day, project, page, source, n }] (visits on akiwi.at / fightfolio.de)
 // addSiteEvent({ day, page, event });  siteEventRows({ since }) → [{ day, page, event, n }] (the contact form on namax.at)
 // recordModelCall(slug);  countModelCalls(slug, sinceIso?)
 // listSlugs(status) → slugs
@@ -31,7 +32,7 @@ const requestOrder = (a, b) => (Boolean(a.doneAt) - Boolean(b.doneAt))
 
 export function memoryStore() {
   const venues = new Map();
-  const messages = [], photos = [], events = [], hits = [], srcHits = [], modelCalls = [], claimEvents = [], siteEvents = [];
+  const messages = [], photos = [], events = [], hits = [], srcHits = [], modelCalls = [], claimEvents = [], siteEvents = [], siteHits = [];
   let requests = [];
   let seq = 0;
   const nowIso = () => new Date().toISOString();
@@ -172,6 +173,12 @@ export function memoryStore() {
       e.n++;
     },
     async siteEventRows({ since }) { return siteEvents.filter((e) => e.day >= since).map((e) => ({ ...e })); },
+    async addSiteHit({ day, project, page, source }) {
+      let e = siteHits.find((x) => x.day === day && x.project === project && x.page === page && x.source === source);
+      if (!e) { e = { day, project, page, source, n: 0 }; siteHits.push(e); }
+      e.n++;
+    },
+    async siteHitRows({ since }) { return siteHits.filter((e) => e.day >= since).map((e) => ({ ...e })); },
 
     async recordModelCall(slug) { modelCalls.push({ slug, at: nowIso() }); },
     async countModelCalls(slug, sinceIso) {

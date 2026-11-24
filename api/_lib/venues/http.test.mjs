@@ -437,6 +437,20 @@ test('contact form of the other sites: the project comes from the Origin, with C
   assert.equal((await s.store.listRequests()).length, 2);
 });
 
+test('visits on akiwi.at and fightfolio.de: entry page and source per day; not for namax.at, robots or other sites', async () => {
+  const s = await services();
+  const hit = (body, headers) => handleContact(contactReq(body, headers), s);
+  assert.equal((await hit({ hit: 'google', path: '/R/12?utm=x' }, { origin: 'https://www.akiwi.at' })).status, 204);
+  await hit({ hit: 'google', path: '/r/12' }, { origin: 'https://lokale.akiwi.at' });
+  await hit({ hit: 'weird', path: '/en/fighters/max/extra/more' }, { origin: 'https://www.fightfolio.de' });
+  await hit({ hit: 'direct', path: '/' }, { origin: 'https://www.namax.at' });
+  await hit({ hit: 'direct', path: '/' }, { origin: 'https://www.akiwi.at', 'user-agent': 'Googlebot/2.1' });
+  assert.equal((await hit({ hit: 'direct', path: '/' }, { origin: 'https://evil.example' })).status, 403);
+  const rows = (await s.store.siteHitRows({ since: '2000-01-01' })).map((r) => [r.project, r.page, r.source, r.n]);
+  assert.deepEqual(rows, [['akiwi', '/r/12', 'google', 2], ['fightfolio', '/en/fighters/max', 'other', 1]]);
+  assert.deepEqual(await s.store.listRequests(), [], 'a visit is never a request');
+});
+
 test('akiwi: a guest may write without a number, then the message counts; owners still need one', async () => {
   const s = await services();
   const ak = { origin: 'https://www.akiwi.at' };

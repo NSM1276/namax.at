@@ -27,6 +27,8 @@ svg{display:block;width:100%;height:auto;overflow:visible}svg text{font:11px sys
 .seg{display:flex;gap:6px;margin:0 0 10px}
 .top{list-style:none;margin:0;padding:0}.top li{border-top:1px solid #eee}.top button{display:grid;grid-template-columns:28px 1fr auto;gap:8px;align-items:center;width:100%;min-height:48px;padding:6px 2px;font:inherit;text-align:left;background:none;border:0;color:#111;cursor:pointer}
 .top li[aria-current] button{background:#fff6d6}.top .r{color:#888;font-variant-numeric:tabular-nums}.top .nm{overflow:hidden}.top .nm b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}.top .nm small{color:#666}
+.pjs{padding-bottom:12px;border-bottom:1px solid #ddd}.pjs button{font-size:16px;min-width:96px}
+.top a.pg{display:grid;grid-template-columns:28px 1fr auto;gap:8px;align-items:center;min-height:48px;padding:6px 2px;color:#111;text-decoration:none}
 .top .c{font-weight:700;font-variant-numeric:tabular-nums}.up{color:#0a7a2f;font-weight:700;font-size:13px;margin-left:6px}
 .ven{margin:10px 0 0;padding:12px;border-radius:10px;background:#f7f6f2}.ven a{color:#111;font-weight:700}.ven p{margin:4px 0 8px;color:#555;font-size:14px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.none{color:#666;margin:0}
@@ -37,7 +39,7 @@ svg{display:block;width:100%;height:auto;overflow:visible}svg text{font:11px sys
 
 // Everything below runs in the browser on window.D (see renderStats).
 const JS = `
-var D=window.D,N=D.days,T0=Date.parse(D.since+'T12:00:00Z'),city='all',per='w',sel=null;
+var D=window.D,N=D.days,T0=Date.parse(D.since+'T12:00:00Z'),city='all',per='w',sel=null,view='namax';
 var SRC=${JSON.stringify(SRC_ORDER)},COL=${JSON.stringify(SRC_COLOR)},SN=${JSON.stringify(SRC_NAME)},KN=${JSON.stringify(KIND_DE)};
 function idx(day){return Math.round((Date.parse(day+'T12:00:00Z')-T0)/864e5)}
 var H=D.hits.map(function(r){return{s:r[0],i:idx(r[1]),src:r[2],n:r[3]}}),C=D.claims.map(function(r){return{s:r[0],i:idx(r[1]),e:r[2],n:r[3]}});
@@ -73,9 +75,11 @@ return '<ul class="bars '+(cls||'')+'">'+list.map(function(x){return '<li><span 
 function group(rows,key,a){var m={},t=0;rows.forEach(function(r){if(r.i>=a){var k=key(r);m[k]=(m[k]||0)+r.n;t+=r.n}});
 var l=Object.keys(m).map(function(k){return[k,m[k]]}).sort(function(x,y){return y[1]-x[1]||(x[0]<y[0]?-1:1)});return{l:l,t:t}}
 function fold(l,max){if(l.length<=max)return l;var rest=l.slice(max-1).reduce(function(a,x){return a+x[1]},0);return l.slice(0,max-1).concat([['andere',rest]])}
-function shares(rows){var a=N-30,s=group(rows,function(r){return r.src},a);
+function woher(rows){var s=group(rows,function(r){return r.src},N-30);
 var src=SRC.map(function(k){var f=s.l.filter(function(x){return x[0]===k})[0];return[SN[k],f?f[1]:0,COL[k]]}).filter(function(x){return x[1]}).sort(function(x,y){return y[1]-x[1]});
-var out='<div class="card"><h2>Woher <small>· 30 Tage</small></h2>'+bars(src,s.t)+'</div>';
+return '<div class="card"><h2>Woher <small>· 30 Tage</small></h2>'+bars(src,s.t)+'</div>'}
+function shares(rows){var a=N-30;
+var out=woher(rows);
 var cityL=group(rows,function(r){return V(r.s)[1]||'?'},a),cn={};D.cities.forEach(function(c){cn[c[0]]=c[1]});
 var dist=group(rows,function(r){var v=V(r.s);return (city==='all'?(cn[v[1]]||'?')+' ':'')+(v[2]||'ohne Bezirk')},a);
 var kind=group(rows,function(r){var k=V(r.s)[3];return KN[k]||k||'?'},a);
@@ -114,9 +118,9 @@ var SE={'open:header':'Knopf oben','open:hero':'Knopf im Titel','open:chat':'Kno
 'close:1':'bei Schritt 1 (Wer?)','close:2':'bei Schritt 2 (Was?)','close:3':'im Formular'};
 var SP={home:'Startseite',webdesign:'Websites',social:'Social Media',content:'Content',seo:'SEO',ads:'Werbung',free:'Kostenlose Seite'};
 var pj='namax';
+// Visits on akiwi.at / fightfolio.de: entry page, day, source word (counted by the form script there).
+var SH=(D.sh||[]).map(function(r){return{p:r[0],s:r[1],i:idx(r[2]),src:r[3],n:r[4]}});
 function pjOf(page){var i=page.indexOf(':');return i<0?'namax':page.slice(0,i)}
-function pjBtns(){var have={namax:1};(D.site||[]).forEach(function(r){have[pjOf(r[0])]=1});var ks=Object.keys(D.proj).filter(function(k){return have[k]});
-if(ks.length<2)return '';return '<div class="flt" role="group" aria-label="Projekt">'+ks.map(function(k){return '<button type="button" data-pj="'+k+'" aria-pressed="'+(pj===k)+'">'+esc(D.proj[k].name)+'</button>'}).join('')+'</div>'}
 function siteFunnel(){var a=N-30,m={},pg={},P=D.proj[pj]||D.proj.namax;(D.site||[]).forEach(function(r){var i=idx(r[1]);if(i<a||pjOf(r[0])!==pj)return;m[r[2]]=(m[r[2]]||0)+r[3];
 if(r[2].indexOf('open:')===0){var k=pj==='namax'?r[0]:r[0].slice(pj.length+1);pg[k]=(pg[k]||0)+r[3]}});
 var lab=function(k){return SE[k]||(k.indexOf('role:')===0?P.roles[k.slice(5)]:k.indexOf('wish:')===0?P.wishes[k.slice(5)]:k.indexOf('open:')===0?'Knopf „'+k.slice(5)+'“':null)};
@@ -131,19 +135,34 @@ return bars([['Geöffnet',op],['Wer gewählt',sumP('role:')],['Formular erreicht
 function cityBtns(){var have={};H.forEach(function(r){have[V(r.s)[1]]=1});C.forEach(function(r){have[V(r.s)[1]]=1});
 return '<div class="flt" role="group" aria-label="Stadt"><button type="button" data-city="all" aria-pressed="'+(city==='all')+'">Alle Städte</button>'
 +D.cities.filter(function(c){return have[c[0]]}).map(function(c){return '<button type="button" data-city="'+c[0]+'" aria-pressed="'+(city===c[0])+'">'+esc(c[1])+'</button>'}).join('')+'</div>'}
-function draw(){var rows=H.filter(inCity);CH={};
-document.getElementById('app').innerHTML=cityBtns()+'<div class="kpi">'+kpis(rows)+'</div>'
+function viewBtns(){return '<div class="flt pjs" role="group" aria-label="Projekt">'+Object.keys(D.proj).map(function(k){return '<button type="button" data-view="'+k+'" aria-pressed="'+(view===k)+'">'+esc(D.proj[k].name)+'</button>'}).join('')+'</div>'}
+// Entry pages of a project site for the chosen period, with where their visitors came from.
+function entryPages(rows,site){var L=N-1,len=per==='d'?1:per==='w'?7:30,a=L-len+1,m={};
+rows.forEach(function(r){if(r.i>=a){var x=m[r.s]||(m[r.s]={c:0,src:{}});x.c+=r.n;x.src[r.src]=(x.src[r.src]||0)+r.n}});
+var l=Object.keys(m).sort(function(x,y){return m[y].c-m[x].c||(x<y?-1:1)}).slice(0,25);
+var seg='<div class="seg" role="group" aria-label="Zeitraum">'+[['d','Heute'],['w','7 Tage'],['m','30 Tage']].map(function(x){return '<button type="button" data-per="'+x[0]+'" aria-pressed="'+(per===x[0])+'">'+x[1]+'</button>'}).join('')+'</div>';
+if(!l.length)return seg+'<p class="none">Noch keine Besuche in diesem Zeitraum.</p>';
+return seg+'<ol class="top">'+l.map(function(p,i){var x=m[p],from=SRC.filter(function(k){return x.src[k]}).map(function(k){return SN[k]+' '+x.src[k]}).join(' · ');
+return '<li><a class="pg" href="https://www.'+esc(site)+esc(p)+'" target="_blank" rel="noopener"><span class="r">'+(i+1)+'</span><span class="nm"><b>'+esc(p)+'</b><small>'+esc(from)+'</small></span><span class="c">'+fmt(x.c)+'</span></a></li>'}).join('')+'</ol>'}
+function drawSite(){var P=D.proj[view],rows=SH.filter(function(r){return r.p===view});CH={};pj=view;
+document.getElementById('app').innerHTML=viewBtns()+'<div class="kpi">'+kpis(rows)+'</div>'
++'<div class="card" style="margin-top:12px"><h2>Besuche auf '+esc(P.site)+' <small>· 30 Tage</small></h2>'+chart(rows,'all')+'</div>'+woher(rows)
++'<div class="card"><h2>Einstiegsseiten <small>· wo die Besuche beginnen</small></h2>'+entryPages(rows,P.site)+'</div>'
++'<div class="card"><h2>Anfrageformular auf '+esc(P.site)+' <small>· 30 Tage</small></h2>'+siteFunnel()+'</div>'
++'<p class="none">Gezählt wird ein Besuch, wenn jemand die Seite wirklich ansieht (kein Programm, nicht nur kurz). Ohne Cookies, ohne IP. Klicks innerhalb der Seite zählen nicht als neuer Besuch.</p>'}
+function draw(){if(view!=='namax')return drawSite();var rows=H.filter(inCity);CH={};pj='namax';
+document.getElementById('app').innerHTML=viewBtns()+cityBtns()+'<div class="kpi">'+kpis(rows)+'</div>'
 +'<div class="card" style="margin-top:12px"><h2>Besuche pro Tag <small>· 30 Tage</small></h2>'+chart(rows,'all')+'</div>'+shares(rows)
 +'<div class="card"><h2>Meistbesuchte Seiten</h2>'+topPages(rows)+'</div>'
-+'<div class="card"><h2>Kundenanfragen auf '+esc((D.proj[pj]||D.proj.namax).site)+' <small>· 30 Tage, alle Seiten</small></h2>'+pjBtns()+siteFunnel()+'</div>'
++'<div class="card"><h2>Kundenanfragen auf '+esc((D.proj[pj]||D.proj.namax).site)+' <small>· 30 Tage, alle Seiten</small></h2>'+siteFunnel()+'</div>'
 +'<div class="card"><h2>Formular „Sind Sie der Inhaber?“ <small>· 30 Tage</small></h2>'+funnel()+'</div>'}
 var tip=document.getElementById('tip');
 function showTip(t,e){var c=CH[t.getAttribute('data-c')];if(!c)return;var o=c.by[+t.getAttribute('data-d')],i=c.a+(+t.getAttribute('data-d'));
 tip.innerHTML='<b>'+dd(i)+' · '+fmt(o._t)+' Besuche</b>'+SRC.filter(function(s){return o[s]}).map(function(s){return '<span class="sw" style="background:'+COL[s]+'"></span>'+esc(SN[s])+' '+o[s]}).join('<br>');
 tip.style.display='block';var x=Math.min(e.clientX+12,innerWidth-tip.offsetWidth-8),y=e.clientY-tip.offsetHeight-12;tip.style.left=x+'px';tip.style.top=(y<8?e.clientY+16:y)+'px'}
 document.addEventListener('pointermove',function(e){var t=e.target.closest&&e.target.closest('.hit');if(t)showTip(t,e);else tip.style.display='none'});
-document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-city],[data-per],[data-ven],[data-pj]');if(!b)return;
-if(b.hasAttribute('data-pj'))pj=b.getAttribute('data-pj');else if(b.hasAttribute('data-city')){city=b.getAttribute('data-city');sel=null}else if(b.hasAttribute('data-per'))per=b.getAttribute('data-per');
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-city],[data-per],[data-ven],[data-view]');if(!b)return;
+if(b.hasAttribute('data-view')){view=b.getAttribute('data-view');per='w'}else if(b.hasAttribute('data-city')){city=b.getAttribute('data-city');sel=null}else if(b.hasAttribute('data-per'))per=b.getAttribute('data-per');
 else{var s=b.getAttribute('data-ven');sel=sel===s?null:s}draw()});
 draw();`;
 
@@ -151,12 +170,13 @@ draw();`;
  * data: { today, days, hits: [{ slug, day, source, n }], claims: [{ slug, day, event, n }],
  *   venues: { slug: [name, city, district label, kind] }, cities: [[key, name]], openRequests }
  */
-export function renderStats({ today, days, hits, claims, site = [], venues, cities, openRequests = 0 }) {
+export function renderStats({ today, days, hits, claims, site = [], siteHits = [], venues, cities, openRequests = 0 }) {
   const start = new Date(today + 'T12:00:00Z');
   start.setUTCDate(start.getUTCDate() - (days - 1));
   const D = { since: start.toISOString().slice(0, 10), days, venues, cities,
     hits: hits.map((r) => [r.slug, r.day, r.source, r.n]), claims: claims.map((r) => [r.slug, r.day, r.event, r.n]),
     site: site.map((r) => [r.page, r.day, r.event, r.n]),
+    sh: siteHits.map((r) => [r.project, r.page, r.day, r.source, r.n]),
     proj: Object.fromEntries(Object.entries(PROJECTS).map(([k, p]) => [k, { name: p.name, site: p.site, roles: p.roles, wishes: p.wishes }])) };
   const data = JSON.stringify(D).replace(/</g, '\\u003c');
   return `<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">

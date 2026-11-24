@@ -197,6 +197,13 @@ function corsHeaders(req, project) {
   const origin = req.headers.get('origin');
   return origin && project && project !== 'namax' ? { 'Access-Control-Allow-Origin': origin, Vary: 'Origin' } : {};
 }
+/** The entry page of a visit, as a short path: lower case, at most three parts, nothing after ? or #; "/" when unreadable. */
+export function hitPath(p) {
+  if (typeof p !== 'string' || p[0] !== '/') return '/';
+  const parts = p.split(/[?#]/)[0].toLowerCase().split('/').filter(Boolean).slice(0, 3);
+  const out = '/' + parts.join('/');
+  return /^\/[a-z0-9\-/._%]{0,79}$/.test(out) ? out : '/';
+}
 const withHeaders = (res, extra) => { for (const [k, v] of Object.entries(extra)) res.headers.set(k, v); return res; };
 
 /** POST https://www.namax.at/api/venue/contact from one of the project sites: { ev, page } counts a form step (always 204);
@@ -213,6 +220,14 @@ export async function handleContact(req, { store, now = () => new Date() }) {
   if (!project) return fail(403, 'not allowed');
   const body = await readJson(req, MAX_CLAIM_BODY + 2 * (PROJECTS[project].maxText || 0));
   const page = sitePage(project, body?.page);
+  // A visit on akiwi.at / fightfolio.de (js/contact.js, after the same person check as the venue pages): entry page and source word only.
+  if (body && body.hit !== undefined) {
+    try {
+      if (project !== 'namax' && !BOT_UA.test(req.headers.get('user-agent') || '') && typeof body.hit === 'string')
+        await store.addSiteHit({ day: viennaDay(now()), project, page: hitPath(body.path), source: HIT_SOURCES.includes(body.hit) ? body.hit : 'other' });
+    } catch { /* never fails visibly */ }
+    return new Response(null, { status: 204, headers: { 'Cache-Control': 'no-store', ...cors } });
+  }
   if (body && body.ev !== undefined) {
     try {
       if (!BOT_UA.test(req.headers.get('user-agent') || '') && !isStaff(req) && siteEvent(project, body.ev))
@@ -408,7 +423,7 @@ async function handleStats(store, now) {
   const start = new Date(today + 'T12:00:00Z');
   start.setUTCDate(start.getUTCDate() - (STATS_DAYS - 1));
   const since = start.toISOString().slice(0, 10);
-  const [hits, claims, all, requests, site] = await Promise.all([store.hitRows({ since }), store.claimEventRows({ since }), store.listForAdmin(), store.listRequests(), store.siteEventRows({ since })]);
+  const [hits, claims, all, requests, site, siteHits] = await Promise.all([store.hitRows({ since }), store.claimEventRows({ since }), store.listForAdmin(), store.listRequests(), store.siteEventRows({ since }), store.siteHitRows({ since })]);
   const seen = new Set([...hits, ...claims].map((r) => r.slug));
   const venues = {};
   for (const r of all) {
@@ -417,7 +432,7 @@ async function handleStats(store, now) {
     venues[r.slug] = [effectiveVenue(r, []).name, city, d ? districtLabel(city, d) : '', r.facts.kind || ''];
   }
   const cities = CITY_ORDER.map((c) => [c, CITIES[c].name]);
-  return new Response(renderStats({ today, days: STATS_DAYS, hits, claims, site, venues, cities, openRequests: requests.filter((q) => !q.doneAt).length }), { headers: {
+  return new Response(renderStats({ today, days: STATS_DAYS, hits, claims, site, siteHits, venues, cities, openRequests: requests.filter((q) => !q.doneAt).length }), { headers: {
     'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'private, no-store', 'X-Robots-Tag': 'noindex, nofollow', 'Set-Cookie': STAFF_MARK } });
 }
 

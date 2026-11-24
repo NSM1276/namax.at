@@ -54,7 +54,7 @@
         en: { website: 'Website', social: 'Social media', content: 'Content & reels', seo: 'SEO (Google)', ads: 'Online ads', advice: 'Not sure yet, advise me' } }
     },
     akiwi: {
-      langs: ['de', 'en', 'tr'], words: SIE, privacy: { de: 'https://www.akiwi.at/impressum', en: 'https://www.akiwi.at/impressum', tr: 'https://www.akiwi.at/impressum' },
+      langs: ['de', 'en', 'tr'], words: SIE, privacy: { de: 'https://www.akiwi.at/datenschutz', en: 'https://www.akiwi.at/datenschutz', tr: 'https://www.akiwi.at/datenschutz' },
       noPhone: { guest: 1 },
       roles: {
         de: { owner: 'Ich habe ein Lokal', staff: 'Ich arbeite in einem Lokal', guest: 'Ich bin Gast' },
@@ -107,6 +107,27 @@
       + '.nxf-thanks{display:grid;gap:16px}.nxf-thanks p{margin:0;font-size:22px;font-weight:800;line-height:1.25}';
     document.head.appendChild(st);
   }
+
+  // A visit on akiwi.at / fightfolio.de, counted like the venue pages on namax: only for a person (not a program-driven
+  // browser, page visible, touched or scrolled after 3 s or read for 15 s), once per page load, with the entry page and
+  // where the visitor came from as one word. Moving on inside the site is not a new visit. No cookie, nothing stored.
+  if (!own) (function () {
+    try {
+      if (navigator.webdriver) return;
+      var base = project === 'akiwi' ? 'akiwi.at' : 'fightfolio.de', rh = '';
+      try { rh = document.referrer ? new URL(document.referrer).hostname.toLowerCase() : ''; } catch (e) { rh = '?'; }
+      if (rh === base || rh.slice(-(base.length + 1)) === '.' + base) return;
+      var is = function (d) { return rh === d || rh.slice(-(d.length + 1)) === '.' + d; };
+      var src = !rh ? 'direct' : rh === '?' ? 'other' : /(^|\.)google\.[a-z.]+$/.test(rh) ? 'google'
+        : is('bing.com') || is('duckduckgo.com') || is('ecosia.org') || /(^|\.)yahoo\.[a-z.]+$/.test(rh) ? 'bing'
+        : is('facebook.com') || is('instagram.com') || is('whatsapp.com') || is('t.co') || is('tiktok.com') || is('x.com') || is('linkedin.com') ? 'social'
+        : is('namax.at') ? 'namax' : 'other';
+      var seen = 0, done = 0, acted = 0, path = location.pathname;
+      var send = function () { if (done) return; done = 1; try { navigator.sendBeacon(api, JSON.stringify({ hit: src, path: path })); } catch (e) {} };
+      ['scroll', 'pointerdown', 'keydown', 'touchstart'].forEach(function (n) { addEventListener(n, function () { acted = 1; if (seen >= 3) send(); }, { passive: true, once: true }); });
+      var iv = setInterval(function () { if (done) { clearInterval(iv); return; } if (document.visibilityState === 'visible') seen += 1; if ((acted && seen >= 3) || seen >= 15) send(); }, 1000);
+    } catch (e) {}
+  })();
 
   var esc = function (t) { return String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
   var picks = function (k, map) {

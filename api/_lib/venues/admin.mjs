@@ -133,7 +133,7 @@ Mit diesem Link ändern Sie Öffnungszeiten, Telefon und Fotos selbst: ${q.owner
     ? `<a href="https://${esc(q.slug)}.namax.at/" target="_blank" rel="noopener">${esc(q.venueName || q.slug)}</a>`
     : site ? `${q.lokal ? esc(q.lokal) : 'Kundenanfrage'}</b><span class="b${q.doneAt ? '' : ' hot'}">${proj.site}</span><b>`  // contact form on one of the sites
     : `${esc(q.lokal || '–')}</b><span class="b">Neues Lokal</span><b>`;  // from namax.at/kostenlos, no page yet
-  return `<li class="rq" data-p="${site ? requestProject(q) : 'namax'}"><b>${head}</b>`
+  return `<li class="rq g-${groupOf(q)}" data-p="${groupOf(q)}"><b>${head}</b>`
     + (q.wish === 'website' && !q.doneAt && !site ? '<span class="b hot">Website!</span>' : '')
     + same
     + `<small>${esc(viennaTime(q.at))} · ${esc(line)}</small>`
@@ -155,18 +155,20 @@ if(b){var s=b.dataset.send,c=document.querySelector('[data-chat="'+s+'"]');windo
 if(c&&c.dataset.to==='1')post(c,{slug:s,chatOpen:true},function(){[].forEach.call(document.querySelectorAll('[data-chat="'+s+'"]'),function(x){x.dataset.to='0';x.textContent='Chat sperren';x.className='rot'})});return}
 b=e.target.closest('[data-done]');if(b){post(b,{requestId:Number(b.dataset.done),done:b.dataset.to==='1'},function(){location.reload()})}});`;
 
-// One chip per project that has requests, so Akiwi and FightFolio can be looked at apart; none while all are namax.
+// Where a request came from, as one of four groups: the owner form on a venue page (or namax.at/kostenlos), the form on
+// namax.at itself, Akiwi, FightFolio. Always all four chips, also with 0, so Nasim sees at once where nothing came in.
+const SOURCE_GROUPS = [['lokale', 'Lokale (namax)'], ['namax', 'namax.at'], ['akiwi', 'Akiwi'], ['fightfolio', 'FightFolio']];
+const groupOf = (q) => (fromSite(q) ? requestProject(q) : 'lokale');
 function projectChips(requests) {
-  const n = {};
-  for (const q of requests) { const p = fromSite(q) ? requestProject(q) : 'namax'; n[p] = (n[p] || 0) + (q.doneAt ? 0 : 1); }
-  const keys = Object.keys(PROJECTS).filter((k) => k in n);
-  if (keys.length < 2) return '';
-  return '<div class="pj" role="group" aria-label="Projekt"><button type="button" data-pj="" aria-pressed="true">Alle</button>'
-    + keys.map((k) => `<button type="button" data-pj="${k}" aria-pressed="false">${esc(PROJECTS[k].name)} <span>${n[k]}</span></button>`).join('') + '</div>';
+  const n = Object.fromEntries(SOURCE_GROUPS.map(([k]) => [k, 0]));
+  for (const q of requests) if (!q.doneAt) n[groupOf(q)]++;
+  return '<div class="pj" role="group" aria-label="Woher"><button type="button" data-pj="" aria-pressed="true">Alle</button>'
+    + SOURCE_GROUPS.map(([k, label]) => `<button type="button" data-pj="${k}" aria-pressed="false" class="g-${k}">${esc(label)} <span>${n[k]}</span></button>`).join('') + '</div>';
 }
 const PJ_JS = `document.addEventListener('click',function(e){var b=e.target.closest('[data-pj]');if(!b)return;var p=b.dataset.pj;
 [].forEach.call(document.querySelectorAll('[data-pj]'),function(x){x.setAttribute('aria-pressed',String(x===b))});
-[].forEach.call(document.querySelectorAll('.rq[data-p]'),function(li){li.hidden=Boolean(p)&&li.dataset.p!==p})});`;
+var open=0;[].forEach.call(document.querySelectorAll('.rq[data-p]'),function(li){li.hidden=Boolean(p)&&li.dataset.p!==p;if(!li.hidden&&!li.closest('details'))open++});
+var z=document.querySelector('[data-pjnone]');if(z)z.hidden=open>0||!document.querySelector('.req ul')});`;
 
 /**
  * view 'anfragen' (start page): the owner requests, also when there are none yet.
@@ -179,7 +181,8 @@ function renderChooser(districts, total, requests = [], view = 'anfragen', visit
   const reqs = `<section class="req"><h2>Anfragen <span>${open.length}</span></h2>${projectChips(requests)}`
     + (open.length ? `<ul>${open.slice(0, MAX_SHOWN_REQUESTS).map(requestCard).join('')}</ul>`
       : requests.length ? '<p class="none">Keine offenen Anfragen</p>'
-      : '<p class="none">Noch keine Anfragen. Neue erscheinen hier, sobald ein Inhaber auf seiner Seite das Formular „Sind Sie der Inhaber?“ ausfüllt.</p>')
+      : '<p class="none">Noch keine Anfragen. Neue erscheinen hier, sobald jemand ein Formular ausfüllt: „Sind Sie der Inhaber?“ auf einer Lokal-Seite, die Anfrage auf namax.at, auf Akiwi oder auf FightFolio.</p>')
+    + '<p class="none" data-pjnone hidden>Von hier keine offenen Anfragen.</p>'
     + (open.length > MAX_SHOWN_REQUESTS ? `<p class="none">${open.length - MAX_SHOWN_REQUESTS} ältere Anfragen nicht angezeigt</p>` : '')
     + (done.length ? `<details><summary>Erledigt (${done.length})</summary><ul>${done.slice(0, MAX_SHOWN_REQUESTS).map(requestCard).join('')}</ul></details>` : '')
     + '</section>';
@@ -199,6 +202,8 @@ ${CITIES_CSS}
 .pick{display:grid;gap:8px;padding:12px;max-width:760px;margin:0 auto}
 .pj{display:flex;flex-wrap:wrap;gap:6px;margin:0 2px 6px}.pj button{font:inherit;font-size:14px;font-weight:600;min-height:40px;padding:6px 12px;border-radius:999px;border:1px solid #111;background:#fff;color:#111}
 .pj button[aria-pressed=true]{background:#111;color:#fff}.pj span{opacity:.7;font-weight:400}.rq[hidden]{display:none}
+.pj button.g-lokale{box-shadow:inset 4px 0 0 #8a8a8a}.pj button.g-namax{box-shadow:inset 4px 0 0 #e0a800}.pj button.g-akiwi{box-shadow:inset 4px 0 0 #1F9D55}.pj button.g-fightfolio{box-shadow:inset 4px 0 0 #ED681F}
+.rq.g-lokale{border-left:5px solid #8a8a8a}.rq.g-namax{border-left:5px solid #e0a800}.rq.g-akiwi{border-left:5px solid #1F9D55}.rq.g-fightfolio{border-left:5px solid #ED681F}
 .pick button{display:flex;justify-content:space-between;align-items:center;font:inherit;font-size:17px;font-weight:600;min-height:52px;padding:10px 16px;border-radius:10px;border:1px solid #ddd;background:#fff;color:#111;text-align:left}
 .pick span{font-weight:400;color:#666}
 .req{max-width:760px;margin:0 auto;padding:12px 12px 0}.req h2{margin:4px 2px 6px;font-size:18px}.req h2 span{display:inline-block;min-width:26px;padding:1px 8px;border-radius:999px;background:#ffc93c;text-align:center}

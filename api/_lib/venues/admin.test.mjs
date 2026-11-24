@@ -404,7 +404,7 @@ test('start page: at most 50 open requests are shown; the count says how many th
   const s = await svc();
   for (let i = 0; i < 53; i++) await s.store.addRequest('cafe-a', { role: 'owner', wish: 'fix', name: 'N' + i, phone: '0660 1234567', channel: 'call', text: '' });
   const html = await chooser(s);
-  assert.equal((html.match(/<li class="rq"[ >]/g) || []).length, 50);
+  assert.equal((html.match(/<li class="rq[ ">]/g) || []).length, 50);
   assert.match(html, /Anfragen <span>53<\/span>/);
   assert.ok(html.includes('3 ältere Anfragen nicht angezeigt'));
 });
@@ -658,10 +658,12 @@ test('requests from Akiwi and FightFolio: their site, their words, topic and gre
   assert.match(html, /Kundenanfrage<\/b><span class="b hot">fightfolio\.de<\/span>/);
   assert.ok(html.includes('Kämpfer/in · Profil anlegen · Anruf'));
   assert.ok(html.includes('ohne Nummer'));
-  assert.match(html, /data-pj="akiwi" aria-pressed="false">Akiwi <span>2<\/span>/);
+  // all four sources always shown, with their open counts (0 too)
+  assert.match(html, /data-pj="lokale"[^>]*>Lokale \(namax\) <span>0<\/span>/);
+  assert.match(html, /data-pj="namax"[^>]*>namax\.at <span>0<\/span>/);
+  assert.match(html, /data-pj="akiwi"[^>]*>Akiwi <span>2<\/span>/);
   assert.match(html, /data-pj="fightfolio"[^>]*>FightFolio <span>1<\/span>/);
-  assert.ok(!html.includes('data-pj="namax"'), 'no namax chip without namax requests');
-  assert.equal((html.match(/data-p="akiwi"/g) || []).length, 2);
+  assert.equal((html.match(/class="rq g-akiwi" data-p="akiwi"/g) || []).length, 2);
 });
 
 test('statistics page carries the site contact form steps', async () => {
@@ -672,4 +674,7 @@ test('statistics page carries the site contact form steps', async () => {
   assert.deepEqual(JSON.parse(html.match(/window\.D=(.*?);<\/script>/)[1]).site, [['seo', '2026-11-24', 'open:hero', 1]]);
   assert.match(html, /Kundenanfragen auf /);
   assert.equal(JSON.parse(html.match(/window\.D=(.*?);<\/script>/)[1]).proj.akiwi.site, 'akiwi.at');
+  await s.store.addSiteHit({ day: '2026-11-24', project: 'akiwi', page: '/lokale', source: 'social' });
+  const h2 = await (await handleAdmin(statsReq(ADMIN), { ...s, now })).text();
+  assert.deepEqual(JSON.parse(h2.match(/window\.D=(.*?);<\/script>/)[1]).sh, [['akiwi', '/lokale', '2026-11-24', 'social', 1]]);
 });
