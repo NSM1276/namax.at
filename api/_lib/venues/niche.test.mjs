@@ -31,7 +31,7 @@ test('a café shows coffee; cake, breakfast or nothing only when name or cuisine
   assert.ok(only(all('cafe', null, 'Konditorei Oberlaa'), ['cake', 'sachertorte', 'pastries']));
   assert.ok(only(all('cafe', 'breakfast', 'Nelke'), ['breakfast', 'croissant']));
   assert.ok(only(all('cafe', 'austrian', 'Hübler'), ['coffee', 'cappuccino', 'sachertorte']));
-  const ICE = ['gelato-cups', 'gelato-cone', 'sundae'];
+  const ICE = ['gelato-cups', 'sundae'];
   assert.ok(only(all('cafe', 'ice_cream', 'Perrella'), ICE));
   assert.ok(only(all('cafe', 'coffee_shop', 'Eissalon Tichy'), ICE));
   assert.equal(name(nicheImage(v('cafe', 'bubble_tea', 'Shodai'))), 'bubble-tea');
@@ -41,7 +41,10 @@ test('a café shows coffee; cake, breakfast or nothing only when name or cuisine
 
 test('the name on the sign beats the OSM cuisine; the earliest word wins', () => {
   assert.ok(only(all('restaurant', 'barbecue', 'Hendl König'), ['chicken', 'fried-chicken']));
-  assert.ok(only(all('imbiss', 'coffee_shop', 'Pamir Pizza & Kebab'), ['pizza', 'pizza-2', 'pizza-3']));
+  assert.ok(only(all('imbiss', 'coffee_shop', 'Pamir Pizza & Kebab'), ['pizza-2', 'pizza-3']));
+  assert.ok(only(all('imbiss', 'kebab;pizza', 'Steak Döner'), ['doener', 'dueruem', 'kebab', 'adana']), 'Steak Döner is a döner place');
+  assert.ok(only(all('restaurant', 'local', 'Stadtheuriger Gigerl'), ['table-setting', 'table-setting-2', 'table-setting-3']), 'a Heuriger is no Schnitzel guess');
+  assert.ok(only(all('restaurant', 'steak_house', 'El Gaucho'), ['table-setting', 'table-setting-2', 'table-setting-3']));
   assert.ok(only(all('imbiss', 'chicken', "Baki's Schnitzelparadies"), ['schnitzel', 'schnitzel-2']));
   assert.ok(only(all('restaurant', 'breakfast;barbecue', 'Paul und Anna'), ['breakfast', 'croissant']));
   assert.equal(name(nicheImage(v('restaurant', 'international', '1516 Brewing Company'))), 'beer-pretzel');

@@ -13,9 +13,13 @@ const CAKE = ['cake', 'sachertorte', 'pastries'];
 const KAFFEEHAUS = ['coffee', 'cappuccino', 'sachertorte'];
 const BREAKFAST = ['breakfast', 'croissant'];
 const AUSTRIAN = ['schnitzel', 'schnitzel-2', 'goulash'];
-const GELATO = ['gelato-cups', 'gelato-cone', 'sundae'];
+const GELATO = ['gelato-cups', 'sundae'];
 const TEA = ['tea'];
 const BOWL = ['buddha-bowl'];
+const PIZZA = ['pizza-2', 'pizza-3'];
+// Steak and wine pictures were dropped on 2026-11-24 (steak sat at the frame's edge, the wine shot showed a cellar);
+// until new ones come, a steakhouse or Heuriger gets the laid table, which is true for any restaurant.
+const TABLE = ['table-setting', 'table-setting-2', 'table-setting-3'];
 
 /** Trades: the default when the name says nothing more. */
 export const NICHE = {
@@ -28,16 +32,16 @@ export const NICHE = {
 };
 
 /** A restaurant with no known cuisine: a laid table says "you eat here", true for every restaurant. An imbiss gets nothing. */
-export const NEUTRAL = { restaurant: ['table-setting', 'table-setting-2', 'table-setting-3'] };
+export const NEUTRAL = { restaurant: TABLE };
 
 // Words in the name, per kind group; the earliest match in the name wins. null = we know it, but have no true picture.
 const NAME_FOOD = [
   [/schnitzel/, AUSTRIAN.slice(0, 2)], [/keba[bp]|d[oö]ner/, ['doener', 'dueruem', 'kebab', 'adana']], [/d[uü]r[uü]m/, ['dueruem']],
-  [/pizz/, ['pizza', 'pizza-2', 'pizza-3']], [/burger/, ['burger']], [/sushi/, ['sushi', 'sushi-2']], [/falafel/, ['falafel', 'hummus']],
+  [/pizz/, PIZZA], [/burger/, ['burger']], [/sushi/, ['sushi', 'sushi-2']], [/falafel/, ['falafel', 'hummus']],
   [/lahmacun/, ['lahmacun']], [/\bpide/, ['pide']], [/[cć]evap/, ['cevapi']], [/gyros/, ['gyros']], [/ramen/, ['ramen']], [/\bpho\b/, ['pho']],
-  [/\bwok\b/, ['asian-wok']], [/momo/, ['momo']], [/taco|burrito|mexi/, ['tacos', 'mexican-bowl']], [/curry/, ['curry']], [/steak/, ['steak']],
+  [/\bwok\b/, ['asian-wok']], [/momo/, ['momo']], [/taco|burrito|mexi/, ['tacos', 'mexican-bowl']], [/curry/, ['curry']], [/steak(?!\s*d[oö]ner)/, TABLE],
   [/fisch|\bfish/, ['fish']], [/hendl|chicken|gefl[uü]gel/, ['chicken', 'fried-chicken']], [/w[uü]rstel|wurst/, ['wuerstel']],
-  [/heurig|buschenschank/, ['wine']], [/br[aä]u\b|brauerei|brewing|brewery|bierhaus/, ['beer-pretzel']], [/fr[uü]hst[uü]ck|breakfast|brunch/, BREAKFAST],
+  [/heurig|buschenschank/, TABLE], [/br[aä]u\b|brauerei|brewing|brewery|bierhaus/, ['beer-pretzel']], [/fr[uü]hst[uü]ck|breakfast|brunch/, BREAKFAST],
   [/konditor|patisser|torten|b[aä]cker/, CAKE],
   [/\beis\b|eiscaf|eissalon|gelat|ice ?cream/, GELATO], [/bubble|boba/, ['bubble-tea']], [/matcha/, ['matcha']],
   [/(?:\btee\b|\btea\b|teehaus|teestube)(?!.*(?:bubble|boba))/, TEA], [/juice|\bs[aä]fte?\b|smoothie/, ['juice']], [/bagel/, ['bagel']],
@@ -57,7 +61,7 @@ const NAME_RULES = { imbiss: NAME_FOOD, restaurant: NAME_FOOD, cafe: NAME_FOOD, 
 // OSM cuisine values (lower case) → pictures. Only the FIRST value decides ("french;italian" is not Italian);
 // a first value we have no picture for gives the kind's neutral picture or none. null = known, no true picture.
 export const CUISINE = {
-  pizza: ['pizza', 'pizza-2', 'pizza-3'], italian_pizza: ['pizza', 'pizza-2', 'pizza-3'], italian: ['pasta', 'carbonara', 'pizza-2'],
+  pizza: PIZZA, italian_pizza: PIZZA, italian: ['pasta', 'carbonara', 'pizza-2'],
   kebab: ['doener', 'dueruem', 'kebab', 'adana'], doner: ['doener', 'dueruem'], turkish: ['lahmacun', 'pide', 'adana'],
   sushi: ['sushi', 'sushi-2'], japanese: ['sushi', 'ramen'], ramen: ['ramen'], noodle: ['ramen'],
   indian: ['curry'], pakistani: ['curry'], curry: ['curry'], burger: ['burger'], american: ['burger'],
@@ -66,7 +70,7 @@ export const CUISINE = {
   balkan: ['cevapi'], serbian: ['cevapi'], bosnian: ['cevapi'], croatian: ['cevapi'], cevapi: ['cevapi'],
   falafel: ['falafel', 'hummus'], lebanese: ['falafel', 'hummus'], syrian: ['falafel', 'hummus'], arab: ['falafel', 'hummus'],
   middle_eastern: ['falafel', 'hummus'], oriental: ['falafel', 'hummus'], israeli: ['hummus', 'falafel'],
-  steak_house: ['steak'], steak: ['steak'], heuriger: ['wine'], buschenschank: ['wine'], wine: ['wine'],
+  steak_house: TABLE, steak: TABLE, heuriger: TABLE, buschenschank: TABLE, wine: TABLE,
   asian: ['asian-wok', 'spring-rolls'], chinese: ['asian-wok', 'dumplings', 'spring-rolls'], dumpling: ['dumplings'],
   vietnamese: ['pho', 'spring-rolls'], thai: ['thai-curry'], korean: ['bibimbap'], nepalese: ['momo'], tibetan: ['momo'],
   greek: ['gyros'], mexican: ['tacos', 'mexican-bowl'], tex_mex: ['tacos', 'mexican-bowl'],
