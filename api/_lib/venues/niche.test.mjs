@@ -42,7 +42,7 @@ test('a café shows coffee; cake, breakfast or nothing only when name or cuisine
 test('the name on the sign beats the OSM cuisine; the earliest word wins', () => {
   assert.ok(only(all('restaurant', 'barbecue', 'Hendl König'), ['chicken', 'fried-chicken']));
   assert.ok(only(all('imbiss', 'coffee_shop', 'Pamir Pizza & Kebab'), ['pizza-2', 'pizza-3']));
-  assert.ok(only(all('imbiss', 'kebab;pizza', 'Steak Döner'), ['doener', 'dueruem', 'kebab', 'adana']), 'Steak Döner is a döner place');
+  assert.ok(only(all('imbiss', 'kebab;pizza', 'Steak Döner'), ['doener', 'dueruem', 'kebab']), 'Steak Döner is a döner place');
   assert.ok(only(all('restaurant', 'local', 'Stadtheuriger Gigerl'), ['table-setting', 'table-setting-2', 'table-setting-3']), 'a Heuriger is no Schnitzel guess');
   assert.ok(only(all('restaurant', 'steak_house', 'El Gaucho'), ['table-setting', 'table-setting-2', 'table-setting-3']));
   assert.ok(only(all('imbiss', 'chicken', "Baki's Schnitzelparadies"), ['schnitzel', 'schnitzel-2']));
@@ -61,7 +61,11 @@ test('cosmetics: care, not perfume or make-up; the name can say nails, brows or 
 
 test('Austrian food: Schnitzel and Gulasch, no regional guess; known cuisines keep their dishes', () => {
   assert.ok(only(all('restaurant', 'austrian', 'Beisl'), ['schnitzel', 'schnitzel-2', 'goulash']));
-  assert.ok(only(all('imbiss', 'kebab;pizza', 'Ova'), ['doener', 'dueruem', 'kebab', 'adana']));
+  assert.ok(only(all('imbiss', 'kebab;pizza', 'Ova'), ['doener', 'dueruem', 'kebab']));
+  // a kebab shop shows döner, never Adana skewers; a Turkish grill restaurant may
+  assert.ok(only(all('imbiss', 'turkish', 'Kara'), ['doener', 'dueruem', 'kebab']));
+  assert.ok(only(all('imbiss', null, 'Best Food Kebap'), ['doener', 'dueruem', 'kebab']));
+  assert.ok(only(all('restaurant', 'turkish', 'Ali Ocakbasi'), ['lahmacun', 'pide', 'adana']));
   assert.equal(name(nicheImage(v('restaurant', 'thai', 'All Reis'))), 'thai-curry');
   assert.equal(name(nicheImage(v('imbiss', 'korean;unknown', 'Ko:on'))), 'bibimbap');
   // only the first cuisine decides: "french;italian" is no Italian place, so no pasta; an imbiss then gets nothing

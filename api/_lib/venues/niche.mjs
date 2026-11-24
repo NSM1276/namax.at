@@ -17,6 +17,8 @@ const GELATO = ['gelato-cups', 'sundae'];
 const TEA = ['tea'];
 const BOWL = ['buddha-bowl'];
 const PIZZA = ['pizza-2', 'pizza-3'];
+// An Austrian kebab shop sells Döner in bread and Dürüm; Adana skewers only in a Turkish grill restaurant (Nasim 2026-11-24).
+const KEBAB = ['doener', 'dueruem', 'kebab'];
 // Steak and wine pictures were dropped on 2026-11-24 (steak sat at the frame's edge, the wine shot showed a cellar);
 // until new ones come, a steakhouse or Heuriger gets the laid table, which is true for any restaurant.
 const TABLE = ['table-setting', 'table-setting-2', 'table-setting-3'];
@@ -36,7 +38,7 @@ export const NEUTRAL = { restaurant: TABLE };
 
 // Words in the name, per kind group; the earliest match in the name wins. null = we know it, but have no true picture.
 const NAME_FOOD = [
-  [/schnitzel/, AUSTRIAN.slice(0, 2)], [/keba[bp]|d[oö]ner/, ['doener', 'dueruem', 'kebab', 'adana']], [/d[uü]r[uü]m/, ['dueruem']],
+  [/schnitzel/, AUSTRIAN.slice(0, 2)], [/keba[bp]|d[oö]ner/, KEBAB], [/d[uü]r[uü]m/, ['dueruem']],
   [/pizz/, PIZZA], [/burger/, ['burger']], [/sushi/, ['sushi', 'sushi-2']], [/falafel/, ['falafel', 'hummus']],
   [/lahmacun/, ['lahmacun']], [/\bpide/, ['pide']], [/[cć]evap/, ['cevapi']], [/gyros/, ['gyros']], [/ramen/, ['ramen']], [/\bpho\b/, ['pho']],
   [/\bwok\b/, ['asian-wok']], [/momo/, ['momo']], [/taco|burrito|mexi/, ['tacos', 'mexican-bowl']], [/curry/, ['curry']], [/steak(?!\s*d[oö]ner)/, TABLE],
@@ -62,7 +64,7 @@ const NAME_RULES = { imbiss: NAME_FOOD, restaurant: NAME_FOOD, cafe: NAME_FOOD, 
 // a first value we have no picture for gives the kind's neutral picture or none. null = known, no true picture.
 export const CUISINE = {
   pizza: PIZZA, italian_pizza: PIZZA, italian: ['pasta', 'carbonara', 'pizza-2'],
-  kebab: ['doener', 'dueruem', 'kebab', 'adana'], doner: ['doener', 'dueruem'], turkish: ['lahmacun', 'pide', 'adana'],
+  kebab: KEBAB, doner: ['doener', 'dueruem'], turkish: ['lahmacun', 'pide', 'adana'],
   sushi: ['sushi', 'sushi-2'], japanese: ['sushi', 'ramen'], ramen: ['ramen'], noodle: ['ramen'],
   indian: ['curry'], pakistani: ['curry'], curry: ['curry'], burger: ['burger'], american: ['burger'],
   austrian: AUSTRIAN, regional: AUSTRIAN, local: AUSTRIAN, viennese: AUSTRIAN, schnitzel: AUSTRIAN.slice(0, 2), escalope: AUSTRIAN.slice(0, 2),
@@ -88,6 +90,9 @@ export const CUISINE = {
 };
 // A Viennese Kaffeehaus (austrian / regional cuisine on a café) is coffee and cake; Schnitzel would be a guess.
 const CAFE_CUISINE = { austrian: KAFFEEHAUS, regional: KAFFEEHAUS, viennese: KAFFEEHAUS, local: KAFFEEHAUS };
+// A Turkish imbiss is a döner stand, not a grill: no Adana, Pide or Lahmacun guess.
+const IMBISS_CUISINE = { turkish: KEBAB };
+const KIND_CUISINE = { cafe: CAFE_CUISINE, imbiss: IMBISS_CUISINE };
 const FOOD = new Set(['restaurant', 'imbiss', 'cafe']);
 // A vague word on the sign gives way to a more exact first cuisine: 'Red Bowl' (chinese) is a wok, 'Tea Plus' (bubble_tea) is bubble tea.
 const YIELDS = new Map([[BOWL, new Set(['asian', 'chinese', 'japanese', 'korean', 'vietnamese', 'thai', 'hawaiian', 'poke', 'poke_bowl'])], [TEA, new Set(['bubble_tea'])]]);
@@ -114,7 +119,8 @@ export function nicheList(v) {
   const named = byName(NAME_RULES[v.kind], v.name);
   if (named && !(YIELDS.get(named.list)?.has(t) && CUISINE[t])) return named.list;
   if (!FOOD.has(v.kind)) return NICHE[v.kind] || null;
-  if (t && v.kind === 'cafe' && Object.hasOwn(CAFE_CUISINE, t)) return CAFE_CUISINE[t];
+  const own = KIND_CUISINE[v.kind];
+  if (t && own && Object.hasOwn(own, t)) return own[t];
   if (t && Object.hasOwn(CUISINE, t)) return CUISINE[t];
   return v.kind === 'cafe' ? NICHE.cafe : NEUTRAL[v.kind] || null;
 }
@@ -126,5 +132,5 @@ export function nicheImage(v) {
 }
 
 /** Every picture name the tables can give (the test checks each file exists). */
-export const allNicheNames = () => [...new Set([...Object.values(NICHE), ...Object.values(NEUTRAL), ...Object.values(CUISINE), ...Object.values(CAFE_CUISINE),
+export const allNicheNames = () => [...new Set([...Object.values(NICHE), ...Object.values(NEUTRAL), ...Object.values(CUISINE), ...Object.values(CAFE_CUISINE), ...Object.values(IMBISS_CUISINE),
   ...Object.values(NAME_RULES).flatMap((r) => r.map((x) => x[1]))].flat().filter(Boolean))];
