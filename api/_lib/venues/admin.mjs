@@ -87,6 +87,10 @@ export const TABS_JS = `var t=document.querySelector('[data-lokale]'),l='',lc=''
 const CL = T.claim.de;
 const MAX_SHOWN_REQUESTS = 50; // a flood never makes the start page unusable
 const CHANNEL_DE = { call: 'Anruf', whatsapp: 'WhatsApp' };
+// Requests from the contact form on namax.at's own pages (js/contact.js): no venue, own roles and wishes.
+const SITE_ROLE_DE = { nosite: 'hat noch keine Website', hassite: 'hat eine Website, will sie besser', misc: 'etwas anderes' };
+const SITE_WISH_DE = { website: 'Website', social: 'Social Media', content: 'Content & Reels', seo: 'SEO', ads: 'Werbung', advice: 'weiß noch nicht, will Beratung' };
+const fromSite = (q) => !q.slug && Boolean(SITE_ROLE_DE[q.role]);
 const viennaTime = (iso) => new Intl.DateTimeFormat('de-AT', { timeZone: 'Europe/Vienna', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
   .format(new Date(iso)).replace(',', '');
 /** Digits for tel:/wa.me: the number the owner typed, as +43…; null when it cannot be read. */
@@ -101,7 +105,7 @@ function chatButton(slug, open) {
 // First line of every message to a requester: name and venue, so they know at once who writes.
 export function greeting(q) {
   const venue = q.slug ? (q.venueName || q.slug) : (q.lokal || '').split(',')[0].trim();  // new venue: name without the address
-  return `Hallo${q.name ? ' ' + q.name : ''}, hier ist Nasim von namax.` + (venue ? ` Danke für Ihre Anfrage zu ${venue}.` : '');
+  return `Hallo${q.name ? ' ' + q.name : ''}, hier ist Nasim von namax.` + (venue ? ` Danke für Ihre Anfrage zu ${venue}.` : fromSite(q) ? ' Danke für Ihre Anfrage.' : '');
 }
 const waLink = (tel, text) => `https://wa.me/${tel.slice(1)}?text=${encodeURIComponent(text)}`;
 
@@ -117,15 +121,17 @@ function requestCard(q) {
 
 Mit diesem Link ändern Sie Öffnungszeiten, Telefon und Fotos selbst: ${q.ownerUrl}`))}">Chat + Link senden</button>` : '';
   const same = tel && q.pagePhone && dialable(q.pagePhone) === tel ? '<span class="b ok">Nummer passt zur Seite ✓</span>' : '';
-  const line = [CL.role[q.role], CL.wish[q.wish], CHANNEL_DE[q.channel]].filter(Boolean).join(' · ');
+  const site = fromSite(q);
+  const line = (site ? [SITE_ROLE_DE[q.role], SITE_WISH_DE[q.wish], CHANNEL_DE[q.channel]] : [CL.role[q.role], CL.wish[q.wish], CHANNEL_DE[q.channel]]).filter(Boolean).join(' · ');
   const done = q.doneAt
     ? `<button type="button" data-done="${q.id}" data-to="0" class="rot">Wieder offen</button>`
     : `<button type="button" data-done="${q.id}" data-to="1">Erledigt</button>`;
   const head = q.slug
     ? `<a href="https://${esc(q.slug)}.namax.at/" target="_blank" rel="noopener">${esc(q.venueName || q.slug)}</a>`
+    : site ? `Kundenanfrage</b><span class="b${q.doneAt ? '' : ' hot'}">namax.at</span><b>`  // contact form on the site itself
     : `${esc(q.lokal || '–')}</b><span class="b">Neues Lokal</span><b>`;  // from namax.at/kostenlos, no page yet
   return `<li class="rq"><b>${head}</b>`
-    + (q.wish === 'website' && !q.doneAt ? '<span class="b hot">Website!</span>' : '')
+    + (q.wish === 'website' && !q.doneAt && !site ? '<span class="b hot">Website!</span>' : '')
     + same
     + `<small>${esc(viennaTime(q.at))} · ${esc(line)}</small>`
     + `<p class="who"><span class="nm">${esc(q.name || '–')}</span> · ${esc(q.phone)}</p>`

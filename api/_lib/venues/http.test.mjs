@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { memoryStore } from './store.mjs';
 import { hashKey } from './owner.mjs';
-import { handleChat, handleClaim, handleSearch, handleSignup, handlePhoto, handleHit, handlePage, handleSitemap, MAX_PHOTO_BYTES, DAILY_PHOTOS, MAX_STORED_PHOTOS } from './http.mjs';
+import { handleContact, handleChat, handleClaim, handleSearch, handleSignup, handlePhoto, handleHit, handlePage, handleSitemap, MAX_PHOTO_BYTES, DAILY_PHOTOS, MAX_STORED_PHOTOS } from './http.mjs';
 
 const KEY = 'a'.repeat(32);
 const SLUG = 'friseur-meidling';
@@ -394,4 +394,44 @@ test('owner form events: only the known words are counted, per venue and day; "s
   assert.equal((await handleClaim(claimReq({ ...claim, website: 'spam' }), s)).status, 200);
   const sent = (await s.store.claimEventRows({ since: '2000-01-01' })).filter((r) => r.event === 'sent');
   assert.equal(sent.length, 1); assert.equal(sent[0].n, 1, 'the honeypot is not counted');
+});
+
+const contactReq = (body, headers = {}) => new Request('https://www.namax.at/api/venue/contact',
+  { method: 'POST', headers: { host: 'www.namax.at', 'content-type': 'application/json', ...headers }, body: JSON.stringify(body) });
+const contact = { page: 'seo', role: 'nosite', wish: 'seo', name: 'Ali', phone: '+43 660 1234567', channel: 'call', text: 'Bitte anrufen' };
+
+test('site contact form: a request without a venue, with its own roles and wishes; "sent" counted per page', async () => {
+  const s = await services();
+  const r = await handleContact(contactReq(contact), s);
+  assert.equal(r.status, 200);
+  const [q] = await s.store.listRequests();
+  assert.equal(q.slug, null); assert.equal(q.role, 'nosite'); assert.equal(q.wish, 'seo'); assert.equal(q.channel, 'call');
+  assert.equal(q.phone, '+43 660 1234567'); assert.equal(q.name, 'Ali'); assert.equal(q.text, 'Bitte anrufen');
+  assert.deepEqual((await s.store.siteEventRows({ since: '2000-01-01' })).map((e) => [e.page, e.event, e.n]), [['seo', 'sent', 1]]);
+  for (const bad of [{ role: 'owner' }, { wish: 'remove' }, { channel: 'fax' }, { phone: '12' }, { text: 'x'.repeat(501) }])
+    assert.equal((await handleContact(contactReq({ ...contact, ...bad }), s)).status, 400, JSON.stringify(bad));
+  assert.equal((await handleContact(contactReq({ ...contact, website: 'spam' }), s)).status, 200);
+  assert.equal((await s.store.listRequests()).length, 1, 'the honeypot is not stored');
+});
+
+test('site contact form steps: known words only, per page; Nasim and robots not counted', async () => {
+  const s = await services();
+  for (const ev of ['open:hero', 'role:nosite', 'wish:seo', 'step:3', 'close:3', 'fail', 'sent', 'name:Ali', '+43 660', 7])
+    assert.equal((await handleContact(contactReq({ ev, page: 'webdesign' }), s)).status, 204);
+  await handleContact(contactReq({ ev: 'open:dock', page: 'nope' }), s);
+  await handleContact(contactReq({ ev: 'open:dock', page: 'home' }, { cookie: 'nx_staff=1' }), s);
+  await handleContact(contactReq({ ev: 'open:dock', page: 'home' }, { 'user-agent': 'Googlebot' }), s);
+  const rows = (await s.store.siteEventRows({ since: '2000-01-01' })).map((e) => e.page + ' ' + e.event).sort();
+  assert.deepEqual(rows, ['home open:dock', 'webdesign close:3', 'webdesign fail', 'webdesign open:hero', 'webdesign role:nosite', 'webdesign step:3', 'webdesign wish:seo']);
+  assert.equal((await s.store.listRequests()).length, 0);
+});
+
+test('namax.at pages: no WhatsApp or Telegram buttons; every request button opens the form, which every such page loads', () => {
+  const pages = ['index.html', 'kostenlos.html', 'webdesign-wien.html', 'social-media-wien.html', 'content-reels-wien.html', 'seo-wien.html', 'online-werbung-wien.html',
+    'en/index.html', 'en/free-page.html', 'en/web-design-vienna.html', 'en/social-media-vienna.html', 'en/content-reels-vienna.html', 'en/seo-vienna.html', 'en/online-ads-vienna.html'];
+  for (const p of [...pages, 'impressum.html', 'en/impressum.html']) {
+    const html = readFileSync(new URL('../../../' + p, import.meta.url), 'utf8');
+    assert.doesNotMatch(html, /wa\.me|t\.me\//, p);
+    if (pages.includes(p)) { assert.match(html, /data-contact="hero"|data-contact="header"/, p); assert.match(html, /src="\/js\/contact\.js\?v=\d+"/, p); }
+  }
 });

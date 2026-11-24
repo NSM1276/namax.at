@@ -174,6 +174,43 @@ export async function handlePhoto(req, { store, blob, now = () => new Date() }) 
   return json(200, { id });
 }
 
+// The contact form on namax.at's own pages (js/contact.js): who they are, what they need, how to reach them.
+export const SITE_ROLES = ['nosite', 'hassite', 'misc'];
+export const SITE_WISHES = ['website', 'social', 'content', 'seo', 'ads', 'advice'];
+export const SITE_PAGES = ['home', 'webdesign', 'social', 'content', 'seo', 'ads', 'free'];
+export const SITE_EVENTS = ['open:header', 'open:hero', 'open:chat', 'open:contact', 'open:dock', 'step:2', 'step:3',
+  ...SITE_ROLES.map((r) => 'role:' + r), ...SITE_WISHES.map((w) => 'wish:' + w), 'close:1', 'close:2', 'close:3', 'fail'];
+
+/** POST www.namax.at/api/venue/contact: { ev, page } counts a form step (always 204);
+ *  { page, role, wish, name, phone, channel, text, website } is a request in the admin list (slug empty). */
+export async function handleContact(req, { store, now = () => new Date() }) {
+  if (req.method !== 'POST') return fail(405, 'POST only');
+  const body = await readJson(req, MAX_CLAIM_BODY);
+  const page = pick(body?.page, SITE_PAGES) || 'home';
+  if (body && body.ev !== undefined) {
+    try {
+      if (!BOT_UA.test(req.headers.get('user-agent') || '') && !isStaff(req) && typeof body.ev === 'string' && SITE_EVENTS.includes(body.ev))
+        await store.addSiteEvent({ day: viennaDay(now()), page, event: body.ev });
+    } catch { /* never fails visibly */ }
+    return new Response(null, { status: 204, headers: { 'Cache-Control': 'no-store' } });
+  }
+  if (!body) return fail(400, 'bad request');
+  if (typeof body.website === 'string' && body.website.trim()) return json(200, { ok: true });
+  const role = pick(body.role, SITE_ROLES), wish = pick(body.wish, SITE_WISHES), channel = pick(body.channel, CLAIM_CHANNELS);
+  const phone = typeof body.phone === 'string' ? body.phone.trim() : '';
+  const name = typeof body.name === 'string' ? body.name.trim() : '';
+  const message = typeof body.text === 'string' ? body.text.trim() : '';
+  if (!role || !wish || !channel || name.length > 80 || message.length > 500 || !PHONE.test(phone) || phone.replace(/\D/g, '').length < 6) return fail(400, 'bad request');
+  const day = viennaDayStart(now());
+  const ip = (req.headers.get('x-forwarded-for') || '').split(',')[0].trim();
+  const ipHash = ip ? createHash('sha256').update('namax claim v1:' + ip).digest('hex').slice(0, 16) : '';
+  if ((ipHash && await store.countRequestsByIpSince(ipHash, day) >= DAILY_CLAIMS_PER_SENDER)
+    || await store.countAllRequestsSince(day) >= DAILY_CLAIMS_TOTAL) return fail(429, 'too many');
+  await store.addRequest(null, { role, wish, name, phone, channel, text: message, ipHash });
+  try { await store.addSiteEvent({ day: viennaDay(now()), page, event: 'sent' }); } catch { /* the request counts */ }
+  return json(200, { ok: true });
+}
+
 /** XML sitemap of the public venue pages, served on www.namax.at. */
 export async function handleSitemap(req, { store }) {
   const slugs = await store.listSlugs('public');
@@ -334,7 +371,7 @@ async function handleStats(store, now) {
   const start = new Date(today + 'T12:00:00Z');
   start.setUTCDate(start.getUTCDate() - (STATS_DAYS - 1));
   const since = start.toISOString().slice(0, 10);
-  const [hits, claims, all, requests] = await Promise.all([store.hitRows({ since }), store.claimEventRows({ since }), store.listForAdmin(), store.listRequests()]);
+  const [hits, claims, all, requests, site] = await Promise.all([store.hitRows({ since }), store.claimEventRows({ since }), store.listForAdmin(), store.listRequests(), store.siteEventRows({ since })]);
   const seen = new Set([...hits, ...claims].map((r) => r.slug));
   const venues = {};
   for (const r of all) {
@@ -343,7 +380,7 @@ async function handleStats(store, now) {
     venues[r.slug] = [effectiveVenue(r, []).name, city, d ? districtLabel(city, d) : '', r.facts.kind || ''];
   }
   const cities = CITY_ORDER.map((c) => [c, CITIES[c].name]);
-  return new Response(renderStats({ today, days: STATS_DAYS, hits, claims, venues, cities, openRequests: requests.filter((q) => !q.doneAt).length }), { headers: {
+  return new Response(renderStats({ today, days: STATS_DAYS, hits, claims, site, venues, cities, openRequests: requests.filter((q) => !q.doneAt).length }), { headers: {
     'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'private, no-store', 'X-Robots-Tag': 'noindex, nofollow', 'Set-Cookie': STAFF_MARK } });
 }
 

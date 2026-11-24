@@ -520,3 +520,12 @@ h1 .d-ul{position:absolute;left:-2%;bottom:-.24em;width:104%;height:.2em;color:v
   .js-motion #how.no-pin .msg{opacity:1;visibility:visible;translate:none;scale:none}
 }
 }
+
+/* Contact form on the site's own pages (js/contact.js), in the free-page dialog style */
+.cdlg .cstep{margin:0 0 -8px;font-size:14px;font-weight:700;color:#55544f}
+.cpicks{display:grid;gap:10px}
+.cpick{display:block;width:100%;min-height:56px;padding:12px 18px;border:2px solid var(--ink);border-radius:16px;background:var(--white);color:var(--ink);font:700 17px/1.25 var(--body);text-align:left;cursor:pointer}
+.cpick:hover{background:var(--lime);box-shadow:3px 3px 0 var(--ink)}.cpick:focus-visible{outline:3px solid var(--violet);outline-offset:2px}
+.cdlg [data-cs="2"]{display:grid;gap:14px}.cdlg [data-cs="2"][hidden]{display:none}
+.cform{display:grid;gap:16px}.cform .linkish{justify-self:start}
+.fld textarea{width:100%;font:500 17px/1.35 var(--body);padding:12px 16px;border:2px solid var(--ink);border-radius:14px;background:var(--white);color:var(--ink);resize:vertical}

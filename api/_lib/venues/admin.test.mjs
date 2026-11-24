@@ -635,3 +635,22 @@ test('statistics page: only with the key, private; it carries counts, venue name
 test('the list links to the statistics page', async () => {
   assert.match(await (await handleAdmin(req(ADMIN), await svc())).text(), /href="\/liste\/statistik"/);
 });
+
+test('a request from the site contact form shows as a customer request, with its own words and a greeting', async () => {
+  const s = await svc();
+  await s.store.addRequest(null, { role: 'nosite', wish: 'advice', name: 'Ali', phone: '0664 7654321', channel: 'whatsapp', text: 'Hallo' });
+  const html = await (await handleAdmin(req(ADMIN, ''), s)).text();
+  assert.match(html, /Kundenanfrage<\/b><span class="b hot">namax\.at<\/span>/);
+  assert.ok(html.includes('hat noch keine Website · weiß noch nicht, will Beratung · WhatsApp'));
+  assert.ok(html.includes(encodeURIComponent('Hallo Ali, hier ist Nasim von namax. Danke für Ihre Anfrage.')));
+  assert.ok(!html.includes('Neues Lokal'));
+});
+
+test('statistics page carries the site contact form steps', async () => {
+  const s = await svc();
+  const now = () => new Date('2026-11-24T10:00:00Z');
+  await s.store.addSiteEvent({ day: '2026-11-24', page: 'seo', event: 'open:hero' });
+  const html = await (await handleAdmin(statsReq(ADMIN), { ...s, now })).text();
+  assert.deepEqual(JSON.parse(html.match(/window\.D=(.*?);<\/script>/)[1]).site, [['seo', '2026-11-24', 'open:hero', 1]]);
+  assert.match(html, /Kundenanfragen auf namax\.at/);
+});

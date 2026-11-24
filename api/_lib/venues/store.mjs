@@ -11,6 +11,7 @@
 // addEvent(slug, { type, text });  listEvents(sinceIso);  countEventsSince(slug, type, sinceIso)
 // addHit(slug, { owner, day, source });  getHits(slug) → { visitors, owner };  hitSources({ weekStart }) → { source: n };  hitSourcesBySlug({ weekStart }) → { slug: { source: n } }
 // hitRows({ since }) → [{ slug, day, source, n }];  addClaimEvent(slug, { day, event });  claimEventRows({ since }) → [{ slug, day, event, n }]
+// addSiteEvent({ day, page, event });  siteEventRows({ since }) → [{ day, page, event, n }] (the contact form on namax.at)
 // recordModelCall(slug);  countModelCalls(slug, sinceIso?)
 // listSlugs(status) → slugs
 // setKeyHash(slug, hash);  setOwnerKeyEnc(slug, enc);  setFacade(slug, url|null)
@@ -30,7 +31,7 @@ const requestOrder = (a, b) => (Boolean(a.doneAt) - Boolean(b.doneAt))
 
 export function memoryStore() {
   const venues = new Map();
-  const messages = [], photos = [], events = [], hits = [], srcHits = [], modelCalls = [], claimEvents = [];
+  const messages = [], photos = [], events = [], hits = [], srcHits = [], modelCalls = [], claimEvents = [], siteEvents = [];
   let requests = [];
   let seq = 0;
   const nowIso = () => new Date().toISOString();
@@ -165,6 +166,12 @@ export function memoryStore() {
       e.n++;
     },
     async claimEventRows({ since }) { return claimEvents.filter((e) => e.day >= since).map((e) => ({ ...e })); },
+    async addSiteEvent({ day, page, event }) {
+      let e = siteEvents.find((x) => x.day === day && x.page === page && x.event === event);
+      if (!e) { e = { day, page, event, n: 0 }; siteEvents.push(e); }
+      e.n++;
+    },
+    async siteEventRows({ since }) { return siteEvents.filter((e) => e.day >= since).map((e) => ({ ...e })); },
 
     async recordModelCall(slug) { modelCalls.push({ slug, at: nowIso() }); },
     async countModelCalls(slug, sinceIso) {

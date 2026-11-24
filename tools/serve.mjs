@@ -11,7 +11,7 @@ import { fileURLToPath } from 'node:url';
 import { memoryStore } from '../api/_lib/venues/store.mjs';
 import { hashKey } from '../api/_lib/venues/owner.mjs';
 import { Readable } from 'node:stream';
-import { handlePage, handleChat, handleClaim, handlePhoto, handleHit, handleAdmin, handleAdminPost, handleSearch, handleSignup } from '../api/_lib/venues/http.mjs';
+import { handlePage, handleChat, handleClaim, handlePhoto, handleHit, handleAdmin, handleAdminPost, handleSearch, handleSignup, handleContact } from '../api/_lib/venues/http.mjs';
 import { sealOwnerKey } from '../api/_lib/venues/admin.mjs';
 import { ownerPanel } from '../api/_lib/venues/owner-ui.mjs';
 import { cityPaths } from './city/paths.mjs';
@@ -86,10 +86,10 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
       res.end(Buffer.from(await r.arrayBuffer()));
       return;
     }
-    if (url.pathname === '/api/venue/search' || url.pathname === '/api/venue/signup') {  // namax.at/kostenlos
+    if (url.pathname === '/api/venue/search' || url.pathname === '/api/venue/signup' || url.pathname === '/api/venue/contact') {  // namax.at/kostenlos, contact form
       const body = ['GET', 'HEAD'].includes(req.method) ? undefined : Readable.toWeb(req);
       const request = new Request('https://www.namax.at' + url.pathname + url.search, { method: req.method, headers: req.headers, body, duplex: 'half' });
-      const r = await (url.pathname.endsWith('search') ? handleSearch : handleSignup)(request, svc);
+      const r = await (url.pathname.endsWith('search') ? handleSearch : url.pathname.endsWith('contact') ? handleContact : handleSignup)(request, svc);
       res.writeHead(r.status, { ...heads(r), 'cache-control': 'no-store' }); res.end(Buffer.from(await r.arrayBuffer())); return;
     }
     if (url.pathname === '/liste') {

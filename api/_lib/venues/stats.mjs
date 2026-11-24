@@ -108,6 +108,21 @@ var steps=[['Geöffnet',op],['Rolle gewählt',sumP('role:')],['Formular erreicht
 return bars(steps.map(function(x){return[x[0],x[1]]}),op,'fun')
 +'<p class="sub">Geöffnet über</p>'+bars(g('open:'),op)+'<div class="grid2"><div><p class="sub">Wer</p>'+bars(g('role:'),0)+'</div><div><p class="sub">Was</p>'+bars(g('wish:'),0)+'</div></div>'
 +'<p class="sub">Geschlossen ohne Senden</p>'+bars(g('close:'),op)+(m.fail?'<p class="sub">Fehler beim Senden: '+m.fail+'</p>':'')}
+// The contact form on namax.at's own pages, 30 days, all pages together (not by city).
+var SE={'open:header':'Knopf oben','open:hero':'Knopf im Titel','open:chat':'Knopf im Chat-Bild','open:contact':'Knopf „Schreiben Sie uns“','open:dock':'Knopf unten am Handy',
+'role:nosite':'hat noch keine Website','role:hassite':'hat Website, will sie besser','role:misc':'etwas anderes',
+'wish:website':'Website','wish:social':'Social Media','wish:content':'Content & Reels','wish:seo':'SEO','wish:ads':'Werbung','wish:advice':'will Beratung',
+'close:1':'bei Schritt 1 (Wer?)','close:2':'bei Schritt 2 (Was?)','close:3':'im Formular'};
+var SP={home:'Startseite',webdesign:'Websites',social:'Social Media',content:'Content',seo:'SEO',ads:'Werbung',free:'Kostenlose Seite'};
+function siteFunnel(){var a=N-30,m={},pg={};(D.site||[]).forEach(function(r){var i=idx(r[1]);if(i<a)return;m[r[2]]=(m[r[2]]||0)+r[3];if(r[2].indexOf('open:')===0)pg[r[0]]=(pg[r[0]]||0)+r[3]});
+var g=function(p){return Object.keys(SE).filter(function(k){return k.indexOf(p)===0&&m[k]}).map(function(k){return[SE[k],m[k]]}).sort(function(x,y){return y[1]-x[1]})};
+var sumP=function(p){return Object.keys(m).filter(function(k){return k.indexOf(p)===0}).reduce(function(t,k){return t+m[k]},0)};
+var op=sumP('open:');if(!op&&!m.sent)return '<p class="none">Noch niemand hat das Formular geöffnet. Gezählt wird ab jetzt, ohne Namen, Nummern oder Text.</p>';
+var pages=Object.keys(pg).map(function(k){return[SP[k]||k,pg[k]]}).sort(function(x,y){return y[1]-x[1]});
+return bars([['Geöffnet',op],['Wer gewählt',sumP('role:')],['Formular erreicht',m['step:3']||0],['Gesendet',m.sent||0]],op,'fun')
++'<div class="grid2"><div><p class="sub">Auf welcher Seite</p>'+bars(pages,op)+'</div><div><p class="sub">Welcher Knopf</p>'+bars(g('open:'),op)+'</div></div>'
++'<div class="grid2"><div><p class="sub">Wer</p>'+bars(g('role:'),0)+'</div><div><p class="sub">Was</p>'+bars(g('wish:'),0)+'</div></div>'
++'<p class="sub">Geschlossen ohne Senden</p>'+bars(g('close:'),op)+(m.fail?'<p class="sub">Fehler beim Senden: '+m.fail+'</p>':'')}
 function cityBtns(){var have={};H.forEach(function(r){have[V(r.s)[1]]=1});C.forEach(function(r){have[V(r.s)[1]]=1});
 return '<div class="flt" role="group" aria-label="Stadt"><button type="button" data-city="all" aria-pressed="'+(city==='all')+'">Alle Städte</button>'
 +D.cities.filter(function(c){return have[c[0]]}).map(function(c){return '<button type="button" data-city="'+c[0]+'" aria-pressed="'+(city===c[0])+'">'+esc(c[1])+'</button>'}).join('')+'</div>'}
@@ -115,6 +130,7 @@ function draw(){var rows=H.filter(inCity);CH={};
 document.getElementById('app').innerHTML=cityBtns()+'<div class="kpi">'+kpis(rows)+'</div>'
 +'<div class="card" style="margin-top:12px"><h2>Besuche pro Tag <small>· 30 Tage</small></h2>'+chart(rows,'all')+'</div>'+shares(rows)
 +'<div class="card"><h2>Meistbesuchte Seiten</h2>'+topPages(rows)+'</div>'
++'<div class="card"><h2>Kundenanfragen auf namax.at <small>· 30 Tage, alle Seiten</small></h2>'+siteFunnel()+'</div>'
 +'<div class="card"><h2>Formular „Sind Sie der Inhaber?“ <small>· 30 Tage</small></h2>'+funnel()+'</div>'}
 var tip=document.getElementById('tip');
 function showTip(t,e){var c=CH[t.getAttribute('data-c')];if(!c)return;var o=c.by[+t.getAttribute('data-d')],i=c.a+(+t.getAttribute('data-d'));
@@ -130,11 +146,12 @@ draw();`;
  * data: { today, days, hits: [{ slug, day, source, n }], claims: [{ slug, day, event, n }],
  *   venues: { slug: [name, city, district label, kind] }, cities: [[key, name]], openRequests }
  */
-export function renderStats({ today, days, hits, claims, venues, cities, openRequests = 0 }) {
+export function renderStats({ today, days, hits, claims, site = [], venues, cities, openRequests = 0 }) {
   const start = new Date(today + 'T12:00:00Z');
   start.setUTCDate(start.getUTCDate() - (days - 1));
   const D = { since: start.toISOString().slice(0, 10), days, venues, cities,
-    hits: hits.map((r) => [r.slug, r.day, r.source, r.n]), claims: claims.map((r) => [r.slug, r.day, r.event, r.n]) };
+    hits: hits.map((r) => [r.slug, r.day, r.source, r.n]), claims: claims.map((r) => [r.slug, r.day, r.event, r.n]),
+    site: site.map((r) => [r.page, r.day, r.event, r.n]) };
   const data = JSON.stringify(D).replace(/</g, '\\u003c');
   return `<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow"><title>namax · Statistik</title><meta name="theme-color" content="#111">

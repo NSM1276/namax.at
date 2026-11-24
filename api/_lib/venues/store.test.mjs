@@ -199,6 +199,15 @@ export function storeContract(makeStore, prefix = '') {
     assert.deepEqual(rows, [{ slug: A, day: '2026-11-22', event: 'open:niche', n: 2 }, { slug: A, day: '2026-11-22', event: 'sent', n: 1 }]);
   });
 
+  test('site contact form steps: counted per page, day and event', async () => {
+    const s = await fresh();
+    const day = prefix ? '2031-01-02' : '2031-01-01';  // the table has no venue, so the engines keep apart by day
+    for (const [page, event] of [['seo', 'open:hero'], ['seo', 'open:hero'], ['home', 'sent']]) await s.addSiteEvent({ day, page, event });
+    await s.addSiteEvent({ day: '2030-01-01', page: 'seo', event: 'open:hero' });
+    const rows = (await s.siteEventRows({ since: day })).filter((r) => r.day === day).sort((x, y) => x.page.localeCompare(y.page));
+    assert.deepEqual(rows, [{ day, page: 'home', event: 'sent', n: 1 }, { day, page: 'seo', event: 'open:hero', n: 2 }]);
+  });
+
   test('hit sources by page: where the visitors of each page of the last 7 days came from', async () => {
     const s = await fresh();
     for (const [slug, day, source] of [[A, '2026-11-22', 'google'], [A, '2026-11-22', 'google'], [B, '2026-11-20', 'direct'], [A, '2026-11-21', 'namax'], [A, '2026-11-01', 'social']])

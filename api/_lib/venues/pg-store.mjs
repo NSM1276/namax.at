@@ -127,6 +127,14 @@ export function pgStore(query) {
       const rows = await query(`select slug, to_char(day, 'YYYY-MM-DD') as day, event, n from venue_claim_events where day >= $1::date`, [since]);
       return rows.map((r) => ({ slug: r.slug, day: r.day, event: r.event, n: num(r.n) }));
     },
+    async addSiteEvent({ day, page, event }) {
+      await query(`insert into site_form_events (day, page, event, n) values ($1::date, $2, $3, 1)
+        on conflict (day, page, event) do update set n = site_form_events.n + 1`, [day, page, event]);
+    },
+    async siteEventRows({ since }) {
+      const rows = await query(`select to_char(day, 'YYYY-MM-DD') as day, page, event, n from site_form_events where day >= $1::date`, [since]);
+      return rows.map((r) => ({ day: r.day, page: r.page, event: r.event, n: num(r.n) }));
+    },
 
     async recordModelCall(slug) { await query('insert into venue_model_calls (slug) values ($1)', [slug]); },
     async countModelCalls(slug, since) {

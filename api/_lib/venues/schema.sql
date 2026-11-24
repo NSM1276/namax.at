@@ -119,4 +119,16 @@ alter table venue_requests add constraint venue_requests_channel_check check (ch
 alter table venue_requests alter column slug drop not null;
 alter table venue_requests add column if not exists lokal text not null default '';
 alter table venue_requests drop constraint if exists venue_requests_wish_check;
-alter table venue_requests add constraint venue_requests_wish_check check (wish in ('manage', 'fix', 'photos', 'website', 'remove'));
+alter table venue_requests add constraint venue_requests_wish_check check (wish in ('manage', 'fix', 'photos', 'website', 'remove', 'social', 'content', 'seo', 'ads', 'advice'));
+
+-- The contact form on namax.at's own pages (no venue, slug empty): who they are and what they need.
+alter table venue_requests drop constraint if exists venue_requests_role_check;
+alter table venue_requests add constraint venue_requests_role_check check (role in ('owner', 'staff', 'other', 'nosite', 'hassite', 'misc'));
+-- Its steps per page and day, like venue_claim_events: counts only, nothing typed.
+create table if not exists site_form_events (
+  day       date not null,
+  page      text not null,
+  event     text not null,
+  n         int not null default 0,
+  primary key (day, page, event)
+);
