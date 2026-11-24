@@ -66,6 +66,7 @@ test('Austrian food: Schnitzel and Gulasch, no regional guess; known cuisines ke
   assert.ok(only(all('imbiss', 'turkish', 'Kara'), ['doener', 'dueruem', 'kebab']));
   assert.ok(only(all('imbiss', null, 'Best Food Kebap'), ['doener', 'dueruem', 'kebab']));
   assert.ok(only(all('restaurant', 'turkish', 'Ali Ocakbasi'), ['lahmacun', 'pide', 'adana']));
+  assert.ok(only(all('cafe', 'turkish', 'Café Satchmo'), ['coffee', 'cappuccino', 'coffee-beans']));
   assert.equal(name(nicheImage(v('restaurant', 'thai', 'All Reis'))), 'thai-curry');
   assert.equal(name(nicheImage(v('imbiss', 'korean;unknown', 'Ko:on'))), 'bibimbap');
   // only the first cuisine decides: "french;italian" is no Italian place, so no pasta; an imbiss then gets nothing

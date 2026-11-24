@@ -89,7 +89,7 @@ export const CUISINE = {
   moroccan: ['tagine'], empanada: ['empanadas'], fine_dining: ['fine-dining'],
 };
 // A Viennese Kaffeehaus (austrian / regional cuisine on a café) is coffee and cake; Schnitzel would be a guess.
-const CAFE_CUISINE = { austrian: KAFFEEHAUS, regional: KAFFEEHAUS, viennese: KAFFEEHAUS, local: KAFFEEHAUS };
+const CAFE_CUISINE = { austrian: KAFFEEHAUS, regional: KAFFEEHAUS, viennese: KAFFEEHAUS, local: KAFFEEHAUS, turkish: COFFEE };
 // A Turkish imbiss is a döner stand, not a grill: no Adana, Pide or Lahmacun guess.
 const IMBISS_CUISINE = { turkish: KEBAB };
 const KIND_CUISINE = { cafe: CAFE_CUISINE, imbiss: IMBISS_CUISINE };
